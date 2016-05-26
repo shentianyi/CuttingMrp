@@ -63,8 +63,8 @@
       <Association Name="Part_BatchOrderTemplate" Member="BatchOrderTemplates" ThisKey="partNr" OtherKey="partNr" Type="BatchOrderTemplate" />
       <Association Name="Part_BOM" Member="BOMs" ThisKey="partNr" OtherKey="partNr" Type="BOM" />
       <Association Name="Part_ProcessOrder" Member="ProcessOrders" ThisKey="partNr" OtherKey="partNr" Type="ProcessOrder" />
-      <Association Name="Part_Requirement" Member="Requirements" ThisKey="partNr" OtherKey="partNr" Type="Requirement" />
       <Association Name="Part_MP" Member="MPs" ThisKey="partNr" OtherKey="partnr" Type="MP" />
+      <Association Name="Part_Requirement" Member="Requirements" ThisKey="partNr" OtherKey="partNr" Type="Requirement" />
     </Type>
   </Table>
   <Table Name="dbo.ProcessOrder" Member="ProcessOrders">
@@ -82,17 +82,6 @@
       <Association Name="Part_ProcessOrder" Member="Part" ThisKey="partNr" OtherKey="partNr" Type="Part" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.Requirement" Member="Requirements">
-    <Type Name="Requirement">
-      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="partNr" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
-      <Column Name="orderedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="requiredDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="quantity" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Column Name="status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="Part_Requirement" Member="Part" ThisKey="partNr" OtherKey="partNr" Type="Part" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.MPS" Member="MPs">
     <Type Name="MP">
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -103,6 +92,19 @@
       <Column Name="source" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
       <Column Name="status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Association Name="Part_MP" Member="Part" ThisKey="partnr" OtherKey="partNr" Type="Part" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Requirement" Member="Requirements">
+    <Type Name="Requirement">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="partNr" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="orderedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="requiredDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="quantity" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="derivedFrom" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="derivedType" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="Part_Requirement" Member="Part" ThisKey="partNr" OtherKey="partNr" Type="Part" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

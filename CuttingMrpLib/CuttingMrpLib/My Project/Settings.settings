@@ -10,5 +10,8 @@
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
       <Value Profile="(Default)">Data Source=vm08;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=sa;Password=brilliantech123@</Value>
     </Setting>
+    <Setting Name="db" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Data Source=vm08;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=sa;Password=brilliantech123@</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

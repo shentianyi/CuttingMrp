@@ -64,6 +64,19 @@ Namespace My
                 Return CType(Me("CuttingMrpConnectionString"),String)
             End Get
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("Data Source=vm08;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=sa"& _ 
+            ";Password=brilliantech123@")>  _
+        Public Property db() As String
+            Get
+                Return CType(Me("db"),String)
+            End Get
+            Set
+                Me("db") = value
+            End Set
+        End Property
     End Class
 End Namespace
 
