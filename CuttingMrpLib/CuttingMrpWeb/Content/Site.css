@@ -7,6 +7,7 @@
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
+    margin-top:20px;
 }
 
 /* Override the default bootstrap behavior where horizontal description lists 
@@ -21,4 +22,12 @@ input,
 select,
 textarea {
     max-width: 280px;
+}
+
+.table thead > tr{
+    background:skyblue;
+    color:white;
+}
+.table thead > tr > th, .table tbody > tr > th, .table tfoot > tr > th, .table thead > tr > td, .table tbody > tr > td, .table tfoot > tr > td{
+    text-align:center;
 }

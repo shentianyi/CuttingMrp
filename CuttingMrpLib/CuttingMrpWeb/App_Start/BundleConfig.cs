@@ -23,9 +23,17 @@ namespace CuttingMrpWeb
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/jquery-plug-in").Include(
+                      "~/Scripts/jquery-popModal.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/stocks").Include(
+                      "~/Scripts/stock.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/site.css",
+                      "~/Content/pagination.css",
+                      "~/Content/jquery-popModal.css"));
         }
     }
 }

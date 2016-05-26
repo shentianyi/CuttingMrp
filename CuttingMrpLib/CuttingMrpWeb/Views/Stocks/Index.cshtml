@@ -3,119 +3,169 @@
 @model IPagedList<CuttingMrpLib.Stock>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Stocks";
 }
 
-<h2>Index</h2>
+@Scripts.Render("~/bundles/stocks")
+
 <div>
     <form action="/Stocks/Search" method="get">
-        <div>
-            <span>
-                PartNr <input type="text" name="PartNr" id="PartNr" value="@ViewBag.Query.PartNr" />
-            </span>
-            <span>
-                FIFO From <input type="text" name="FIFOFrom" id="FIFOFrom" value="@ViewBag.Query.FIFOFrom" />
-            </span>
-            <span>
-                FIFO To <input type="text" name="FIFOTo" id="FIFOTo" value="@ViewBag.Query.FIFOTo" />
-            </span>
-            <p><input type="submit" value="查询" class="button" /> </p>
+        <div class="panel panel-primary">
+            <div class="panel-body">
+                <div class="col-sm-12">
+                    <div class="col-sm-2">
+                        <select class="form-control">
+                            <option>天</option>
+                            <option>小时</option>
+                            <option>周</option>
+                            <option>月</option>
+                        </select>
+                    </div>
+
+                    <div class="col-sm-8 filter-content" style="border:1px solid black; border-radius:4px;height:36px;line-height:35px;">
+                        @*<div class="input-group">
+                            <input type="text" readonly class="form-control" style="max-width:none;" aria-describedby="basic-addon-filter">
+                            <span class="input-group-addon" id="basic-addon-filter"> <i class="glyphicon glyphicon-filter"></i> </span>
+                        </div>*@
+
+                        <span class="pull-right" style="border-left:1px solid black;padding:0 10px 0 20px; cursor:pointer;" id="basic-addon-filter"> <i class="glyphicon glyphicon-filter"></i> </span>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </form>
 </div>
 <div>
-    <p>
-        @Html.ActionLink("Create New", "Create")
-    </p>
-    <table class="table">
-        <tr>
-            <td>No.</td>
-            <th>
-                partNr
-            </th>
-            <th>
-                FIFO
-            </th>
-            <th>
+    @*<p>
+            @Html.ActionLink("Create New", "Create")
+        </p>*@
 
-            </th>
-            <th>
-
-            </th>
-            <th>
-
-            </th>
-            <th>
-
-            </th>
-            <th>
-
-            </th>
-            <th>
-
-            </th>
-            <th></th>
-        </tr>
-        @if (Model != null)
-        {
-            int i = 0;
-            foreach (var item in Model)
+    <table class="table table-bordered" style="margin-top:20px;">
+        <thead>
+            <tr>
+                <th> No. </th>
+                <th>PartNr</th>
+                <th>FIFO</th>
+                <th>Quantity</th>
+                <th>Container</th>
+                <th>WH</th>
+                <th>Position</th>
+                <th>Source</th>
+                <th>SourceType</th>
+                <th>Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
             {
-                <tr>
-                    <td>
-                        @(i += 1)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.partNr)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.fifo)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.quantity)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.container)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.wh)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.position)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.source)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.sourceType)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
-                        @Html.ActionLink("Details", "Details", new { id = item.id }) |
-                        @Html.ActionLink("Delete", "Delete", new { id = item.id })
-                    </td>
-                </tr>
+                int i = 0;
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@(i += 1)</td>
+                        <td>@Html.DisplayFor(modelItem => item.partNr)</td>
+                        <td>@Html.DisplayFor(modelItem => item.fifo)</td>
+                        <td>@Html.DisplayFor(modelItem => item.quantity)</td>
+                        <td>@Html.DisplayFor(modelItem => item.container)</td>
+                        <td>@Html.DisplayFor(modelItem => item.wh)</td>
+                        <td>@Html.DisplayFor(modelItem => item.position)</td>
+                        <td>@Html.DisplayFor(modelItem => item.source)</td>
+                        <td>@Html.DisplayFor(modelItem => item.sourceType)</td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.id }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.id })
+                        </td>
+                    </tr>
+                }
             }
-        }
+        </tbody>
     </table>
-</div>
-<div class="clearfix pagination">
-    <div class="pagination-inner">
-        @if (Model != null)
-        {
-            if (ViewBag.Query != null)
+    <div class="clearfix pagination">
+        <div class="pagination-inner">
+            @if (Model != null)
             {
+                if (ViewBag.Query != null)
+                {
 
-                var html = Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
-                   .Options(o => o.AddRouteValue("PartNr", ViewBag.Query.PartNr))
-                   .Options(o => o.AddRouteValue("FIFOFrom", ViewBag.Query.FIFOFrom))
-                   .Options(o => o.AddRouteValue("FIFOTo", ViewBag.Query.FIFOTo));
-                @html
+                    var html = Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
+                       .Options(o => o.AddRouteValue("PartNr", ViewBag.Query.PartNr))
+                       .Options(o => o.AddRouteValue("FIFOFrom", ViewBag.Query.FIFOFrom))
+                       .Options(o => o.AddRouteValue("FIFOTo", ViewBag.Query.FIFOTo));
+                    @html
+                }
+                else
+                {
+                    @Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
+                }
             }
-            else
-            {
-                @Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
-            }
-        }
+        </div>
     </div>
 </div>
+
+
+<div style="display:none;">
+    <div id="extra-filter-content">
+        <div class="panel">
+            <div class="panel-body">
+                <div class="col-sm-12">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon-partnr">PartNr</span>
+                        <input type="text" class="form-control" name="PartNr" id="PartNr" value="@ViewBag.Query.PartNr" placeholder="PartNr" aria-describedby="basic-addon-partnr">
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="col-sm-12">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon-fifo">FIFO</span>
+                        <input type="text" class="form-control" name="FIFOFrom" id="FIFOFrom" value="@ViewBag.Query.FIFOFrom" placeholder="FIFO From" aria-describedby="basic-addon-partnr">
+                        <span class="input-group-addon" style="width:20%;">~</span>
+                        <input type="text" class="form-control" name="FIFOTo" id="FIFOTo" value="@ViewBag.Query.FIFOTo" placeholder="FIFO To" />
+                    </div>
+                </div>
+            </div>
+            <div class="popModal_footer">
+                <input type="submit" value="查询" class="btn btn-primary FilterSearchBtn" style="width:200px;" data-dialogModalBut="ok" />
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $('#basic-addon-filter').click(function () {
+        $('#basic-addon-filter').popModal({
+            html: $('#extra-filter-content'),
+            placement: 'bottomRight',
+            showCloseBut: false,
+            onDocumentClickClose: true,
+            onOkBut: function () {
+                console.log("OK.....")
+            },
+            onCancelBut: function () {
+                console.log("Cancel.....")
+            },
+            onLoad: function () {
+                console.log("Load.....")
+            },
+            onClose: function () {
+
+            }
+        })
+    });
+
+    $("<p class='label label-primary'>PartNr = " +@ViewBag.Query.PartNr +"</p>").appendTo('.filter-content').ready(function () {
+    });
+
+    //TODO:Show Time
+    $("<p class='label label-primary'>FIFOFrom : " + @ViewBag.Query.FIFOFrom +"</p>").appendTo('.filter-content').ready(function () {
+    })
+
+    $("<p class='label label-primary'>FIFOTo : " +@ViewBag.Query.FIFOTo +"</p>").appendTo('.filter-content').ready(function () {
+    })
+</script>
