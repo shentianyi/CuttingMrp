@@ -103,11 +103,16 @@ namespace CuttingMrpWeb.Controllers
         {
             StockSearchModel q = new StockSearchModel()
             {
-                PartNr = Request.QueryString.Get("PartNr")
+                PartNr = Request.QueryString.Get("PartNr"),
+                Wh = Request.QueryString.Get("Wh"),
+                Position=Request.QueryString.Get("Position")
             };
 
             if (!string.IsNullOrWhiteSpace(Request.QueryString.Get("FIFOFrom"))) { q.FIFOFrom = DateTime.Parse(Request.QueryString.Get("FIFOFrom")); }
             if (!string.IsNullOrWhiteSpace(Request.QueryString.Get("FIFOTo"))) { q.FIFOTo = DateTime.Parse(Request.QueryString.Get("FIFOTo")); }
+            if (!string.IsNullOrWhiteSpace(Request.QueryString.Get("QuantityFrom"))) { q.QuantityFrom = float.Parse(Request.QueryString.Get("QuantityFrom")); }
+            if (!string.IsNullOrWhiteSpace(Request.QueryString.Get("QuantityTo"))) { q.QuantityTo = float.Parse(Request.QueryString.Get("QuantityTo")); }
+
 
             int pageIndex = 0;
             int.TryParse(Request.QueryString.Get("page"), out pageIndex);

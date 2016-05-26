@@ -96,7 +96,11 @@
                     var html = Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
                        .Options(o => o.AddRouteValue("PartNr", ViewBag.Query.PartNr))
                        .Options(o => o.AddRouteValue("FIFOFrom", ViewBag.Query.FIFOFrom))
-                       .Options(o => o.AddRouteValue("FIFOTo", ViewBag.Query.FIFOTo));
+                       .Options(o => o.AddRouteValue("FIFOTo", ViewBag.Query.FIFOTo))
+                       .Options(o => o.AddRouteValue("QuantityFrom", ViewBag.Query.QuantityFrom))
+                       .Options(o => o.AddRouteValue("QuantityTo", ViewBag.Query.QuantityTo))
+                       .Options(o => o.AddRouteValue("Wh", ViewBag.Query.Wh))
+                       .Options(o => o.AddRouteValue("Position", ViewBag.Query.Position));
                     @html
                 }
                 else

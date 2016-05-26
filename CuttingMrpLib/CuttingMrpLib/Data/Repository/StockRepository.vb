@@ -22,18 +22,29 @@ Public Class StockRepository
             End If
 
             If searchModel.FIFOFrom.HasValue Then
-
                 stocks = stocks.Where(Function(s) s.fifo >= searchModel.FIFOFrom.Value)
-
             End If
 
             If searchModel.FIFOTo.HasValue Then
-
                 stocks = stocks.Where(Function(s) s.fifo <= searchModel.FIFOTo.Value)
+            End If
 
+            If searchModel.QuantityFrom.HasValue Then
+                stocks = stocks.Where(Function(s) s.quantity >= searchModel.QuantityFrom.Value)
+            End If
+
+            If searchModel.QuantityTo.HasValue Then
+                stocks = stocks.Where(Function(s) s.quantity <= searchModel.QuantityTo.Value)
+            End If
+
+            If Not String.IsNullOrWhiteSpace(searchModel.Wh) Then
+                stocks = stocks.Where(Function(s) s.wh.Equals(searchModel.Wh))
             End If
 
 
+            If Not String.IsNullOrWhiteSpace(searchModel.Position) Then
+                stocks = stocks.Where(Function(s) s.position.Contains(searchModel.Position))
+            End If
 
             Return stocks
         End If
