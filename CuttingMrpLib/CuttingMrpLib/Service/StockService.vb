@@ -45,4 +45,28 @@ Public Class StockService
         Return result
     End Function
 
+    Public Function Update(stock As Stock) As Boolean Implements IStockService.Update
+        Dim result As Boolean = False
+        Try
+            Dim context As DataContext = New DataContext(Me.dbString)
+            Dim rep As Repository(Of Stock) = New Repository.Repository(Of Stock)(context)
+            Dim ustock As Stock = rep.First(Function(s) s.id.Equals(stock.id))
+            If (ustock IsNot Nothing) Then
+                ustock.fifo = stock.fifo
+                ustock.quantity = stock.quantity
+                ustock.container = stock.container
+                ustock.wh = stock.wh
+                ustock.position = stock.position
+                ustock.source = stock.source
+                ustock.sourceType = stock.sourceType
+
+
+                context.SaveAll()
+                result = True
+            End If
+        Catch ex As Exception
+            result = False
+        End Try
+        Return result
+    End Function
 End Class

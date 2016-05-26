@@ -59,17 +59,19 @@ namespace CuttingMrpWeb.Controllers
         // GET: Stocks/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            return GetStockById(id);
         }
 
         // POST: Stocks/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit([Bind(Include = "id,partNr,fifo,quantity,container,wh,position,source,sourceType")] Stock stock)
         {
             try
             {
                 // TODO: Add update logic here
-
+                Stock s = stock;
+                IStockService ss = new StockService(Settings.Default.db);
+                ss.Update(s);
                 return RedirectToAction("Index");
             }
             catch
@@ -81,18 +83,8 @@ namespace CuttingMrpWeb.Controllers
         // GET: Stocks/Delete/5
         public ActionResult Delete(int? id)
         {
-            if (id == null || !id.HasValue)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             
-            IStockService ss = new StockService(Settings.Default.db);
-            Stock stock = ss.FindById(id.Value);
-            if (stock == null)
-            {
-                return HttpNotFound();
-            }
-            return View(stock);
+            return GetStockById(id);
         }
 
         // POST: Stocks/Delete/5
@@ -137,6 +129,21 @@ namespace CuttingMrpWeb.Controllers
             IPagedList<Stock> stocks = ss.Search(q).ToPagedList(pageIndex, Settings.Default.pageSize);
 
             return View("Index", stocks);
+        }
+
+        private ActionResult GetStockById(int? id) {
+            if (id == null || !id.HasValue)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            IStockService ss = new StockService(Settings.Default.db);
+            Stock stock = ss.FindById(id.Value);
+            if (stock == null)
+            {
+                return HttpNotFound();
+            }
+            return View(stock);
         }
     }
 }
