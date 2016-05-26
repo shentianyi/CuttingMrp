@@ -85,6 +85,12 @@ Partial Public Class CuttingMrpDataContext
     End Sub
   Partial Private Sub DeleteRequirement(instance As Requirement)
     End Sub
+  Partial Private Sub InsertStock(instance As Stock)
+    End Sub
+  Partial Private Sub UpdateStock(instance As Stock)
+    End Sub
+  Partial Private Sub DeleteStock(instance As Stock)
+    End Sub
   #End Region
 	
 	Public Sub New()
@@ -163,6 +169,12 @@ Partial Public Class CuttingMrpDataContext
 	Public ReadOnly Property Requirements() As System.Data.Linq.Table(Of Requirement)
 		Get
 			Return Me.GetTable(Of Requirement)
+		End Get
+	End Property
+	
+	Public ReadOnly Property Stock() As System.Data.Linq.Table(Of Stock)
+		Get
+			Return Me.GetTable(Of Stock)
 		End Get
 	End Property
 End Class
@@ -1188,6 +1200,8 @@ Partial Public Class Part
 	
 	Private _Requirements As EntitySet(Of Requirement)
 	
+	Private _Stock As EntitySet(Of Stock)
+	
     #Region "可扩展性方法定义"
     Partial Private Sub OnLoaded()
     End Sub
@@ -1220,6 +1234,7 @@ Partial Public Class Part
 		Me._ProcessOrders = New EntitySet(Of ProcessOrder)(AddressOf Me.attach_ProcessOrders, AddressOf Me.detach_ProcessOrders)
 		Me._MPs = New EntitySet(Of MP)(AddressOf Me.attach_MPs, AddressOf Me.detach_MPs)
 		Me._Requirements = New EntitySet(Of Requirement)(AddressOf Me.attach_Requirements, AddressOf Me.detach_Requirements)
+		Me._Stock = New EntitySet(Of Stock)(AddressOf Me.attach_Stock, AddressOf Me.detach_Stock)
 		OnCreated
 	End Sub
 	
@@ -1339,6 +1354,16 @@ Partial Public Class Part
 		End Set
 	End Property
 	
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_Stock", Storage:="_Stock", ThisKey:="partNr", OtherKey:="partNr")>  _
+	Public Property Stock() As EntitySet(Of Stock)
+		Get
+			Return Me._Stock
+		End Get
+		Set
+			Me._Stock.Assign(value)
+		End Set
+	End Property
+	
 	Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
 	
 	Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
@@ -1403,6 +1428,16 @@ Partial Public Class Part
 	End Sub
 	
 	Private Sub detach_Requirements(ByVal entity As Requirement)
+		Me.SendPropertyChanging
+		entity.Part = Nothing
+	End Sub
+	
+	Private Sub attach_Stock(ByVal entity As Stock)
+		Me.SendPropertyChanging
+		entity.Part = Me
+	End Sub
+	
+	Private Sub detach_Stock(ByVal entity As Stock)
 		Me.SendPropertyChanging
 		entity.Part = Nothing
 	End Sub
@@ -2165,6 +2200,280 @@ Partial Public Class Requirement
 				If ((value Is Nothing)  _
 							= false) Then
 					value.Requirements.Add(Me)
+					Me._partNr = value.partNr
+				Else
+					Me._partNr = CType(Nothing, String)
+				End If
+				Me.SendPropertyChanged("Part")
+			End If
+		End Set
+	End Property
+	
+	Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
+	
+	Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
+	
+	Protected Overridable Sub SendPropertyChanging()
+		If ((Me.PropertyChangingEvent Is Nothing)  _
+					= false) Then
+			RaiseEvent PropertyChanging(Me, emptyChangingEventArgs)
+		End If
+	End Sub
+	
+	Protected Overridable Sub SendPropertyChanged(ByVal propertyName As [String])
+		If ((Me.PropertyChangedEvent Is Nothing)  _
+					= false) Then
+			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
+		End If
+	End Sub
+End Class
+
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.Stock")>  _
+Partial Public Class Stock
+	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+	
+	Private Shared emptyChangingEventArgs As PropertyChangingEventArgs = New PropertyChangingEventArgs(String.Empty)
+	
+	Private _id As Integer
+	
+	Private _partNr As String
+	
+	Private _fifo As Date
+	
+	Private _quantity As Double
+	
+	Private _container As String
+	
+	Private _wh As String
+	
+	Private _position As String
+	
+	Private _source As String
+	
+	Private _sourceType As String
+	
+	Private _Part As EntityRef(Of Part)
+	
+    #Region "可扩展性方法定义"
+    Partial Private Sub OnLoaded()
+    End Sub
+    Partial Private Sub OnValidate(action As System.Data.Linq.ChangeAction)
+    End Sub
+    Partial Private Sub OnCreated()
+    End Sub
+    Partial Private Sub OnidChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnidChanged()
+    End Sub
+    Partial Private Sub OnpartNrChanging(value As String)
+    End Sub
+    Partial Private Sub OnpartNrChanged()
+    End Sub
+    Partial Private Sub OnfifoChanging(value As Date)
+    End Sub
+    Partial Private Sub OnfifoChanged()
+    End Sub
+    Partial Private Sub OnquantityChanging(value As Double)
+    End Sub
+    Partial Private Sub OnquantityChanged()
+    End Sub
+    Partial Private Sub OncontainerChanging(value As String)
+    End Sub
+    Partial Private Sub OncontainerChanged()
+    End Sub
+    Partial Private Sub OnwhChanging(value As String)
+    End Sub
+    Partial Private Sub OnwhChanged()
+    End Sub
+    Partial Private Sub OnpositionChanging(value As String)
+    End Sub
+    Partial Private Sub OnpositionChanged()
+    End Sub
+    Partial Private Sub OnsourceChanging(value As String)
+    End Sub
+    Partial Private Sub OnsourceChanged()
+    End Sub
+    Partial Private Sub OnsourceTypeChanging(value As String)
+    End Sub
+    Partial Private Sub OnsourceTypeChanged()
+    End Sub
+    #End Region
+	
+	Public Sub New()
+		MyBase.New
+		Me._Part = CType(Nothing, EntityRef(Of Part))
+		OnCreated
+	End Sub
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_id", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true)>  _
+	Public Property id() As Integer
+		Get
+			Return Me._id
+		End Get
+		Set
+			If ((Me._id = value)  _
+						= false) Then
+				Me.OnidChanging(value)
+				Me.SendPropertyChanging
+				Me._id = value
+				Me.SendPropertyChanged("id")
+				Me.OnidChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partNr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
+	Public Property partNr() As String
+		Get
+			Return Me._partNr
+		End Get
+		Set
+			If (String.Equals(Me._partNr, value) = false) Then
+				If Me._Part.HasLoadedOrAssignedValue Then
+					Throw New System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException()
+				End If
+				Me.OnpartNrChanging(value)
+				Me.SendPropertyChanging
+				Me._partNr = value
+				Me.SendPropertyChanged("partNr")
+				Me.OnpartNrChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_fifo", DbType:="DateTime NOT NULL")>  _
+	Public Property fifo() As Date
+		Get
+			Return Me._fifo
+		End Get
+		Set
+			If ((Me._fifo = value)  _
+						= false) Then
+				Me.OnfifoChanging(value)
+				Me.SendPropertyChanging
+				Me._fifo = value
+				Me.SendPropertyChanged("fifo")
+				Me.OnfifoChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_quantity", DbType:="Float NOT NULL")>  _
+	Public Property quantity() As Double
+		Get
+			Return Me._quantity
+		End Get
+		Set
+			If ((Me._quantity = value)  _
+						= false) Then
+				Me.OnquantityChanging(value)
+				Me.SendPropertyChanging
+				Me._quantity = value
+				Me.SendPropertyChanged("quantity")
+				Me.OnquantityChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_container", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
+	Public Property container() As String
+		Get
+			Return Me._container
+		End Get
+		Set
+			If (String.Equals(Me._container, value) = false) Then
+				Me.OncontainerChanging(value)
+				Me.SendPropertyChanging
+				Me._container = value
+				Me.SendPropertyChanged("container")
+				Me.OncontainerChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_wh", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
+	Public Property wh() As String
+		Get
+			Return Me._wh
+		End Get
+		Set
+			If (String.Equals(Me._wh, value) = false) Then
+				Me.OnwhChanging(value)
+				Me.SendPropertyChanging
+				Me._wh = value
+				Me.SendPropertyChanged("wh")
+				Me.OnwhChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_position", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
+	Public Property position() As String
+		Get
+			Return Me._position
+		End Get
+		Set
+			If (String.Equals(Me._position, value) = false) Then
+				Me.OnpositionChanging(value)
+				Me.SendPropertyChanging
+				Me._position = value
+				Me.SendPropertyChanged("position")
+				Me.OnpositionChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_source", DbType:="VarChar(200)")>  _
+	Public Property source() As String
+		Get
+			Return Me._source
+		End Get
+		Set
+			If (String.Equals(Me._source, value) = false) Then
+				Me.OnsourceChanging(value)
+				Me.SendPropertyChanging
+				Me._source = value
+				Me.SendPropertyChanged("source")
+				Me.OnsourceChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_sourceType", DbType:="VarChar(200)")>  _
+	Public Property sourceType() As String
+		Get
+			Return Me._sourceType
+		End Get
+		Set
+			If (String.Equals(Me._sourceType, value) = false) Then
+				Me.OnsourceTypeChanging(value)
+				Me.SendPropertyChanging
+				Me._sourceType = value
+				Me.SendPropertyChanged("sourceType")
+				Me.OnsourceTypeChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_Stock", Storage:="_Part", ThisKey:="partNr", OtherKey:="partNr", IsForeignKey:=true)>  _
+	Public Property Part() As Part
+		Get
+			Return Me._Part.Entity
+		End Get
+		Set
+			Dim previousValue As Part = Me._Part.Entity
+			If ((Object.Equals(previousValue, value) = false)  _
+						OrElse (Me._Part.HasLoadedOrAssignedValue = false)) Then
+				Me.SendPropertyChanging
+				If ((previousValue Is Nothing)  _
+							= false) Then
+					Me._Part.Entity = Nothing
+					previousValue.Stock.Remove(Me)
+				End If
+				Me._Part.Entity = value
+				If ((value Is Nothing)  _
+							= false) Then
+					value.Stock.Add(Me)
 					Me._partNr = value.partNr
 				Else
 					Me._partNr = CType(Nothing, String)

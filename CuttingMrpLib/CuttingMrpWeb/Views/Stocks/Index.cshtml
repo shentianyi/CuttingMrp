@@ -1,0 +1,121 @@
+﻿@using MvcPaging;
+
+@model IPagedList<CuttingMrpLib.Stock>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+<div>
+    <form action="/Stocks/Search" method="get">
+        <div>
+            <span>
+                PartNr <input type="text" name="PartNr" id="PartNr" value="@ViewBag.Query.PartNr" />
+            </span>
+            <span>
+                FIFO From <input type="text" name="FIFOFrom" id="FIFOFrom" value="@ViewBag.Query.FIFOFrom" />
+            </span>
+            <span>
+                FIFO To <input type="text" name="FIFOTo" id="FIFOTo" value="@ViewBag.Query.FIFOTo" />
+            </span>
+            <p><input type="submit" value="查询" class="button" /> </p>
+        </div>
+    </form>
+</div>
+<div>
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table class="table">
+        <tr>
+            <td>No.</td>
+            <th>
+                partNr
+            </th>
+            <th>
+                FIFO
+            </th>
+            <th>
+
+            </th>
+            <th>
+
+            </th>
+            <th>
+
+            </th>
+            <th>
+
+            </th>
+            <th>
+
+            </th>
+            <th>
+
+            </th>
+            <th></th>
+        </tr>
+        @if (Model != null)
+        {
+            int i = 0;
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @(i += 1)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.partNr)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.fifo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.quantity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.container)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.wh)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.position)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.source)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.sourceType)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.id }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.id })
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+</div>
+<div class="clearfix pagination">
+    <div class="pagination-inner">
+        @if (Model != null)
+        {
+            if (ViewBag.Query != null)
+            {
+
+                var html = Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
+                   .Options(o => o.AddRouteValue("PartNr", ViewBag.Query.PartNr))
+                   .Options(o => o.AddRouteValue("FIFOFrom", ViewBag.Query.FIFOFrom))
+                   .Options(o => o.AddRouteValue("FIFOTo", ViewBag.Query.FIFOTo));
+                @html
+            }
+            else
+            {
+                @Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
+            }
+        }
+    </div>
+</div>

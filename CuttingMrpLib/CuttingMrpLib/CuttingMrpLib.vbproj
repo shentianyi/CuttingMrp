@@ -62,6 +62,9 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\CuttingMrp.vb">
+      <DependentUpon>CuttingMrp.dbml</DependentUpon>
+    </Compile>
     <Compile Include="Data\DataContext.vb" />
     <Compile Include="Data\CuttingMrp.designer.vb">
       <AutoGen>True</AutoGen>
@@ -69,7 +72,9 @@
       <DependentUpon>CuttingMrp.dbml</DependentUpon>
     </Compile>
     <Compile Include="Data\Repository\IRequirementRepository.vb" />
+    <Compile Include="Data\Repository\IStockRepository.vb" />
     <Compile Include="Data\Repository\RequirementRepository.vb" />
+    <Compile Include="Data\Repository\StockRepository.vb" />
     <Compile Include="Model\RequirementStatistics.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -87,10 +92,13 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Service\IRequirementService.vb" />
+    <Compile Include="Service\IStockService.vb" />
     <Compile Include="Service\RequirementService.vb" />
+    <Compile Include="Service\StockService.vb" />
     <Compile Include="ViewModel\SearchViewModel\RequirementSearchModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\RequirementStatisticsSearchModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\SearchModelBase.vb" />
+    <Compile Include="ViewModel\SearchViewModel\StockSearchModel.vb" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
