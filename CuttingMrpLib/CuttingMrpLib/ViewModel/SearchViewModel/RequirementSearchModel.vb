@@ -33,7 +33,7 @@
         End Set
     End Property
 
-    Public Property OrderedDateoTo As DateTime
+    Public Property OrderedDateTo As DateTime
         Get
             Return _orderedDateTo
         End Get
