@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Net;
 
 namespace CuttingMrpWeb.Controllers
 {
@@ -78,9 +79,20 @@ namespace CuttingMrpWeb.Controllers
         }
 
         // GET: Stocks/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int? id)
         {
-            return View();
+            if (id == null || !id.HasValue)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            
+            IStockService ss = new StockService(Settings.Default.db);
+            Stock stock = ss.FindById(id.Value);
+            if (stock == null)
+            {
+                return HttpNotFound();
+            }
+            return View(stock);
         }
 
         // POST: Stocks/Delete/5
@@ -89,8 +101,8 @@ namespace CuttingMrpWeb.Controllers
         {
             try
             {
-                // TODO: Add delete logic here
-
+                IStockService ss = new StockService(Settings.Default.db);
+                ss.DeleteById(id);
                 return RedirectToAction("Index");
             }
             catch
