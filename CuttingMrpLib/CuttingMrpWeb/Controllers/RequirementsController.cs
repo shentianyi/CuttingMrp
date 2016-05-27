@@ -1,5 +1,6 @@
 ﻿using CuttingMrpLib;
 using CuttingMrpWeb.Helpers;
+using CuttingMrpWeb.Models;
 using CuttingMrpWeb.Properties;
 using MvcPaging;
 using System;
@@ -124,12 +125,22 @@ namespace CuttingMrpWeb.Controllers
             return View("Index", requirements);
         }
 
-        public ActionResult RunMrp() {
-
-            ICalculateService cs = new CalculateService(Settings.Default.db);
-            cs.Start(Settings.Default.mrpQueue, null);
-
-            return null;
+        [HttpPost]
+        public ActionResult RunMrp([Bind(Include = "OrderType,MergeMethod")] CalculateSetting setting)
+        {
+            Message msg = new Message() { Result = false };
+            try
+            {
+                ICalculateService cs = new CalculateService(Settings.Default.db);
+                cs.Start(Settings.Default.mrpQueue, setting);
+                msg.Result = true;
+                msg.Msg = "MRP 任务运行成功!";
+            }
+            catch (Exception e)
+            {
+                msg.Msg = e.Message;
+            }
+            return Json(msg);
         }
 
         private ActionResult ValidateRequirement(Requirement requirement)
