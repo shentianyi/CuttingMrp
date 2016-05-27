@@ -27,6 +27,9 @@ namespace CuttingMrpWeb
             bundles.Add(new ScriptBundle("~/bundles/jquery-plug-in").Include(
                       "~/Scripts/jquery-popModal.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/requirements").Include(
+                      "~/Scripts/requirement.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/stocks").Include(
                       "~/Scripts/stock.js"));
 
@@ -35,7 +38,11 @@ namespace CuttingMrpWeb
                       "~/Content/jquery.datetimepicker.css",
                       "~/Content/site.css",
                       "~/Content/pagination.css",
+                      "~/Content/filter.css",
                       "~/Content/jquery-popModal.css"));
+
+            bundles.Add(new StyleBundle("~/Content/requirement").Include(
+                     "~/Content/requirement.css"));
 
             bundles.Add(new StyleBundle("~/Content/stock").Include(
                      "~/Content/stock.css"));

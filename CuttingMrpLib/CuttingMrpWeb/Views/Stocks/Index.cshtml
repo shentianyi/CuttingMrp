@@ -21,7 +21,6 @@
                     <button class="btn btn-primary" type="submit">Search</button>
                 </div>
             </div>
-
         </div>
     </div>
 </form>
@@ -72,9 +71,10 @@
             }
         </tbody>
     </table>
-    <div class="clearfix pagination">
-        <div class="pagination-inner">
-            @if (Model != null)
+    <div class="col-sm-12" style="text-align:center;">
+        <div class="clearfix pagination">
+            <div class="pagination-inner">
+                @if (Model != null)
             {
                 if (ViewBag.Query != null)
                 {
@@ -87,13 +87,14 @@
                        .Options(o => o.AddRouteValue("QuantityTo", ViewBag.Query.QuantityTo))
                        .Options(o => o.AddRouteValue("Wh", ViewBag.Query.Wh))
                        .Options(o => o.AddRouteValue("Position", ViewBag.Query.Position));
-                    @html
+                        @html
+                    }
+                    else
+                    {
+                        @Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
+                    }
                 }
-                else
-                {
-                    @Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
-                }
-            }
+            </div>
         </div>
     </div>
 </div>

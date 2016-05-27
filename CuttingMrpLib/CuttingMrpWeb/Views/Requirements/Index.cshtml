@@ -2,67 +2,78 @@
 
 @model IPagedList<CuttingMrpLib.Requirement>
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Requirements";
 }
 
-<h2>Index</h2>
+@Styles.Render("~/Content/requirement")
 
-<div>
-    <form action="/Requirements/Search" method="get">
-        <div class="panel panel-primary">
-            <div class="panel-body">
-                <div class="col-sm-12">
-                    <div class="col-sm-2">
-                        <select class="form-control">
-                            <option>小时</option>
-                            <option>天</option>
-                            <option>周</option>
-                            <option>月</option>
-                        </select>
-                    </div>
+<form action="/Requirements/Search" method="get">
+    <div class="panel panel-primary">
+        <div class="panel-body">
+            <div class="col-sm-12" style="text-align:center;">
+                @*<div class="col-sm-2">
+                    <select class="form-control">
+                        <option>小时</option>
+                        <option>天</option>
+                        <option>周</option>
+                        <option>月</option>
+                    </select>
+                </div>*@
 
-                    <div class="col-sm-8 filter-content" style="border:1px solid black; border-radius:4px;height:36px;line-height:35px;">
-                        <span class="pull-right" style="border-left:1px solid black;padding:0 10px 0 20px; cursor:pointer;" id="basic-addon-filter"> <i class="glyphicon glyphicon-filter"></i> </span>
-                    </div>
-
-                    <div class="col-sm-2">
-                        <button class="btn btn-primary" type="submit">Search</button>
-                    </div>
+                <div class="col-sm-10 filter-content">
+                    <span class="pull-right" id="basic-addon-filter"> <i class="glyphicon glyphicon-filter"></i> </span>
+                    <div class="filter-p"></div>
                 </div>
 
+                <div class="col-sm-2">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </div>
             </div>
         </div>
-    </form>
-</div>
+    </div>
+</form>
 
-<div>
-    <table class="table table-bordered" style="margin-top:20px;">
-        <thead>
-            <tr>
-                <th> No. </th>
-                <th>PartNr</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model != null)
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th> No. </th>
+            <th>PartNr</th>
+            <th>OrderedDate</th>
+            <th>RequiredDate</th>
+            <th>Quantity</th>
+            <th>Status</th>
+            <th>DerivedFrom</th>
+            <th>DerivedType</th>
+            <th>Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            int i = 0;
+            foreach (var item in Model)
             {
-                int i = 0;
-                foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@(i += 1)</td>
-                        <td>@Html.DisplayFor(modelItem => item.partNr)</td>
-                        <td>
-                            @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
-                            @Html.ActionLink("Details", "Details", new { id = item.id }) |
-                            @Html.ActionLink("Delete", "Delete", new { id = item.id })
-                        </td>
-                    </tr>
-                }
+                <tr>
+                    <td>@(i += 1)</td>
+                    <td>@Html.DisplayFor(modelItem => item.partNr)</td>
+                    <td>@Html.DisplayFor(modelItem => item.orderedDate)</td>
+                    <td>@Html.DisplayFor(modelItem => item.requiredDate)</td>
+                    <td>@Html.DisplayFor(modelItem => item.quantity)</td>
+                    <td>@Html.DisplayFor(modelItem => item.status)</td>
+                    <td>@Html.DisplayFor(modelItem => item.derivedFrom)</td>
+                    <td>@Html.DisplayFor(modelItem => item.derivedType)</td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
+                        @*@Html.ActionLink("Details", "Details", new { id = item.id }) |*@
+                        @Html.ActionLink("Delete", "Delete", new { id = item.id })
+                    </td>
+                </tr>
             }
-        </tbody>
-    </table>
+        }
+    </tbody>
+</table>
+
+<div class="col-sm-12" style="text-align:center;">
     <div class="clearfix pagination">
         <div class="pagination-inner">
             @if (Model != null)
@@ -70,7 +81,16 @@
                 if (ViewBag.Query != null)
                 {
                     var html = Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
-                       .Options(o => o.AddRouteValue("PartNr", ViewBag.Query.PartNr));
+                        .Options(o => o.AddRouteValue("PartNr", ViewBag.Query.PartNr))
+                        .Options(o => o.AddRouteValue("OrderedDateFrom", ViewBag.Query.PartNr))
+                        .Options(o => o.AddRouteValue("OrderedDateTo", ViewBag.Query.PartNr))
+                        .Options(o => o.AddRouteValue("RequiredTimeFrom", ViewBag.Query.PartNr))
+                        .Options(o => o.AddRouteValue("RequiredTimeTo", ViewBag.Query.PartNr))
+                        .Options(o => o.AddRouteValue("QuantityFrom", ViewBag.Query.PartNr))
+                        .Options(o => o.AddRouteValue("QuantityTo", ViewBag.Query.PartNr))
+                        .Options(o => o.AddRouteValue("Status", ViewBag.Query.PartNr))
+                        .Options(o => o.AddRouteValue("DerivedFrom", ViewBag.Query.PartNr))
+                        .Options(o => o.AddRouteValue("DerivedType", ViewBag.Query.PartNr));
                     @html
                 }
                 else
@@ -81,26 +101,86 @@
         </div>
     </div>
 </div>
-
-
 <div style="display:none;">
     <div id="extra-filter-content">
-        <div class="panel">
-            <div class="panel-body">
-                <div class="col-sm-12">
-                    <div class="input-group">
-                        <span class="input-group-addon" id="basic-addon-partnr">PartNr</span>
-                        <input type="text" class="form-control" name="PartNr" id="PartNr" value="@ViewBag.Query.PartNr" placeholder="PartNr" aria-describedby="basic-addon-partnr">
-                    </div>
+        <div class="col-sm-12">
+            <div class="input-group filter-detail">
+                <span class="input-group-addon" id="basic-addon-partnr">PartNr</span>
+                <input type="text" class="form-control" name="PartNr" id="PartNr" value="@ViewBag.Query.PartNr" placeholder="PartNr" aria-describedby="basic-addon-partnr">
+            </div>
+        </div>
+        <hr />
+        <div class="col-sm-12">
+            <div class="input-group filter-detail">
+                <span class="input-group-addon" id="basic-addon-ordered-date">OrderedDate</span>
+                <input type="text" class="form-control datetime-picker" autocomplete="off" name="OrderedDateFrom" id="OrderedDateFrom" value="@ViewBag.Query.OrderedDateFrom" placeholder="OrderedDate From" aria-describedby="basic-addon-ordered-date">
+                <span>~</span>
+                <input type="text" class="form-control datetime-picker" autocomplete="off" name="OrderedDateTo" id="OrderedDateTo" value="@ViewBag.Query.OrderedDateTo" placeholder="OrderedDate To" />
+            </div>
+        </div>
+        <hr />
+        <div class="col-sm-12">
+            <div class="input-group filter-detail">
+                <span class="input-group-addon" id="basic-addon-requied-time">RequiredTime</span>
+                <input type="text" class="form-control datetime-picker" autocomplete="off" name="RequiredTimeFrom" id="RequiredTimeFrom" value="@ViewBag.Query.RequiredTimeFrom" placeholder="RequiredTime From" aria-describedby="basic-addon-requied-time">
+                <span>~</span>
+                <input type="text" class="form-control datetime-picker" autocomplete="off" name="RequiredTimeTo" id="RequiredTimeTo" value="@ViewBag.Query.RequiredTimeTo" placeholder="RequiredTime To" />
+            </div>
+        </div>
+        <hr />
+        <div class="col-sm-12">
+            <div class="input-group filter-detail">
+                <span class="input-group-addon" id="basic-addon-quantity">Quantity</span>
+                <input type="number" class="form-control" step="5" name="QuantityFrom" id="QuantityFrom" value="@ViewBag.Query.QuantityFrom" placeholder="Quantity From" aria-describedby="basic-addon-quantity">
+                <span>~</span>
+                <input type="number" class="form-control" step="5" name="QuantityTo" id="QuantityTo" value="@ViewBag.Query.QuantityTo" placeholder="Quantity To" />
+            </div>
+        </div>
+        <hr />
+        <div class="col-sm-12">
+            <div class="col-sm-5" style="margin-left:-15px;">
+                <div class="input-group filter-detail">
+                    <span class="input-group-addon" id="basic-addon-derivedfrom" style="width:80px;">Status</span>
+                    <select name="Status" id="Status">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                    </select>
+                    @*<input type="text" class="form-control" name="Status" id="Status" value="@ViewBag.Query.Status" placeholder="Derived From" aria-describedby="basic-addon-derivedfrom">*@
                 </div>
-
-                <hr />
-
-               
             </div>
-            <div class="popModal_footer">
-                <input type="submit" value="查询" class="btn btn-primary FilterSearchBtn" style="width:200px;" data-dialogModalBut="ok" />
+            <div class="col-sm-7">
+                <div class="input-group filter-detail">
+                    <span class="input-group-addon" id="basic-addon-derivedfrom">DerivedFrom</span>
+                    <input type="text" class="form-control" name="DerivedFrom" id="DerivedFrom" value="@ViewBag.Query.DerivedFrom" placeholder="Derived From" aria-describedby="basic-addon-derivedfrom">
+                </div>
             </div>
+        </div>
+        <div class="popModal_footer">
+            <input type="submit" value="查询" class="btn btn-primary FilterSearchBtn" data-dialogModalBut="ok" />
         </div>
     </div>
 </div>
+
+@Scripts.Render("~/bundles/requirements")
+
+<script type="text/javascript">
+    Requirement.init();
+
+    $('#basic-addon-filter').click(function () {
+        $('#basic-addon-filter').popModal({
+            html: $('#extra-filter-content'),
+            placement: 'bottomRight',
+            showCloseBut: false,
+            onDocumentClickClose: true,
+            onOkBut: function () {
+            },
+            onCancelBut: function () {
+            },
+            onLoad: function () {
+            },
+            onClose: function () {
+            }
+        })
+    });
+
+</script>
