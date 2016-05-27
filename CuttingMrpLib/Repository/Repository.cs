@@ -22,6 +22,7 @@ namespace Repository
             return GetTable;
         }
 
+       
         /// <summary>
         /// Return all instances of type T that match the expression exp.
         /// </summary>
@@ -67,6 +68,7 @@ namespace Repository
         /// <summary>See IRepository.</summary>
         public void SaveAll()
         {
+
             _dataContextFactory.SaveAll();
         }
 
@@ -82,9 +84,9 @@ namespace Repository
             get { return TableMetadata.RowType.IdentityMembers[0].Name; }
         }
 
-        private System.Data.Linq.Table<T> GetTable
+        public System.Data.Linq.Table<T> GetTable
         {
-            get { return _dataContextFactory.Context.GetTable<T>(); }
+            get { return _dataContextFactory.Context.GetTable<T>(); }       
         }
 
         private System.Data.Linq.Mapping.MetaTable TableMetadata
