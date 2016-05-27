@@ -97,11 +97,22 @@ Partial Public Class CuttingMrpDataContext
     End Sub
   Partial Private Sub DeleteOrderDerivation(instance As OrderDerivation)
     End Sub
-
+  Partial Private Sub InsertNumericBuild(instance As NumericBuild)
+    End Sub
+  Partial Private Sub UpdateNumericBuild(instance As NumericBuild)
+    End Sub
+  Partial Private Sub DeleteNumericBuild(instance As NumericBuild)
+    End Sub
+  Partial Private Sub InsertMrpRound(instance As MrpRound)
+    End Sub
+  Partial Private Sub UpdateMrpRound(instance As MrpRound)
+    End Sub
+  Partial Private Sub DeleteMrpRound(instance As MrpRound)
+    End Sub
   #End Region
 	
 	Public Sub New()
-		MyBase.New(Global.CuttingMrpLib.My.MySettings.Default.CuttingMrpConnectionString, mappingSource)
+		MyBase.New(Global.CuttingMrpLib.My.MySettings.Default.CuttingMrpConnectionString1, mappingSource)
 		OnCreated
 	End Sub
 	
@@ -179,13 +190,11 @@ Partial Public Class CuttingMrpDataContext
 		End Get
 	End Property
 	
-
 	Public ReadOnly Property Stocks() As System.Data.Linq.Table(Of Stock)
 		Get
 			Return Me.GetTable(Of Stock)
 		End Get
 	End Property
-
 	
 	Public ReadOnly Property SumOfStocks() As System.Data.Linq.Table(Of SumOfStock)
 		Get
@@ -198,7 +207,18 @@ Partial Public Class CuttingMrpDataContext
 			Return Me.GetTable(Of OrderDerivation)
 		End Get
 	End Property
-
+	
+	Public ReadOnly Property NumericBuilds() As System.Data.Linq.Table(Of NumericBuild)
+		Get
+			Return Me.GetTable(Of NumericBuild)
+		End Get
+	End Property
+	
+	Public ReadOnly Property MrpRounds() As System.Data.Linq.Table(Of MrpRound)
+		Get
+			Return Me.GetTable(Of MrpRound)
+		End Get
+	End Property
 End Class
 
 <Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.BatchOrderTemplate")>  _
@@ -1222,9 +1242,7 @@ Partial Public Class Part
 	
 	Private _Requirements As EntitySet(Of Requirement)
 	
-
 	Private _Stocks As EntitySet(Of Stock)
-	
 	
     #Region "可扩展性方法定义"
     Partial Private Sub OnLoaded()
@@ -1258,9 +1276,7 @@ Partial Public Class Part
 		Me._ProcessOrders = New EntitySet(Of ProcessOrder)(AddressOf Me.attach_ProcessOrders, AddressOf Me.detach_ProcessOrders)
 		Me._MPs = New EntitySet(Of MP)(AddressOf Me.attach_MPs, AddressOf Me.detach_MPs)
 		Me._Requirements = New EntitySet(Of Requirement)(AddressOf Me.attach_Requirements, AddressOf Me.detach_Requirements)
-
 		Me._Stocks = New EntitySet(Of Stock)(AddressOf Me.attach_Stocks, AddressOf Me.detach_Stocks)
-
 		OnCreated
 	End Sub
 	
@@ -1380,7 +1396,6 @@ Partial Public Class Part
 		End Set
 	End Property
 	
-
 	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_Stock", Storage:="_Stocks", ThisKey:="partNr", OtherKey:="partNr")>  _
 	Public Property Stocks() As EntitySet(Of Stock)
 		Get
@@ -1388,7 +1403,6 @@ Partial Public Class Part
 		End Get
 		Set
 			Me._Stocks.Assign(value)
-
 		End Set
 	End Property
 	
@@ -1460,18 +1474,12 @@ Partial Public Class Part
 		entity.Part = Nothing
 	End Sub
 	
-
 	Private Sub attach_Stocks(ByVal entity As Stock)
-
-	
 		Me.SendPropertyChanging
 		entity.Part = Me
 	End Sub
 	
-
 	Private Sub detach_Stocks(ByVal entity As Stock)
-
-	
 		Me.SendPropertyChanging
 		entity.Part = Nothing
 	End Sub
@@ -2552,16 +2560,12 @@ Partial Public Class Stock
 				If ((previousValue Is Nothing)  _
 							= false) Then
 					Me._Part.Entity = Nothing
-
 					previousValue.Stocks.Remove(Me)
-
 				End If
 				Me._Part.Entity = value
 				If ((value Is Nothing)  _
 							= false) Then
-
 					value.Stocks.Add(Me)
-
 					Me._partNr = value.partNr
 				Else
 					Me._partNr = CType(Nothing, String)
@@ -2589,7 +2593,6 @@ Partial Public Class Stock
 		End If
 	End Sub
 End Class
-
 
 <Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.SumOfStock")>  _
 Partial Public Class SumOfStock
@@ -2847,3 +2850,350 @@ Partial Public Class OrderDerivation
 	End Sub
 End Class
 
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.NumericBuild")>  _
+Partial Public Class NumericBuild
+	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+	
+	Private Shared emptyChangingEventArgs As PropertyChangingEventArgs = New PropertyChangingEventArgs(String.Empty)
+	
+	Private _idUniq As Integer
+	
+	Private _idType As String
+	
+	Private _prefix As String
+	
+	Private _suffix As String
+	
+	Private _max As Long
+	
+	Private _min As Integer
+	
+	Private _currentNumber As Long
+	
+	Private _description As String
+	
+    #Region "可扩展性方法定义"
+    Partial Private Sub OnLoaded()
+    End Sub
+    Partial Private Sub OnValidate(action As System.Data.Linq.ChangeAction)
+    End Sub
+    Partial Private Sub OnCreated()
+    End Sub
+    Partial Private Sub OnidUniqChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnidUniqChanged()
+    End Sub
+    Partial Private Sub OnidTypeChanging(value As String)
+    End Sub
+    Partial Private Sub OnidTypeChanged()
+    End Sub
+    Partial Private Sub OnprefixChanging(value As String)
+    End Sub
+    Partial Private Sub OnprefixChanged()
+    End Sub
+    Partial Private Sub OnsuffixChanging(value As String)
+    End Sub
+    Partial Private Sub OnsuffixChanged()
+    End Sub
+    Partial Private Sub OnmaxChanging(value As Long)
+    End Sub
+    Partial Private Sub OnmaxChanged()
+    End Sub
+    Partial Private Sub OnminChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnminChanged()
+    End Sub
+    Partial Private Sub OncurrentNumberChanging(value As Long)
+    End Sub
+    Partial Private Sub OncurrentNumberChanged()
+    End Sub
+    Partial Private Sub OndescriptionChanging(value As String)
+    End Sub
+    Partial Private Sub OndescriptionChanged()
+    End Sub
+    #End Region
+	
+	Public Sub New()
+		MyBase.New
+		OnCreated
+	End Sub
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_idUniq", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true)>  _
+	Public Property idUniq() As Integer
+		Get
+			Return Me._idUniq
+		End Get
+		Set
+			If ((Me._idUniq = value)  _
+						= false) Then
+				Me.OnidUniqChanging(value)
+				Me.SendPropertyChanging
+				Me._idUniq = value
+				Me.SendPropertyChanged("idUniq")
+				Me.OnidUniqChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_idType", DbType:="VarChar(10) NOT NULL", CanBeNull:=false)>  _
+	Public Property idType() As String
+		Get
+			Return Me._idType
+		End Get
+		Set
+			If (String.Equals(Me._idType, value) = false) Then
+				Me.OnidTypeChanging(value)
+				Me.SendPropertyChanging
+				Me._idType = value
+				Me.SendPropertyChanged("idType")
+				Me.OnidTypeChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_prefix", DbType:="VarChar(10)")>  _
+	Public Property prefix() As String
+		Get
+			Return Me._prefix
+		End Get
+		Set
+			If (String.Equals(Me._prefix, value) = false) Then
+				Me.OnprefixChanging(value)
+				Me.SendPropertyChanging
+				Me._prefix = value
+				Me.SendPropertyChanged("prefix")
+				Me.OnprefixChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_suffix", DbType:="VarChar(10)")>  _
+	Public Property suffix() As String
+		Get
+			Return Me._suffix
+		End Get
+		Set
+			If (String.Equals(Me._suffix, value) = false) Then
+				Me.OnsuffixChanging(value)
+				Me.SendPropertyChanging
+				Me._suffix = value
+				Me.SendPropertyChanged("suffix")
+				Me.OnsuffixChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_max", DbType:="BigInt NOT NULL")>  _
+	Public Property max() As Long
+		Get
+			Return Me._max
+		End Get
+		Set
+			If ((Me._max = value)  _
+						= false) Then
+				Me.OnmaxChanging(value)
+				Me.SendPropertyChanging
+				Me._max = value
+				Me.SendPropertyChanged("max")
+				Me.OnmaxChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_min", DbType:="Int NOT NULL")>  _
+	Public Property min() As Integer
+		Get
+			Return Me._min
+		End Get
+		Set
+			If ((Me._min = value)  _
+						= false) Then
+				Me.OnminChanging(value)
+				Me.SendPropertyChanging
+				Me._min = value
+				Me.SendPropertyChanged("min")
+				Me.OnminChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_currentNumber", DbType:="BigInt NOT NULL")>  _
+	Public Property currentNumber() As Long
+		Get
+			Return Me._currentNumber
+		End Get
+		Set
+			If ((Me._currentNumber = value)  _
+						= false) Then
+				Me.OncurrentNumberChanging(value)
+				Me.SendPropertyChanging
+				Me._currentNumber = value
+				Me.SendPropertyChanged("currentNumber")
+				Me.OncurrentNumberChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_description", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
+	Public Property description() As String
+		Get
+			Return Me._description
+		End Get
+		Set
+			If (String.Equals(Me._description, value) = false) Then
+				Me.OndescriptionChanging(value)
+				Me.SendPropertyChanging
+				Me._description = value
+				Me.SendPropertyChanged("description")
+				Me.OndescriptionChanged
+			End If
+		End Set
+	End Property
+	
+	Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
+	
+	Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
+	
+	Protected Overridable Sub SendPropertyChanging()
+		If ((Me.PropertyChangingEvent Is Nothing)  _
+					= false) Then
+			RaiseEvent PropertyChanging(Me, emptyChangingEventArgs)
+		End If
+	End Sub
+	
+	Protected Overridable Sub SendPropertyChanged(ByVal propertyName As [String])
+		If ((Me.PropertyChangedEvent Is Nothing)  _
+					= false) Then
+			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
+		End If
+	End Sub
+End Class
+
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.MrpRound")>  _
+Partial Public Class MrpRound
+	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+	
+	Private Shared emptyChangingEventArgs As PropertyChangingEventArgs = New PropertyChangingEventArgs(String.Empty)
+	
+	Private _mrpRound As String
+	
+	Private _runningStatus As Integer
+	
+	Private _time As Date
+	
+	Private _launcher As String
+	
+    #Region "可扩展性方法定义"
+    Partial Private Sub OnLoaded()
+    End Sub
+    Partial Private Sub OnValidate(action As System.Data.Linq.ChangeAction)
+    End Sub
+    Partial Private Sub OnCreated()
+    End Sub
+    Partial Private Sub OnmrpRoundChanging(value As String)
+    End Sub
+    Partial Private Sub OnmrpRoundChanged()
+    End Sub
+    Partial Private Sub OnrunningStatusChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnrunningStatusChanged()
+    End Sub
+    Partial Private Sub OntimeChanging(value As Date)
+    End Sub
+    Partial Private Sub OntimeChanged()
+    End Sub
+    Partial Private Sub OnlauncherChanging(value As String)
+    End Sub
+    Partial Private Sub OnlauncherChanged()
+    End Sub
+    #End Region
+	
+	Public Sub New()
+		MyBase.New
+		OnCreated
+	End Sub
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_mrpRound", DbType:="VarChar(200) NOT NULL", CanBeNull:=false, IsPrimaryKey:=true)>  _
+	Public Property mrpRound() As String
+		Get
+			Return Me._mrpRound
+		End Get
+		Set
+			If (String.Equals(Me._mrpRound, value) = false) Then
+				Me.OnmrpRoundChanging(value)
+				Me.SendPropertyChanging
+				Me._mrpRound = value
+				Me.SendPropertyChanged("mrpRound")
+				Me.OnmrpRoundChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_runningStatus", DbType:="Int NOT NULL")>  _
+	Public Property runningStatus() As Integer
+		Get
+			Return Me._runningStatus
+		End Get
+		Set
+			If ((Me._runningStatus = value)  _
+						= false) Then
+				Me.OnrunningStatusChanging(value)
+				Me.SendPropertyChanging
+				Me._runningStatus = value
+				Me.SendPropertyChanged("runningStatus")
+				Me.OnrunningStatusChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_time", DbType:="DateTime NOT NULL")>  _
+	Public Property time() As Date
+		Get
+			Return Me._time
+		End Get
+		Set
+			If ((Me._time = value)  _
+						= false) Then
+				Me.OntimeChanging(value)
+				Me.SendPropertyChanging
+				Me._time = value
+				Me.SendPropertyChanged("time")
+				Me.OntimeChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_launcher", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
+	Public Property launcher() As String
+		Get
+			Return Me._launcher
+		End Get
+		Set
+			If (String.Equals(Me._launcher, value) = false) Then
+				Me.OnlauncherChanging(value)
+				Me.SendPropertyChanging
+				Me._launcher = value
+				Me.SendPropertyChanged("launcher")
+				Me.OnlauncherChanged
+			End If
+		End Set
+	End Property
+	
+	Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
+	
+	Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
+	
+	Protected Overridable Sub SendPropertyChanging()
+		If ((Me.PropertyChangingEvent Is Nothing)  _
+					= false) Then
+			RaiseEvent PropertyChanging(Me, emptyChangingEventArgs)
+		End If
+	End Sub
+	
+	Protected Overridable Sub SendPropertyChanged(ByVal propertyName As [String])
+		If ((Me.PropertyChangedEvent Is Nothing)  _
+					= false) Then
+			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
+		End If
+	End Sub
+End Class

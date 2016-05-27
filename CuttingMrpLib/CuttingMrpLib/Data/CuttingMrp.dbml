@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="CuttingMrp" Class="CuttingMrpDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=wangsong-pc;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=sa" SettingsObjectName="CuttingMrpLib.My.MySettings" SettingsPropertyName="CuttingMrpConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Data Source=vm08;Initial Catalog=CuttingMrp;User ID=sa" SettingsObjectName="CuttingMrpLib.My.MySettings" SettingsPropertyName="CuttingMrpConnectionString1" Provider="System.Data.SqlClient" />
   <Table Name="dbo.BatchOrderTemplate" Member="BatchOrderTemplates">
     <Type Name="BatchOrderTemplate">
       <Column Name="orderNr" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -139,6 +139,26 @@
       <Column Name="deriveQty" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
       <Association Name="ProcessOrder_OrderDerivation" Member="ProcessOrder" ThisKey="orderId" OtherKey="orderNr" Type="ProcessOrder" IsForeignKey="true" />
       <Association Name="Requirement_OrderDerivation" Member="Requirement" ThisKey="id" OtherKey="id" Type="Requirement" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.NumericBuild" Member="NumericBuilds">
+    <Type Name="NumericBuild">
+      <Column Name="idUniq" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="idType" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="prefix" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="suffix" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="max" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="min" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="currentNumber" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="description" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.MrpRound" Member="MrpRounds">
+    <Type Name="MrpRound">
+      <Column Name="mrpRound" Type="System.String" DbType="VarChar(200) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="runningStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="time" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="launcher" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
 </Database>

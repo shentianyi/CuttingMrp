@@ -1,16 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BFFF4147-B219-4BDF-AB9B-8351E79055C5}</ProjectGuid>
+    <ProjectGuid>{AAEB7C4B-57A9-41D7-8DE8-8A360999CD22}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>CuttingMrpLib</RootNamespace>
-    <AssemblyName>CuttingMrpLib</AssemblyName>
+    <RootNamespace>UnitTestLib</RootNamespace>
+    <AssemblyName>UnitTestLib</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{F184B08F-C81C-45F6-A57F-5ABD9991F28F}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -18,9 +23,8 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>CuttingMrpLib.xml</DocumentationFile>
+    <DocumentationFile>UnitTestLib.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,7 +32,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>CuttingMrpLib.xml</DocumentationFile>
+    <DocumentationFile>UnitTestLib.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -46,14 +50,23 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.Linq" />
-    <Reference Include="System.Messaging" />
-    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
   </ItemGroup>
+  <Choose>
+    <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
     <Import Include="System" />
@@ -63,33 +76,10 @@
     <Import Include="System.Diagnostics" />
     <Import Include="System.Linq" />
     <Import Include="System.Xml.Linq" />
+    <Import Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\CalculatorStatus.vb" />
-    <Compile Include="Data\CuttingMrp.vb">
-      <DependentUpon>CuttingMrp.dbml</DependentUpon>
-    </Compile>
-    <Compile Include="Data\DataContext.vb" />
-    <Compile Include="Data\CuttingMrp.designer.vb">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CuttingMrp.dbml</DependentUpon>
-    </Compile>
-    <Compile Include="Data\ProcessOrderEnum.vb" />
-    <Compile Include="Data\Repository\CalculateRepository.vb" />
-    <Compile Include="Data\Repository\ICalculateRepository.vb" />
-    <Compile Include="Data\Repository\INumericBuildRepository.vb" />
-    <Compile Include="Data\Repository\IProcessOrderRepository.vb" />
-    <Compile Include="Data\Repository\IRequirementRepository.vb" />
-    <Compile Include="Data\Repository\NumericDefinitionRepository.vb" />
-    <Compile Include="Data\Repository\ProcessOrderRepository.vb" />
-    <Compile Include="Data\Repository\RequirementRepository.vb" />
-    <Compile Include="Data\RequirementStatus.vb" />
-    <Compile Include="Model\CalculateSetting.vb" />
-    <Compile Include="Model\DeriveType.vb" />
-    <Compile Include="Data\Repository\IStockRepository.vb" />
-    <Compile Include="Data\Repository\StockRepository.vb" />
-    <Compile Include="Model\RequirementStatistics.vb" />
+    <Compile Include="UnitTest1.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -105,31 +95,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Service\CalculateService.vb" />
-    <Compile Include="Service\ICalculateService.vb" />
-    <Compile Include="Service\INumericService.vb" />
-    <Compile Include="Service\IProcessOrderService.vb" />
-    <Compile Include="Service\IRequirementService.vb" />
-    <Compile Include="Service\NumericService.vb" />
-    <Compile Include="Service\ProcessOrderService.vb" />
-    <Compile Include="Service\RequirementService.vb" />
-    <Compile Include="Service\ServiceBase.vb" />
-    <Compile Include="Service\IStockService.vb" />
-    <Compile Include="Service\StockService.vb" />
-    <Compile Include="Utility\Calculator.vb" />
-    <Compile Include="Utility\CalculatorSingleton.vb" />
-    <Compile Include="ViewModel\SearchViewModel\MRPSearchModel.vb" />
-    <Compile Include="ViewModel\SearchViewModel\ProcessOrderSearchModel.vb" />
-    <Compile Include="ViewModel\SearchViewModel\RequirementSearchModel.vb" />
-    <Compile Include="ViewModel\SearchViewModel\RequirementStatisticsSearchModel.vb" />
-    <Compile Include="ViewModel\SearchViewModel\SearchModelBase.vb" />
-    <Compile Include="ViewModel\SearchViewModel\StockSearchModel.vb" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
-    <None Include="Data\CuttingMrp.dbml.layout">
-      <DependentUpon>CuttingMrp.dbml</DependentUpon>
-    </None>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
@@ -138,11 +105,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Data\CuttingMrp.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>CuttingMrp.designer.vb</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
@@ -154,17 +116,30 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ViewModel\PageViewModel\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Repository\Repository.csproj">
-      <Project>{b3e59cdb-b93e-4364-98d7-55aca02b80f1}</Project>
-      <Name>Repository</Name>
+    <ProjectReference Include="..\CuttingMrpLib\CuttingMrpLib.vbproj">
+      <Project>{bfff4147-b219-4bdf-ab9b-8351e79055c5}</Project>
+      <Name>CuttingMrpLib</Name>
     </ProjectReference>
   </ItemGroup>
+  <Choose>
+    <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.CodedUITestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Extension, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITesting, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
