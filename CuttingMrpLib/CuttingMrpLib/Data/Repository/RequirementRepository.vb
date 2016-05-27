@@ -29,15 +29,15 @@ Public Class RequirementRepository
                 requires = requires.Where(Function(c) c.requiredDate <= searchModel.RequiredTimeTo)
             End If
 
-            If searchModel.QuantityFrom > 0 Then
+            If searchModel.QuantityFrom.HasValue > 0 Then
                 requires = requires.Where(Function(c) c.quantity >= searchModel.QuantityFrom)
             End If
 
-            If searchModel.QuantityTo > 0 Then
+            If searchModel.QuantityTo.HasValue > 0 Then
                 requires = requires.Where(Function(c) c.quantity <= searchModel.QuantityTo)
             End If
 
-            If searchModel.Status <> -999 Then
+            If searchModel.Status.HasValue Then
                 requires = requires.Where(Function(c) c.status = searchModel.Status)
             End If
 
@@ -50,7 +50,7 @@ Public Class RequirementRepository
             End If
 
             If Not String.IsNullOrEmpty(searchModel.PartNr) Then
-                requires = requires.Where(Function(c) c.partNr Like searchModel.PartNr)
+                requires = requires.Where(Function(c) c.partNr.Contains(searchModel.PartNr))
             End If
             '   requires = requires.Skip(searchModel.PageIndex * searchModel.PageSize)
             '  requires = requires.Take(searchModel.PageSize)
