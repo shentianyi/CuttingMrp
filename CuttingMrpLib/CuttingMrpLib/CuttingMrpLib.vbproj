@@ -20,6 +20,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DocumentationFile>CuttingMrpLib.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -81,7 +82,6 @@
     <Compile Include="Model\CalculateSetting.vb" />
     <Compile Include="Model\DeriveType.vb" />
     <Compile Include="Data\Repository\IStockRepository.vb" />
-    <Compile Include="Data\Repository\RequirementRepository.vb" />
     <Compile Include="Data\Repository\StockRepository.vb" />
     <Compile Include="Model\RequirementStatistics.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -105,8 +105,8 @@
     <Compile Include="Service\RequirementService.vb" />
     <Compile Include="Service\ServiceBase.vb" />
     <Compile Include="Service\IStockService.vb" />
-    <Compile Include="Service\RequirementService.vb" />
     <Compile Include="Service\StockService.vb" />
+    <Compile Include="ViewModel\SearchViewModel\ProcessOrderSearchModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\RequirementSearchModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\RequirementStatisticsSearchModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\SearchModelBase.vb" />

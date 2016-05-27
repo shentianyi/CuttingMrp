@@ -16,9 +16,7 @@ Public Class StockRepository
     Public Function Search(searchModel As StockSearchModel) As IQueryable(Of Stock) Implements IStockRepository.Search
         If searchModel IsNot Nothing Then
 
-            Dim stocks As IQueryable(Of Stock) = _context.Stock
-
-
+            Dim stocks As IQueryable(Of Stock) = _context.Stocks
             If Not String.IsNullOrWhiteSpace(searchModel.PartNr) Then
                 stocks = stocks.Where(Function(s) s.partNr.Contains(searchModel.PartNr))
             End If

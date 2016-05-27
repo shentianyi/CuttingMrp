@@ -2,16 +2,16 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="My" GeneratedClassName="MySettings" UseMySettingsClassName="true">
   <Profiles />
   <Settings>
+    <Setting Name="db" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Data Source=vm08;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=sa;Password=brilliantech123@</Value>
+    </Setting>
     <Setting Name="CuttingMrpConnectionString" Type="(Connection string)" Scope="Application">
       <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;ConnectionString&gt;Data Source=vm08;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=sa;Password=brilliantech123@&lt;/ConnectionString&gt;
+  &lt;ConnectionString&gt;Data Source=wangsong-pc;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=sa;Password=wangsong&lt;/ConnectionString&gt;
   &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
-      <Value Profile="(Default)">Data Source=vm08;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=sa;Password=brilliantech123@</Value>
-    </Setting>
-    <Setting Name="db" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Data Source=vm08;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=sa;Password=brilliantech123@</Value>
+      <Value Profile="(Default)">Data Source=wangsong-pc;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=sa;Password=wangsong</Value>
     </Setting>
   </Settings>
 </SettingsFile>
