@@ -1,0 +1,32 @@
+﻿.FilterSearchBtn{
+    width:200px;
+}
+
+.filter-p{
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.filter-content{
+    border:1px solid black; 
+    border-radius:4px;
+    height:36px;
+    line-height:34px;
+    text-align:center;
+}
+
+.filter-content>span{
+    border-left:1px solid black;
+    padding:0 10px 0 20px; 
+    cursor:pointer;
+}
+
+.filter-detail>span{
+    width:80px;
+}
+
+.filter-detail>input[type='text'], .filter-detail>input[type='number'], .filter-detail>input[type='datetime'] ,.filter-detail>select{
+    height:38px;
+    width:200px;
+    box-shadow:none;
+}

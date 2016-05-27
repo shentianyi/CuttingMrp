@@ -3,10 +3,10 @@
 
 
     Private _partNrStr As String
-    Private _orderedDateFrom As DateTime
-    Private _orderedDateTo As DateTime
-    Private _requiredTimeFrom As DateTime
-    Private _requiredTimeTo As DateTime
+    Private _orderedDateFrom As DateTime?
+    Private _orderedDateTo As DateTime?
+    Private _requiredTimeFrom As DateTime?
+    Private _requiredTimeTo As DateTime?
     Private _quantityFrom As Double = -1.0
     Private _quantityTo As Double = -1.0
     Private _status As Integer = -9999
@@ -24,38 +24,38 @@
         End Set
     End Property
 
-    Public Property OrderedDateFrom As DateTime
+    Public Property OrderedDateFrom As DateTime?
         Get
             Return _orderedDateFrom
         End Get
-        Set(value As DateTime)
+        Set(value As DateTime?)
             _orderedDateFrom = value
         End Set
     End Property
 
-    Public Property OrderedDateTo As DateTime
+    Public Property OrderedDateTo As DateTime?
         Get
             Return _orderedDateTo
         End Get
-        Set(value As DateTime)
+        Set(value As DateTime?)
             _orderedDateTo = value
         End Set
     End Property
 
-    Public Property RequiredTimeFrom As DateTime
+    Public Property RequiredTimeFrom As DateTime?
         Get
             Return _requiredTimeFrom
         End Get
-        Set(value As DateTime)
+        Set(value As DateTime?)
             _requiredTimeFrom = value
         End Set
     End Property
 
-    Public Property RequiredTimeTo As DateTime
+    Public Property RequiredTimeTo As DateTime?
         Get
             Return _requiredTimeTo
         End Get
-        Set(value As DateTime)
+        Set(value As DateTime?)
             _requiredTimeTo = value
         End Set
     End Property

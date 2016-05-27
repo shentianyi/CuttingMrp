@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Net;
+using CuttingMrpWeb.Helpers;
 
 namespace CuttingMrpWeb.Controllers
 {
@@ -15,7 +16,7 @@ namespace CuttingMrpWeb.Controllers
         // GET: Stocks
         public ActionResult Index(int? page)
         {
-            int pageIndex = page.HasValue ? (page.Value <= 0 ? 0 : page.Value - 1) : 0;
+            int pageIndex = PagingHelper.GetPageIndex(page);
 
             StockSearchModel q = new StockSearchModel();
 
@@ -68,10 +69,9 @@ namespace CuttingMrpWeb.Controllers
         {
             try
             {
-                // TODO: Add update logic here
-                Stock s = stock;
+                // TODO: Add update logic here 
                 IStockService ss = new StockService(Settings.Default.db);
-                ss.Update(s);
+                ss.Update(stock);
                 return RedirectToAction("Index");
             }
             catch
@@ -103,24 +103,11 @@ namespace CuttingMrpWeb.Controllers
             }
         }
 
-        public ActionResult Search()
+        public ActionResult Search([Bind(Include = "PartNr,FIFOFrom,FIFOTo,QuantityFrom,QuantityTo,Wh,Position")] StockSearchModel q)
         {
-            StockSearchModel q = new StockSearchModel()
-            {
-                PartNr = Request.QueryString.Get("PartNr"),
-                Wh = Request.QueryString.Get("Wh"),
-                Position=Request.QueryString.Get("Position")
-            };
-
-            if (!string.IsNullOrWhiteSpace(Request.QueryString.Get("FIFOFrom"))) { q.FIFOFrom = DateTime.Parse(Request.QueryString.Get("FIFOFrom")); }
-            if (!string.IsNullOrWhiteSpace(Request.QueryString.Get("FIFOTo"))) { q.FIFOTo = DateTime.Parse(Request.QueryString.Get("FIFOTo")); }
-            if (!string.IsNullOrWhiteSpace(Request.QueryString.Get("QuantityFrom"))) { q.QuantityFrom = float.Parse(Request.QueryString.Get("QuantityFrom")); }
-            if (!string.IsNullOrWhiteSpace(Request.QueryString.Get("QuantityTo"))) { q.QuantityTo = float.Parse(Request.QueryString.Get("QuantityTo")); }
-
-
             int pageIndex = 0;
             int.TryParse(Request.QueryString.Get("page"), out pageIndex);
-            pageIndex = pageIndex <= 0 ? 0 : pageIndex - 1;
+            pageIndex = PagingHelper.GetPageIndex(pageIndex);
 
             ViewBag.Query = q;
 
