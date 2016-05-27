@@ -4,8 +4,8 @@ Stock.init = function () {
     var partNr = $('#PartNr').val();
     var fifofrom = $('#FIFOFrom').val();
     var fifoto = $('#FIFOTo').val();
-    var quantityfrom = $('#QuantityFrom').val();
-    var quantityto = $('#QuantityTo').val();
+    var quantityfrom = $('#QuantityFrom').val() > 0 ? $('#QuantityFrom').val() : "";
+    var quantityto = $('#QuantityTo').val() > 0 ? $('#QuantityTo').val() : "";
     var wh = $('#Wh').val();
     var position = $('#Position').val();
 

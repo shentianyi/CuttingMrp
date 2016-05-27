@@ -222,9 +222,11 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\filter.css" />
     <Content Include="Content\jquery-popModal.css" />
     <Content Include="Content\jquery.datetimepicker.css" />
     <Content Include="Content\pagination.css" />
+    <Content Include="Content\requirement.css" />
     <Content Include="Content\stock.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -250,6 +252,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\requirement.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\stock.js" />
