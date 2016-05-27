@@ -83,6 +83,7 @@
     <Compile Include="Model\DeriveType.vb" />
     <Compile Include="Data\Repository\IStockRepository.vb" />
     <Compile Include="Data\Repository\StockRepository.vb" />
+    <Compile Include="Model\RequirementPartial.vb" />
     <Compile Include="Model\RequirementStatistics.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -106,6 +107,7 @@
     <Compile Include="Service\ServiceBase.vb" />
     <Compile Include="Service\IStockService.vb" />
     <Compile Include="Service\StockService.vb" />
+    <Compile Include="Utility\EnumUtility.vb" />
     <Compile Include="ViewModel\SearchViewModel\ProcessOrderSearchModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\RequirementSearchModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\RequirementStatisticsSearchModel.vb" />
@@ -141,7 +143,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Utility\" />
     <Folder Include="ViewModel\PageViewModel\" />
   </ItemGroup>
   <ItemGroup>

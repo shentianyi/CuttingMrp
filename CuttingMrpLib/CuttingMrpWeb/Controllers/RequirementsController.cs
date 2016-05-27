@@ -23,7 +23,7 @@ namespace CuttingMrpWeb.Controllers
             IPagedList<Requirement> requirements = rs.Search(q).ToPagedList(pageIndex, Settings.Default.pageSize);
 
             ViewBag.Query = q;
-
+            List<EnumItem> item = EnumUtility.GetList(typeof(RequirementStatus));
             return View(requirements);
         }
 
