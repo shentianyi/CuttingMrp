@@ -26,8 +26,8 @@ Public Class CalculateRepository
             If conditions.RunningStatus <> -999 Then
                 rounds = rounds.Where(Function(c) c.runningStatus = conditions.RunningStatus)
             End If
-            rounds.Skip(conditions.PageSize * conditions.PageIndex)
-            rounds.Take(conditions.PageSize)
+            'rounds.Skip(conditions.PageSize * conditions.PageIndex)
+            'rounds.Take(conditions.PageSize)
             Return rounds.ToList
         End If
 

@@ -39,8 +39,8 @@ Public Class ProcessOrderRepository
                 table = table.Where(Function(c) c.completeRate <= conditions.CompleteRateTo)
             End If
 
-            table.Skip(conditions.PageSize * conditions.PageIndex)
-            table.Take(conditions.PageSize)
+            'table.Skip(conditions.PageSize * conditions.PageIndex)
+            ' table.Take(conditions.PageSize)
             Return table
         Else
             Throw New ArgumentNullException
