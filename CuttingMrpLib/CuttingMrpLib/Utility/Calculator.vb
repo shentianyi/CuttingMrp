@@ -142,7 +142,7 @@ Public Class Calculator
                     key = coll.requiredDate.ToString("yyyy-MM-dd")
                 Case "WEEK"
                     'get the monday of each week
-                    Dim delta As Integer = DayOfWeek.Monday - coll.requiredDate.DayOfWeek;
+                    Dim delta As Integer = DayOfWeek.Monday - coll.requiredDate.DayOfWeek
                     key = coll.requiredDate.AddDays(delta).ToString("yyyy-MM-dd")
                 Case "MONTH"
                     key = coll.requiredDate.ToString("yyyy-MM") & "-01"

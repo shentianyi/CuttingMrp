@@ -124,6 +124,14 @@ namespace CuttingMrpWeb.Controllers
             return View("Index", requirements);
         }
 
+        public ActionResult RunMrp() {
+
+            ICalculateService cs = new CalculateService(Settings.Default.db);
+            cs.Start(Settings.Default.mrpQueue, null);
+
+            return null;
+        }
+
         private ActionResult ValidateRequirement(Requirement requirement)
         {
             if (requirement == null)
