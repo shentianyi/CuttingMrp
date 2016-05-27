@@ -4,15 +4,14 @@ Imports Repository
 Public Class RequirementService
     Inherits ServiceBase
     Implements IRequirementService
-    Public Property dbString As String
- 
+
     Public Sub New(db As String)
         MyBase.New(db)
     End Sub
 
     Public Function Search(conditions As RequirementSearchModel) As IQueryable(Of Requirement) Implements IRequirementService.Search
         Try
-            Dim reqRepo As RequirementRepository = New RequirementRepository(New DataContext(Me.dbString))
+            Dim reqRepo As RequirementRepository = New RequirementRepository(New DataContext(Me.DBConn))
 
             Return reqRepo.Search(conditions)
         Catch ex As Exception
@@ -21,14 +20,14 @@ Public Class RequirementService
     End Function
 
     Public Function SearchStatistics(condition As RequirementStatisticsSearchModel) As List(Of RequirementStatistics) Implements IRequirementService.SearchStatistics
-        Dim reqRepo As RequirementRepository = New RequirementRepository(New DataContext(My.Settings.db))
+        Dim reqRepo As RequirementRepository = New RequirementRepository(New DataContext(Me.DBConn))
         Return Nothing
     End Function
 
     Public Function FindById(id As Integer) As Requirement Implements IRequirementService.FindById
         Dim requirement As Requirement = Nothing
         Try
-            Dim context As DataContext = New DataContext(Me.dbString)
+            Dim context As DataContext = New DataContext(Me.DBConn)
             Dim rep As Repository(Of Requirement) = New Repository.Repository(Of Requirement)(context)
             requirement = rep.First(Function(s) s.id.Equals(id))
         Catch ex As Exception
