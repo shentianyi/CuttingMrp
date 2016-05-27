@@ -58,7 +58,14 @@ namespace CuttingMrpWeb.Controllers
         // GET: Requirements/Edit/5
         public ActionResult Edit(int id)
         {
-            return GetRequirementById(id);
+            Requirement requirement = GetRequirementById(id);
+
+            if (requirement != null)
+            {
+                SetRequirementStatusList(requirement.status,false);
+            }
+
+            return ValidateRequirement(requirement);
         }
 
         // POST: Requirements/Edit/5
@@ -81,7 +88,7 @@ namespace CuttingMrpWeb.Controllers
         // GET: Requirements/Delete/5
         public ActionResult Delete(int id)
         {
-            return GetRequirementById(id);
+            return ValidateRequirement(GetRequirementById(id));
         }
 
         // POST: Requirements/Delete/5
@@ -117,15 +124,8 @@ namespace CuttingMrpWeb.Controllers
             return View("Index", requirements);
         }
 
-        private ActionResult GetRequirementById(int? id)
+        private ActionResult ValidateRequirement(Requirement requirement)
         {
-            if (id == null || !id.HasValue)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            IRequirementService rs = new RequirementService(Settings.Default.db);
-            Requirement requirement = rs.FindById(id.Value);
             if (requirement == null)
             {
                 return HttpNotFound();
@@ -133,14 +133,20 @@ namespace CuttingMrpWeb.Controllers
             return View(requirement);
         }
 
-        private void SetRequirementStatusList(int? status) {
+        private Requirement GetRequirementById(int id) {
+            IRequirementService rs = new RequirementService(Settings.Default.db);
+            Requirement requirement = rs.FindById(id);
+            return requirement;
+        }
+
+        private void SetRequirementStatusList(int? status,bool allowBlank=true) {
             List<EnumItem> item = EnumUtility.GetList(typeof(RequirementStatus));
            
             List<SelectListItem> select = new List<SelectListItem>();
-            //if (!status.HasValue)
-           // {
+            if (allowBlank)
+            {
                 select.Add(new SelectListItem { Text = "", Value = "" });
-           // }
+            }
             foreach (var it in item)
             {
                 if (status.HasValue && status.ToString().Equals(it.Value))
