@@ -5,6 +5,7 @@ using MvcPaging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -57,7 +58,7 @@ namespace CuttingMrpWeb.Controllers
         // GET: Requirements/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            return GetRequirementById(id);
         }
 
         // POST: Requirements/Edit/5
@@ -79,7 +80,7 @@ namespace CuttingMrpWeb.Controllers
         // GET: Requirements/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            return GetRequirementById(id);
         }
 
         // POST: Requirements/Delete/5
@@ -113,7 +114,21 @@ namespace CuttingMrpWeb.Controllers
             return View("Index", requirements);
         }
 
+        private ActionResult GetRequirementById(int? id)
+        {
+            if (id == null || !id.HasValue)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
 
+            IRequirementService rs = new RequirementService(Settings.Default.db);
+            Requirement requirement = rs.FindById(id.Value);
+            if (requirement == null)
+            {
+                return HttpNotFound();
+            }
+            return View(requirement);
+        }
 
     }
 }

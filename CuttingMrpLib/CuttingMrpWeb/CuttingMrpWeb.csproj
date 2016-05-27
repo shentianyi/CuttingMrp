@@ -294,6 +294,8 @@
     <Content Include="Views\Stocks\Delete.cshtml" />
     <Content Include="Views\Stocks\Edit.cshtml" />
     <Content Include="Views\Requirements\Index.cshtml" />
+    <Content Include="Views\Requirements\Delete.cshtml" />
+    <Content Include="Views\Requirements\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
