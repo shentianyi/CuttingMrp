@@ -1,0 +1,106 @@
+﻿@using MvcPaging;
+
+@model IPagedList<CuttingMrpLib.Requirement>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<div>
+    <form action="/Requirements/Search" method="get">
+        <div class="panel panel-primary">
+            <div class="panel-body">
+                <div class="col-sm-12">
+                    <div class="col-sm-2">
+                        <select class="form-control">
+                            <option>小时</option>
+                            <option>天</option>
+                            <option>周</option>
+                            <option>月</option>
+                        </select>
+                    </div>
+
+                    <div class="col-sm-8 filter-content" style="border:1px solid black; border-radius:4px;height:36px;line-height:35px;">
+                        <span class="pull-right" style="border-left:1px solid black;padding:0 10px 0 20px; cursor:pointer;" id="basic-addon-filter"> <i class="glyphicon glyphicon-filter"></i> </span>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+
+<div>
+    <table class="table table-bordered" style="margin-top:20px;">
+        <thead>
+            <tr>
+                <th> No. </th>
+                <th>PartNr</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                int i = 0;
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@(i += 1)</td>
+                        <td>@Html.DisplayFor(modelItem => item.partNr)</td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.id }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.id })
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <div class="clearfix pagination">
+        <div class="pagination-inner">
+            @if (Model != null)
+            {
+                if (ViewBag.Query != null)
+                {
+                    var html = Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
+                       .Options(o => o.AddRouteValue("PartNr", ViewBag.Query.PartNr));
+                    @html
+                }
+                else
+                {
+                    @Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
+                }
+            }
+        </div>
+    </div>
+</div>
+
+
+<div style="display:none;">
+    <div id="extra-filter-content">
+        <div class="panel">
+            <div class="panel-body">
+                <div class="col-sm-12">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon-partnr">PartNr</span>
+                        <input type="text" class="form-control" name="PartNr" id="PartNr" value="@ViewBag.Query.PartNr" placeholder="PartNr" aria-describedby="basic-addon-partnr">
+                    </div>
+                </div>
+
+                <hr />
+
+               
+            </div>
+            <div class="popModal_footer">
+                <input type="submit" value="查询" class="btn btn-primary FilterSearchBtn" style="width:200px;" data-dialogModalBut="ok" />
+            </div>
+        </div>
+    </div>
+</div>

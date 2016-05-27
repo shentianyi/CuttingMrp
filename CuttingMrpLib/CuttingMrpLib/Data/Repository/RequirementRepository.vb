@@ -16,10 +16,19 @@ Public Class RequirementRepository
     Public Function Search(searchModel As RequirementSearchModel) As IQueryable(Of Requirement) Implements IRequirementRepository.Search
         If searchModel IsNot Nothing Then
             Dim requires As IQueryable(Of Requirement) = _context.Requirements
-            requires.Where(Function(c) c.orderedDate >= searchModel.OrderedDateFrom)
-            requires.Where(Function(c) c.orderedDate <= searchModel.OrderedDateTo)
-            requires.Where(Function(c) c.requiredDate >= searchModel.RequiredTimeFrom)
-            requires.Where(Function(c) c.requiredDate <= searchModel.RequiredTimeTo)
+            If searchModel.OrderedDateFrom.HasValue Then
+                requires = requires.Where(Function(c) c.orderedDate >= searchModel.OrderedDateFrom)
+            End If
+            If searchModel.OrderedDateTo.HasValue Then
+                requires = requires.Where(Function(c) c.orderedDate <= searchModel.OrderedDateTo)
+            End If
+            If searchModel.RequiredTimeFrom.HasValue Then
+                requires = requires.Where(Function(c) c.requiredDate >= searchModel.RequiredTimeFrom)
+            End If
+            If searchModel.RequiredTimeTo.HasValue Then
+                requires = requires.Where(Function(c) c.requiredDate <= searchModel.RequiredTimeTo)
+            End If
+
             If searchModel.QuantityFrom > 0 Then
                 requires = requires.Where(Function(c) c.quantity >= searchModel.QuantityFrom)
             End If
@@ -32,22 +41,24 @@ Public Class RequirementRepository
                 requires = requires.Where(Function(c) c.status = searchModel.Status)
             End If
 
-            If String.IsNullOrEmpty(searchModel.DerivedFrom) Then
+            If Not String.IsNullOrEmpty(searchModel.DerivedFrom) Then
                 requires = requires.Where(Function(c) c.derivedFrom Like searchModel.DerivedFrom)
             End If
 
-            If String.IsNullOrEmpty(searchModel.DerivedType) Then
+            If Not String.IsNullOrEmpty(searchModel.DerivedType) Then
                 requires = requires.Where(Function(c) String.Compare(searchModel.DerivedType, c.derivedType))
             End If
-            If String.IsNullOrEmpty(searchModel.PartNr) = True Then
+
+            If Not String.IsNullOrEmpty(searchModel.PartNr) Then
                 requires = requires.Where(Function(c) c.partNr Like searchModel.PartNr)
             End If
-            requires = requires.Skip(searchModel.PageIndex * searchModel.PageSize)
-            requires = requires.Take(searchModel.PageSize)
+            '   requires = requires.Skip(searchModel.PageIndex * searchModel.PageSize)
+            '  requires = requires.Take(searchModel.PageSize)
             Return requires
 
         Else
             Throw New ArgumentNullException
+
         End If
     End Function
 
