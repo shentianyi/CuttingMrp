@@ -23,7 +23,7 @@ namespace CuttingMrpWeb.Controllers
             IPagedList<Requirement> requirements = rs.Search(q).ToPagedList(pageIndex, Settings.Default.pageSize);
 
             ViewBag.Query = q;
-
+            SetRequirementStatusList(null);
             return View(requirements);
         }
 
@@ -112,7 +112,8 @@ namespace CuttingMrpWeb.Controllers
             IPagedList<Requirement> requirements = rs.Search(q).ToPagedList(pageIndex, Settings.Default.pageSize);
 
             ViewBag.Query = q;
-            
+
+            SetRequirementStatusList(q.Status);
             return View("Index", requirements);
         }
 
@@ -130,6 +131,27 @@ namespace CuttingMrpWeb.Controllers
                 return HttpNotFound();
             }
             return View(requirement);
+        }
+
+        private void SetRequirementStatusList(int? status) {
+            List<EnumItem> item = EnumUtility.GetList(typeof(RequirementStatus));
+           
+            List<SelectListItem> select = new List<SelectListItem>();
+            //if (!status.HasValue)
+           // {
+                select.Add(new SelectListItem { Text = "", Value = "" });
+           // }
+            foreach (var it in item)
+            {
+                if (status.HasValue && status.ToString().Equals(it.Value))
+                {
+                    select.Add(new SelectListItem { Text = it.Text, Value = it.Value.ToString(), Selected = true });
+                }
+                else {
+                    select.Add(new SelectListItem { Text = it.Text, Value = it.Value.ToString(), Selected = false });
+                }
+            }
+            ViewData["statusList"] = select;
         }
 
     }

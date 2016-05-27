@@ -59,7 +59,7 @@
                     <td>@Html.DisplayFor(modelItem => item.orderedDate)</td>
                     <td>@Html.DisplayFor(modelItem => item.requiredDate)</td>
                     <td>@Html.DisplayFor(modelItem => item.quantity)</td>
-                    <td>@Html.DisplayFor(modelItem => item.status)</td>
+                    <td>@Html.DisplayFor(modelItem => item.statusDisplay)</td>
                     <td>@Html.DisplayFor(modelItem => item.derivedFrom)</td>
                     <td>@Html.DisplayFor(modelItem => item.derivedType)</td>
                     <td>
@@ -141,10 +141,11 @@
             <div class="col-sm-5" style="margin-left:-15px;">
                 <div class="input-group filter-detail">
                     <span class="input-group-addon" id="basic-addon-derivedfrom" style="width:80px;">Status</span>
-                    <select name="Status" id="Status">
+                    @*<select name="Status" id="Status">
                         <option value="0">0</option>
                         <option value="1">1</option>
-                    </select>
+                    </select>*@
+                    @Html.DropDownList("Status", ViewData["statusList"] as   IEnumerable<SelectListItem>)
                     @*<input type="text" class="form-control" name="Status" id="Status" value="@ViewBag.Query.Status" placeholder="Derived From" aria-describedby="basic-addon-derivedfrom">*@
                 </div>
             </div>
