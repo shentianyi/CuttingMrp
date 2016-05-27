@@ -63,12 +63,13 @@ namespace CuttingMrpWeb.Controllers
 
         // POST: Requirements/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit([Bind(Include = "id,partNr,orderedDate,requiredDate,quantity,status,derivedFrom,derivedType")] Requirement requirement)
         {
             try
             {
                 // TODO: Add update logic here
-
+                IRequirementService rs = new RequirementService(Settings.Default.db);
+                rs.Update(requirement);
                 return RedirectToAction("Index");
             }
             catch
@@ -90,8 +91,9 @@ namespace CuttingMrpWeb.Controllers
             try
             {
                 // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
+                IRequirementService rs = new RequirementService(Settings.Default.db);
+                rs.DeleteById(id);
+                return RedirectToAction("Index"); 
             }
             catch
             {
