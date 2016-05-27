@@ -9,7 +9,7 @@
     Private _requiredTimeTo As DateTime?
     Private _quantityFrom As Double = -1.0
     Private _quantityTo As Double = -1.0
-    Private _status As Integer = -9999
+    Private _status As Integer = -999
     Private _derivedFrom As String
     Private _derivedType As String
 
