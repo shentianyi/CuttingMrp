@@ -1,6 +1,6 @@
 /* popModal - 23.05.14 */
 /* popModal */
-.popModal {position:absolute;background:#fff;padding:15px;border:2px solid steelblue;border-radius:10px; box-shadow:0 2px 3px rgba(0, 0, 0, 0.3);text-align:left;max-width:800px;min-width:180px;z-index:9997;box-sizing:border-box}
+.popModal {position:absolute;background:#fff;padding:15px;border:2px solid steelblue;border-radius:10px; box-shadow:0 2px 3px rgba(0, 0, 0, 0.3);text-align:left;max-width:600px;min-width:180px;z-index:9997;box-sizing:border-box}
 .popModal .close {line-height:12px;font-size:25px;font-weight:bold;font-family:serif;position:absolute;right:8px;top:8px;color:#000;opacity:0.2;padding:0;cursor:pointer;background:transparent;border:0;outline:0}
 .popModal .close:hover {opacity:1}
 .popModal .popModal_content {margin:15px auto;word-wrap:break-word;font-family:sans-serif;font-size:14px;font-weight:initial;font-style:initial;color:initial;text-decoration:initial;text-transform:initial;padding:initial}

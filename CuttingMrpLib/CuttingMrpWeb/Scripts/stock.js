@@ -1,16 +1,8 @@
 ﻿var stock = {};
-stock.show_fill_pop = function () {
-    $('#basic-addon-filter').click(function () {
-        alert("FSF")
-        $('#basic-addon-filter').popModal({
-            html: $('#extra-filter-content'),
-            placement: 'bottomRight',
-            showCloseBut: true,
-            onDocumentClickClose: true,
-            onOkBut: function () { },
-            onCancelBut: function () { },
-            onLoad: function () { },
-            onClose: function () { }
-        })
-    });
-}     
+
+stock.add_label_to_div = function (content, name, cls) {
+    if (content != null && content != "") {
+        $("<p class='label label-primary'>" + name + " " + content + "</p>").appendTo(cls).ready(function () {
+        });
+    }
+}
