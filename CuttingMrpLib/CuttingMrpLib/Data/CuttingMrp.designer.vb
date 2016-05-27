@@ -97,6 +97,7 @@ Partial Public Class CuttingMrpDataContext
     End Sub
   Partial Private Sub DeleteOrderDerivation(instance As OrderDerivation)
     End Sub
+
   #End Region
 	
 	Public Sub New()
@@ -178,11 +179,13 @@ Partial Public Class CuttingMrpDataContext
 		End Get
 	End Property
 	
+
 	Public ReadOnly Property Stocks() As System.Data.Linq.Table(Of Stock)
 		Get
 			Return Me.GetTable(Of Stock)
 		End Get
 	End Property
+
 	
 	Public ReadOnly Property SumOfStocks() As System.Data.Linq.Table(Of SumOfStock)
 		Get
@@ -195,6 +198,7 @@ Partial Public Class CuttingMrpDataContext
 			Return Me.GetTable(Of OrderDerivation)
 		End Get
 	End Property
+
 End Class
 
 <Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.BatchOrderTemplate")>  _
@@ -1218,7 +1222,9 @@ Partial Public Class Part
 	
 	Private _Requirements As EntitySet(Of Requirement)
 	
+
 	Private _Stocks As EntitySet(Of Stock)
+	
 	
     #Region "可扩展性方法定义"
     Partial Private Sub OnLoaded()
@@ -1252,7 +1258,9 @@ Partial Public Class Part
 		Me._ProcessOrders = New EntitySet(Of ProcessOrder)(AddressOf Me.attach_ProcessOrders, AddressOf Me.detach_ProcessOrders)
 		Me._MPs = New EntitySet(Of MP)(AddressOf Me.attach_MPs, AddressOf Me.detach_MPs)
 		Me._Requirements = New EntitySet(Of Requirement)(AddressOf Me.attach_Requirements, AddressOf Me.detach_Requirements)
+
 		Me._Stocks = New EntitySet(Of Stock)(AddressOf Me.attach_Stocks, AddressOf Me.detach_Stocks)
+
 		OnCreated
 	End Sub
 	
@@ -1372,6 +1380,7 @@ Partial Public Class Part
 		End Set
 	End Property
 	
+
 	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_Stock", Storage:="_Stocks", ThisKey:="partNr", OtherKey:="partNr")>  _
 	Public Property Stocks() As EntitySet(Of Stock)
 		Get
@@ -1379,6 +1388,7 @@ Partial Public Class Part
 		End Get
 		Set
 			Me._Stocks.Assign(value)
+
 		End Set
 	End Property
 	
@@ -1450,12 +1460,18 @@ Partial Public Class Part
 		entity.Part = Nothing
 	End Sub
 	
+
 	Private Sub attach_Stocks(ByVal entity As Stock)
+
+	
 		Me.SendPropertyChanging
 		entity.Part = Me
 	End Sub
 	
+
 	Private Sub detach_Stocks(ByVal entity As Stock)
+
+	
 		Me.SendPropertyChanging
 		entity.Part = Nothing
 	End Sub
@@ -2536,12 +2552,16 @@ Partial Public Class Stock
 				If ((previousValue Is Nothing)  _
 							= false) Then
 					Me._Part.Entity = Nothing
+
 					previousValue.Stocks.Remove(Me)
+
 				End If
 				Me._Part.Entity = value
 				If ((value Is Nothing)  _
 							= false) Then
+
 					value.Stocks.Add(Me)
+
 					Me._partNr = value.partNr
 				Else
 					Me._partNr = CType(Nothing, String)
@@ -2569,6 +2589,7 @@ Partial Public Class Stock
 		End If
 	End Sub
 End Class
+
 
 <Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.SumOfStock")>  _
 Partial Public Class SumOfStock
@@ -2825,3 +2846,4 @@ Partial Public Class OrderDerivation
 		End If
 	End Sub
 End Class
+

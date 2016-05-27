@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="CuttingMrp" Class="CuttingMrpDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=vm08;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=sa" SettingsObjectName="CuttingMrpLib.My.MySettings" SettingsPropertyName="CuttingMrpConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Data Source=wangsong-pc;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=sa" SettingsObjectName="CuttingMrpLib.My.MySettings" SettingsPropertyName="CuttingMrpConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.BatchOrderTemplate" Member="BatchOrderTemplates">
     <Type Name="BatchOrderTemplate">
       <Column Name="orderNr" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />

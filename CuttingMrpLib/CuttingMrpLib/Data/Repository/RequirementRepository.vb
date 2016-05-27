@@ -17,7 +17,7 @@ Public Class RequirementRepository
         If searchModel IsNot Nothing Then
             Dim requires As IQueryable(Of Requirement) = _context.Requirements
             requires.Where(Function(c) c.orderedDate >= searchModel.OrderedDateFrom)
-            requires.Where(Function(c) c.orderedDate <= searchModel.OrderedDateoTo)
+            requires.Where(Function(c) c.orderedDate <= searchModel.OrderedDateTo)
             requires.Where(Function(c) c.requiredDate >= searchModel.RequiredTimeFrom)
             requires.Where(Function(c) c.requiredDate <= searchModel.RequiredTimeTo)
             If searchModel.QuantityFrom > 0 Then
