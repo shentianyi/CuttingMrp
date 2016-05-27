@@ -115,6 +115,12 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CuttingMrpLib\CuttingMrpLib.vbproj">
+      <Project>{bfff4147-b219-4bdf-ab9b-8351e79055c5}</Project>
+      <Name>CuttingMrpLib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

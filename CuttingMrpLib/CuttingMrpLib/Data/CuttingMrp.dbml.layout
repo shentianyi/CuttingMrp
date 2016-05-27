@@ -143,10 +143,10 @@
         <elementListCompartment Id="db15613f-04a9-4a27-b1aa-0fbadbdc8853" absoluteBounds="6.39, 1.21, 1.9700000000000002, 1.7756245930989585" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="6b5f2164-85ea-41a4-b3e9-99b5674d8d14" absoluteBounds="5.75, 3.875, 2, 1.5715458170572916">
+    <classShape Id="ffb01d8c-a551-4b4d-b27e-089fa170a022" absoluteBounds="6.25, 5.75, 2, 1.5715458170572916">
       <DataClassMoniker Name="/CuttingMrpDataContext/MrpRound" />
       <nestedChildShapes>
-        <elementListCompartment Id="983c99ec-5384-463a-9824-a44ce1dcd740" absoluteBounds="5.765, 4.335, 1.9700000000000002, 1.0115458170572915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="5cc6caa2-34d4-4757-9353-2fb025a56176" absoluteBounds="6.265, 6.21, 1.9700000000000002, 1.0115458170572915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
   </nestedChildShapes>

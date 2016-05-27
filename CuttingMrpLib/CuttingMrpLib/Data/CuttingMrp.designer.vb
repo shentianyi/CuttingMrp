@@ -3077,7 +3077,7 @@ Partial Public Class MrpRound
 	
 	Private _mrpRound As String
 	
-	Private _runningStatus As String
+	Private _runningStatus As Integer
 	
 	Private _time As Date
 	
@@ -3094,7 +3094,7 @@ Partial Public Class MrpRound
     End Sub
     Partial Private Sub OnmrpRoundChanged()
     End Sub
-    Partial Private Sub OnrunningStatusChanging(value As String)
+    Partial Private Sub OnrunningStatusChanging(value As Integer)
     End Sub
     Partial Private Sub OnrunningStatusChanged()
     End Sub
@@ -3129,13 +3129,14 @@ Partial Public Class MrpRound
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_runningStatus", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
-	Public Property runningStatus() As String
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_runningStatus", DbType:="Int NOT NULL")>  _
+	Public Property runningStatus() As Integer
 		Get
 			Return Me._runningStatus
 		End Get
 		Set
-			If (String.Equals(Me._runningStatus, value) = false) Then
+			If ((Me._runningStatus = value)  _
+						= false) Then
 				Me.OnrunningStatusChanging(value)
 				Me.SendPropertyChanging
 				Me._runningStatus = value

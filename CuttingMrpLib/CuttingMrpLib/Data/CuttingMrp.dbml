@@ -156,7 +156,7 @@
   <Table Name="dbo.MrpRound" Member="MrpRounds">
     <Type Name="MrpRound">
       <Column Name="mrpRound" Type="System.String" DbType="VarChar(200) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="runningStatus" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="runningStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="time" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="launcher" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
     </Type>

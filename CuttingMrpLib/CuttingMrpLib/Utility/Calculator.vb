@@ -100,7 +100,7 @@ Public Class Calculator
             Case "YEAR"
 
         End Select
-        Dim result = (From g In collections.AsEnumerable Group g By g.partNr, g.requiredDate Into)
+
 
     End Function
 

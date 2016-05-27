@@ -47,6 +47,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Messaging" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -64,6 +65,7 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\CalculatorStatus.vb" />
     <Compile Include="Data\CuttingMrp.vb">
       <DependentUpon>CuttingMrp.dbml</DependentUpon>
     </Compile>
@@ -74,8 +76,12 @@
       <DependentUpon>CuttingMrp.dbml</DependentUpon>
     </Compile>
     <Compile Include="Data\ProcessOrderEnum.vb" />
+    <Compile Include="Data\Repository\CalculateRepository.vb" />
+    <Compile Include="Data\Repository\ICalculateRepository.vb" />
+    <Compile Include="Data\Repository\INumericBuildRepository.vb" />
     <Compile Include="Data\Repository\IProcessOrderRepository.vb" />
     <Compile Include="Data\Repository\IRequirementRepository.vb" />
+    <Compile Include="Data\Repository\NumericDefinitionRepository.vb" />
     <Compile Include="Data\Repository\ProcessOrderRepository.vb" />
     <Compile Include="Data\Repository\RequirementRepository.vb" />
     <Compile Include="Data\RequirementStatus.vb" />
@@ -99,13 +105,20 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Service\CalculateService.vb" />
+    <Compile Include="Service\ICalculateService.vb" />
+    <Compile Include="Service\INumericService.vb" />
     <Compile Include="Service\IProcessOrderService.vb" />
     <Compile Include="Service\IRequirementService.vb" />
+    <Compile Include="Service\NumericService.vb" />
     <Compile Include="Service\ProcessOrderService.vb" />
     <Compile Include="Service\RequirementService.vb" />
     <Compile Include="Service\ServiceBase.vb" />
     <Compile Include="Service\IStockService.vb" />
     <Compile Include="Service\StockService.vb" />
+    <Compile Include="Utility\Calculator.vb" />
+    <Compile Include="Utility\CalculatorSingleton.vb" />
+    <Compile Include="ViewModel\SearchViewModel\MRPSearchModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\ProcessOrderSearchModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\RequirementSearchModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\RequirementStatisticsSearchModel.vb" />
@@ -141,7 +154,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Utility\" />
     <Folder Include="ViewModel\PageViewModel\" />
   </ItemGroup>
   <ItemGroup>

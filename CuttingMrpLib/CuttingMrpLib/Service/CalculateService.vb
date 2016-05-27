@@ -21,4 +21,8 @@ Public Class CalculateService
             CalculatorSingleton.CreateInstance.DoCalculation("START", DBConn, queueAddr, settings)
         End If
     End Sub
+
+    Public Function Search(conditons As MRPSearchModel) As List(Of MrpRound) Implements ICalculateService.Search
+        Throw New NotImplementedException()
+    End Function
 End Class
