@@ -92,10 +92,10 @@ Requirement.run_mrp = function () {
                     "MergeMethod":"DAY"
                 },
                 success: function (data) {
-                    console.log(data);
-                    $('#ProcessOrderMask').fadeOut(400);
-                    $('#ProcessOrder').fadeOut(400);
-                    $('#ProcessOrder').addClass('bounceOutUp').fadeOut();
+                    alert(JSON.stringify(data));
+                    //$('#ProcessOrderMask').fadeOut(400);
+                    //$('#ProcessOrder').fadeOut(400);
+                    //$('#ProcessOrder').addClass('bounceOutUp').fadeOut();
                 },
                 error: function () {
                     console.log("Error");
