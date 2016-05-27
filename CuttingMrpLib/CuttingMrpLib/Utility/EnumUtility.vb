@@ -23,8 +23,8 @@ Public Class EnumUtility
 
         For Each v As [Enum] In values
             Dim item As EnumItem = New EnumItem
-            item.Name = GetDescription(v)
-            item.Value = Convert.ToInt32(v)
+            item.Text = GetDescription(v)
+            item.Value = Convert.ToInt32(v).ToString()
             arrayList.Add(item)
         Next
 
@@ -32,8 +32,3 @@ Public Class EnumUtility
     End Function
 End Class
 
-Public Class EnumItem
-    Public Property Name As String
-    Public Property Value As Integer
-    Public Property Description As String
-End Class
