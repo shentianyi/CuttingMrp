@@ -46,6 +46,6 @@ namespace Repository
         /// <summary>Persist the data context.</summary>
         void SaveAll();
 
-        System.Data.Linq.Table<T> GetTable();
+       
     }
 }

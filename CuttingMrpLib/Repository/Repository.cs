@@ -8,6 +8,7 @@ using System.Data.Linq;
 namespace Repository
 {
     public class Repository<T> : IRepository<T>
+
         where T : class
     {
        
