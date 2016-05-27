@@ -61,18 +61,6 @@ Partial Public Class CuttingMrpDataContext
     End Sub
   Partial Private Sub DeleteEnumType(instance As EnumType)
     End Sub
-  Partial Private Sub InsertPart(instance As Part)
-    End Sub
-  Partial Private Sub UpdatePart(instance As Part)
-    End Sub
-  Partial Private Sub DeletePart(instance As Part)
-    End Sub
-  Partial Private Sub InsertProcessOrder(instance As ProcessOrder)
-    End Sub
-  Partial Private Sub UpdateProcessOrder(instance As ProcessOrder)
-    End Sub
-  Partial Private Sub DeleteProcessOrder(instance As ProcessOrder)
-    End Sub
   Partial Private Sub InsertMP(instance As MP)
     End Sub
   Partial Private Sub UpdateMP(instance As MP)
@@ -102,6 +90,18 @@ Partial Public Class CuttingMrpDataContext
   Partial Private Sub UpdateNumericBuild(instance As NumericBuild)
     End Sub
   Partial Private Sub DeleteNumericBuild(instance As NumericBuild)
+    End Sub
+  Partial Private Sub InsertPart(instance As Part)
+    End Sub
+  Partial Private Sub UpdatePart(instance As Part)
+    End Sub
+  Partial Private Sub DeletePart(instance As Part)
+    End Sub
+  Partial Private Sub InsertProcessOrder(instance As ProcessOrder)
+    End Sub
+  Partial Private Sub UpdateProcessOrder(instance As ProcessOrder)
+    End Sub
+  Partial Private Sub DeleteProcessOrder(instance As ProcessOrder)
     End Sub
   Partial Private Sub InsertMrpRound(instance As MrpRound)
     End Sub
@@ -166,18 +166,6 @@ Partial Public Class CuttingMrpDataContext
 		End Get
 	End Property
 	
-	Public ReadOnly Property Parts() As System.Data.Linq.Table(Of Part)
-		Get
-			Return Me.GetTable(Of Part)
-		End Get
-	End Property
-	
-	Public ReadOnly Property ProcessOrders() As System.Data.Linq.Table(Of ProcessOrder)
-		Get
-			Return Me.GetTable(Of ProcessOrder)
-		End Get
-	End Property
-	
 	Public ReadOnly Property MPs() As System.Data.Linq.Table(Of MP)
 		Get
 			Return Me.GetTable(Of MP)
@@ -211,6 +199,18 @@ Partial Public Class CuttingMrpDataContext
 	Public ReadOnly Property NumericBuilds() As System.Data.Linq.Table(Of NumericBuild)
 		Get
 			Return Me.GetTable(Of NumericBuild)
+		End Get
+	End Property
+	
+	Public ReadOnly Property Parts() As System.Data.Linq.Table(Of Part)
+		Get
+			Return Me.GetTable(Of Part)
+		End Get
+	End Property
+	
+	Public ReadOnly Property ProcessOrders() As System.Data.Linq.Table(Of ProcessOrder)
+		Get
+			Return Me.GetTable(Of ProcessOrder)
 		End Get
 	End Property
 	
@@ -1218,595 +1218,6 @@ Partial Public Class EnumType
 	End Sub
 End Class
 
-<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.Part")>  _
-Partial Public Class Part
-	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
-	
-	Private Shared emptyChangingEventArgs As PropertyChangingEventArgs = New PropertyChangingEventArgs(String.Empty)
-	
-	Private _partNr As String
-	
-	Private _partType As Integer
-	
-	Private _partDesc As String
-	
-	Private _partStatus As Integer
-	
-	Private _BatchOrderTemplates As EntitySet(Of BatchOrderTemplate)
-	
-	Private _BOMs As EntitySet(Of BOM)
-	
-	Private _ProcessOrders As EntitySet(Of ProcessOrder)
-	
-	Private _MPs As EntitySet(Of MP)
-	
-	Private _Requirements As EntitySet(Of Requirement)
-	
-	Private _Stocks As EntitySet(Of Stock)
-	
-    #Region "可扩展性方法定义"
-    Partial Private Sub OnLoaded()
-    End Sub
-    Partial Private Sub OnValidate(action As System.Data.Linq.ChangeAction)
-    End Sub
-    Partial Private Sub OnCreated()
-    End Sub
-    Partial Private Sub OnpartNrChanging(value As String)
-    End Sub
-    Partial Private Sub OnpartNrChanged()
-    End Sub
-    Partial Private Sub OnpartTypeChanging(value As Integer)
-    End Sub
-    Partial Private Sub OnpartTypeChanged()
-    End Sub
-    Partial Private Sub OnpartDescChanging(value As String)
-    End Sub
-    Partial Private Sub OnpartDescChanged()
-    End Sub
-    Partial Private Sub OnpartStatusChanging(value As Integer)
-    End Sub
-    Partial Private Sub OnpartStatusChanged()
-    End Sub
-    #End Region
-	
-	Public Sub New()
-		MyBase.New
-		Me._BatchOrderTemplates = New EntitySet(Of BatchOrderTemplate)(AddressOf Me.attach_BatchOrderTemplates, AddressOf Me.detach_BatchOrderTemplates)
-		Me._BOMs = New EntitySet(Of BOM)(AddressOf Me.attach_BOMs, AddressOf Me.detach_BOMs)
-		Me._ProcessOrders = New EntitySet(Of ProcessOrder)(AddressOf Me.attach_ProcessOrders, AddressOf Me.detach_ProcessOrders)
-		Me._MPs = New EntitySet(Of MP)(AddressOf Me.attach_MPs, AddressOf Me.detach_MPs)
-		Me._Requirements = New EntitySet(Of Requirement)(AddressOf Me.attach_Requirements, AddressOf Me.detach_Requirements)
-		Me._Stocks = New EntitySet(Of Stock)(AddressOf Me.attach_Stocks, AddressOf Me.detach_Stocks)
-		OnCreated
-	End Sub
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partNr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false, IsPrimaryKey:=true)>  _
-	Public Property partNr() As String
-		Get
-			Return Me._partNr
-		End Get
-		Set
-			If (String.Equals(Me._partNr, value) = false) Then
-				Me.OnpartNrChanging(value)
-				Me.SendPropertyChanging
-				Me._partNr = value
-				Me.SendPropertyChanged("partNr")
-				Me.OnpartNrChanged
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partType", DbType:="Int NOT NULL")>  _
-	Public Property partType() As Integer
-		Get
-			Return Me._partType
-		End Get
-		Set
-			If ((Me._partType = value)  _
-						= false) Then
-				Me.OnpartTypeChanging(value)
-				Me.SendPropertyChanging
-				Me._partType = value
-				Me.SendPropertyChanged("partType")
-				Me.OnpartTypeChanged
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partDesc", DbType:="Text NOT NULL", CanBeNull:=false, UpdateCheck:=UpdateCheck.Never)>  _
-	Public Property partDesc() As String
-		Get
-			Return Me._partDesc
-		End Get
-		Set
-			If (String.Equals(Me._partDesc, value) = false) Then
-				Me.OnpartDescChanging(value)
-				Me.SendPropertyChanging
-				Me._partDesc = value
-				Me.SendPropertyChanged("partDesc")
-				Me.OnpartDescChanged
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partStatus", DbType:="Int NOT NULL")>  _
-	Public Property partStatus() As Integer
-		Get
-			Return Me._partStatus
-		End Get
-		Set
-			If ((Me._partStatus = value)  _
-						= false) Then
-				Me.OnpartStatusChanging(value)
-				Me.SendPropertyChanging
-				Me._partStatus = value
-				Me.SendPropertyChanged("partStatus")
-				Me.OnpartStatusChanged
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_BatchOrderTemplate", Storage:="_BatchOrderTemplates", ThisKey:="partNr", OtherKey:="partNr")>  _
-	Public Property BatchOrderTemplates() As EntitySet(Of BatchOrderTemplate)
-		Get
-			Return Me._BatchOrderTemplates
-		End Get
-		Set
-			Me._BatchOrderTemplates.Assign(value)
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_BOM", Storage:="_BOMs", ThisKey:="partNr", OtherKey:="partNr")>  _
-	Public Property BOMs() As EntitySet(Of BOM)
-		Get
-			Return Me._BOMs
-		End Get
-		Set
-			Me._BOMs.Assign(value)
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_ProcessOrder", Storage:="_ProcessOrders", ThisKey:="partNr", OtherKey:="partNr")>  _
-	Public Property ProcessOrders() As EntitySet(Of ProcessOrder)
-		Get
-			Return Me._ProcessOrders
-		End Get
-		Set
-			Me._ProcessOrders.Assign(value)
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_MP", Storage:="_MPs", ThisKey:="partNr", OtherKey:="partnr")>  _
-	Public Property MPs() As EntitySet(Of MP)
-		Get
-			Return Me._MPs
-		End Get
-		Set
-			Me._MPs.Assign(value)
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_Requirement", Storage:="_Requirements", ThisKey:="partNr", OtherKey:="partNr")>  _
-	Public Property Requirements() As EntitySet(Of Requirement)
-		Get
-			Return Me._Requirements
-		End Get
-		Set
-			Me._Requirements.Assign(value)
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_Stock", Storage:="_Stocks", ThisKey:="partNr", OtherKey:="partNr")>  _
-	Public Property Stocks() As EntitySet(Of Stock)
-		Get
-			Return Me._Stocks
-		End Get
-		Set
-			Me._Stocks.Assign(value)
-		End Set
-	End Property
-	
-	Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
-	
-	Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
-	
-	Protected Overridable Sub SendPropertyChanging()
-		If ((Me.PropertyChangingEvent Is Nothing)  _
-					= false) Then
-			RaiseEvent PropertyChanging(Me, emptyChangingEventArgs)
-		End If
-	End Sub
-	
-	Protected Overridable Sub SendPropertyChanged(ByVal propertyName As [String])
-		If ((Me.PropertyChangedEvent Is Nothing)  _
-					= false) Then
-			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
-		End If
-	End Sub
-	
-	Private Sub attach_BatchOrderTemplates(ByVal entity As BatchOrderTemplate)
-		Me.SendPropertyChanging
-		entity.Part = Me
-	End Sub
-	
-	Private Sub detach_BatchOrderTemplates(ByVal entity As BatchOrderTemplate)
-		Me.SendPropertyChanging
-		entity.Part = Nothing
-	End Sub
-	
-	Private Sub attach_BOMs(ByVal entity As BOM)
-		Me.SendPropertyChanging
-		entity.Part = Me
-	End Sub
-	
-	Private Sub detach_BOMs(ByVal entity As BOM)
-		Me.SendPropertyChanging
-		entity.Part = Nothing
-	End Sub
-	
-	Private Sub attach_ProcessOrders(ByVal entity As ProcessOrder)
-		Me.SendPropertyChanging
-		entity.Part = Me
-	End Sub
-	
-	Private Sub detach_ProcessOrders(ByVal entity As ProcessOrder)
-		Me.SendPropertyChanging
-		entity.Part = Nothing
-	End Sub
-	
-	Private Sub attach_MPs(ByVal entity As MP)
-		Me.SendPropertyChanging
-		entity.Part = Me
-	End Sub
-	
-	Private Sub detach_MPs(ByVal entity As MP)
-		Me.SendPropertyChanging
-		entity.Part = Nothing
-	End Sub
-	
-	Private Sub attach_Requirements(ByVal entity As Requirement)
-		Me.SendPropertyChanging
-		entity.Part = Me
-	End Sub
-	
-	Private Sub detach_Requirements(ByVal entity As Requirement)
-		Me.SendPropertyChanging
-		entity.Part = Nothing
-	End Sub
-	
-	Private Sub attach_Stocks(ByVal entity As Stock)
-		Me.SendPropertyChanging
-		entity.Part = Me
-	End Sub
-	
-	Private Sub detach_Stocks(ByVal entity As Stock)
-		Me.SendPropertyChanging
-		entity.Part = Nothing
-	End Sub
-End Class
-
-<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.ProcessOrder")>  _
-Partial Public Class ProcessOrder
-	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
-	
-	Private Shared emptyChangingEventArgs As PropertyChangingEventArgs = New PropertyChangingEventArgs(String.Empty)
-	
-	Private _orderNr As String
-	
-	Private _sourceDoc As String
-	
-	Private _derivedFrom As String
-	
-	Private _proceeDate As Date
-	
-	Private _partNr As String
-	
-	Private _sourceQuantity As Double
-	
-	Private _actualQuantity As Double
-	
-	Private _completeRate As Double
-	
-	Private _status As Integer
-	
-	Private _requirementId As Integer
-	
-	Private _OrderDerivations As EntitySet(Of OrderDerivation)
-	
-	Private _Part As EntityRef(Of Part)
-	
-    #Region "可扩展性方法定义"
-    Partial Private Sub OnLoaded()
-    End Sub
-    Partial Private Sub OnValidate(action As System.Data.Linq.ChangeAction)
-    End Sub
-    Partial Private Sub OnCreated()
-    End Sub
-    Partial Private Sub OnorderNrChanging(value As String)
-    End Sub
-    Partial Private Sub OnorderNrChanged()
-    End Sub
-    Partial Private Sub OnsourceDocChanging(value As String)
-    End Sub
-    Partial Private Sub OnsourceDocChanged()
-    End Sub
-    Partial Private Sub OnderivedFromChanging(value As String)
-    End Sub
-    Partial Private Sub OnderivedFromChanged()
-    End Sub
-    Partial Private Sub OnproceeDateChanging(value As Date)
-    End Sub
-    Partial Private Sub OnproceeDateChanged()
-    End Sub
-    Partial Private Sub OnpartNrChanging(value As String)
-    End Sub
-    Partial Private Sub OnpartNrChanged()
-    End Sub
-    Partial Private Sub OnsourceQuantityChanging(value As Double)
-    End Sub
-    Partial Private Sub OnsourceQuantityChanged()
-    End Sub
-    Partial Private Sub OnactualQuantityChanging(value As Double)
-    End Sub
-    Partial Private Sub OnactualQuantityChanged()
-    End Sub
-    Partial Private Sub OncompleteRateChanging(value As Double)
-    End Sub
-    Partial Private Sub OncompleteRateChanged()
-    End Sub
-    Partial Private Sub OnstatusChanging(value As Integer)
-    End Sub
-    Partial Private Sub OnstatusChanged()
-    End Sub
-    Partial Private Sub OnrequirementIdChanging(value As Integer)
-    End Sub
-    Partial Private Sub OnrequirementIdChanged()
-    End Sub
-    #End Region
-	
-	Public Sub New()
-		MyBase.New
-		Me._OrderDerivations = New EntitySet(Of OrderDerivation)(AddressOf Me.attach_OrderDerivations, AddressOf Me.detach_OrderDerivations)
-		Me._Part = CType(Nothing, EntityRef(Of Part))
-		OnCreated
-	End Sub
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_orderNr", DbType:="VarChar(50) NOT NULL", CanBeNull:=false, IsPrimaryKey:=true)>  _
-	Public Property orderNr() As String
-		Get
-			Return Me._orderNr
-		End Get
-		Set
-			If (String.Equals(Me._orderNr, value) = false) Then
-				Me.OnorderNrChanging(value)
-				Me.SendPropertyChanging
-				Me._orderNr = value
-				Me.SendPropertyChanged("orderNr")
-				Me.OnorderNrChanged
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_sourceDoc", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
-	Public Property sourceDoc() As String
-		Get
-			Return Me._sourceDoc
-		End Get
-		Set
-			If (String.Equals(Me._sourceDoc, value) = false) Then
-				Me.OnsourceDocChanging(value)
-				Me.SendPropertyChanging
-				Me._sourceDoc = value
-				Me.SendPropertyChanged("sourceDoc")
-				Me.OnsourceDocChanged
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_derivedFrom", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
-	Public Property derivedFrom() As String
-		Get
-			Return Me._derivedFrom
-		End Get
-		Set
-			If (String.Equals(Me._derivedFrom, value) = false) Then
-				Me.OnderivedFromChanging(value)
-				Me.SendPropertyChanging
-				Me._derivedFrom = value
-				Me.SendPropertyChanged("derivedFrom")
-				Me.OnderivedFromChanged
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_proceeDate", DbType:="DateTime NOT NULL")>  _
-	Public Property proceeDate() As Date
-		Get
-			Return Me._proceeDate
-		End Get
-		Set
-			If ((Me._proceeDate = value)  _
-						= false) Then
-				Me.OnproceeDateChanging(value)
-				Me.SendPropertyChanging
-				Me._proceeDate = value
-				Me.SendPropertyChanged("proceeDate")
-				Me.OnproceeDateChanged
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partNr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
-	Public Property partNr() As String
-		Get
-			Return Me._partNr
-		End Get
-		Set
-			If (String.Equals(Me._partNr, value) = false) Then
-				If Me._Part.HasLoadedOrAssignedValue Then
-					Throw New System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException()
-				End If
-				Me.OnpartNrChanging(value)
-				Me.SendPropertyChanging
-				Me._partNr = value
-				Me.SendPropertyChanged("partNr")
-				Me.OnpartNrChanged
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_sourceQuantity", DbType:="Float NOT NULL")>  _
-	Public Property sourceQuantity() As Double
-		Get
-			Return Me._sourceQuantity
-		End Get
-		Set
-			If ((Me._sourceQuantity = value)  _
-						= false) Then
-				Me.OnsourceQuantityChanging(value)
-				Me.SendPropertyChanging
-				Me._sourceQuantity = value
-				Me.SendPropertyChanged("sourceQuantity")
-				Me.OnsourceQuantityChanged
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_actualQuantity", DbType:="Float NOT NULL")>  _
-	Public Property actualQuantity() As Double
-		Get
-			Return Me._actualQuantity
-		End Get
-		Set
-			If ((Me._actualQuantity = value)  _
-						= false) Then
-				Me.OnactualQuantityChanging(value)
-				Me.SendPropertyChanging
-				Me._actualQuantity = value
-				Me.SendPropertyChanged("actualQuantity")
-				Me.OnactualQuantityChanged
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_completeRate", DbType:="Float NOT NULL")>  _
-	Public Property completeRate() As Double
-		Get
-			Return Me._completeRate
-		End Get
-		Set
-			If ((Me._completeRate = value)  _
-						= false) Then
-				Me.OncompleteRateChanging(value)
-				Me.SendPropertyChanging
-				Me._completeRate = value
-				Me.SendPropertyChanged("completeRate")
-				Me.OncompleteRateChanged
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_status", DbType:="Int NOT NULL")>  _
-	Public Property status() As Integer
-		Get
-			Return Me._status
-		End Get
-		Set
-			If ((Me._status = value)  _
-						= false) Then
-				Me.OnstatusChanging(value)
-				Me.SendPropertyChanging
-				Me._status = value
-				Me.SendPropertyChanged("status")
-				Me.OnstatusChanged
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_requirementId", DbType:="Int NOT NULL")>  _
-	Public Property requirementId() As Integer
-		Get
-			Return Me._requirementId
-		End Get
-		Set
-			If ((Me._requirementId = value)  _
-						= false) Then
-				Me.OnrequirementIdChanging(value)
-				Me.SendPropertyChanging
-				Me._requirementId = value
-				Me.SendPropertyChanged("requirementId")
-				Me.OnrequirementIdChanged
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="ProcessOrder_OrderDerivation", Storage:="_OrderDerivations", ThisKey:="orderNr", OtherKey:="orderId")>  _
-	Public Property OrderDerivations() As EntitySet(Of OrderDerivation)
-		Get
-			Return Me._OrderDerivations
-		End Get
-		Set
-			Me._OrderDerivations.Assign(value)
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_ProcessOrder", Storage:="_Part", ThisKey:="partNr", OtherKey:="partNr", IsForeignKey:=true)>  _
-	Public Property Part() As Part
-		Get
-			Return Me._Part.Entity
-		End Get
-		Set
-			Dim previousValue As Part = Me._Part.Entity
-			If ((Object.Equals(previousValue, value) = false)  _
-						OrElse (Me._Part.HasLoadedOrAssignedValue = false)) Then
-				Me.SendPropertyChanging
-				If ((previousValue Is Nothing)  _
-							= false) Then
-					Me._Part.Entity = Nothing
-					previousValue.ProcessOrders.Remove(Me)
-				End If
-				Me._Part.Entity = value
-				If ((value Is Nothing)  _
-							= false) Then
-					value.ProcessOrders.Add(Me)
-					Me._partNr = value.partNr
-				Else
-					Me._partNr = CType(Nothing, String)
-				End If
-				Me.SendPropertyChanged("Part")
-			End If
-		End Set
-	End Property
-	
-	Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
-	
-	Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
-	
-	Protected Overridable Sub SendPropertyChanging()
-		If ((Me.PropertyChangingEvent Is Nothing)  _
-					= false) Then
-			RaiseEvent PropertyChanging(Me, emptyChangingEventArgs)
-		End If
-	End Sub
-	
-	Protected Overridable Sub SendPropertyChanged(ByVal propertyName As [String])
-		If ((Me.PropertyChangedEvent Is Nothing)  _
-					= false) Then
-			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
-		End If
-	End Sub
-	
-	Private Sub attach_OrderDerivations(ByVal entity As OrderDerivation)
-		Me.SendPropertyChanging
-		entity.ProcessOrder = Me
-	End Sub
-	
-	Private Sub detach_OrderDerivations(ByVal entity As OrderDerivation)
-		Me.SendPropertyChanging
-		entity.ProcessOrder = Nothing
-	End Sub
-End Class
-
 <Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.MPS")>  _
 Partial Public Class MP
 	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
@@ -2646,9 +2057,9 @@ Partial Public Class OrderDerivation
 	
 	Private _deriveQty As Double
 	
-	Private _ProcessOrder As EntityRef(Of ProcessOrder)
-	
 	Private _Requirement As EntityRef(Of Requirement)
+	
+	Private _ProcessOrder As EntityRef(Of ProcessOrder)
 	
     #Region "可扩展性方法定义"
     Partial Private Sub OnLoaded()
@@ -2681,8 +2092,8 @@ Partial Public Class OrderDerivation
 	
 	Public Sub New()
 		MyBase.New
-		Me._ProcessOrder = CType(Nothing, EntityRef(Of ProcessOrder))
 		Me._Requirement = CType(Nothing, EntityRef(Of Requirement))
+		Me._ProcessOrder = CType(Nothing, EntityRef(Of ProcessOrder))
 		OnCreated
 	End Sub
 	
@@ -2775,34 +2186,6 @@ Partial Public Class OrderDerivation
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="ProcessOrder_OrderDerivation", Storage:="_ProcessOrder", ThisKey:="orderId", OtherKey:="orderNr", IsForeignKey:=true)>  _
-	Public Property ProcessOrder() As ProcessOrder
-		Get
-			Return Me._ProcessOrder.Entity
-		End Get
-		Set
-			Dim previousValue As ProcessOrder = Me._ProcessOrder.Entity
-			If ((Object.Equals(previousValue, value) = false)  _
-						OrElse (Me._ProcessOrder.HasLoadedOrAssignedValue = false)) Then
-				Me.SendPropertyChanging
-				If ((previousValue Is Nothing)  _
-							= false) Then
-					Me._ProcessOrder.Entity = Nothing
-					previousValue.OrderDerivations.Remove(Me)
-				End If
-				Me._ProcessOrder.Entity = value
-				If ((value Is Nothing)  _
-							= false) Then
-					value.OrderDerivations.Add(Me)
-					Me._orderId = value.orderNr
-				Else
-					Me._orderId = CType(Nothing, String)
-				End If
-				Me.SendPropertyChanged("ProcessOrder")
-			End If
-		End Set
-	End Property
-	
 	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Requirement_OrderDerivation", Storage:="_Requirement", ThisKey:="id", OtherKey:="id", IsForeignKey:=true)>  _
 	Public Property Requirement() As Requirement
 		Get
@@ -2827,6 +2210,34 @@ Partial Public Class OrderDerivation
 					Me._id = CType(Nothing, Integer)
 				End If
 				Me.SendPropertyChanged("Requirement")
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="ProcessOrder_OrderDerivation", Storage:="_ProcessOrder", ThisKey:="orderId", OtherKey:="orderNr", IsForeignKey:=true)>  _
+	Public Property ProcessOrder() As ProcessOrder
+		Get
+			Return Me._ProcessOrder.Entity
+		End Get
+		Set
+			Dim previousValue As ProcessOrder = Me._ProcessOrder.Entity
+			If ((Object.Equals(previousValue, value) = false)  _
+						OrElse (Me._ProcessOrder.HasLoadedOrAssignedValue = false)) Then
+				Me.SendPropertyChanging
+				If ((previousValue Is Nothing)  _
+							= false) Then
+					Me._ProcessOrder.Entity = Nothing
+					previousValue.OrderDerivations.Remove(Me)
+				End If
+				Me._ProcessOrder.Entity = value
+				If ((value Is Nothing)  _
+							= false) Then
+					value.OrderDerivations.Add(Me)
+					Me._orderId = value.orderNr
+				Else
+					Me._orderId = CType(Nothing, String)
+				End If
+				Me.SendPropertyChanged("ProcessOrder")
 			End If
 		End Set
 	End Property
@@ -3069,6 +2480,661 @@ Partial Public Class NumericBuild
 	End Sub
 End Class
 
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.Part")>  _
+Partial Public Class Part
+	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+	
+	Private Shared emptyChangingEventArgs As PropertyChangingEventArgs = New PropertyChangingEventArgs(String.Empty)
+	
+	Private _partNr As String
+	
+	Private _partType As Integer
+	
+	Private _partDesc As String
+	
+	Private _partStatus As Integer
+	
+	Private _moq As System.Nullable(Of Double)
+	
+	Private _spq As System.Nullable(Of Double)
+	
+	Private _BatchOrderTemplates As EntitySet(Of BatchOrderTemplate)
+	
+	Private _BOMs As EntitySet(Of BOM)
+	
+	Private _MPs As EntitySet(Of MP)
+	
+	Private _Requirements As EntitySet(Of Requirement)
+	
+	Private _Stocks As EntitySet(Of Stock)
+	
+	Private _ProcessOrders As EntitySet(Of ProcessOrder)
+	
+    #Region "可扩展性方法定义"
+    Partial Private Sub OnLoaded()
+    End Sub
+    Partial Private Sub OnValidate(action As System.Data.Linq.ChangeAction)
+    End Sub
+    Partial Private Sub OnCreated()
+    End Sub
+    Partial Private Sub OnpartNrChanging(value As String)
+    End Sub
+    Partial Private Sub OnpartNrChanged()
+    End Sub
+    Partial Private Sub OnpartTypeChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnpartTypeChanged()
+    End Sub
+    Partial Private Sub OnpartDescChanging(value As String)
+    End Sub
+    Partial Private Sub OnpartDescChanged()
+    End Sub
+    Partial Private Sub OnpartStatusChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnpartStatusChanged()
+    End Sub
+    Partial Private Sub OnmoqChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnmoqChanged()
+    End Sub
+    Partial Private Sub OnspqChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnspqChanged()
+    End Sub
+    #End Region
+	
+	Public Sub New()
+		MyBase.New
+		Me._BatchOrderTemplates = New EntitySet(Of BatchOrderTemplate)(AddressOf Me.attach_BatchOrderTemplates, AddressOf Me.detach_BatchOrderTemplates)
+		Me._BOMs = New EntitySet(Of BOM)(AddressOf Me.attach_BOMs, AddressOf Me.detach_BOMs)
+		Me._MPs = New EntitySet(Of MP)(AddressOf Me.attach_MPs, AddressOf Me.detach_MPs)
+		Me._Requirements = New EntitySet(Of Requirement)(AddressOf Me.attach_Requirements, AddressOf Me.detach_Requirements)
+		Me._Stocks = New EntitySet(Of Stock)(AddressOf Me.attach_Stocks, AddressOf Me.detach_Stocks)
+		Me._ProcessOrders = New EntitySet(Of ProcessOrder)(AddressOf Me.attach_ProcessOrders, AddressOf Me.detach_ProcessOrders)
+		OnCreated
+	End Sub
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partNr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false, IsPrimaryKey:=true)>  _
+	Public Property partNr() As String
+		Get
+			Return Me._partNr
+		End Get
+		Set
+			If (String.Equals(Me._partNr, value) = false) Then
+				Me.OnpartNrChanging(value)
+				Me.SendPropertyChanging
+				Me._partNr = value
+				Me.SendPropertyChanged("partNr")
+				Me.OnpartNrChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partType", DbType:="Int NOT NULL")>  _
+	Public Property partType() As Integer
+		Get
+			Return Me._partType
+		End Get
+		Set
+			If ((Me._partType = value)  _
+						= false) Then
+				Me.OnpartTypeChanging(value)
+				Me.SendPropertyChanging
+				Me._partType = value
+				Me.SendPropertyChanged("partType")
+				Me.OnpartTypeChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partDesc", DbType:="Text NOT NULL", CanBeNull:=false, UpdateCheck:=UpdateCheck.Never)>  _
+	Public Property partDesc() As String
+		Get
+			Return Me._partDesc
+		End Get
+		Set
+			If (String.Equals(Me._partDesc, value) = false) Then
+				Me.OnpartDescChanging(value)
+				Me.SendPropertyChanging
+				Me._partDesc = value
+				Me.SendPropertyChanged("partDesc")
+				Me.OnpartDescChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partStatus", DbType:="Int NOT NULL")>  _
+	Public Property partStatus() As Integer
+		Get
+			Return Me._partStatus
+		End Get
+		Set
+			If ((Me._partStatus = value)  _
+						= false) Then
+				Me.OnpartStatusChanging(value)
+				Me.SendPropertyChanging
+				Me._partStatus = value
+				Me.SendPropertyChanged("partStatus")
+				Me.OnpartStatusChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_moq", DbType:="Float")>  _
+	Public Property moq() As System.Nullable(Of Double)
+		Get
+			Return Me._moq
+		End Get
+		Set
+			If (Me._moq.Equals(value) = false) Then
+				Me.OnmoqChanging(value)
+				Me.SendPropertyChanging
+				Me._moq = value
+				Me.SendPropertyChanged("moq")
+				Me.OnmoqChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_spq", DbType:="Float")>  _
+	Public Property spq() As System.Nullable(Of Double)
+		Get
+			Return Me._spq
+		End Get
+		Set
+			If (Me._spq.Equals(value) = false) Then
+				Me.OnspqChanging(value)
+				Me.SendPropertyChanging
+				Me._spq = value
+				Me.SendPropertyChanged("spq")
+				Me.OnspqChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_BatchOrderTemplate", Storage:="_BatchOrderTemplates", ThisKey:="partNr", OtherKey:="partNr")>  _
+	Public Property BatchOrderTemplates() As EntitySet(Of BatchOrderTemplate)
+		Get
+			Return Me._BatchOrderTemplates
+		End Get
+		Set
+			Me._BatchOrderTemplates.Assign(value)
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_BOM", Storage:="_BOMs", ThisKey:="partNr", OtherKey:="partNr")>  _
+	Public Property BOMs() As EntitySet(Of BOM)
+		Get
+			Return Me._BOMs
+		End Get
+		Set
+			Me._BOMs.Assign(value)
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_MP", Storage:="_MPs", ThisKey:="partNr", OtherKey:="partnr")>  _
+	Public Property MPs() As EntitySet(Of MP)
+		Get
+			Return Me._MPs
+		End Get
+		Set
+			Me._MPs.Assign(value)
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_Requirement", Storage:="_Requirements", ThisKey:="partNr", OtherKey:="partNr")>  _
+	Public Property Requirements() As EntitySet(Of Requirement)
+		Get
+			Return Me._Requirements
+		End Get
+		Set
+			Me._Requirements.Assign(value)
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_Stock", Storage:="_Stocks", ThisKey:="partNr", OtherKey:="partNr")>  _
+	Public Property Stocks() As EntitySet(Of Stock)
+		Get
+			Return Me._Stocks
+		End Get
+		Set
+			Me._Stocks.Assign(value)
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_ProcessOrder", Storage:="_ProcessOrders", ThisKey:="partNr", OtherKey:="partNr")>  _
+	Public Property ProcessOrders() As EntitySet(Of ProcessOrder)
+		Get
+			Return Me._ProcessOrders
+		End Get
+		Set
+			Me._ProcessOrders.Assign(value)
+		End Set
+	End Property
+	
+	Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
+	
+	Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
+	
+	Protected Overridable Sub SendPropertyChanging()
+		If ((Me.PropertyChangingEvent Is Nothing)  _
+					= false) Then
+			RaiseEvent PropertyChanging(Me, emptyChangingEventArgs)
+		End If
+	End Sub
+	
+	Protected Overridable Sub SendPropertyChanged(ByVal propertyName As [String])
+		If ((Me.PropertyChangedEvent Is Nothing)  _
+					= false) Then
+			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
+		End If
+	End Sub
+	
+	Private Sub attach_BatchOrderTemplates(ByVal entity As BatchOrderTemplate)
+		Me.SendPropertyChanging
+		entity.Part = Me
+	End Sub
+	
+	Private Sub detach_BatchOrderTemplates(ByVal entity As BatchOrderTemplate)
+		Me.SendPropertyChanging
+		entity.Part = Nothing
+	End Sub
+	
+	Private Sub attach_BOMs(ByVal entity As BOM)
+		Me.SendPropertyChanging
+		entity.Part = Me
+	End Sub
+	
+	Private Sub detach_BOMs(ByVal entity As BOM)
+		Me.SendPropertyChanging
+		entity.Part = Nothing
+	End Sub
+	
+	Private Sub attach_MPs(ByVal entity As MP)
+		Me.SendPropertyChanging
+		entity.Part = Me
+	End Sub
+	
+	Private Sub detach_MPs(ByVal entity As MP)
+		Me.SendPropertyChanging
+		entity.Part = Nothing
+	End Sub
+	
+	Private Sub attach_Requirements(ByVal entity As Requirement)
+		Me.SendPropertyChanging
+		entity.Part = Me
+	End Sub
+	
+	Private Sub detach_Requirements(ByVal entity As Requirement)
+		Me.SendPropertyChanging
+		entity.Part = Nothing
+	End Sub
+	
+	Private Sub attach_Stocks(ByVal entity As Stock)
+		Me.SendPropertyChanging
+		entity.Part = Me
+	End Sub
+	
+	Private Sub detach_Stocks(ByVal entity As Stock)
+		Me.SendPropertyChanging
+		entity.Part = Nothing
+	End Sub
+	
+	Private Sub attach_ProcessOrders(ByVal entity As ProcessOrder)
+		Me.SendPropertyChanging
+		entity.Part = Me
+	End Sub
+	
+	Private Sub detach_ProcessOrders(ByVal entity As ProcessOrder)
+		Me.SendPropertyChanging
+		entity.Part = Nothing
+	End Sub
+End Class
+
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.ProcessOrder")>  _
+Partial Public Class ProcessOrder
+	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+	
+	Private Shared emptyChangingEventArgs As PropertyChangingEventArgs = New PropertyChangingEventArgs(String.Empty)
+	
+	Private _orderNr As String
+	
+	Private _sourceDoc As String
+	
+	Private _derivedFrom As String
+	
+	Private _proceeDate As Date
+	
+	Private _partNr As String
+	
+	Private _sourceQuantity As Double
+	
+	Private _actualQuantity As Double
+	
+	Private _completeRate As Double
+	
+	Private _status As Integer
+	
+	Private _requirementId As Integer
+	
+	Private _batchQuantity As System.Nullable(Of Double)
+	
+	Private _OrderDerivations As EntitySet(Of OrderDerivation)
+	
+	Private _Part As EntityRef(Of Part)
+	
+    #Region "可扩展性方法定义"
+    Partial Private Sub OnLoaded()
+    End Sub
+    Partial Private Sub OnValidate(action As System.Data.Linq.ChangeAction)
+    End Sub
+    Partial Private Sub OnCreated()
+    End Sub
+    Partial Private Sub OnorderNrChanging(value As String)
+    End Sub
+    Partial Private Sub OnorderNrChanged()
+    End Sub
+    Partial Private Sub OnsourceDocChanging(value As String)
+    End Sub
+    Partial Private Sub OnsourceDocChanged()
+    End Sub
+    Partial Private Sub OnderivedFromChanging(value As String)
+    End Sub
+    Partial Private Sub OnderivedFromChanged()
+    End Sub
+    Partial Private Sub OnproceeDateChanging(value As Date)
+    End Sub
+    Partial Private Sub OnproceeDateChanged()
+    End Sub
+    Partial Private Sub OnpartNrChanging(value As String)
+    End Sub
+    Partial Private Sub OnpartNrChanged()
+    End Sub
+    Partial Private Sub OnsourceQuantityChanging(value As Double)
+    End Sub
+    Partial Private Sub OnsourceQuantityChanged()
+    End Sub
+    Partial Private Sub OnactualQuantityChanging(value As Double)
+    End Sub
+    Partial Private Sub OnactualQuantityChanged()
+    End Sub
+    Partial Private Sub OncompleteRateChanging(value As Double)
+    End Sub
+    Partial Private Sub OncompleteRateChanged()
+    End Sub
+    Partial Private Sub OnstatusChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnstatusChanged()
+    End Sub
+    Partial Private Sub OnrequirementIdChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnrequirementIdChanged()
+    End Sub
+    Partial Private Sub OnbatchQuantityChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnbatchQuantityChanged()
+    End Sub
+    #End Region
+	
+	Public Sub New()
+		MyBase.New
+		Me._OrderDerivations = New EntitySet(Of OrderDerivation)(AddressOf Me.attach_OrderDerivations, AddressOf Me.detach_OrderDerivations)
+		Me._Part = CType(Nothing, EntityRef(Of Part))
+		OnCreated
+	End Sub
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_orderNr", DbType:="VarChar(50) NOT NULL", CanBeNull:=false, IsPrimaryKey:=true)>  _
+	Public Property orderNr() As String
+		Get
+			Return Me._orderNr
+		End Get
+		Set
+			If (String.Equals(Me._orderNr, value) = false) Then
+				Me.OnorderNrChanging(value)
+				Me.SendPropertyChanging
+				Me._orderNr = value
+				Me.SendPropertyChanged("orderNr")
+				Me.OnorderNrChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_sourceDoc", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
+	Public Property sourceDoc() As String
+		Get
+			Return Me._sourceDoc
+		End Get
+		Set
+			If (String.Equals(Me._sourceDoc, value) = false) Then
+				Me.OnsourceDocChanging(value)
+				Me.SendPropertyChanging
+				Me._sourceDoc = value
+				Me.SendPropertyChanged("sourceDoc")
+				Me.OnsourceDocChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_derivedFrom", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
+	Public Property derivedFrom() As String
+		Get
+			Return Me._derivedFrom
+		End Get
+		Set
+			If (String.Equals(Me._derivedFrom, value) = false) Then
+				Me.OnderivedFromChanging(value)
+				Me.SendPropertyChanging
+				Me._derivedFrom = value
+				Me.SendPropertyChanged("derivedFrom")
+				Me.OnderivedFromChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_proceeDate", DbType:="DateTime NOT NULL")>  _
+	Public Property proceeDate() As Date
+		Get
+			Return Me._proceeDate
+		End Get
+		Set
+			If ((Me._proceeDate = value)  _
+						= false) Then
+				Me.OnproceeDateChanging(value)
+				Me.SendPropertyChanging
+				Me._proceeDate = value
+				Me.SendPropertyChanged("proceeDate")
+				Me.OnproceeDateChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partNr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
+	Public Property partNr() As String
+		Get
+			Return Me._partNr
+		End Get
+		Set
+			If (String.Equals(Me._partNr, value) = false) Then
+				If Me._Part.HasLoadedOrAssignedValue Then
+					Throw New System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException()
+				End If
+				Me.OnpartNrChanging(value)
+				Me.SendPropertyChanging
+				Me._partNr = value
+				Me.SendPropertyChanged("partNr")
+				Me.OnpartNrChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_sourceQuantity", DbType:="Float NOT NULL")>  _
+	Public Property sourceQuantity() As Double
+		Get
+			Return Me._sourceQuantity
+		End Get
+		Set
+			If ((Me._sourceQuantity = value)  _
+						= false) Then
+				Me.OnsourceQuantityChanging(value)
+				Me.SendPropertyChanging
+				Me._sourceQuantity = value
+				Me.SendPropertyChanged("sourceQuantity")
+				Me.OnsourceQuantityChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_actualQuantity", DbType:="Float NOT NULL")>  _
+	Public Property actualQuantity() As Double
+		Get
+			Return Me._actualQuantity
+		End Get
+		Set
+			If ((Me._actualQuantity = value)  _
+						= false) Then
+				Me.OnactualQuantityChanging(value)
+				Me.SendPropertyChanging
+				Me._actualQuantity = value
+				Me.SendPropertyChanged("actualQuantity")
+				Me.OnactualQuantityChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_completeRate", DbType:="Float NOT NULL")>  _
+	Public Property completeRate() As Double
+		Get
+			Return Me._completeRate
+		End Get
+		Set
+			If ((Me._completeRate = value)  _
+						= false) Then
+				Me.OncompleteRateChanging(value)
+				Me.SendPropertyChanging
+				Me._completeRate = value
+				Me.SendPropertyChanged("completeRate")
+				Me.OncompleteRateChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_status", DbType:="Int NOT NULL")>  _
+	Public Property status() As Integer
+		Get
+			Return Me._status
+		End Get
+		Set
+			If ((Me._status = value)  _
+						= false) Then
+				Me.OnstatusChanging(value)
+				Me.SendPropertyChanging
+				Me._status = value
+				Me.SendPropertyChanged("status")
+				Me.OnstatusChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_requirementId", DbType:="Int NOT NULL")>  _
+	Public Property requirementId() As Integer
+		Get
+			Return Me._requirementId
+		End Get
+		Set
+			If ((Me._requirementId = value)  _
+						= false) Then
+				Me.OnrequirementIdChanging(value)
+				Me.SendPropertyChanging
+				Me._requirementId = value
+				Me.SendPropertyChanged("requirementId")
+				Me.OnrequirementIdChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_batchQuantity", DbType:="Float")>  _
+	Public Property batchQuantity() As System.Nullable(Of Double)
+		Get
+			Return Me._batchQuantity
+		End Get
+		Set
+			If (Me._batchQuantity.Equals(value) = false) Then
+				Me.OnbatchQuantityChanging(value)
+				Me.SendPropertyChanging
+				Me._batchQuantity = value
+				Me.SendPropertyChanged("batchQuantity")
+				Me.OnbatchQuantityChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="ProcessOrder_OrderDerivation", Storage:="_OrderDerivations", ThisKey:="orderNr", OtherKey:="orderId")>  _
+	Public Property OrderDerivations() As EntitySet(Of OrderDerivation)
+		Get
+			Return Me._OrderDerivations
+		End Get
+		Set
+			Me._OrderDerivations.Assign(value)
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_ProcessOrder", Storage:="_Part", ThisKey:="partNr", OtherKey:="partNr", IsForeignKey:=true)>  _
+	Public Property Part() As Part
+		Get
+			Return Me._Part.Entity
+		End Get
+		Set
+			Dim previousValue As Part = Me._Part.Entity
+			If ((Object.Equals(previousValue, value) = false)  _
+						OrElse (Me._Part.HasLoadedOrAssignedValue = false)) Then
+				Me.SendPropertyChanging
+				If ((previousValue Is Nothing)  _
+							= false) Then
+					Me._Part.Entity = Nothing
+					previousValue.ProcessOrders.Remove(Me)
+				End If
+				Me._Part.Entity = value
+				If ((value Is Nothing)  _
+							= false) Then
+					value.ProcessOrders.Add(Me)
+					Me._partNr = value.partNr
+				Else
+					Me._partNr = CType(Nothing, String)
+				End If
+				Me.SendPropertyChanged("Part")
+			End If
+		End Set
+	End Property
+	
+	Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
+	
+	Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
+	
+	Protected Overridable Sub SendPropertyChanging()
+		If ((Me.PropertyChangingEvent Is Nothing)  _
+					= false) Then
+			RaiseEvent PropertyChanging(Me, emptyChangingEventArgs)
+		End If
+	End Sub
+	
+	Protected Overridable Sub SendPropertyChanged(ByVal propertyName As [String])
+		If ((Me.PropertyChangedEvent Is Nothing)  _
+					= false) Then
+			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
+		End If
+	End Sub
+	
+	Private Sub attach_OrderDerivations(ByVal entity As OrderDerivation)
+		Me.SendPropertyChanging
+		entity.ProcessOrder = Me
+	End Sub
+	
+	Private Sub detach_OrderDerivations(ByVal entity As OrderDerivation)
+		Me.SendPropertyChanging
+		entity.ProcessOrder = Nothing
+	End Sub
+End Class
+
 <Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.MrpRound")>  _
 Partial Public Class MrpRound
 	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
@@ -3082,6 +3148,8 @@ Partial Public Class MrpRound
 	Private _time As Date
 	
 	Private _launcher As String
+	
+	Private _text As String
 	
     #Region "可扩展性方法定义"
     Partial Private Sub OnLoaded()
@@ -3105,6 +3173,10 @@ Partial Public Class MrpRound
     Partial Private Sub OnlauncherChanging(value As String)
     End Sub
     Partial Private Sub OnlauncherChanged()
+    End Sub
+    Partial Private Sub OntextChanging(value As String)
+    End Sub
+    Partial Private Sub OntextChanged()
     End Sub
     #End Region
 	
@@ -3175,6 +3247,22 @@ Partial Public Class MrpRound
 				Me._launcher = value
 				Me.SendPropertyChanged("launcher")
 				Me.OnlauncherChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_text", DbType:="Text NOT NULL", CanBeNull:=false, UpdateCheck:=UpdateCheck.Never)>  _
+	Public Property text() As String
+		Get
+			Return Me._text
+		End Get
+		Set
+			If (String.Equals(Me._text, value) = false) Then
+				Me.OntextChanging(value)
+				Me.SendPropertyChanging
+				Me._text = value
+				Me.SendPropertyChanged("text")
+				Me.OntextChanged
 			End If
 		End Set
 	End Property

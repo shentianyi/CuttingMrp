@@ -16,6 +16,26 @@ Requirement.init = function () {
     Requirement.add_range_label_to_div(requiredtimefrom + "~" + requiredtimeto, 'RequiredDate ', '.filter-p');
     Requirement.add_range_label_to_div(quantityfrom + "~" + quantityto, 'Quantity ', '.filter-p');
     Requirement.add_string_label_to_div(derivedfrom, 'DerivedFrom Like', '.filter-p');
+    Requirement.add_string_label_to_div(status, 'Status =', '.filter-p');
+}
+
+Requirement.click_filter = function () {
+    $('#basic-addon-filter').click(function () {
+        $('#basic-addon-filter').popModal({
+            html: $('#extra-filter-content'),
+            placement: 'bottomRight',
+            showCloseBut: false,
+            onDocumentClickClose: true,
+            onOkBut: function () {
+            },
+            onCancelBut: function () {
+            },
+            onLoad: function () {
+            },
+            onClose: function () {
+            }
+        })
+    });
 }
 
 Requirement.add_string_label_to_div = function (content, name, cls) {
@@ -43,3 +63,46 @@ Requirement.add_range_label_to_div = function (content, name, cls) {
 $('.datetime-picker').datetimepicker({
     lang: 'ch'
 })
+
+//{
+//    "OrderType":"FIX",
+//      "MergeMethod":"DAY"
+//}
+
+//post /Requirements/RunMrp
+
+Requirement.run_mrp = function () {
+    $('.runMrp').click(function () {
+        $('#ProcessOrderMask').fadeIn(0);
+        $('#ProcessOrder').fadeIn(400);
+        $('#ProcessOrder').removeAttr('class').addClass('animated bounceIn').fadeIn();
+
+        $('.remove-process-order').click(function () {
+            $('#ProcessOrderMask').fadeOut(400);
+            $('#ProcessOrder').fadeOut(400);
+            $('#ProcessOrder').addClass('bounceOutUp').fadeOut();
+        });
+
+        $('.confirm-process-order').click(function () {
+            $.ajax({
+                url: "/Requirements/RunMrp",
+                type: "post",
+                data:{
+                    "OrderType": "FIX",
+                    "MergeMethod":"DAY"
+                },
+                success: function (data) {
+                    alert(JSON.stringify(data));
+                    //$('#ProcessOrderMask').fadeOut(400);
+                    //$('#ProcessOrder').fadeOut(400);
+                    //$('#ProcessOrder').addClass('bounceOutUp').fadeOut();
+                },
+                error: function () {
+                    console.log("Error");
+                }
+            });
+        });
+
+    });
+    
+}

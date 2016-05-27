@@ -4,31 +4,33 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BFFF4147-B219-4BDF-AB9B-8351E79055C5}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>CuttingMrpLib</RootNamespace>
-    <AssemblyName>CuttingMrpLib</AssemblyName>
+    <ProjectGuid>{BC5BCD58-EB62-4807-B342-BBF3ADEC9CF6}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>MrpSvc.Service1</StartupObject>
+    <RootNamespace>MrpSvc</RootNamespace>
+    <AssemblyName>MrpSvc</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <MyType>Windows</MyType>
+    <MyType>Console</MyType>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>CuttingMrpLib.xml</DocumentationFile>
+    <DocumentationFile>MrpSvc.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>CuttingMrpLib.xml</DocumentationFile>
+    <DocumentationFile>MrpSvc.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -44,11 +46,16 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.5\lib\net40-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Deployment" />
     <Reference Include="System.Messaging" />
-    <Reference Include="System.Transactions" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -65,37 +72,23 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\CalculatorStatus.vb" />
-    <Compile Include="Data\CuttingMrp.vb">
-      <DependentUpon>CuttingMrp.dbml</DependentUpon>
-    </Compile>
-    <Compile Include="Data\DataContext.vb" />
-    <Compile Include="Data\CuttingMrp.designer.vb">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CuttingMrp.dbml</DependentUpon>
-    </Compile>
-    <Compile Include="Data\ProcessOrderEnum.vb" />
-    <Compile Include="Data\Repository\CalculateRepository.vb" />
-    <Compile Include="Data\Repository\ICalculateRepository.vb" />
-    <Compile Include="Data\Repository\INumericBuildRepository.vb" />
-    <Compile Include="Data\Repository\IProcessOrderRepository.vb" />
-    <Compile Include="Data\Repository\IRequirementRepository.vb" />
-    <Compile Include="Data\Repository\NumericDefinitionRepository.vb" />
-    <Compile Include="Data\Repository\ProcessOrderRepository.vb" />
-    <Compile Include="Data\Repository\RequirementRepository.vb" />
-    <Compile Include="Data\RequirementStatus.vb" />
-    <Compile Include="Model\CalculateSetting.vb" />
-    <Compile Include="Model\DeriveType.vb" />
-    <Compile Include="Data\Repository\IStockRepository.vb" />
-    <Compile Include="Data\Repository\StockRepository.vb" />
-    <Compile Include="Model\RequirementPartial.vb" />
-    <Compile Include="Model\RequirementStatistics.vb" />
-    <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
       <DependentUpon>Application.myapp</DependentUpon>
     </Compile>
+    <Compile Include="ProjectInstaller.Designer.vb">
+      <DependentUpon>ProjectInstaller.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ProjectInstaller.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Service1.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Service1.Designer.vb">
+      <DependentUpon>Service1.vb</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -106,46 +99,23 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Service\CalculateService.vb" />
-    <Compile Include="Service\ICalculateService.vb" />
-    <Compile Include="Service\INumericService.vb" />
-    <Compile Include="Service\IProcessOrderService.vb" />
-    <Compile Include="Service\IRequirementService.vb" />
-    <Compile Include="Service\NumericService.vb" />
-    <Compile Include="Service\ProcessOrderService.vb" />
-    <Compile Include="Service\RequirementService.vb" />
-    <Compile Include="Service\ServiceBase.vb" />
-    <Compile Include="Service\IStockService.vb" />
-    <Compile Include="Service\StockService.vb" />
-    <Compile Include="Utility\EnumItem.vb" />
-    <Compile Include="Utility\EnumUtility.vb" />
-    <Compile Include="Utility\Calculator.vb" />
-    <Compile Include="Utility\CalculatorSingleton.vb" />
-    <Compile Include="ViewModel\SearchViewModel\MRPSearchModel.vb" />
-    <Compile Include="ViewModel\SearchViewModel\ProcessOrderSearchModel.vb" />
-    <Compile Include="ViewModel\SearchViewModel\RequirementSearchModel.vb" />
-    <Compile Include="ViewModel\SearchViewModel\RequirementStatisticsSearchModel.vb" />
-    <Compile Include="ViewModel\SearchViewModel\SearchModelBase.vb" />
-    <Compile Include="ViewModel\SearchViewModel\StockSearchModel.vb" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
-    <None Include="Data\CuttingMrp.dbml.layout">
-      <DependentUpon>CuttingMrp.dbml</DependentUpon>
-    </None>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="ProjectInstaller.resx">
+      <DependentUpon>ProjectInstaller.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Service1.resx">
+      <DependentUpon>Service1.vb</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Data\CuttingMrp.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>CuttingMrp.designer.vb</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="app.config" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
@@ -155,17 +125,17 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ViewModel\PageViewModel\" />
+    <Content Include="logConfig.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Repository\Repository.csproj">
-      <Project>{b3e59cdb-b93e-4364-98d7-55aca02b80f1}</Project>
-      <Name>Repository</Name>
+    <ProjectReference Include="..\CuttingMrpLib\CuttingMrpLib.vbproj">
+      <Project>{bfff4147-b219-4bdf-ab9b-8351e79055c5}</Project>
+      <Name>CuttingMrpLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />

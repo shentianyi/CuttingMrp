@@ -38,7 +38,6 @@ Public Class CalculatorSingleton
                         Throw New Exception("MRP is running")
                     End If
                     Dim msg As Message = New Message
-
                     msg.Body = settings
                     msg.Formatter = New XmlMessageFormatter({GetType(String)})
                     qu.Send(msg)

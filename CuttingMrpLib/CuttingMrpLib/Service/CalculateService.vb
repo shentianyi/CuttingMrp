@@ -23,6 +23,7 @@ Public Class CalculateService
     End Sub
 
     Public Function Search(conditons As MRPSearchModel) As List(Of MrpRound) Implements ICalculateService.Search
-        Throw New NotImplementedException()
+        Dim calculateRepo As CalculateRepository = New CalculateRepository(New DataContext(DBConn))
+        Return calculateRepo.Search(conditons)
     End Function
 End Class

@@ -1,5 +1,6 @@
 ﻿using CuttingMrpLib;
 using CuttingMrpWeb.Helpers;
+using CuttingMrpWeb.Models;
 using CuttingMrpWeb.Properties;
 using MvcPaging;
 using System;
@@ -23,7 +24,7 @@ namespace CuttingMrpWeb.Controllers
             IPagedList<Requirement> requirements = rs.Search(q).ToPagedList(pageIndex, Settings.Default.pageSize);
 
             ViewBag.Query = q;
-
+            SetRequirementStatusList(null);
             return View(requirements);
         }
 
@@ -58,13 +59,14 @@ namespace CuttingMrpWeb.Controllers
         // GET: Requirements/Edit/5
         public ActionResult Edit(int? id)
         {
-            if (id.HasValue)
+            Requirement requirement = GetRequirementById(id);
+
+            if (requirement != null)
             {
-                return GetRequirementById(id);
+                SetRequirementStatusList(requirement.status,false);
             }
-            else {
-                return RedirectToAction("Index");
-            }
+
+            return ValidateRequirement(requirement);
         }
 
         // POST: Requirements/Edit/5
@@ -89,10 +91,11 @@ namespace CuttingMrpWeb.Controllers
         {
             if (id.HasValue)
             {
-                return GetRequirementById(id);
+                return ValidateRequirement(GetRequirementById(id.Value));
             }
-            else {
-             return  RedirectToAction("Index");
+            else
+            {
+                return RedirectToAction("Index");
             }
         }
 
@@ -124,24 +127,63 @@ namespace CuttingMrpWeb.Controllers
             IPagedList<Requirement> requirements = rs.Search(q).ToPagedList(pageIndex, Settings.Default.pageSize);
 
             ViewBag.Query = q;
-            
+
+            SetRequirementStatusList(q.Status);
             return View("Index", requirements);
         }
 
-        private ActionResult GetRequirementById(int? id)
+        [HttpPost]
+        public ActionResult RunMrp([Bind(Include = "OrderType,MergeMethod")] CalculateSetting setting)
         {
-            if (id == null || !id.HasValue)
+            Message msg = new Message() { Result = false };
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                ICalculateService cs = new CalculateService(Settings.Default.db);
+                cs.Start(Settings.Default.mrpQueue, setting);
+                msg.Result = true;
+                msg.Msg = "MRP 任务运行成功!";
             }
+            catch (Exception e)
+            {
+                msg.Msg = e.Message;
+            }
+            return Json(msg);
+        }
 
-            IRequirementService rs = new RequirementService(Settings.Default.db);
-            Requirement requirement = rs.FindById(id.Value);
+        private ActionResult ValidateRequirement(Requirement requirement)
+        {
             if (requirement == null)
             {
                 return HttpNotFound();
             }
             return View(requirement);
+        }
+
+        private Requirement GetRequirementById(int id) {
+            IRequirementService rs = new RequirementService(Settings.Default.db);
+            Requirement requirement = rs.FindById(id);
+            return requirement;
+        }
+
+        private void SetRequirementStatusList(int? status,bool allowBlank=true) {
+            List<EnumItem> item = EnumUtility.GetList(typeof(RequirementStatus));
+           
+            List<SelectListItem> select = new List<SelectListItem>();
+            if (allowBlank)
+            {
+                select.Add(new SelectListItem { Text = "", Value = "" });
+            }
+            foreach (var it in item)
+            {
+                if (status.HasValue && status.ToString().Equals(it.Value))
+                {
+                    select.Add(new SelectListItem { Text = it.Text, Value = it.Value.ToString(), Selected = true });
+                }
+                else {
+                    select.Add(new SelectListItem { Text = it.Text, Value = it.Value.ToString(), Selected = false });
+                }
+            }
+            ViewData["statusList"] = select;
         }
 
     }

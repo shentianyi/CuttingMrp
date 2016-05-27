@@ -7,9 +7,9 @@
     Private _orderedDateTo As DateTime?
     Private _requiredTimeFrom As DateTime?
     Private _requiredTimeTo As DateTime?
-    Private _quantityFrom As Double = -1.0
-    Private _quantityTo As Double = -1.0
-    Private _status As Integer = -9999
+    Private _quantityFrom As Double?
+    Private _quantityTo As Double?
+    Private _status As Integer?
     Private _derivedFrom As String
     Private _derivedType As String
 
@@ -60,29 +60,29 @@
         End Set
     End Property
 
-    Public Property QuantityFrom As Double
+    Public Property QuantityFrom As Double?
         Get
             Return _quantityFrom
         End Get
-        Set(value As Double)
+        Set(value As Double?)
             _quantityFrom = value
         End Set
     End Property
 
-    Public Property QuantityTo As Double
+    Public Property QuantityTo As Double?
         Get
             Return _quantityTo
         End Get
-        Set(value As Double)
+        Set(value As Double?)
             _quantityTo = value
         End Set
     End Property
 
-    Public Property Status As Integer
+    Public Property Status As Integer?
         Get
             Return _status
         End Get
-        Set(value As Integer)
+        Set(value As Integer?)
             _status = value
         End Set
     End Property
