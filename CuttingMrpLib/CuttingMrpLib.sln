@@ -13,7 +13,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CuttingMrpWeb.Tests", "Cutt
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "UnitTestLib", "UnitTestLib\UnitTestLib.vbproj", "{AAEB7C4B-57A9-41D7-8DE8-8A360999CD22}"
 EndProject
+<<<<<<< Updated upstream
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "MrpSvc", "MrpSvc\MrpSvc.vbproj", "{BC5BCD58-EB62-4807-B342-BBF3ADEC9CF6}"
+=======
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B4236F7C-EFFD-45E6-8EBC-1C56E4FFE541}"
+	ProjectSection(SolutionItems) = preProject
+		WebEssentials2015-Settings.json = WebEssentials2015-Settings.json
+	EndProjectSection
+>>>>>>> Stashed changes
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

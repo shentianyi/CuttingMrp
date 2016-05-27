@@ -29,7 +29,7 @@
                     <button class="btn btn-primary" type="submit">Search All</button>
                 </div>
                 <div class="col-sm-2">
-                    <button class="btn btn-success" type="button">确认生产</button>
+                    <button class="btn btn-success runMrp" type="button">Run MRP</button>
                 </div>
             </div>
         </div>
@@ -80,20 +80,20 @@
     <div class="clearfix pagination">
         <div class="pagination-inner">
             @if (Model != null)
-    {
-        if (ViewBag.Query != null)
-        {
-            var html = Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
-                .Options(o => o.AddRouteValue("PartNr", ViewBag.Query.PartNr))
-                .Options(o => o.AddRouteValue("OrderedDateFrom", ViewBag.Query.PartNr))
-                .Options(o => o.AddRouteValue("OrderedDateTo", ViewBag.Query.PartNr))
-                .Options(o => o.AddRouteValue("RequiredTimeFrom", ViewBag.Query.PartNr))
-                .Options(o => o.AddRouteValue("RequiredTimeTo", ViewBag.Query.PartNr))
-                .Options(o => o.AddRouteValue("QuantityFrom", ViewBag.Query.PartNr))
-                .Options(o => o.AddRouteValue("QuantityTo", ViewBag.Query.PartNr))
-                .Options(o => o.AddRouteValue("Status", ViewBag.Query.PartNr))
-                .Options(o => o.AddRouteValue("DerivedFrom", ViewBag.Query.PartNr))
-                .Options(o => o.AddRouteValue("DerivedType", ViewBag.Query.PartNr));
+            {
+                if (ViewBag.Query != null)
+                {
+                    var html = Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
+                        .Options(o => o.AddRouteValue("PartNr", ViewBag.Query.PartNr))
+                        .Options(o => o.AddRouteValue("OrderedDateFrom", ViewBag.Query.PartNr))
+                        .Options(o => o.AddRouteValue("OrderedDateTo", ViewBag.Query.PartNr))
+                        .Options(o => o.AddRouteValue("RequiredTimeFrom", ViewBag.Query.PartNr))
+                        .Options(o => o.AddRouteValue("RequiredTimeTo", ViewBag.Query.PartNr))
+                        .Options(o => o.AddRouteValue("QuantityFrom", ViewBag.Query.PartNr))
+                        .Options(o => o.AddRouteValue("QuantityTo", ViewBag.Query.PartNr))
+                        .Options(o => o.AddRouteValue("Status", ViewBag.Query.PartNr))
+                        .Options(o => o.AddRouteValue("DerivedFrom", ViewBag.Query.PartNr))
+                        .Options(o => o.AddRouteValue("DerivedType", ViewBag.Query.PartNr));
                     @html
                 }
                 else
@@ -109,11 +109,11 @@
     <div id="extra-filter-content">
         <div class="col-sm-12">
             <div class="input-group filter-detail">
-                <span class="input-group-addon" id="basic-addon-partnr" style="background:#ff6700;">PartNr</span>
+                <span class="input-group-addon" id="basic-addon-partnr" style="background:#0088cc;color:white;">PartNr</span>
                 <input type="text" class="form-control" name="PartNr" id="PartNr" value="@ViewBag.Query.PartNr" placeholder="PartNr" aria-describedby="basic-addon-partnr">
             </div>
         </div>
-        <hr style="border:2px solid #0088cc; margin:10px -20px;" />
+        <hr style="border:1px solid #eeeeee; margin:10px -20px;" />
         <div class="col-sm-12">
             <div class="input-group filter-detail">
                 <span class="input-group-addon" id="basic-addon-ordered-date">OrderedDate</span>
@@ -123,7 +123,7 @@
             </div>
         </div>
 
-        <hr style="margin:10px;"/>
+        <hr style="margin:10px;" />
 
         <div class="col-sm-12">
             <div class="input-group filter-detail">
@@ -150,7 +150,7 @@
             <div class="col-sm-6" style="margin-left:-15px;">
                 <div class="input-group filter-detail">
                     <span class="input-group-addon" id="basic-addon-derivedfrom" style="width:80px;">Status</span>
-                    @Html.DropDownList("Status", ViewData["statusList"] as   IEnumerable<SelectListItem>)
+                    @Html.DropDownList("Status", ViewData["statusList"] as IEnumerable<SelectListItem>)
                 </div>
             </div>
             <div class="col-sm-6" style="margin-left:10px;">
@@ -161,8 +161,54 @@
             </div>
         </div>
         <div class="popModal_footer">
-            <input type="submit" value="查询" class="btn btn-success FilterSearchBtn" data-dialogModalBut="ok" />
+            <input type="submit" value="Search" class="btn btn-success FilterSearchBtn" data-dialogModalBut="ok" />
         </div>
+    </div>
+</div>
+
+<div id="ProcessOrderMask" style="display:none;"></div>
+<div id="ProcessOrder" style="display:none;">
+    <h3>订单选项</h3>
+    <i class="glyphicon glyphicon-remove pull-right remove-process-order"></i>
+    <hr />
+    <div class="panel panel-primary">
+        <div class="panel-body">
+            <div class="col-sm-12">
+                <div class="col-sm-6">
+                    <input type="radio" checked name="OrderTypes" value="FIX" />KANBAN 生成
+                </div>
+                <div class="col-sm-6">
+                    <input type="radio" disabled name="OrderTypes" value="ACTUAL" />直接订单
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-primary">
+        <div class="panel-body">
+            <div class="col-sm-12">
+                <div class="col-sm-3">
+                    <input type="radio" checked name="MergeMethodType" value="DAY" />天
+                </div>
+                <div class="col-sm-3">
+                    <input type="radio" disabled name="MergeMethodType" value="WEEK" />周
+                </div>
+
+                <div class="col-sm-3">
+                    <input type="radio" disabled name="MergeMethodType" value="MONTH" />月
+                </div>
+
+                <div class="col-sm-3">
+                    <input type="radio" disabled name="MergeMethodType" value="YEAR" />年
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="col-sm-12" style="text-align:right;">
+        <button class="btn btn-default confirm-process-order" >Confirm</button>
     </div>
 </div>
 
@@ -170,22 +216,6 @@
 
 <script type="text/javascript">
     Requirement.init();
-
-    $('#basic-addon-filter').click(function () {
-        $('#basic-addon-filter').popModal({
-            html: $('#extra-filter-content'),
-            placement: 'bottomRight',
-            showCloseBut: false,
-            onDocumentClickClose: true,
-            onOkBut: function () {
-            },
-            onCancelBut: function () {
-            },
-            onLoad: function () {
-            },
-            onClose: function () {
-            }
-        })
-    });
-
+    Requirement.run_mrp();
+    Requirement.click_filter();
 </script>
