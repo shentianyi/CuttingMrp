@@ -37,12 +37,12 @@ Public Class RequirementRepository
                 requires = requires.Where(Function(c) c.quantity <= searchModel.QuantityTo)
             End If
 
-            If searchModel.Status <> -9999 Then
+            If searchModel.Status <> -999 Then
                 requires = requires.Where(Function(c) c.status = searchModel.Status)
             End If
 
             If Not String.IsNullOrEmpty(searchModel.DerivedFrom) Then
-                requires = requires.Where(Function(c) c.derivedFrom Like searchModel.DerivedFrom)
+                requires = requires.Where(Function(c) c.derivedFrom.Contains(searchModel.DerivedFrom))
             End If
 
             If Not String.IsNullOrEmpty(searchModel.DerivedType) Then
