@@ -91,12 +91,6 @@ Partial Public Class CuttingMrpDataContext
     End Sub
   Partial Private Sub DeleteNumericBuild(instance As NumericBuild)
     End Sub
-  Partial Private Sub InsertMrpRound(instance As MrpRound)
-    End Sub
-  Partial Private Sub UpdateMrpRound(instance As MrpRound)
-    End Sub
-  Partial Private Sub DeleteMrpRound(instance As MrpRound)
-    End Sub
   Partial Private Sub InsertPart(instance As Part)
     End Sub
   Partial Private Sub UpdatePart(instance As Part)
@@ -108,6 +102,12 @@ Partial Public Class CuttingMrpDataContext
   Partial Private Sub UpdateProcessOrder(instance As ProcessOrder)
     End Sub
   Partial Private Sub DeleteProcessOrder(instance As ProcessOrder)
+    End Sub
+  Partial Private Sub InsertMrpRound(instance As MrpRound)
+    End Sub
+  Partial Private Sub UpdateMrpRound(instance As MrpRound)
+    End Sub
+  Partial Private Sub DeleteMrpRound(instance As MrpRound)
     End Sub
   #End Region
 	
@@ -202,12 +202,6 @@ Partial Public Class CuttingMrpDataContext
 		End Get
 	End Property
 	
-	Public ReadOnly Property MrpRounds() As System.Data.Linq.Table(Of MrpRound)
-		Get
-			Return Me.GetTable(Of MrpRound)
-		End Get
-	End Property
-	
 	Public ReadOnly Property Parts() As System.Data.Linq.Table(Of Part)
 		Get
 			Return Me.GetTable(Of Part)
@@ -217,6 +211,12 @@ Partial Public Class CuttingMrpDataContext
 	Public ReadOnly Property ProcessOrders() As System.Data.Linq.Table(Of ProcessOrder)
 		Get
 			Return Me.GetTable(Of ProcessOrder)
+		End Get
+	End Property
+	
+	Public ReadOnly Property MrpRounds() As System.Data.Linq.Table(Of MrpRound)
+		Get
+			Return Me.GetTable(Of MrpRound)
 		End Get
 	End Property
 End Class
@@ -2480,135 +2480,6 @@ Partial Public Class NumericBuild
 	End Sub
 End Class
 
-<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.MrpRound")>  _
-Partial Public Class MrpRound
-	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
-	
-	Private Shared emptyChangingEventArgs As PropertyChangingEventArgs = New PropertyChangingEventArgs(String.Empty)
-	
-	Private _mrpRound As String
-	
-	Private _runningStatus As Integer
-	
-	Private _time As Date
-	
-	Private _launcher As String
-	
-    #Region "可扩展性方法定义"
-    Partial Private Sub OnLoaded()
-    End Sub
-    Partial Private Sub OnValidate(action As System.Data.Linq.ChangeAction)
-    End Sub
-    Partial Private Sub OnCreated()
-    End Sub
-    Partial Private Sub OnmrpRoundChanging(value As String)
-    End Sub
-    Partial Private Sub OnmrpRoundChanged()
-    End Sub
-    Partial Private Sub OnrunningStatusChanging(value As Integer)
-    End Sub
-    Partial Private Sub OnrunningStatusChanged()
-    End Sub
-    Partial Private Sub OntimeChanging(value As Date)
-    End Sub
-    Partial Private Sub OntimeChanged()
-    End Sub
-    Partial Private Sub OnlauncherChanging(value As String)
-    End Sub
-    Partial Private Sub OnlauncherChanged()
-    End Sub
-    #End Region
-	
-	Public Sub New()
-		MyBase.New
-		OnCreated
-	End Sub
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_mrpRound", DbType:="VarChar(200) NOT NULL", CanBeNull:=false, IsPrimaryKey:=true)>  _
-	Public Property mrpRound() As String
-		Get
-			Return Me._mrpRound
-		End Get
-		Set
-			If (String.Equals(Me._mrpRound, value) = false) Then
-				Me.OnmrpRoundChanging(value)
-				Me.SendPropertyChanging
-				Me._mrpRound = value
-				Me.SendPropertyChanged("mrpRound")
-				Me.OnmrpRoundChanged
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_runningStatus", DbType:="Int NOT NULL")>  _
-	Public Property runningStatus() As Integer
-		Get
-			Return Me._runningStatus
-		End Get
-		Set
-			If ((Me._runningStatus = value)  _
-						= false) Then
-				Me.OnrunningStatusChanging(value)
-				Me.SendPropertyChanging
-				Me._runningStatus = value
-				Me.SendPropertyChanged("runningStatus")
-				Me.OnrunningStatusChanged
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_time", DbType:="DateTime NOT NULL")>  _
-	Public Property time() As Date
-		Get
-			Return Me._time
-		End Get
-		Set
-			If ((Me._time = value)  _
-						= false) Then
-				Me.OntimeChanging(value)
-				Me.SendPropertyChanging
-				Me._time = value
-				Me.SendPropertyChanged("time")
-				Me.OntimeChanged
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_launcher", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
-	Public Property launcher() As String
-		Get
-			Return Me._launcher
-		End Get
-		Set
-			If (String.Equals(Me._launcher, value) = false) Then
-				Me.OnlauncherChanging(value)
-				Me.SendPropertyChanging
-				Me._launcher = value
-				Me.SendPropertyChanged("launcher")
-				Me.OnlauncherChanged
-			End If
-		End Set
-	End Property
-	
-	Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
-	
-	Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
-	
-	Protected Overridable Sub SendPropertyChanging()
-		If ((Me.PropertyChangingEvent Is Nothing)  _
-					= false) Then
-			RaiseEvent PropertyChanging(Me, emptyChangingEventArgs)
-		End If
-	End Sub
-	
-	Protected Overridable Sub SendPropertyChanged(ByVal propertyName As [String])
-		If ((Me.PropertyChangedEvent Is Nothing)  _
-					= false) Then
-			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
-		End If
-	End Sub
-End Class
-
 <Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.Part")>  _
 Partial Public Class Part
 	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
@@ -3261,5 +3132,156 @@ Partial Public Class ProcessOrder
 	Private Sub detach_OrderDerivations(ByVal entity As OrderDerivation)
 		Me.SendPropertyChanging
 		entity.ProcessOrder = Nothing
+	End Sub
+End Class
+
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.MrpRound")>  _
+Partial Public Class MrpRound
+	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+	
+	Private Shared emptyChangingEventArgs As PropertyChangingEventArgs = New PropertyChangingEventArgs(String.Empty)
+	
+	Private _mrpRound As String
+	
+	Private _runningStatus As Integer
+	
+	Private _time As Date
+	
+	Private _launcher As String
+	
+	Private _text As String
+	
+    #Region "可扩展性方法定义"
+    Partial Private Sub OnLoaded()
+    End Sub
+    Partial Private Sub OnValidate(action As System.Data.Linq.ChangeAction)
+    End Sub
+    Partial Private Sub OnCreated()
+    End Sub
+    Partial Private Sub OnmrpRoundChanging(value As String)
+    End Sub
+    Partial Private Sub OnmrpRoundChanged()
+    End Sub
+    Partial Private Sub OnrunningStatusChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnrunningStatusChanged()
+    End Sub
+    Partial Private Sub OntimeChanging(value As Date)
+    End Sub
+    Partial Private Sub OntimeChanged()
+    End Sub
+    Partial Private Sub OnlauncherChanging(value As String)
+    End Sub
+    Partial Private Sub OnlauncherChanged()
+    End Sub
+    Partial Private Sub OntextChanging(value As String)
+    End Sub
+    Partial Private Sub OntextChanged()
+    End Sub
+    #End Region
+	
+	Public Sub New()
+		MyBase.New
+		OnCreated
+	End Sub
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_mrpRound", DbType:="VarChar(200) NOT NULL", CanBeNull:=false, IsPrimaryKey:=true)>  _
+	Public Property mrpRound() As String
+		Get
+			Return Me._mrpRound
+		End Get
+		Set
+			If (String.Equals(Me._mrpRound, value) = false) Then
+				Me.OnmrpRoundChanging(value)
+				Me.SendPropertyChanging
+				Me._mrpRound = value
+				Me.SendPropertyChanged("mrpRound")
+				Me.OnmrpRoundChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_runningStatus", DbType:="Int NOT NULL")>  _
+	Public Property runningStatus() As Integer
+		Get
+			Return Me._runningStatus
+		End Get
+		Set
+			If ((Me._runningStatus = value)  _
+						= false) Then
+				Me.OnrunningStatusChanging(value)
+				Me.SendPropertyChanging
+				Me._runningStatus = value
+				Me.SendPropertyChanged("runningStatus")
+				Me.OnrunningStatusChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_time", DbType:="DateTime NOT NULL")>  _
+	Public Property time() As Date
+		Get
+			Return Me._time
+		End Get
+		Set
+			If ((Me._time = value)  _
+						= false) Then
+				Me.OntimeChanging(value)
+				Me.SendPropertyChanging
+				Me._time = value
+				Me.SendPropertyChanged("time")
+				Me.OntimeChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_launcher", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
+	Public Property launcher() As String
+		Get
+			Return Me._launcher
+		End Get
+		Set
+			If (String.Equals(Me._launcher, value) = false) Then
+				Me.OnlauncherChanging(value)
+				Me.SendPropertyChanging
+				Me._launcher = value
+				Me.SendPropertyChanged("launcher")
+				Me.OnlauncherChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_text", DbType:="Text NOT NULL", CanBeNull:=false, UpdateCheck:=UpdateCheck.Never)>  _
+	Public Property text() As String
+		Get
+			Return Me._text
+		End Get
+		Set
+			If (String.Equals(Me._text, value) = false) Then
+				Me.OntextChanging(value)
+				Me.SendPropertyChanging
+				Me._text = value
+				Me.SendPropertyChanged("text")
+				Me.OntextChanged
+			End If
+		End Set
+	End Property
+	
+	Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
+	
+	Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
+	
+	Protected Overridable Sub SendPropertyChanging()
+		If ((Me.PropertyChangingEvent Is Nothing)  _
+					= false) Then
+			RaiseEvent PropertyChanging(Me, emptyChangingEventArgs)
+		End If
+	End Sub
+	
+	Protected Overridable Sub SendPropertyChanged(ByVal propertyName As [String])
+		If ((Me.PropertyChangedEvent Is Nothing)  _
+					= false) Then
+			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
+		End If
 	End Sub
 End Class

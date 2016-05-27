@@ -123,14 +123,6 @@
       <Column Name="description" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
-  <Table Name="dbo.MrpRound" Member="MrpRounds">
-    <Type Name="MrpRound">
-      <Column Name="mrpRound" Type="System.String" DbType="VarChar(200) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="runningStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="time" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="launcher" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
-    </Type>
-  </Table>
   <Table Name="dbo.Part" Member="Parts">
     <Type Name="Part">
       <Column Name="partNr" Type="System.String" DbType="VarChar(200) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -162,6 +154,15 @@
       <Column Name="batchQuantity" Type="System.Double" DbType="Float" CanBeNull="true" />
       <Association Name="ProcessOrder_OrderDerivation" Member="OrderDerivations" ThisKey="orderNr" OtherKey="orderId" Type="OrderDerivation" />
       <Association Name="Part_ProcessOrder" Member="Part" ThisKey="partNr" OtherKey="partNr" Type="Part" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.MrpRound" Member="MrpRounds">
+    <Type Name="MrpRound">
+      <Column Name="mrpRound" Type="System.String" DbType="VarChar(200) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="runningStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="time" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="launcher" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="text" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
     </Type>
   </Table>
 </Database>

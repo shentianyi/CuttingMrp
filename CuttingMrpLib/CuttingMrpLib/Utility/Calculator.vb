@@ -8,7 +8,28 @@ Public Class Calculator
         MyBase.New(db)
     End Sub
 
-    Public Sub GenerateProcessOrderByRequirement(mrpRound As String, settings As CalculateSetting) As Boolean
+    Public Sub ProcessMrp(settings As CalculateSetting)
+        Dim mrprepo As Repository(Of MrpRound) = New Repository(Of MrpRound)(New DataContext(DBConn))
+        Dim mrpRoundStr As String = Now.ToString("yyyyMMddhhmmss")
+        mrprepo.GetTable.InsertOnSubmit(New MrpRound With {.launcher = My.Application.Info.AssemblyName, .mrpRound = mrpRoundStr, .runningStatus = CalculatorStatus.Running, .time = Now})
+        mrprepo.SaveAll()
+        Try
+            GenerateProcessOrderByRequirement(mrpRoundStr, settings)
+            Dim round As MrpRound = mrprepo.First(Function(c) c.mrpRound = mrpRoundStr)
+            round.runningStatus = CalculatorStatus.Finish
+            mrprepo.SaveAll()
+        Catch ex As Exception
+            Dim round As MrpRound = mrprepo.First(Function(c) c.mrpRound = mrpRoundStr)
+            round.runningStatus = CalculatorStatus.Cancel
+            round.text = "Fail to run MRP with following errors:" & ex.ToString
+            mrprepo.SaveAll()
+            Throw New Exception(round.text)
+        End Try
+        '1. create a mrpround
+        '2.run the function
+        '3. change the status 
+    End Sub
+    Public Sub GenerateProcessOrderByRequirement(mrpRound As String, settings As CalculateSetting)
         '0 Clear the ProcessOrders, set the status to SYSCAN yes
         '1 find all valid requirement
         '2 find all stock of the part
