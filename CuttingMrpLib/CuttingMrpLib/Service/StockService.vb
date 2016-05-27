@@ -2,14 +2,16 @@
 Imports Repository
 
 Public Class StockService
+    Inherits ServiceBase
     Implements IStockService
-    Public Property dbString As String
 
-    Public Sub New(dbString As String)
-        Me.dbString = dbString
+
+    Public Sub New(db As String)
+        MyBase.New(db)
     End Sub
+
     Public Function Search(searchModel As StockSearchModel) As IQueryable(Of Stock) Implements IStockService.Search
-        Dim context As DataContext = New DataContext(Me.dbString)
+        Dim context As DataContext = New DataContext(Me.DBConn)
         Dim rep As IStockRepository = New StockRepository(context)
 
         Return rep.Search(searchModel)
@@ -19,7 +21,7 @@ Public Class StockService
     Public Function FindById(id As Integer) As Stock Implements IStockService.FindById
         Dim stock As Stock = Nothing
         Try
-            Dim context As DataContext = New DataContext(Me.dbString)
+            Dim context As DataContext = New DataContext(Me.DBConn)
             Dim rep As Repository(Of Stock) = New Repository.Repository(Of Stock)(context)
             stock = rep.First(Function(s) s.id.Equals(id))
         Catch ex As Exception
@@ -31,7 +33,7 @@ Public Class StockService
     Public Function DeleteById(id As Integer) As Boolean Implements IStockService.DeleteById
         Dim result As Boolean = False
         Try
-            Dim context As DataContext = New DataContext(Me.dbString)
+            Dim context As DataContext = New DataContext(Me.DBConn)
             Dim rep As Repository(Of Stock) = New Repository.Repository(Of Stock)(context)
             Dim stock As Stock = rep.First(Function(s) s.id.Equals(id))
             If (stock IsNot Nothing) Then
@@ -48,7 +50,7 @@ Public Class StockService
     Public Function Update(stock As Stock) As Boolean Implements IStockService.Update
         Dim result As Boolean = False
         Try
-            Dim context As DataContext = New DataContext(Me.dbString)
+            Dim context As DataContext = New DataContext(Me.DBConn)
             Dim rep As Repository(Of Stock) = New Repository.Repository(Of Stock)(context)
             Dim ustock As Stock = rep.First(Function(s) s.id.Equals(stock.id))
             If (ustock IsNot Nothing) Then

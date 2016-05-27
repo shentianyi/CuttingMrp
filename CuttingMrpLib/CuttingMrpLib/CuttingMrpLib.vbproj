@@ -77,6 +77,7 @@
     <Compile Include="Data\Repository\IProcessOrderRepository.vb" />
     <Compile Include="Data\Repository\IRequirementRepository.vb" />
     <Compile Include="Data\Repository\ProcessOrderRepository.vb" />
+    <Compile Include="Data\Repository\RequirementRepository.vb" />
     <Compile Include="Data\RequirementStatus.vb" />
     <Compile Include="Model\CalculateSetting.vb" />
     <Compile Include="Model\DeriveType.vb" />
