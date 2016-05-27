@@ -52,7 +52,7 @@
             If OrderTypes.Contains(value) = False Then
                 Throw New Exception("order method not supported")
             Else
-                __orderType = value
+                _orderType = value
             End If
         End Set
     End Property

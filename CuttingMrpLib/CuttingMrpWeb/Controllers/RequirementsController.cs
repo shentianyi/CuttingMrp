@@ -56,9 +56,15 @@ namespace CuttingMrpWeb.Controllers
         }
 
         // GET: Requirements/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int? id)
         {
-            return GetRequirementById(id);
+            if (id.HasValue)
+            {
+                return GetRequirementById(id);
+            }
+            else {
+                return RedirectToAction("Index");
+            }
         }
 
         // POST: Requirements/Edit/5
@@ -79,9 +85,15 @@ namespace CuttingMrpWeb.Controllers
         }
 
         // GET: Requirements/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int? id)
         {
-            return GetRequirementById(id);
+            if (id.HasValue)
+            {
+                return GetRequirementById(id);
+            }
+            else {
+             return  RedirectToAction("Index");
+            }
         }
 
         // POST: Requirements/Delete/5
