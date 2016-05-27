@@ -1,4 +1,6 @@
 ﻿Imports Repository
+Imports System.Globalization
+Imports System.Data.Linq
 
 Public Class Calculator
     Inherits ServiceBase
@@ -6,6 +8,22 @@ Public Class Calculator
         MyBase.New(db)
     End Sub
 
+    Public Sub GenerateProcessOrderByRequirement(mrpRound As String, settings As CalculateSetting) As Boolean
+        '0 Clear the ProcessOrders, set the status to SYSCAN yes
+        '1 find all valid requirement
+        '2 find all stock of the part
+        '3 get net requirement
+        '4 generate the order
+        '5.find the related KANBAN card
+
+        ResetOrders({ProcessOrderEnum.Open}, settings.ReservedType, ProcessOrderEnum.SystemCancel)
+        Dim toInsertOrders As List(Of ProcessOrder) = New List(Of ProcessOrder)
+        Dim procOrderRepo As Repository(Of ProcessOrder) = New Repository(Of ProcessOrder)(New DataContext(DBConn))
+        Dim orders As Hashtable = GetValidRequirement()
+        Dim toInsert As List(Of ProcessOrder) = PrepareData(mrpRound, orders, settings)
+        procOrderRepo.GetTable.InsertAllOnSubmit(toInsert)
+        procOrderRepo.SaveAll()
+    End Sub
 
     Private Sub ResetOrders(targetStatus() As ProcessOrderEnum, reserveTypes As List(Of String), status As ProcessOrderEnum)
         If reserveTypes Is Nothing Then
@@ -19,20 +37,57 @@ Public Class Calculator
         Next
         repo.SaveAll()
     End Sub
-    Public Function GenerateProcessOrderByRequirement(mrpRound As String, settings As CalculateSetting) As Boolean
-        '0 Clear the ProcessOrders, set the status to SYSCAN yes
-        '1 find all valid requirement
-        '2 find all stock of the part
-        '3 get net requirement
-        '4 generate the order
-        '5.find the related KANBAN card
 
-        ResetOrders({ProcessOrderEnum.Open}, settings.ReservedType, ProcessOrderEnum.SystemCancel)
+
+    Public Function PrepareData(mrpround As String, orders As Hashtable, settings As CalculateSetting) As List(Of ProcessOrder)
+        Dim result As List(Of ProcessOrder) = New List(Of ProcessOrder)
+        For Each dic As DictionaryEntry In orders
+            Dim orderPieces As Hashtable = GroupByDate(settings.MergeMethod, dic.Value)
+            Dim ordernr As String = NumericService.GenerateID(DBConn, "PROCESSORDER")
+            For Each piece As DictionaryEntry In orderPieces
+                Dim sum As Double = 0
+                Dim toInsertRefer As List(Of OrderDerivation) = New List(Of OrderDerivation)
+                For Each req As Requirement In piece.Value
+                    sum = sum + req.quantity
+                    toInsertRefer.Add(New OrderDerivation With {.orderId = ordernr, .mrpRound = mrpround, .deriveQty = req.quantity, .requirementId = req.id})
+                Next
+                Dim dateresult As DateTime
+                DateTime.TryParse(piece.Key, dateresult)
+                Dim en As EntitySet(Of OrderDerivation) = New EntitySet(Of OrderDerivation)
+                en.AddRange(toInsertRefer)
+                Dim partRepo As Repository(Of Part) = New Repository(Of Part)(New DataContext(DBConn))
+                Dim currPart As Part = partRepo.First(Function(c) c.partNr = dic.Key)
+                Dim actualQty As Double
+                If sum > 0 Then
+                    If sum < currPart.spq Then
+                        actualQty = currPart.spq
+                    Else
+                        If sum Mod currPart.spq <> 0 Then
+                            actualQty = sum + sum - (sum Mod currPart.spq)
+                        End If
+                    End If
+                End If
+
+                Dim completeRate As Double = 0
+                If sum <> 0 And actualQty <> 0 Then
+                    completeRate = actualQty / sum
+                End If
+
+                Dim toinsert As ProcessOrder = New ProcessOrder With {.orderNr = ordernr,
+                    .partNr = dic.Key, .derivedFrom = "MRP", .proceeDate = dateresult,
+                    .OrderDerivations = en, .requirementId = " ", .sourceDoc = " ",
+                    .status = ProcessOrderEnum.Open, .sourceQuantity = sum, .actualQuantity = actualQty,
+                    .completeRate = completeRate, .batchQuantity = currPart.moq}
+                result.Add(toinsert)
+            Next
+        Next
+        Return result
+    End Function
+
+    Public Function GetValidRequirement()
         Dim requireRepo As RequirementRepository = New RequirementRepository(New DataContext(DBConn))
         Dim searchConditions As RequirementSearchModel = New RequirementSearchModel
         searchConditions.DerivedType = DeriveType.MRP
-        searchConditions.PageSize = Integer.MaxValue
-        searchConditions.PageIndex = 0
         searchConditions.Status = RequirementStatus.Open
         Dim toUse As IQueryable(Of Requirement) = requireRepo.Search(searchConditions)
         Dim parts As IQueryable(Of String) = (From t In toUse Select t.partNr)
@@ -60,18 +115,7 @@ Public Class Calculator
                 End If
             End If
         Next
-
-        Dim toInsertOrders As List(Of ProcessOrder) = New List(Of ProcessOrder)
-        Dim procOrderRepo As Repository(Of ProcessOrder) = New Repository(Of ProcessOrder)(New DataContext(DBConn))
-
-        For Each dic As DictionaryEntry In orders
-            Dim derivs As List(Of OrderDerivation) = New List(Of OrderDerivation)
-            For Each req As Requirement In dic.Value
-                derivs.Add(New OrderDerivation With {.mrpRound = mrpRound, .requirementId = req.id, .deriveQty = req.quantity})
-            Next
-
-            Dim toinsert As ProcessOrder = New ProcessOrder
-        Next
+        Return orders
     End Function
 
     ''' <summary>
@@ -86,22 +130,34 @@ Public Class Calculator
     ''' <param name="collections"></param>
     ''' <returns></returns>
     Public Function GroupByDate(dateType As String, collections As List(Of Requirement))
-        Dim dateTypeS() As String = {"DAY", "WEEK", "MONTH", "YEAR"}
         If collections Is Nothing Or dateType Is Nothing Then
             Throw New ArgumentNullException
         End If
-        If dateTypeS.Contains(dateType) = False Then
-            Throw New Exception("Date type not supported")
-        End If
-        Select Case dateType
-            Case "DAY"
-            Case "WEEK"
-            Case "MONTH"
-            Case "YEAR"
+        Dim result As Hashtable = New Hashtable
 
-        End Select
-
-
+        For Each coll As Requirement In collections
+            Dim key As String = ""
+            Select Case dateType
+                Case "DAY"
+                    key = coll.requiredDate.ToString("yyyy-MM-dd")
+                Case "WEEK"
+                    'get the monday of each week
+                    Dim delta As Integer = DayOfWeek.Monday - coll.requiredDate.DayOfWeek;
+                    key = coll.requiredDate.AddDays(delta).ToString("yyyy-MM-dd")
+                Case "MONTH"
+                    key = coll.requiredDate.ToString("yyyy-MM") & "-01"
+                Case "YEAR"
+                    key = coll.requiredDate.ToString("yyyy") & "01-01"
+            End Select
+            If result.ContainsKey(key) Then
+                result(key).add(coll)
+            Else
+                Dim content As List(Of Requirement) = New List(Of Requirement)
+                content.Add(coll)
+                result.Add(key, content)
+            End If
+        Next
+        Return result
     End Function
 
 End Class
