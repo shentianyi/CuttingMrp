@@ -34,6 +34,9 @@ namespace CuttingMrpWeb
                       "~/Content/site.css",
                       "~/Content/pagination.css",
                       "~/Content/jquery-popModal.css"));
+
+            bundles.Add(new StyleBundle("~/Content/stock").Include(
+                     "~/Content/stock.css"));
         }
     }
 }

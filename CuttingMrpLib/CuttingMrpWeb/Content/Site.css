@@ -1,6 +1,7 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    min-width:1000px;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -8,6 +9,7 @@
     padding-left: 15px;
     padding-right: 15px;
     margin-top:20px;
+    min-width:800px;
 }
 
 /* Override the default bootstrap behavior where horizontal description lists 
@@ -30,4 +32,8 @@ textarea {
 }
 .table thead > tr > th, .table tbody > tr > th, .table tfoot > tr > th, .table thead > tr > td, .table tbody > tr > td, .table tfoot > tr > td{
     text-align:center;
+}
+
+.navbar{
+    min-width:800px;
 }

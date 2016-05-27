@@ -2,11 +2,12 @@
 Imports Repository
 
 Public Class RequirementService
+    Inherits ServiceBase
     Implements IRequirementService
     Public Property dbString As String
-
-    Public Sub New(dbString As String)
-        Me.dbString = dbString
+ 
+    Public Sub New(db As String)
+        MyBase.New(db)
     End Sub
 
     Public Function Search(conditions As RequirementSearchModel) As IQueryable(Of Requirement) Implements IRequirementService.Search
