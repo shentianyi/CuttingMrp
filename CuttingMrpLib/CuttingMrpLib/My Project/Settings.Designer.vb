@@ -54,17 +54,6 @@ Namespace My
             End Get
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.SpecialSettingAttribute(Global.System.Configuration.SpecialSetting.ConnectionString),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("Data Source=vm08;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=sa"& _ 
-            ";Password=brilliantech123@")>  _
-        Public ReadOnly Property CuttingMrpConnectionString() As String
-            Get
-                Return CType(Me("CuttingMrpConnectionString"),String)
-            End Get
-        End Property
-        
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("Data Source=vm08;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=sa"& _ 
@@ -76,6 +65,17 @@ Namespace My
             Set
                 Me("db") = value
             End Set
+        End Property
+        
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.SpecialSettingAttribute(Global.System.Configuration.SpecialSetting.ConnectionString),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("Data Source=wangsong-pc;Initial Catalog=CuttingMrp;Persist Security Info=True;Use"& _ 
+            "r ID=sa;Password=wangsong")>  _
+        Public ReadOnly Property CuttingMrpConnectionString() As String
+            Get
+                Return CType(Me("CuttingMrpConnectionString"),String)
+            End Get
         End Property
     End Class
 End Namespace
