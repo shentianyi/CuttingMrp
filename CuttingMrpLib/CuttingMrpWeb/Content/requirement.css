@@ -3,6 +3,18 @@
 }
 
 .filter-detail>select{
-    width:100px;
+    width:200px;
     text-align:center;
+}
+
+.filter-detail>select>option{
+    height:30px;
+    line-height:28px;
+    border-bottom:1px solid #eeeeee;
+}
+
+
+.input-group-addon{
+    background:#0088cc;
+    color:white;
 }
