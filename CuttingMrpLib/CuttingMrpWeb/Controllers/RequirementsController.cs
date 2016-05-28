@@ -59,7 +59,7 @@ namespace CuttingMrpWeb.Controllers
         // GET: Requirements/Edit/5
         public ActionResult Edit(int? id)
         {
-            Requirement requirement = GetRequirementById(id);
+            Requirement requirement = GetRequirementById(id.Value);
 
             if (requirement != null)
             {
