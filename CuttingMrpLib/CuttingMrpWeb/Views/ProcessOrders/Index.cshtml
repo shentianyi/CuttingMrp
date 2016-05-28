@@ -27,6 +27,7 @@
 <table class="table table-bordered" style="margin-top:100px;">
     <thead>
         <tr>
+            <td>#</td>
             <th> No. </th>
             <th>OrderNr</th>
             <th>SourceDoc</th>
@@ -48,6 +49,16 @@
             foreach (var item in Model)
             {
                 <tr>
+                    <td> 
+                        @if (item.canFinish)
+                        {
+                         @Html.CheckBox("orderNr", new { value = item.orderNr })
+                        }
+                        else
+                        {
+                            @Html.CheckBox("orderNr", new { value = item.orderNr,@disabled=true })
+                        }
+                    </td>
                     <td>@(i += 1)</td>
                     <td>@Html.DisplayFor(modelItem => item.orderNr)</td>
                     <td>@Html.DisplayFor(modelItem => item.sourceDoc)</td>
@@ -61,7 +72,10 @@
                     <td>@Html.DisplayFor(modelItem => item.batchQuantity)</td>
                     <td>
                         @Html.ActionLink("Edit", "Edit", new { id = item.orderNr }) |
-                        @Html.ActionLink("Delete", "Delete", new { id = item.orderNr })
+                        @if (item.canDelete)
+                        {
+                            @Html.ActionLink("Delete", "Delete", new { id = item.orderNr })
+                        }
                     </td>
                 </tr>
             }

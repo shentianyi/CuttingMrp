@@ -91,16 +91,16 @@ namespace CuttingMrpWeb.Controllers
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {
-            try
-            {
+            //try
+            //{
                 IStockService ss = new StockService(Settings.Default.db);
                 ss.DeleteById(id);
                 return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            //}
+            //catch
+            //{
+            //    return View();
+            //}
         }
 
         public ActionResult Search([Bind(Include = "PartNr,FIFOFrom,FIFOTo,QuantityFrom,QuantityTo,Wh,Position")] StockSearchModel q)

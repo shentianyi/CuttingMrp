@@ -103,17 +103,17 @@ namespace CuttingMrpWeb.Controllers
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {
-            try
-            {
+            //try
+            //{
                 // TODO: Add delete logic here
                 IRequirementService rs = new RequirementService(Settings.Default.db);
                 rs.DeleteById(id);
                 return RedirectToAction("Index"); 
-            }
-            catch
-            {
-                return View();
-            }
+            //}
+            //catch
+            //{
+            //    return View();
+            //}
         }
 
 

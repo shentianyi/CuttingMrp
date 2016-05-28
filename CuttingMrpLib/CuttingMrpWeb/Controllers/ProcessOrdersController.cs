@@ -80,25 +80,33 @@ namespace CuttingMrpWeb.Controllers
         }
 
         // GET: ProcessOrders/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(string id)
         {
-            return View();
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return ValidateProcessOrder(GetProcessOrderById(id));
+            }
         }
 
         // POST: ProcessOrders/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(string id, FormCollection collection)
         {
-            try
-            {
+            //try
+            //{
                 // TODO: Add delete logic here
-
+                IProcessOrderService ps = new ProcessOrderService(Settings.Default.db);
+                ps.DeleteById(id);
                 return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            //}
+            //catch
+            //{
+            //    return View();
+            //}
         }
 
 
@@ -118,6 +126,22 @@ namespace CuttingMrpWeb.Controllers
             return View("Index", processOrders);
         }
 
+
+        private ActionResult ValidateProcessOrder(ProcessOrder processOrder)
+        {
+            if (processOrder == null)
+            {
+                return HttpNotFound();
+            }
+            return View(processOrder);
+        }
+
+        private ProcessOrder GetProcessOrderById(string id)
+        {
+            IProcessOrderService ps = new ProcessOrderService(Settings.Default.db);
+            ProcessOrder order = ps.FindById(id);
+            return order;
+        }
 
         private void SetProcessOrderStatusList(int? status, bool allowBlank = true)
         {
