@@ -25,9 +25,6 @@ Public Class Calculator
             mrprepo.SaveAll()
             Throw New Exception(round.text)
         End Try
-        '1. create a mrpround
-        '2.run the function
-        '3. change the status 
     End Sub
     Public Sub GenerateProcessOrderByRequirement(mrpRound As String, settings As CalculateSetting)
         '0 Clear the ProcessOrders, set the status to SYSCAN yes
