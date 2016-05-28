@@ -2,9 +2,11 @@
     width:200px;
 }
 
-.filter-p{
-    overflow:hidden;
-    text-overflow:ellipsis;
+.filter-p {
+    overflow: hidden;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
 }
 
 .filter-content{
@@ -15,18 +17,42 @@
     text-align:center;
 }
 
+.space-mark{
+    text-align:center;
+    padding:0 33px;
+}
+
 .filter-content>span{
     border-left:1px solid black;
     padding:0 10px 0 20px; 
     cursor:pointer;
 }
 
+.filter-detail{
+    display:-ms-flexbox;
+}
+
 .filter-detail>span{
-    width:80px;
+    width:81px;
+    height:38px;
+    text-align:center;
 }
 
 .filter-detail>input[type='text'], .filter-detail>input[type='number'], .filter-detail>input[type='datetime'] ,.filter-detail>select{
     height:38px;
-    width:200px;
+    width:170px;
     box-shadow:none;
+}
+
+.filter-detail>select{
+    width:200px;
+    text-align:center;
+}
+
+.filter-detail>select>option{
+    height:30px;
+    padding-left:20px;
+    padding-top:5px;
+    text-align:left;
+    border-bottom:1px solid #eeeeee;
 }

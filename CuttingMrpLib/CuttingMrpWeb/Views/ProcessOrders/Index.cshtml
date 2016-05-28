@@ -5,16 +5,18 @@
     ViewBag.Title = "ProcessOrders";
 }
 
+@Styles.Render("~/Content/process-order")
+
 <form action="/ProcessOrders/Search" method="get">
     <div class="panel panel-default navbar-fixed-top" style="box-shadow: -2px 2px 4px #34313a;top:60px;">
         <div class="panel-body">
             <div class="col-sm-12" style="text-align:center;">
-                <div class="col-sm-9 filter-content">
+                <div class="col-sm-10 filter-content">
                     <span class="pull-right" id="basic-addon-filter"> <i class="glyphicon glyphicon-filter"></i> </span>
                     <div class="filter-p"></div>
                 </div>
 
-                <div class="col-sm-1" style="text-align:left;">
+                <div class="col-sm-2" style="text-align:left;">
                     <button class="btn btn-primary" type="submit">Search All</button>
                 </div>
 
@@ -115,21 +117,72 @@
 
 <div style="display:none;">
     <div id="extra-filter-content">
+        <div class="col-sm-12">
+            <div class="input-group filter-detail">
+                <span class="input-group-addon" id="basic-addon-ordernr" style="background:#0088cc;color:white;">OrderNr</span>
+                <input type="text" class="form-control" name="OrderNr" id="OrderNr" value="@ViewBag.Query.OrderNr" placeholder="OrderNr" aria-describedby="basic-addon-ordernr">
+            </div>
+        </div>
 
+        <hr style="border:1px solid #eeeeee; margin:10px -20px;" />
 
+        <div class="col-sm-12">
+            <div class="input-group filter-detail">
+                <span class="input-group-addon" id="basic-addon-sourcedoc-date">SourceDoc</span>
+                <input type="text" class="form-control" autocomplete="off" name="SourceDoc" id="SourceDoc" value="@ViewBag.Query.SourceDoc" placeholder="SourceDoc" aria-describedby="basic-addon-sourcedoc-date">
+                <span class="input-group-addon">DerivedFrom</span>
+                <input type="text" class="form-control" autocomplete="off" name="DerivedFrom" id="DerivedFrom" value="@ViewBag.Query.DerivedFrom" placeholder="DerivedFrom" />
+            </div>
+        </div>
         <hr style="margin:10px;" />
 
         <div class="col-sm-12">
-            <div class="col-sm-6" style="margin-left:-15px;">
-                <div class="input-group filter-detail">
-                    <span class="input-group-addon" id="basic-addon-derivedfrom" style="width:80px;">Status</span>
-                    @Html.DropDownList("Status", ViewData["statusList"] as IEnumerable<SelectListItem>)
-                </div>
+            <div class="input-group filter-detail">
+                <span class="input-group-addon" id="basic-addon-partnr-date">PartNr</span>
+                <input type="text" class="form-control" autocomplete="off" name="PartNr" id="PartNr" value="@ViewBag.Query.PartNr" placeholder="SourceDoc" aria-describedby="basic-addon-partnr-date">
+                <span class="input-group-addon">Status</span>
+                @Html.DropDownList("Status", ViewData["statusList"] as IEnumerable<SelectListItem>, new { @class = "form-control" })
             </div>
+        </div>
+        <hr style="margin:10px;" />
 
+        <div class="col-sm-12">
+            <div class="input-group filter-detail">
+                <span class="input-group-addon" id="basic-addon-procee-date">ProceeDate</span>
+                <input type="text" style="width:188px;" class="form-control datetime-picker" autocomplete="off" name="ProceeDateFrom" id="ProceeDateFrom" value="@ViewBag.Query.ProceeDateFrom" placeholder="ProceeDate From" aria-describedby="basic-addon-procee-date">
+                <span class="space-mark">~</span>
+                <input type="text" style="width:170px;" class="form-control datetime-picker" autocomplete="off" name="ProceeDateTo" id="ProceeDateTo" value="@ViewBag.Query.ProceeDateTo" placeholder="ProceeDate To" />
+            </div>
+        </div>
+        <hr style="margin:10px;" />
+
+        <div class="col-sm-12">
+            <div class="input-group filter-detail">
+                <span class="input-group-addon" id="basic-addon-actual-quantity">ActualQuantity</span>
+                <input type="text" style="width:165px;" class="form-control" autocomplete="off" name="ActualQuantityFrom" id="ActualQuantityFrom" value="@ViewBag.Query.ActualQuantityFrom" placeholder="ActualQuantity From" aria-describedby="basic-addon-actual-quantity">
+                <span class="space-mark">~</span>
+                <input type="text" style="width:170px;" class="form-control" autocomplete="off" name="ActualQuantityTo" id="ActualQuantityTo" value="@ViewBag.Query.ActualQuantityTo" placeholder="ActualQuantity To" />
+            </div>
+        </div>
+        <hr style="margin:10px;" />
+
+        <div class="col-sm-12">
+            <div class="input-group filter-detail">
+                <span class="input-group-addon" id="basic-addon-complete-rate">CompleteRate</span>
+                <input type="text" class="form-control" autocomplete="off" name="CompleteRateFrom" id="CompleteRateFrom" value="@ViewBag.Query.CompleteRateFrom" placeholder="CompleteRate From" aria-describedby="basic-addon-complete-rate">
+                <span class="space-mark">~</span>
+                <input type="text" class="form-control" autocomplete="off" name="CompleteRateTo" id="CompleteRateTo" value="@ViewBag.Query.CompleteRateTo" placeholder="CompleteRate To" />
+            </div>
         </div>
         <div class="popModal_footer">
             <input type="submit" value="Search" class="btn btn-success FilterSearchBtn" data-dialogModalBut="ok" />
         </div>
     </div>
 </div>
+
+@Scripts.Render("~/bundles/process-orders")
+
+<script type="text/javascript">
+    ProcessOrders.init();
+    ProcessOrders.click_filter();
+</script>

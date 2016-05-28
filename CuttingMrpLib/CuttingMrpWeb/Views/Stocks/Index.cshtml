@@ -104,9 +104,9 @@
         <hr style="border:1px solid #eeeeee; margin:10px -20px;" />
         <div class="col-sm-12">
             <div class="input-group filter-detail">
-                <span class="input-group-addon" id="basic-addon-fifo">FIFO</span>
+                <span class="input-group-addon" id="basic-addon-fifo">FIFO </span>
                 <input type="text" class="form-control datetime-picker" autocomplete="off" name="FIFOFrom" id="FIFOFrom" value="@ViewBag.Query.FIFOFrom" placeholder="FIFO From" aria-describedby="basic-addon-fifo">
-                <span>~</span>
+                <span class="space-mark">~</span>
                 <input type="text" class="form-control datetime-picker" autocomplete="off" name="FIFOTo" id="FIFOTo" value="@ViewBag.Query.FIFOTo" placeholder="FIFO To" />
             </div>
         </div>
@@ -115,22 +115,22 @@
             <div class="input-group filter-detail">
                 <span class="input-group-addon" id="basic-addon-quantity">Quantity</span>
                 <input type="number" class="form-control" name="QuantityFrom" id="QuantityFrom" value="@ViewBag.Query.QuantityFrom" placeholder="Quantity From" aria-describedby="basic-addon-quantity">
-                <span>~</span>
+                <span class="space-mark">~</span>
                 <input type="number" class="form-control" name="QuantityTo" id="QuantityTo" value="@ViewBag.Query.QuantityTo" placeholder="Quantity To" />
             </div>
         </div>
         <hr style="margin:10px;" />
         <div class="col-sm-12">
-            <div class="col-sm-4" style="margin-left:-15px;">
+            <div class="col-sm-5" style="margin-left:-15px;">
                 <div class="input-group filter-detail">
                     <span class="input-group-addon" id="basic-addon-wh">Wh</span>
                     <input type="text" class="form-control" name="Wh" id="Wh" value="@ViewBag.Query.Wh" placeholder="Wh" aria-describedby="basic-addon-wh">
                 </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-6" style="text-align:left;margin-left: -32px;">
                 <div class="input-group filter-detail">
                     <span class="input-group-addon" id="basic-addon-position">Position</span>
-                    <input type="text" class="form-control" name="Position" id="Position" value="@ViewBag.Query.Position" placeholder="Position" aria-describedby="basic-addon-position">
+                    <input style="width:130px;" type="text" class="form-control" name="Position" id="Position" value="@ViewBag.Query.Position" placeholder="Position" aria-describedby="basic-addon-position">
                 </div>
             </div>
         </div>

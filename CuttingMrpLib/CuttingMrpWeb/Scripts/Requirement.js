@@ -75,12 +75,14 @@ Requirement.run_mrp = function () {
     $('.runMrp').click(function () {
         $('#ProcessOrderMask').fadeIn(0);
         $('#ProcessOrder').fadeIn(400);
-        $('#ProcessOrder').removeAttr('class').addClass('animated bounceIn').fadeIn();
 
         $('.remove-process-order').click(function () {
             $('#ProcessOrderMask').fadeOut(400);
             $('#ProcessOrder').fadeOut(400);
-            $('#ProcessOrder').addClass('bounceOutUp').fadeOut();
+            //是否需要手动刷新？  
+            //如手动刷新，注释此行
+            //如自动刷新，此行去注释
+            //window.location.reload();
         });
 
         $('.confirm-process-order').click(function () {
@@ -92,17 +94,35 @@ Requirement.run_mrp = function () {
                     "MergeMethod":"DAY"
                 },
                 success: function (data) {
-                    alert(JSON.stringify(data));
-                    //$('#ProcessOrderMask').fadeOut(400);
-                    //$('#ProcessOrder').fadeOut(400);
-                    //$('#ProcessOrder').addClass('bounceOutUp').fadeOut();
+                    //{"Result":true,"Msg":"MRP 任务运行成功!"}
+                    //{"Result":false,"Msg":"队列中已经有待运行的任务，请稍后再试"}
+                    if (data.Result) {
+                        ShowMsg("生成成功--", "glyphicon glyphicon-ok-circle", "green", data.Msg);
+                    } else if (!data.Result) {
+                        ShowMsg("生成失败--", "glyphicon glyphicon-exclamation-sign", "orange", data.Msg);
+                    } else {
+                        ShowMsg("错误--", "glyphicon glyphicon-remove-circle", "#ff0000", data.Msg);
+                    }
                 },
-                error: function () {
-                    console.log("Error");
+                error: function (data) {
+                    ShowMsg("错误--", "glyphicon glyphicon-remove-circle", "#ff0000", "无法请求到服务，请检查确认之后再运行。");
                 }
             });
         });
 
     });
-    
+
+    //Change Icon
+    function ShowMsg(titleMsg, iconClass , fontColor,contentMsg) {
+        $('#ProcessOrder').children('h3').html(titleMsg + new Date().toLocaleString()).css({ color: fontColor });
+        $('hr').remove();
+        var PanelDiv = $('#ProcessOrder').children('div');
+        $('#ProcessOrder').find(PanelDiv).remove();
+
+        $("<hr/><div class='col-sm-12' style='text-align:center;'>" +
+            "<i class='" + iconClass + "' style='font-size:9em;color:" + fontColor + "'></i>" +
+            "<br/><br/><div class='col-sm-12'>" +
+            "<label style='text-align:center;color:"+fontColor+";font-size:1em;'>"+contentMsg+"</label>" +
+            "</div></div>").appendTo($('#ProcessOrder'));
+    }
 }
