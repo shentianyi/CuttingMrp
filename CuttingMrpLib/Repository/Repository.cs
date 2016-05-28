@@ -45,7 +45,7 @@ namespace Repository
         /// <param name="exp"></param><returns></returns>
         public T First(Func<T, bool> exp)
         {
-            return GetTable.First(exp);
+            return GetTable.FirstOrDefault(exp);
         }
 
         /// <summary>See IRepository.</summary>

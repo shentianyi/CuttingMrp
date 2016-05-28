@@ -1,5 +1,6 @@
 ﻿using CuttingMrpLib;
 using CuttingMrpWeb.Helpers;
+using CuttingMrpWeb.Models;
 using CuttingMrpWeb.Properties;
 using MvcPaging;
 using System;
@@ -56,9 +57,16 @@ namespace CuttingMrpWeb.Controllers
         }
 
         // GET: Requirements/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int? id)
         {
-            return GetRequirementById(id);
+            Requirement requirement = GetRequirementById(id);
+
+            if (requirement != null)
+            {
+                SetRequirementStatusList(requirement.status,false);
+            }
+
+            return ValidateRequirement(requirement);
         }
 
         // POST: Requirements/Edit/5
@@ -79,9 +87,16 @@ namespace CuttingMrpWeb.Controllers
         }
 
         // GET: Requirements/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int? id)
         {
-            return GetRequirementById(id);
+            if (id.HasValue)
+            {
+                return ValidateRequirement(GetRequirementById(id.Value));
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
         }
 
         // POST: Requirements/Delete/5
@@ -117,15 +132,26 @@ namespace CuttingMrpWeb.Controllers
             return View("Index", requirements);
         }
 
-        private ActionResult GetRequirementById(int? id)
+        [HttpPost]
+        public ActionResult RunMrp([Bind(Include = "OrderType,MergeMethod")] CalculateSetting setting)
         {
-            if (id == null || !id.HasValue)
+            Message msg = new Message() { Result = false };
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                ICalculateService cs = new CalculateService(Settings.Default.db);
+                cs.Start(Settings.Default.mrpQueue, setting);
+                msg.Result = true;
+                msg.Msg = "MRP 任务运行成功!";
             }
+            catch (Exception e)
+            {
+                msg.Msg = e.Message;
+            }
+            return Json(msg);
+        }
 
-            IRequirementService rs = new RequirementService(Settings.Default.db);
-            Requirement requirement = rs.FindById(id.Value);
+        private ActionResult ValidateRequirement(Requirement requirement)
+        {
             if (requirement == null)
             {
                 return HttpNotFound();
@@ -133,14 +159,20 @@ namespace CuttingMrpWeb.Controllers
             return View(requirement);
         }
 
-        private void SetRequirementStatusList(int? status) {
+        private Requirement GetRequirementById(int id) {
+            IRequirementService rs = new RequirementService(Settings.Default.db);
+            Requirement requirement = rs.FindById(id);
+            return requirement;
+        }
+
+        private void SetRequirementStatusList(int? status,bool allowBlank=true) {
             List<EnumItem> item = EnumUtility.GetList(typeof(RequirementStatus));
            
             List<SelectListItem> select = new List<SelectListItem>();
-            //if (!status.HasValue)
-           // {
+            if (allowBlank)
+            {
                 select.Add(new SelectListItem { Text = "", Value = "" });
-           // }
+            }
             foreach (var it in item)
             {
                 if (status.HasValue && status.ToString().Equals(it.Value))
