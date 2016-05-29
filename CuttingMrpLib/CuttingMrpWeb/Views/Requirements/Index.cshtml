@@ -11,7 +11,6 @@
     <div class="panel panel-default navbar-fixed-top" style="box-shadow: -2px 2px 4px #34313a;top:60px;">
         <div class="panel-body">
             <div class="col-sm-12" style="text-align:center;">
- 
                 @*<div class="col-sm-2">
                         <select class="form-control">
                             <option>小时</option>
@@ -66,10 +65,10 @@
                     <td>@Html.DisplayFor(modelItem => item.statusDisplay)</td>
                     <td>@Html.DisplayFor(modelItem => item.derivedFrom)</td>
                     <td>@Html.DisplayFor(modelItem => item.derivedType)</td>
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
-                        @*@Html.ActionLink("Details", "Details", new { id = item.id }) |*@
-                        @Html.ActionLink("Delete", "Delete", new { id = item.id })
+                    <td class="IconA">
+                        <a href="@Url.Action("Edit", "Requirements" , new { id=item.id }) "> <i class="glyphicon glyphicon-pencil"></i></a>
+                        @*@Html.ActionLink("Details", "Details", new { id = item.id })*@ 
+                        <a href="@Url.Action("Delete", "Requirements" , new { id=item.id })"> <i class="glyphicon glyphicon-trash" style="color:#ff0000;"></i></a>
                     </td>
                 </tr>
             }

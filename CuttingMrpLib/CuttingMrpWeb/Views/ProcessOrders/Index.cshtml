@@ -19,74 +19,96 @@
                 <div class="col-sm-2" style="text-align:left;">
                     <button class="btn btn-primary" type="submit">Search All</button>
                 </div>
-
-
             </div>
         </div>
     </div>
 </form>
 
-<table class="table table-bordered" style="margin-top:100px;">
-    <thead>
-        <tr>
-            <td>#</td>
-            <th> No. </th>
-            <th>OrderNr</th>
-            <th>SourceDoc</th>
-            <th>DerivedFrom</th>
-            <th>ProceeDate</th>
-            <th>PartNr</th>
-            <th>SourceQuantity</th>
-            <th>ActualQuantity</th>
-            <th>CompleteRate</th>
-            <th>Status</th>
-            <th>BatchQuantity</th>
-            <th>Options</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model != null)
-        {
-            int i = 0;
-            foreach (var item in Model)
+<div class="panel panel-primary" style="margin-top:100px;margin-bottom:10px;">
+    <div class="panel-body">
+        <div class="col-md-12" style="text-align:center;">
+            <div class="col-md-2" style="border-right:1px solid steelblue;padding:8px;">
+                <h3>统计</h3>
+            </div>
+            <div class="col-md-5" style="border-right:1px solid steelblue;padding:0;">
+                <label>最早 </label>
+                <label>2016-05-29 00:00:00</label>
+                <hr style="margin:10px;" />
+                <label>最晚 </label>
+                <label>2016-05-30 00:00:00</label>
+            </div>
+            <div class="col-md-5">
+                <label>共200个订单</label>
+                <hr style="margin:10px;" />
+                <label>来自100个需求</label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-12" style="padding:0;">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <td>#</td>
+                <th> No. </th>
+                <th>OrderNr</th>
+                <th>SourceDoc</th>
+                <th>DerivedFrom</th>
+                <th>ProceeDate</th>
+                <th>PartNr</th>
+                <th>SourceQuantity</th>
+                <th>ActualQuantity</th>
+                <th>CompleteRate</th>
+                <th>Status</th>
+                <th>BatchQuantity</th>
+                <th>Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
             {
-                <tr>
-                    <td> 
-                        @if (item.canFinish)
-                        {
-                            <input type="checkbox" id="orderNr" name="orderNr" value="@item.orderNr" />
-                            @*@Html.CheckBox("orderNr",  new { value = item.orderNr})*@
-                        }
-                        else
-                        {
-                            <input type="checkbox" id="orderNr" name="orderNr" disabled value="@item.orderNr" />
-                            @*@Html.CheckBox("orderNr", new { value = item.orderNr,@disabled=true })*@
-                        }
-                    </td>
-                    <td>@(i += 1)</td>
-                    <td>@Html.DisplayFor(modelItem => item.orderNr)</td>
-                    <td>@Html.DisplayFor(modelItem => item.sourceDoc)</td>
-                    <td>@Html.DisplayFor(modelItem => item.derivedFrom)</td>
-                    <td>@Html.DisplayFor(modelItem => item.proceeDate)</td>
-                    <td>@Html.DisplayFor(modelItem => item.partNr)</td>
-                    <td>@Html.DisplayFor(modelItem => item.sourceQuantity)</td>
-                    <td>@Html.DisplayFor(modelItem => item.actualQuantity)</td>
-                    <td>@Html.DisplayFor(modelItem => item.completeRate)</td>
-                    <td>@Html.DisplayFor(modelItem => item.statusDisplay)</td>
-                    <td>@Html.DisplayFor(modelItem => item.batchQuantity)</td>
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = item.orderNr }) |
-                        @if (item.canDelete)
-                        {
-                            @Html.ActionLink("Delete", "Delete", new { id = item.orderNr })
-                        }
-                    </td>
-                </tr>
+                int i = 0;
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @if (item.canFinish)
+                            {
+                                <input type="checkbox" id="orderNr" name="orderNr" value="@item.orderNr" />
+                                @*@Html.CheckBox("orderNr",  new { value = item.orderNr})*@
+                            }
+                            else
+                            {
+                                <input type="checkbox" id="orderNr" name="orderNr" disabled value="@item.orderNr" />
+                                @*@Html.CheckBox("orderNr", new { value = item.orderNr,@disabled=true })*@
+                            }
+                        </td>
+                        <td>@(i += 1)</td>
+                        <td>@Html.DisplayFor(modelItem => item.orderNr)</td>
+                        <td>@Html.DisplayFor(modelItem => item.sourceDoc)</td>
+                        <td>@Html.DisplayFor(modelItem => item.derivedFrom)</td>
+                        <td>@Html.DisplayFor(modelItem => item.proceeDate)</td>
+                        <td>@Html.DisplayFor(modelItem => item.partNr)</td>
+                        <td>@Html.DisplayFor(modelItem => item.sourceQuantity)</td>
+                        <td>@Html.DisplayFor(modelItem => item.actualQuantity)</td>
+                        <td>@Html.DisplayFor(modelItem => item.completeRate)</td>
+                        <td>@Html.DisplayFor(modelItem => item.statusDisplay)</td>
+                        <td>@Html.DisplayFor(modelItem => item.batchQuantity)</td>
+                        <td class="IconA">
+                            <a href="@Url.Action("Edit", "ProcessOrders" , new { id=item.orderNr }) "> <i class="glyphicon glyphicon-pencil"></i></a>
+                            @*@Html.ActionLink("Edit", "Edit", new { id = item.orderNr }) |*@
+                            @if (item.canDelete)
+                            {
+                                <a href="@Url.Action("Delete", "ProcessOrders" , new { id=item.orderNr }) "> <i class="glyphicon glyphicon-trash" style="color:red;"></i></a>
+                                @*@Html.ActionLink("Delete", "Delete", new { id = item.orderNr })*@
+                            }
+                        </td>
+                    </tr>
+                }
             }
-        }
-    </tbody>
-</table>
-
+        </tbody>
+    </table>
+</div>
 <div class="col-sm-12" style="text-align:center;">
     <div class="clearfix pagination">
         <div class="pagination-inner">
