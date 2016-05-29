@@ -38,3 +38,13 @@ textarea {
 .navbar{
     min-width:800px;
 }
+
+.IconA{
+    text-align:center;
+    white-space:nowrap;
+}
+
+.IconA>a{
+    margin-left:10px;
+    font-size:1.2em;
+}

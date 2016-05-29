@@ -56,10 +56,10 @@
                     <td>@Html.DisplayFor(modelItem => item.position)</td>
                     <td>@Html.DisplayFor(modelItem => item.source)</td>
                     <td>@Html.DisplayFor(modelItem => item.sourceType)</td>
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
+                    <td class="IconA">
+                        <a href="@Url.Action("Edit", "Stocks" , new { id=item.id }) "> <i class="glyphicon glyphicon-pencil"></i></a>
                         @*@Html.ActionLink("Details", "Details", new { id = item.id }) |*@
-                        @Html.ActionLink("Delete", "Delete", new { id = item.id })
+                        <a href="@Url.Action("Delete", "Stocks" , new { id=item.id })"> <i class="glyphicon glyphicon-trash" style="color:#ff0000;"></i></a>
                     </td>
                 </tr>
             }

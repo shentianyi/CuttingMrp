@@ -5,118 +5,139 @@
     ViewBag.Title = "Delete";
 }
 
-<h2>Delete</h2>
+<div class="alert alert-danger" role="alert">
+    <h3>Are you sure you want to delete this?</h3>
+</div>
 
-<h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>Stock</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.partNr)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.partNr)
-        </dd>
+    <div class="panel panel-danger">
+        <div class="panel-heading">
+            <div class="col-md-12" style="height:35px;">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-actions no-color">
+                        <div class="col-md-2">
+                            @Html.ActionLink("Back", "Index", null, new { @class = "btn btn-default", @style="width:150px;"})
+                        </div>
+                        
 
-    </dl>
-
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.quantity)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.quantity)
-        </dd>
-
-    </dl>
-
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.fifo)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.fifo)
-        </dd>
-
-    </dl>
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.quantity)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.quantity)
-        </dd>
-
-    </dl>
-
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.container)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.container)
-        </dd>
-
-    </dl>
-
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.wh)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.wh)
-        </dd>
-
-    </dl>
-
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.position)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.position)
-        </dd>
-
-    </dl>
-
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.source)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.source)
-        </dd>
-
-    </dl>
-
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.sourceType)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.sourceType)
-        </dd>
-
-    </dl>
-
-
-    @using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
-
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+                        <div class="col-md-offset-8 col-md-2">
+                            <input type="submit" value="Delete" class="btn btn-danger" style="width:150px;" />
+                        </div>
+                    </div>
+                }
+                
+            </div>
         </div>
-    }
+        <div class="panel-body">
+            <div class="col-md-12">
+                <div class="col-md-4">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.partNr)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.partNr)
+                        </dd>
+                    </dl>
+                </div>
+                <div class="col-md-4">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.quantity)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.quantity)
+                        </dd>
+                    </dl>
+                </div>
+                <div class="col-md-4">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.fifo)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.fifo)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="col-md-4">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.quantity)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.quantity)
+                        </dd>
+                    </dl>
+                </div>
+                <div class="col-md-4">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.container)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.container)
+                        </dd>
+                    </dl>
+                </div>
+                <div class="col-md-4">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.wh)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.wh)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="col-md-4">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.position)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.position)
+                        </dd>
+                    </dl>
+                </div>
+                <div class="col-md-4">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.source)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.source)
+                        </dd>
+                    </dl>
+                </div>
+                <div class="col-md-4">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.sourceType)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.sourceType)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
