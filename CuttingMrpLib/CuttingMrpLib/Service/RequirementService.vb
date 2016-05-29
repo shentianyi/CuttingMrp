@@ -21,7 +21,8 @@ Public Class RequirementService
 
     Public Function SearchStatistics(condition As RequirementStatisticsSearchModel) As List(Of RequirementStatistics) Implements IRequirementService.SearchStatistics
         Dim reqRepo As RequirementRepository = New RequirementRepository(New DataContext(Me.DBConn))
-        Return Nothing
+        Dim v = reqRepo.SearchStatistics(condition)
+        Return v.ToList
     End Function
 
     Public Function FindById(id As Integer) As Requirement Implements IRequirementService.FindById

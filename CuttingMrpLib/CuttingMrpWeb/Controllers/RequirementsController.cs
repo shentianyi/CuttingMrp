@@ -132,6 +132,21 @@ namespace CuttingMrpWeb.Controllers
             return View("Index", requirements);
         }
 
+        public ActionResult Statistics([Bind(Include = "StatisticsType")] RequirementStatisticsSearchModel q)
+        {
+            if (string.IsNullOrWhiteSpace(q.StatisticsType))
+            {
+                q.StatisticsType = "DERIVEDTYPE";
+            }
+            IRequirementService rs = new RequirementService(Settings.Default.db);
+            List<RequirementStatistics> reqs = rs.SearchStatistics(q);
+
+            ViewBag.Query = q;
+            SetSearchTypeList(q.StatisticsType);
+
+            return View(reqs);
+        }
+
         [HttpPost]
         public ActionResult RunMrp([Bind(Include = "OrderType,MergeMethod")] CalculateSetting setting)
         {
@@ -184,6 +199,30 @@ namespace CuttingMrpWeb.Controllers
                 }
             }
             ViewData["statusList"] = select;
+        }
+
+        private void SetSearchTypeList(string type, bool allowBlank = false)
+        {
+            List<EnumItem> item = RequirementStatisticsSearchModel.typeList;
+
+
+            List<SelectListItem> select = new List<SelectListItem>();
+            if (allowBlank)
+            {
+                select.Add(new SelectListItem { Text = "", Value = "" });
+            }
+            foreach (var it in item)
+            {
+                if ((!string.IsNullOrWhiteSpace(type)) && type.ToString().Equals(it.Value))
+                {
+                    select.Add(new SelectListItem { Text = it.Text, Value = it.Value.ToString(), Selected = true });
+                }
+                else
+                {
+                    select.Add(new SelectListItem { Text = it.Text, Value = it.Value.ToString(), Selected = false });
+                }
+            }
+            ViewData["typeList"] = select;
         }
 
     }

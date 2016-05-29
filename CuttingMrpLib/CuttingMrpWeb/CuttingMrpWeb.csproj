@@ -312,6 +312,7 @@
     <Content Include="Views\ProcessOrders\Delete.cshtml" />
     <Content Include="Views\ProcessOrders\Edit.cshtml" />
     <Content Include="Views\MrpRounds\Index.cshtml" />
+    <Content Include="Views\Requirements\Statistics.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

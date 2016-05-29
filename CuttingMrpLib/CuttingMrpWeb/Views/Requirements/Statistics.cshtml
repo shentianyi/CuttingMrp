@@ -1,0 +1,51 @@
+﻿
+@model List<CuttingMrpLib.RequirementStatistics>
+@{
+    ViewBag.Title = "RequirementStatistics";
+}
+<div>
+    <form action="/Requirements/Statistics" method="get">
+         
+            <span class="input-group-addon" id="basic-addon-stat" style="width:80px;">StatisticsType</span>
+            @Html.DropDownList("StatisticsType", ViewData["typeList"] as IEnumerable<SelectListItem>)
+        </div>
+
+ 
+            <button class="btn btn-primary" type="submit" style="width:120px;">Search</button>
+    
+    </form>
+</div>
+
+
+<div class="col-md-12" style="padding:0;">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th> No. </th>
+                <th>PartNr</th>
+                <th>SumOfQuantity</th>
+                <th>Condition</th>
+               
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                int i = 0;
+                foreach (var item in Model)
+                {
+                    <tr>
+                        
+
+                        <td>@(i += 1)</td>
+                        <td>@Html.DisplayFor(modelItem => item.PartNr)</td>
+                        <td>@Html.DisplayFor(modelItem => item.SumOfQuantity)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Condition)</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+

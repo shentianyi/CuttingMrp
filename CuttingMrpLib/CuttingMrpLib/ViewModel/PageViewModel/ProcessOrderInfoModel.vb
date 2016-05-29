@@ -7,7 +7,7 @@
 
     Public Property requirementCount As Integer
 
-    Public ReadOnly Property latestOrderDate As DateTime
+    Public ReadOnly Property latestOrderDate As DateTime?
         Get
             If Me.latestOrder IsNot Nothing Then
                 Return Me.latestOrder.proceeDate
@@ -17,7 +17,7 @@
         End Get
     End Property
 
-    Public ReadOnly Property oldestOrderDate As DateTime
+    Public ReadOnly Property oldestOrderDate As DateTime?
         Get
             If Me.oldestOrder IsNot Nothing Then
                 Return Me.oldestOrder.proceeDate

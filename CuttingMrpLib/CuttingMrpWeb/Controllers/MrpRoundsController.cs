@@ -98,7 +98,7 @@ namespace CuttingMrpWeb.Controllers
             }
         }
 
-        public ActionResult Search([Bind(Include = "MrpRoundId,RunningStatus,TimeFrom,TimeTo")] MRPSearchModel q)
+        public ActionResult Search([Bind(Include = "MrpRoundId,RunningStatus,TimeFrom,TimeTo,Launcher")] MRPSearchModel q)
         {
             int pageIndex = 0;
             int.TryParse(Request.QueryString.Get("page"), out pageIndex);

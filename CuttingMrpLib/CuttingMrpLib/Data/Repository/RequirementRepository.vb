@@ -81,19 +81,21 @@ Public Class RequirementRepository
                 Case "REQUIREDTIME_D"
                     comm = String.Format(comm, "LEFT(CONVERT(nvarchar(30),requiredDate, 120), 10)")
                 Case "REQUIREDTIME_W"
-                    comm = String.Format(comm, "DATEPART(wk, requiredDate)")
+                    comm = String.Format(comm, "LEFT(CONVERT(nvarchar(30),requiredDate, 120), 4)+'-'+CONVERT(varchar(100),DATEPART(wk, requiredDate))")
+
                 Case "REQUIREDTIME_M"
                     comm = String.Format(comm, "LEFT(CONVERT(nvarchar(30),requiredDate, 120), 7)")
                 Case "ORDERTIME_D"
                     comm = String.Format(comm, "LEFT(CONVERT(nvarchar(30), orderedDate, 120), 10)")
                 Case "ORDERTIME_W"
-                    comm = String.Format(comm, "DATEPART(wk, orderedDate)")
+                    ' comm = String.Format(comm, "DATEPART(wk, orderedDate)")
+                    comm = String.Format(comm, "LEFT(CONVERT(nvarchar(30),orderedDate, 120), 4)+'-'+CONVERT(varchar(100),DATEPART(wk, orderedDate))")
                 Case "ORDERTIME_M"
                     comm = String.Format(comm, "LEFT(CONVERT(nvarchar(30), orderedDate, 120), 7)")
                 Case Else
                     Throw New Exception("type not supported")
             End Select
-            Return _context.ExecuteQuery(Of RequirementStatistics)(comm, Nothing)
+            Return _context.ExecuteQuery(Of RequirementStatistics)(comm, String.Empty)
         Else
             Throw New ArgumentNullException
         End If
