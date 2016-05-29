@@ -12,7 +12,7 @@ Stock.init = function () {
     Stock.add_string_label_to_div(partNr, 'PartNr Like ', '.filter-p');
     Stock.add_range_label_to_div(fifofrom +"~"+ fifoto, 'FIFO ', '.filter-p');
     Stock.add_range_label_to_div(quantityfrom +"~"+ quantityto, 'Quantity ', '.filter-p');
-    Stock.add_string_label_to_div(wh, 'Wh Like', '.filter-p');
+    Stock.add_string_label_to_div(wh, 'Wh = ', '.filter-p');
     Stock.add_string_label_to_div(position, 'Position Like', '.filter-p');
 }
 
