@@ -17,6 +17,27 @@ Imports CuttingMrpLib
         '  Dim result As List(Of SumResult) = (From a In li.AsEnumerable Group By a.requiredDate Into total = Sum(a.quantity) Select a.partnr, a.requiredDate.ToString("YYYY-mm-DD"))
     End Sub
 
+
+    <TestMethod> Public Sub TestConvertMpsToRequirement()
+        Dim cal As Calculator = New Calculator("Data Source=vm08;Initial Catalog=CuttingMrp;User ID=sa;Password=brilliantech123@")
+        Try
+            cal.ConvertMpsToRequirement()
+        Catch ex As Exception
+            Assert.Fail()
+        End Try
+    End Sub
+
+    <TestMethod> Public Sub TestGenerate()
+        Dim cal As Calculator = New Calculator("Data Source=vm08;Initial Catalog=CuttingMrp;User ID=sa;Password=brilliantech123@")
+        Try
+            cal.GenerateProcessOrderByRequirement("0001", New CalculateSetting With {.MergeMethod = "WEEK", .OrderType = "FIX", .RoundId = "001"})
+
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+
 End Class
 
 Public Class SumResult

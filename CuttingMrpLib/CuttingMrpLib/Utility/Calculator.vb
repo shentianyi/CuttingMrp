@@ -40,7 +40,8 @@ Public Class Calculator
         Dim procOrderRepo As Repository(Of ProcessOrder) = New Repository(Of ProcessOrder)(New DataContext(DBConn))
         Dim orders As Hashtable = GetValidRequirement()
         Dim toInsert As List(Of ProcessOrder) = PrepareData(mrpRound, orders, settings)
-        procOrderRepo.GetTable.InsertAllOnSubmit(toInsert)
+
+        procOrderRepo.GetTable.InsertAllOnSubmit(toInsert.ToArray)
         procOrderRepo.SaveAll()
     End Sub
 
@@ -52,18 +53,18 @@ Public Class Calculator
         For Each m As MP In repo.GetTable
             If tempBoms.ContainsKey(m.partnr) = False Then
                 Dim bomRepo As Repository(Of BOM) = New Repository(Of BOM)(dc)
-                Dim counter As Integer = bomRepo.Count(Function(c) c.validFrom <= Now And c.validTo >= Now And c.partNr = m.partnr)
+                Dim counter As Integer = bomRepo.Count(Function(c) c.validFrom <= m.requiredDate And c.validTo >= m.requiredDate And c.partNr = m.partnr)
                 If counter < 1 Then
                     Throw New Exception("没有找到相应的BOM")
                 End If
                 If counter > 1 Then
-                    Throw New Exception("找到两个生效的BOM")
+                    Throw New Exception("找到" & counter & "个生效的BOM")
                 End If
                 Dim bom As BOM = bomRepo.Single(Function(c) c.validFrom <= Now And c.validTo >= Now And c.partNr = m.partnr)
                 tempBoms.Add(m.partnr, bom.BomItems.Where(Function(c) c.validFrom <= Now And c.validTo >= Now).ToList)
             End If
             For Each item As BomItem In tempBoms(m.partnr)
-                requires.Add(New Requirement With {.derivedFrom = m.sourceDoc, .derivedType = m.source, .orderedDate = m.orderedDate, .requiredDate = m.requiredDate, .partNr = m.partnr, .status = RequirementStatus.Open, .quantity = item.quantity * m.quantity})
+                requires.Add(New Requirement With {.derivedFrom = m.sourceDoc, .derivedType = m.source, .orderedDate = m.orderedDate, .requiredDate = m.requiredDate, .partNr = item.componentId, .status = RequirementStatus.Open, .quantity = item.quantity * m.quantity})
             Next
             repo.MarkForDeletion(m)
         Next
@@ -85,7 +86,7 @@ Public Class Calculator
             End Try
         End Using
     End Sub
-    Private Sub ResetOrders(targetStatus() As ProcessOrderStatus, reserveTypes As List(Of String), status As ProcessOrderStatus)
+    Public Sub ResetOrders(targetStatus() As ProcessOrderStatus, reserveTypes As List(Of String), status As ProcessOrderStatus)
         If reserveTypes Is Nothing Then
             reserveTypes = New List(Of String)
         End If
@@ -103,13 +104,14 @@ Public Class Calculator
         Dim result As List(Of ProcessOrder) = New List(Of ProcessOrder)
         For Each dic As DictionaryEntry In orders
             Dim orderPieces As Hashtable = GroupByDate(settings.MergeMethod, dic.Value)
-            Dim ordernr As String = NumericService.GenerateID(DBConn, "PROCESSORDER")
+            Dim ordernr As String
             For Each piece As DictionaryEntry In orderPieces
+                ordernr = NumericService.GenerateID(DBConn, "PROCESSORDER")
                 Dim sum As Double = 0
                 Dim toInsertRefer As List(Of OrderDerivation) = New List(Of OrderDerivation)
                 For Each req As Requirement In piece.Value
                     sum = sum + req.quantity
-                    toInsertRefer.Add(New OrderDerivation With {.orderId = ordernr, .mrpRound = mrpround, .deriveQty = req.quantity, .requirementId = req.id})
+                    toInsertRefer.Add(New OrderDerivation With {.mrpRound = mrpround, .deriveQty = req.quantity, .requirementId = req.id})
                 Next
                 Dim dateresult As DateTime
                 DateTime.TryParse(piece.Key, dateresult)
@@ -135,9 +137,8 @@ Public Class Calculator
 
                 Dim toinsert As ProcessOrder = New ProcessOrder With {.orderNr = ordernr,
                     .partNr = dic.Key, .derivedFrom = "MRP", .proceeDate = dateresult,
-                    .OrderDerivations = en, .requirementId = " ", .sourceDoc = " ",
                     .status = ProcessOrderStatus.Open, .sourceQuantity = sum, .actualQuantity = actualQty,
-                    .completeRate = completeRate, .batchQuantity = currPart.moq}
+                    .completeRate = completeRate, .batchQuantity = currPart.moq, .OrderDerivations = en}
                 result.Add(toinsert)
             Next
         Next
