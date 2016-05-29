@@ -37,7 +37,3 @@ Stock.add_range_label_to_div = function (content,name, cls) {
         });
     }
 }
-
-$('.datetime-picker').datetimepicker({
-    lang: 'ch'
-})

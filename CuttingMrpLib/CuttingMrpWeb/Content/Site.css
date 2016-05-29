@@ -48,3 +48,12 @@ textarea {
     margin-left:10px;
     font-size:1.2em;
 }
+
+.nav-choosed{
+    background:steelblue!important;
+    border-radius:5px!important;
+}
+
+.nav-choosed>a{
+    color:white!important;
+}

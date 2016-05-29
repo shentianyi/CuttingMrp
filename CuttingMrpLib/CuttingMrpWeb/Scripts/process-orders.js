@@ -68,20 +68,24 @@ $('.datetime-picker').datetimepicker({
     lang: 'ch'
 })
 
-function cancelOrders() {
-    var ids = getCheckedIds();
-    if (ids.length > 0 && confirm("Sure to Cancel Selected?")) {
-        $("#cancelOrderIds").val(ids);
-        $("#cancelForm").submit();
-    }
+ProcessOrders.finish_porcess_order = function () {
+    $('.finish-process-order').click(function () {
+        var ids = getCheckedIds();
+        if (ids.length > 0 && confirm("Sure to Finish Selected?")) {
+            $("#finishOrderIds").val(ids);
+            $("#finishForm").submit();
+        }
+    });
 }
 
-function finishOrders() {
-    var ids = getCheckedIds();
-    if (ids.length > 0 && confirm("Sure to Finish Selected?")) {
-        $("#finishOrderIds").val(ids);
-        $("#finishForm").submit();
-    }
+ProcessOrders.cancel_process_order = function () {
+    $('.cancel-process-order').click(function () {
+        var ids = getCheckedIds();
+        if (ids.length > 0 && confirm("Sure to Cancel Selected?")) {
+            $("#cancelOrderIds").val(ids);
+            $("#cancelForm").submit();
+        }
+    })
 }
 
 function getCheckedIds() {
@@ -90,4 +94,10 @@ function getCheckedIds() {
         ids.push($(this).val());
     });
     return ids;
+}
+
+ProcessOrders.export_porcess_order = function () {
+    $('.export-process-order').click(function () {
+        console.log("Export");
+    })
 }

@@ -24,6 +24,9 @@ namespace CuttingMrpWeb
                       "~/Scripts/jquery.datetimepicker.full.js",
                       "~/Scripts/respond.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/basic").Include(
+                   "~/Scripts/basics.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/jquery-plug-in").Include(
                       "~/Scripts/jquery-popModal.js"));
 

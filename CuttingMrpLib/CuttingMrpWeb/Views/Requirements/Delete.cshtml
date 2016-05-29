@@ -5,97 +5,142 @@
     ViewBag.Title = "Delete";
 }
 
-<h2>Delete</h2>
-
-<h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>Requirement</h4>
+    <ol class="breadcrumb" style="padding:20px 15px;font-size:1.5em;">
+        <li>
+            @Html.ActionLink("Requirements", "Index")
+        </li>
+        <li>
+            <label style="color:#ff0000;">
+                Delete
+            </label>
+            <label class="label label-danger">
+                @Html.DisplayFor(model => model.partNr)
+            </label>
+        </li>
+    </ol>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.partNr)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.partNr)
-        </dd>
-
-    </dl>
-
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.quantity)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.quantity)
-        </dd>
-
-    </dl>
-
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.orderedDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.orderedDate)
-        </dd>
-
-    </dl>
-
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.requiredDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.requiredDate)
-        </dd>
-
-    </dl>
-
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.statusDisplay)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.statusDisplay)
-        </dd>
-
-    </dl>
-
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.derivedFrom)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.derivedFrom)
-        </dd>
-
-    </dl>
-
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.derivedType)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.derivedType)
-        </dd>
-
-    </dl>
+    <div class="panel panel-danger">
+        <div class="panel-heading">
+            <div class="col-md-12" style="height:35px;">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-actions no-color">
+                        <div class="col-md-10">
+                            <h4>
+                                Are you sure you want to delete
+                                <label class="label label-danger">
+                                    @Html.DisplayFor(model => model.partNr)
+                                </label>
+                                ?
+                            </h4>
+                        </div>
 
 
-    @using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
-
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+                        <div class="col-md-2">
+                            <input type="submit" value="Delete" class="btn btn-danger" style="width:150px;" />
+                        </div>
+                    </div>
+                }
+            </div>
         </div>
-    }
+
+        <div class="panel-body">
+            <div class="col-md-12">
+                <div class="col-md-4">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @*@Html.DisplayNameFor(model => model.partNr)*@
+                            PartNr
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.partNr)
+                        </dd>
+
+                    </dl>
+                </div>
+                <div class="col-md-4">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @*@Html.DisplayNameFor(model => model.quantity)*@
+                            Quantity
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.quantity)
+                        </dd>
+                    </dl>
+                </div>
+                <div class="col-md-4">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @*@Html.DisplayNameFor(model => model.orderedDate)*@
+                            OrderedDate
+                        </dt>
+
+                        <dd style="white-space:nowrap;">
+                            @Html.DisplayFor(model => model.orderedDate)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="col-md-4">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @*@Html.DisplayNameFor(model => model.requiredDate)*@
+                            RequiredDate
+                        </dt>
+
+                        <dd style="white-space:nowrap;">
+                            @Html.DisplayFor(model => model.requiredDate)
+                        </dd>
+                    </dl>
+                </div>
+                <div class="col-md-4">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @*@Html.DisplayNameFor(model => model.statusDisplay)*@
+                            StatusDisplay
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.statusDisplay)
+                        </dd>
+                    </dl>
+                </div>
+                <div class="col-md-4">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @*@Html.DisplayNameFor(model => model.derivedFrom)*@
+                            DerivedFrom
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.derivedFrom)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="col-md-4">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @*@Html.DisplayNameFor(model => model.derivedType)*@
+                            DerivedType
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.derivedType)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
