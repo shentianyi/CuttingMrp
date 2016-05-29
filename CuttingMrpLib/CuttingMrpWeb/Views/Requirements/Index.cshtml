@@ -16,14 +16,14 @@
                     <div class="filter-p"></div>
                 </div>
 
-                <div class="col-sm-1" style="margin-top:10px;text-align:left;">
+                <div class="col-sm-1" style="margin-top:10px;">
                     <button class="btn btn-primary" type="submit">Search All</button>
                 </div>
-                <div class="col-sm-2" style="margin-top:10px;">
+                <div class="col-sm-1" style="margin-top:10px;">
                     <button class="btn btn-success runMrp" type="button">Run MRP</button>
                 </div>
 
-                <div class="col-sm-2">
+                <div class="col-sm-1" style="margin-top:10px;">
                     <a href="/Requirements/Statistics" class="btn btn-info">Go Statistics</a>
                 </div>
             </div>
@@ -142,16 +142,16 @@
         <hr style="margin:10px;" />
 
         <div class="col-sm-12">
-            <div class="col-sm-5" style="margin-left:-15px;">
+            <div class="col-sm-6" style="margin-left:-15px;">
                 <div class="input-group filter-detail">
                     <span class="input-group-addon" id="basic-addon-stat" style="width:80px;">Status</span>
                     @Html.DropDownList("Status", ViewData["statusList"] as IEnumerable<SelectListItem>, new { @class="from-control"})
                 </div>
             </div>
-            <div class="col-sm-6" style="margin-left:-20px;">
+            <div class="col-sm-6" style="margin-left:10px;">
                 <div class="input-group filter-detail">
                     <span class="input-group-addon" id="basic-addon-derivedfrom">DerivedFrom</span>
-                    <input type="text" class="form-control" style="width:115px;" name="DerivedFrom" id="DerivedFrom" value="@ViewBag.Query.DerivedFrom" placeholder="Derived From" aria-describedby="basic-addon-derivedfrom">
+                    <input type="text" class="form-control" style="width:145px;" name="DerivedFrom" id="DerivedFrom" value="@ViewBag.Query.DerivedFrom" placeholder="Derived From" aria-describedby="basic-addon-derivedfrom">
                 </div>
             </div>
         </div>

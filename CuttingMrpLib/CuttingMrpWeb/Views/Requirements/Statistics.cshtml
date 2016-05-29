@@ -3,21 +3,28 @@
 @{
     ViewBag.Title = "RequirementStatistics";
 }
-<div>
-    <form action="/Requirements/Statistics" method="get">
-         
-            <span class="input-group-addon" id="basic-addon-stat" style="width:80px;">StatisticsType</span>
-            @Html.DropDownList("StatisticsType", ViewData["typeList"] as IEnumerable<SelectListItem>)
-        </div>
-
- 
-            <button class="btn btn-primary" type="submit" style="width:120px;">Search</button>
-    
-    </form>
+<div class="panel panel-primary">
+    <div class="panel-body">
+        <form action="/Requirements/Statistics" method="get">
+            <div class="col-sm-12">
+                <div class="col-sm-4">
+                    <h4>Statistics</h4>
+                </div>
+                <div class="col-sm-4">
+                    <div class="input-group filter-detail" style="text-align:right;">
+                        <span class="input-group-addon" id="basic-addon-status">StatisticsType</span>
+                        @Html.DropDownList("StatisticsType", ViewData["typeList"] as IEnumerable<SelectListItem>, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="col-sm-4" style="text-align:left;">
+                    <button class="btn btn-primary" type="submit" style="width:150px;">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 
-
-<div class="col-md-12" style="padding:0;">
+<div class="col-md-12">
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -48,4 +55,5 @@
     </table>
 </div>
 
+@Scripts.Render("~/bundles/requirements")
 
