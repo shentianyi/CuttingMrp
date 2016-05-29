@@ -1,3 +1,3 @@
 ﻿Public Interface ICalculateRepository
-    Function Search(conditions As MRPSearchModel) As List(Of MrpRound)
+    Function Search(conditions As MRPSearchModel) As IQueryable(Of MrpRound)
 End Interface

@@ -36,6 +36,9 @@ namespace CuttingMrpWeb
             bundles.Add(new ScriptBundle("~/bundles/stocks").Include(
                       "~/Scripts/stock.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/mrp-rounds").Include(
+                     "~/Scripts/mrp-round.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/process-orders").Include(
                       "~/Scripts/process-orders.js"));
 
@@ -55,6 +58,9 @@ namespace CuttingMrpWeb
 
             bundles.Add(new StyleBundle("~/Content/process-order").Include(
                      "~/Content/process-orders.css"));
+
+            bundles.Add(new StyleBundle("~/Content/mrp-rounds").Include(
+                     "~/Content/mrp-round.css"));
         }
     }
 }

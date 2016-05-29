@@ -67,7 +67,7 @@
                     <td>@Html.DisplayFor(modelItem => item.derivedType)</td>
                     <td class="IconA">
                         <a href="@Url.Action("Edit", "Requirements" , new { id=item.id }) "> <i class="glyphicon glyphicon-pencil"></i></a>
-                        @*@Html.ActionLink("Details", "Details", new { id = item.id })*@ 
+                        @*@Html.ActionLink("Details", "Details", new { id = item.id })*@
                         <a href="@Url.Action("Delete", "Requirements" , new { id=item.id })"> <i class="glyphicon glyphicon-trash" style="color:#ff0000;"></i></a>
                     </td>
                 </tr>
@@ -160,6 +160,7 @@
                 </div>
             </div>
         </div>
+
         <div class="popModal_footer">
             <input type="submit" value="Search" class="btn btn-success FilterSearchBtn" data-dialogModalBut="ok" />
         </div>
@@ -208,7 +209,7 @@
     <hr />
 
     <div class="col-sm-12" style="text-align:right;">
-        <button class="btn btn-warning confirm-process-order" >CONFIRM</button>
+        <button class="btn btn-warning confirm-process-order">CONFIRM</button>
     </div>
 </div>
 
