@@ -39,7 +39,7 @@ Public Class CalculatorSingleton
                     End If
                     Dim msg As Message = New Message
                     msg.Body = settings
-                    msg.Formatter = New XmlMessageFormatter({GetType(String)})
+                    msg.Formatter = New XmlMessageFormatter({GetType(CalculateSetting)})
                     qu.Send(msg)
                 Case Else
                     Throw New Exception("MRP Action not supported")

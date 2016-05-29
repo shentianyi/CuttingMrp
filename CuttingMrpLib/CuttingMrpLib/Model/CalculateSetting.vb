@@ -1,4 +1,5 @@
-﻿Public Class CalculateSetting
+﻿<Serializable>
+Public Class CalculateSetting
     Private _roundId As String
     Private _reserveTypes As List(Of String)
     Public MergeMethodType() As String = {"DAY", "WEEK", "MONTH", "YEAR"}
