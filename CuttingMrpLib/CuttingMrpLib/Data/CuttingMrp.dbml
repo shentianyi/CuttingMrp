@@ -88,17 +88,6 @@
       <Column Name="SumOfStock" Type="System.Double" DbType="Float" CanBeNull="true" />
     </Type>
   </Table>
-  <Table Name="dbo.OrderDerivation" Member="OrderDerivations">
-    <Type Name="OrderDerivation">
-      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="orderId" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="requirementId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="mrpRound" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="deriveQty" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Association Name="Requirement_OrderDerivation" Member="Requirement" ThisKey="id" OtherKey="id" Type="Requirement" IsForeignKey="true" />
-      <Association Name="ProcessOrder_OrderDerivation" Member="ProcessOrder" ThisKey="orderId" OtherKey="orderNr" Type="ProcessOrder" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.NumericBuild" Member="NumericBuilds">
     <Type Name="NumericBuild">
       <Column Name="idUniq" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -123,25 +112,8 @@
       <Association Name="Part_BOM" Member="BOMs" ThisKey="partNr" OtherKey="partNr" Type="BOM" />
       <Association Name="Part_Requirement" Member="Requirements" ThisKey="partNr" OtherKey="partNr" Type="Requirement" />
       <Association Name="Part_Stock" Member="Stocks" ThisKey="partNr" OtherKey="partNr" Type="Stock" />
-      <Association Name="Part_ProcessOrder" Member="ProcessOrders" ThisKey="partNr" OtherKey="partNr" Type="ProcessOrder" />
       <Association Name="Part_MP" Member="MPs" ThisKey="partNr" OtherKey="partnr" Type="MP" />
-    </Type>
-  </Table>
-  <Table Name="dbo.ProcessOrder" Member="ProcessOrders">
-    <Type Name="ProcessOrder">
-      <Column Name="orderNr" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="sourceDoc" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="derivedFrom" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="proceeDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="partNr" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
-      <Column Name="sourceQuantity" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Column Name="actualQuantity" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Column Name="completeRate" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Column Name="status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="requirementId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="batchQuantity" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Association Name="ProcessOrder_OrderDerivation" Member="OrderDerivations" ThisKey="orderNr" OtherKey="orderId" Type="OrderDerivation" />
-      <Association Name="Part_ProcessOrder" Member="Part" ThisKey="partNr" OtherKey="partNr" Type="Part" IsForeignKey="true" />
+      <Association Name="Part_ProcessOrder" Member="ProcessOrders" ThisKey="partNr" OtherKey="partNr" Type="ProcessOrder" />
     </Type>
   </Table>
   <Table Name="dbo.MrpRound" Member="MrpRounds">
@@ -164,6 +136,34 @@
       <Column Name="sourceDoc" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
       <Column Name="status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Association Name="Part_MP" Member="Part" ThisKey="partnr" OtherKey="partNr" Type="Part" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.OrderDerivation" Member="OrderDerivations">
+    <Type Name="OrderDerivation">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="orderId" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="requirementId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="mrpRound" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="deriveQty" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Association Name="Requirement_OrderDerivation" Member="Requirement" ThisKey="id" OtherKey="id" Type="Requirement" IsForeignKey="true" />
+      <Association Name="ProcessOrder_OrderDerivation" Member="ProcessOrder" ThisKey="orderId" OtherKey="orderNr" Type="ProcessOrder" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ProcessOrder" Member="ProcessOrders">
+    <Type Name="ProcessOrder">
+      <Column Name="orderNr" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="sourceDoc" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="derivedFrom" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="proceeDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="partNr" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="sourceQuantity" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="actualQuantity" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="completeRate" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="requirementId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="batchQuantity" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Association Name="ProcessOrder_OrderDerivation" Member="OrderDerivations" ThisKey="orderNr" OtherKey="orderId" Type="OrderDerivation" />
+      <Association Name="Part_ProcessOrder" Member="Part" ThisKey="partNr" OtherKey="partNr" Type="Part" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>
