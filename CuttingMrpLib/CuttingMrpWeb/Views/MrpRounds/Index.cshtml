@@ -1,0 +1,127 @@
+﻿@using MvcPaging;
+
+@model IPagedList<CuttingMrpLib.MrpRound>
+@{
+    ViewBag.Title = "MrpRounds";
+}
+
+@Styles.Render("~/Content/requirement")
+
+<form action="/MrpRounds/Search" method="get">
+    <div class="panel panel-default navbar-fixed-top" style="box-shadow: -2px 2px 4px #34313a;top:60px;">
+        <div class="panel-body">
+            <div class="col-sm-12" style="text-align:center;">
+          
+                <div class="col-sm-9 filter-content">
+                    <span class="pull-right" id="basic-addon-filter"> <i class="glyphicon glyphicon-filter"></i> </span>
+                    <div class="filter-p"></div>
+                </div>
+
+                <div class="col-sm-1" style="text-align:left;">
+                    <button class="btn btn-primary" type="submit">Search All</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>
+
+<table class="table table-bordered" style="margin-top:100px;">
+    <thead>
+        <tr>
+            <th> No. </th>
+            <th>MrpRound</th>
+            <th>RunningStatus</th>
+            <th>Time</th>
+            <th>Launcher</th>
+            <th>Text</th>
+            <th>Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            int i = 0;
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@(i += 1)</td>
+                    <td>@Html.DisplayFor(modelItem => item.mrpRound)</td>
+                    <td>@Html.DisplayFor(modelItem => item.runningStatusDisplay)</td>
+                    <td>@Html.DisplayFor(modelItem => item.time)</td>
+                    <td>@Html.DisplayFor(modelItem => item.launcher)</td>
+                    <td>@Html.DisplayFor(modelItem => item.text)</td>
+                    <td class="IconA">
+                       
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<div class="col-sm-12" style="text-align:center;">
+    <div class="clearfix pagination">
+        <div class="pagination-inner">
+            @if (Model != null)
+            {
+                if (ViewBag.Query != null)
+                {
+                    var html = Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
+                        .Options(o => o.AddRouteValue("MrpRoundId", ViewBag.Query.MrpRoundId))
+                        .Options(o => o.AddRouteValue("RunningStatus", ViewBag.Query.RunningStatus))
+                        .Options(o => o.AddRouteValue("TimeFrom", ViewBag.Query.TimeFrom))
+                        .Options(o => o.AddRouteValue("TimeTo", ViewBag.Query.TimeTo))
+                        .Options(o => o.AddRouteValue("Launcher", ViewBag.Query.Launcher));
+                    @html
+                }
+                else
+                {
+                    @Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<div style="display:none;">
+    <div id="extra-filter-content">
+        <div class="col-sm-12">
+            <div class="input-group filter-detail">
+                <span class="input-group-addon" id="basic-addon-partnr" style="background:#0088cc;color:white;">MrpRoundId</span>
+                <input type="text" class="form-control" name="MrpRoundId" id="MrpRoundId" value="@ViewBag.Query.MrpRoundId" placeholder="MrpRoundId" aria-describedby="basic-addon-partnr">
+            </div>
+        </div>
+        <hr style="border:1px solid #eeeeee; margin:10px -20px;" />
+        <div class="col-sm-12">
+            <div class="input-group filter-detail">
+                <span class="input-group-addon" id="basic-addon-ordered-date">TimeFrom</span>
+                <input type="text" class="form-control datetime-picker" autocomplete="off" name="TimeFrom" id="TimeFrom" value="@ViewBag.Query.TimeFrom" placeholder="Time From" aria-describedby="basic-addon-ordered-date">
+                <span class="space-mark">~</span>
+                <input type="text" class="form-control datetime-picker" autocomplete="off" name="TimeTo" id="TimeTo" value="@ViewBag.Query.TimeTo" placeholder="Time To" />
+            </div>
+        </div>
+
+        <hr style="margin:10px;" />
+
+        <hr style="margin:10px;" />
+
+        <div class="col-sm-12">
+            <div class="col-sm-6" style="margin-left:-15px;">
+                <div class="input-group filter-detail">
+                    <span class="input-group-addon" id="basic-addon-stat" style="width:80px;">Status</span>
+                    @Html.DropDownList("RunningStatus", ViewData["statusList"] as IEnumerable<SelectListItem>)
+                </div>
+            </div>
+            <div class="col-sm-6" style="margin-left:10px;">
+                <div class="input-group filter-detail">
+                    <span class="input-group-addon" id="basic-addon-partnr" style="background:#0088cc;color:white;">Launcher</span>
+                    <input type="text" class="form-control" name="Launcher" id="Launcher" value="@ViewBag.Query.Launcher" placeholder="Launcher" aria-describedby="basic-addon-partnr">
+                </div>
+            </div>
+        </div>
+        <div class="popModal_footer">
+            <input type="submit" value="Search" class="btn btn-success FilterSearchBtn" data-dialogModalBut="ok" />
+        </div>
+    </div>
+</div>
