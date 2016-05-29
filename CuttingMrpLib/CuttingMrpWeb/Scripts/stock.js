@@ -1,6 +1,11 @@
 ﻿var Stock = {};
 
 Stock.init = function () {
+    window.onload = function () {
+        $('.navbar-nav li').removeClass("nav-choosed");
+        $('.nav-stocks').addClass("nav-choosed");
+    }
+
     var partNr = $('#PartNr').val();
     var fifofrom = $('#FIFOFrom').val();
     var fifoto = $('#FIFOTo').val();
@@ -37,3 +42,26 @@ Stock.add_range_label_to_div = function (content,name, cls) {
         });
     }
 }
+
+Stock.click_filter = function () {
+    $('#basic-addon-filter').click(function () {
+        $('#basic-addon-filter').popModal({
+            html: $('#extra-filter-content'),
+            placement: 'bottomRight',
+            showCloseBut: false,
+            onDocumentClickClose: true,
+            onOkBut: function () {
+            },
+            onCancelBut: function () {
+            },
+            onLoad: function () {
+            },
+            onClose: function () {
+            }
+        })
+    });
+}
+    
+$('.datetime-picker').datetimepicker({
+    lang: 'ch'
+})

@@ -25,10 +25,10 @@
                     <div class="filter-p"></div>
                 </div>
 
-                <div class="col-sm-1" style="text-align:left;">
+                <div class="col-sm-1" style="margin-top:10px;text-align:left;">
                     <button class="btn btn-primary" type="submit">Search All</button>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-2" style="margin-top:10px;">
                     <button class="btn btn-success runMrp" type="button">Run MRP</button>
                 </div>
             </div>
@@ -36,7 +36,7 @@
     </div>
 </form>
 
-<table class="table table-bordered" style="margin-top:100px;">
+<table class="table table-bordered" style="margin-top:110px;">
     <thead>
         <tr>
             <th> No. </th>
@@ -138,9 +138,9 @@
         <div class="col-sm-12">
             <div class="input-group filter-detail">
                 <span class="input-group-addon" id="basic-addon-quantity">Quantity</span>
-                <input type="number" class="form-control" step="5" name="QuantityFrom" id="QuantityFrom" value="@ViewBag.Query.QuantityFrom" placeholder="Quantity From" aria-describedby="basic-addon-quantity">
+                <input type="number" class="form-control" name="QuantityFrom" id="QuantityFrom" value="@ViewBag.Query.QuantityFrom" placeholder="Quantity From" aria-describedby="basic-addon-quantity">
                 <span class="space-mark">~</span>
-                <input type="number" class="form-control" step="5" name="QuantityTo" id="QuantityTo" value="@ViewBag.Query.QuantityTo" placeholder="Quantity To" />
+                <input type="number" class="form-control" name="QuantityTo" id="QuantityTo" value="@ViewBag.Query.QuantityTo" placeholder="Quantity To" />
             </div>
         </div>
 
@@ -150,7 +150,7 @@
             <div class="col-sm-6" style="margin-left:-15px;">
                 <div class="input-group filter-detail">
                     <span class="input-group-addon" id="basic-addon-stat" style="width:80px;">Status</span>
-                    @Html.DropDownList("Status", ViewData["statusList"] as IEnumerable<SelectListItem>)
+                    @Html.DropDownList("Status", ViewData["statusList"] as IEnumerable<SelectListItem>, new { @class="from-control"})
                 </div>
             </div>
             <div class="col-sm-6" style="margin-left:10px;">

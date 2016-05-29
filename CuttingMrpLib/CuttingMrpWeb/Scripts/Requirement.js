@@ -1,6 +1,11 @@
 ﻿var Requirement = {};
 
 Requirement.init = function () {
+    window.onload = function () {
+        $('.navbar-nav li').removeClass("nav-choosed");
+        $('.nav-requirements').addClass("nav-choosed");
+    }
+
     var partNr = $('#PartNr').val();
     var ordereddatefrom = $('#OrderedDateFrom').val();
     var ordereddateto = $('#OrderedDateTo').val();
@@ -128,7 +133,3 @@ Requirement.run_mrp = function () {
             "</div></div>").appendTo($('#ProcessOrder'));
     }
 }
-
-$('.datetime-picker').datetimepicker({
-    lang: 'ch'
-})

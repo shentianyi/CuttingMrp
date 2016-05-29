@@ -1,6 +1,11 @@
 ﻿var ProcessOrders = {};
 
-ProcessOrders.init = function (){ 
+ProcessOrders.init = function () {
+    window.onload = function () {
+        $('.navbar-nav li').removeClass("nav-choosed");
+        $('.nav-process-orders').addClass("nav-choosed");
+    }
+
     var ordernr= $('#OrderNr').val();
     var sourcedoc = $('#SourceDoc').val();
     var derivedfrom = $('#DerivedFrom').val();
@@ -12,15 +17,17 @@ ProcessOrders.init = function (){
     var completeratefrom = $('#CompleteRateFrom').val();
     var completerateto = $('#CompleteRateTo').val();
     var status = $('#Status').val();
+    var mrpround = $('#MrpRound').val();
 
     ProcessOrders.add_string_label_to_div(ordernr, 'OrderNr like ', '.filter-p');
     ProcessOrders.add_string_label_to_div(sourcedoc, 'SourceDoc like ', '.filter-p');
     ProcessOrders.add_string_label_to_div(derivedfrom, 'DerivedFrom like ', '.filter-p');
-    ProcessOrders.add_range_label_to_div(proceedatefrom + "~" + proceedateto, 'ProceeDate ', '.filter-p');
     ProcessOrders.add_string_label_to_div(partnr, 'PartNr like ', '.filter-p');
+    ProcessOrders.add_string_label_to_div(status, 'Status =', '.filter-p');
+    ProcessOrders.add_string_label_to_div(mrpround, 'Status =', '.filter-p');
+    ProcessOrders.add_range_label_to_div(proceedatefrom + "~" + proceedateto, 'ProceeDate ', '.filter-p');
     ProcessOrders.add_range_label_to_div(actualquantityfrom + "~" + actualquantityto, 'ActualQuantity ', '.filter-p');
     ProcessOrders.add_range_label_to_div(completeratefrom + "~" + completerateto, 'CompleteRate ', '.filter-p');
-    ProcessOrders.add_string_label_to_div(status, 'Status =', '.filter-p');
 }
 
 ProcessOrders.click_filter = function () {

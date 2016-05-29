@@ -1,10 +1,15 @@
 ﻿.filter-content{
-    height:90px;
+    height:70px;
+    text-align:left;
 }
 
 #basic-addon-filter{
-    line-height:89px;
+    line-height:60px;
 }
+.filter-p{
+    line-height:30px;
+}
+
 .filter-detail>span{
     width:100px;
 }

@@ -1,4 +1,7 @@
-﻿.filter-detail>span{
+﻿.col-sm-12{
+    min-width:800px;
+}
+.filter-detail>span{
     width:120px;
 }
 
