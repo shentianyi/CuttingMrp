@@ -1,4 +1,11 @@
-﻿.filter-detail>span{
+﻿.filter-content{
+    height:90px;
+}
+
+#basic-addon-filter{
+    line-height:89px;
+}
+.filter-detail>span{
     width:100px;
 }
 

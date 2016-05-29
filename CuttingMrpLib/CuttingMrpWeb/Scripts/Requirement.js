@@ -128,3 +128,7 @@ Requirement.run_mrp = function () {
             "</div></div>").appendTo($('#ProcessOrder'));
     }
 }
+
+$('.datetime-picker').datetimepicker({
+    lang: 'ch'
+})
