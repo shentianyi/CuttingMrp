@@ -12,7 +12,7 @@ Public Class Calculator
     Public Sub ProcessMrp(settings As CalculateSetting)
         Dim mrprepo As Repository(Of MrpRound) = New Repository(Of MrpRound)(New DataContext(DBConn))
         Dim mrpRoundStr As String = Now.ToString("yyyyMMddhhmmss")
-        mrprepo.GetTable.InsertOnSubmit(New MrpRound With {.launcher = My.Application.Info.AssemblyName, .mrpRound = mrpRoundStr, .runningStatus = CalculatorStatus.Running, .time = Now})
+        mrprepo.GetTable.InsertOnSubmit(New MrpRound With {.launcher = My.Application.Info.AssemblyName, .mrpRound = mrpRoundStr, .runningStatus = CalculatorStatus.Running, .time = Now, .text = " "})
         mrprepo.SaveAll()
         Try
             GenerateProcessOrderByRequirement(mrpRoundStr, settings)

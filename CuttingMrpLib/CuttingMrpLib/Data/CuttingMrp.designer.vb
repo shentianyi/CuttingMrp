@@ -1240,7 +1240,7 @@ Partial Public Class Requirement
 	
 	Private _derivedType As String
 	
-	Private _OrderDerivation As EntityRef(Of OrderDerivation)
+	Private _OrderDerivations As EntitySet(Of OrderDerivation)
 	
 	Private _Part As EntityRef(Of Part)
 	
@@ -1287,7 +1287,7 @@ Partial Public Class Requirement
 	
 	Public Sub New()
 		MyBase.New
-		Me._OrderDerivation = CType(Nothing, EntityRef(Of OrderDerivation))
+		Me._OrderDerivations = New EntitySet(Of OrderDerivation)(AddressOf Me.attach_OrderDerivations, AddressOf Me.detach_OrderDerivations)
 		Me._Part = CType(Nothing, EntityRef(Of Part))
 		OnCreated
 	End Sub
@@ -1428,27 +1428,13 @@ Partial Public Class Requirement
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Requirement_OrderDerivation", Storage:="_OrderDerivation", ThisKey:="id", OtherKey:="requirementId", IsUnique:=true, IsForeignKey:=false)>  _
-	Public Property OrderDerivation() As OrderDerivation
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Requirement_OrderDerivation", Storage:="_OrderDerivations", ThisKey:="id", OtherKey:="requirementId")>  _
+	Public Property OrderDerivations() As EntitySet(Of OrderDerivation)
 		Get
-			Return Me._OrderDerivation.Entity
+			Return Me._OrderDerivations
 		End Get
 		Set
-			Dim previousValue As OrderDerivation = Me._OrderDerivation.Entity
-			If ((Object.Equals(previousValue, value) = false)  _
-						OrElse (Me._OrderDerivation.HasLoadedOrAssignedValue = false)) Then
-				Me.SendPropertyChanging
-				If ((previousValue Is Nothing)  _
-							= false) Then
-					Me._OrderDerivation.Entity = Nothing
-					previousValue.Requirement = Nothing
-				End If
-				Me._OrderDerivation.Entity = value
-				If (Object.Equals(value, Nothing) = false) Then
-					value.Requirement = Me
-				End If
-				Me.SendPropertyChanged("OrderDerivation")
-			End If
+			Me._OrderDerivations.Assign(value)
 		End Set
 	End Property
 	
@@ -1496,6 +1482,16 @@ Partial Public Class Requirement
 					= false) Then
 			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
 		End If
+	End Sub
+	
+	Private Sub attach_OrderDerivations(ByVal entity As OrderDerivation)
+		Me.SendPropertyChanging
+		entity.Requirement = Me
+	End Sub
+	
+	Private Sub detach_OrderDerivations(ByVal entity As OrderDerivation)
+		Me.SendPropertyChanging
+		entity.Requirement = Nothing
 	End Sub
 End Class
 
@@ -2902,12 +2898,12 @@ Partial Public Class OrderDerivation
 				If ((previousValue Is Nothing)  _
 							= false) Then
 					Me._Requirement.Entity = Nothing
-					previousValue.OrderDerivation = Nothing
+					previousValue.OrderDerivations.Remove(Me)
 				End If
 				Me._Requirement.Entity = value
 				If ((value Is Nothing)  _
 							= false) Then
-					value.OrderDerivation = Me
+					value.OrderDerivations.Add(Me)
 					Me._requirementId = value.id
 				Else
 					Me._requirementId = CType(Nothing, Integer)

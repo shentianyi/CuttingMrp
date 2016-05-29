@@ -64,7 +64,7 @@
       <Column Name="status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="derivedFrom" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
       <Column Name="derivedType" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Association Name="Requirement_OrderDerivation" Member="OrderDerivation" ThisKey="id" OtherKey="requirementId" Type="OrderDerivation" Cardinality="One" />
+      <Association Name="Requirement_OrderDerivation" Member="OrderDerivations" ThisKey="id" OtherKey="requirementId" Type="OrderDerivation" />
       <Association Name="Part_Requirement" Member="Part" ThisKey="partNr" OtherKey="partNr" Type="Part" IsForeignKey="true" />
     </Type>
   </Table>

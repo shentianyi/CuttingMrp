@@ -31,7 +31,7 @@ Public Class ProcessOrderRepository
                 processOrders = processOrders.Where(Function(c) c.sourceDoc.Contains(conditions.SourceDoc))
             End If
 
-            If conditions.CompleteRateFrom.HasValue Then
+            If conditions.ProceeDateFrom.HasValue Then
                 processOrders = processOrders.Where(Function(c) c.proceeDate >= conditions.ProceeDateFrom)
             End If
 

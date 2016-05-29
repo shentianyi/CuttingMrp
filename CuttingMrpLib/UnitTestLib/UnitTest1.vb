@@ -1,7 +1,7 @@
 ﻿Imports System.Text
 Imports Microsoft.VisualStudio.TestTools.UnitTesting
 Imports CuttingMrpLib
-
+Imports System.Messaging
 <TestClass()> Public Class UnitTest1
 
     <TestMethod()> Public Sub TestListGroupBy()
@@ -37,7 +37,33 @@ Imports CuttingMrpLib
         End Try
     End Sub
 
+    <TestMethod> Public Sub TestQueue()
+        Dim cal As CalculateService = New CalculateService("Data Source=vm08;Initial Catalog=CuttingMrp;User ID=sa;Password=brilliantech123@")
+        Try
+            cal.Start(".\Private$\CuttingMrp", New CalculateSetting With {.MergeMethod = "DAY", .OrderType = "FIX"})
+        Catch ex As Exception
 
+        End Try
+    End Sub
+
+    <TestMethod> Public Sub TestQueueRead()
+        Dim cal As Calculator = New Calculator("Data Source=vm08;Initial Catalog=CuttingMrp;User ID=sa;Password=brilliantech123@")
+        Try
+            Dim mrpExe As Calculator = New Calculator("Data Source=vm08;Initial Catalog=CuttingMrp;User ID=sa;Password=brilliantech123@")
+            If Not MessageQueue.Exists(".\Private$\CuttingMrp") Then
+                MessageQueue.Create(".\Private$\CuttingMrp")
+            End If
+            Dim qu As MessageQueue = New MessageQueue(".\Private$\CuttingMrp")
+            qu.Formatter = New XmlMessageFormatter({GetType(CalculateSetting)})
+            Dim msg As Message = qu.Receive
+            If msg IsNot Nothing Then
+                Dim settings As CalculateSetting = msg.Body
+                mrpExe.ProcessMrp(settings)
+            End If
+        Catch ex As Exception
+
+        End Try
+    End Sub
 End Class
 
 Public Class SumResult
