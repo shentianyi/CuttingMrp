@@ -1428,7 +1428,7 @@ Partial Public Class Requirement
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Requirement_OrderDerivation", Storage:="_OrderDerivation", ThisKey:="id", OtherKey:="id", IsUnique:=true, IsForeignKey:=false)>  _
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Requirement_OrderDerivation", Storage:="_OrderDerivation", ThisKey:="id", OtherKey:="requirementId", IsUnique:=true, IsForeignKey:=false)>  _
 	Public Property OrderDerivation() As OrderDerivation
 		Get
 			Return Me._OrderDerivation.Entity
@@ -2808,9 +2808,6 @@ Partial Public Class OrderDerivation
 		Set
 			If ((Me._id = value)  _
 						= false) Then
-				If Me._Requirement.HasLoadedOrAssignedValue Then
-					Throw New System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException()
-				End If
 				Me.OnidChanging(value)
 				Me.SendPropertyChanging
 				Me._id = value
@@ -2847,6 +2844,9 @@ Partial Public Class OrderDerivation
 		Set
 			If ((Me._requirementId = value)  _
 						= false) Then
+				If Me._Requirement.HasLoadedOrAssignedValue Then
+					Throw New System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException()
+				End If
 				Me.OnrequirementIdChanging(value)
 				Me.SendPropertyChanging
 				Me._requirementId = value
@@ -2889,7 +2889,7 @@ Partial Public Class OrderDerivation
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Requirement_OrderDerivation", Storage:="_Requirement", ThisKey:="id", OtherKey:="id", IsForeignKey:=true)>  _
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Requirement_OrderDerivation", Storage:="_Requirement", ThisKey:="requirementId", OtherKey:="id", IsForeignKey:=true)>  _
 	Public Property Requirement() As Requirement
 		Get
 			Return Me._Requirement.Entity
@@ -2908,9 +2908,9 @@ Partial Public Class OrderDerivation
 				If ((value Is Nothing)  _
 							= false) Then
 					value.OrderDerivation = Me
-					Me._id = value.id
+					Me._requirementId = value.id
 				Else
-					Me._id = CType(Nothing, Integer)
+					Me._requirementId = CType(Nothing, Integer)
 				End If
 				Me.SendPropertyChanged("Requirement")
 			End If

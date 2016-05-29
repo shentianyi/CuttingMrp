@@ -88,7 +88,6 @@
       <Column Name="SumOfStock" Type="System.Double" DbType="Float" CanBeNull="true" />
     </Type>
   </Table>
-
   <Table Name="dbo.NumericBuild" Member="NumericBuilds">
     <Type Name="NumericBuild">
       <Column Name="idUniq" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -146,7 +145,7 @@
       <Column Name="requirementId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="mrpRound" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="deriveQty" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Association Name="Requirement_OrderDerivation" Member="Requirement" ThisKey="id" OtherKey="id" Type="Requirement" IsForeignKey="true" />
+      <Association Name="Requirement_OrderDerivation" Member="Requirement" ThisKey="requirementId" OtherKey="id" Type="Requirement" IsForeignKey="true" />
       <Association Name="ProcessOrder_OrderDerivation" Member="ProcessOrder" ThisKey="orderId" OtherKey="orderNr" Type="ProcessOrder" IsForeignKey="true" />
     </Type>
   </Table>
