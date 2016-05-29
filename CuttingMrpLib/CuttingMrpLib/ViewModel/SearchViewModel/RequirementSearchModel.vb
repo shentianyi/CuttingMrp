@@ -105,4 +105,6 @@
         End Set
     End Property
 
+    Public Property OrderNr As String
+
 End Class

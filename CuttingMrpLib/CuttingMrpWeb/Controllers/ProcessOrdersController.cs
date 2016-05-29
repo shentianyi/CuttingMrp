@@ -58,25 +58,25 @@ namespace CuttingMrpWeb.Controllers
         }
 
         // GET: ProcessOrders/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(string id)
         {
-            return View();
+            ProcessOrder order = GetProcessOrderById(id);
+
+            if (order != null)
+            {
+                SetProcessOrderStatusList(order.status, false);
+            }
+
+            return ValidateProcessOrder(order);
         }
 
         // POST: ProcessOrders/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit([Bind(Include = "orderNr,status,actualQuantity")] ProcessOrder order)
         {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            IProcessOrderService ps = new ProcessOrderService(Settings.Default.db);
+            ps.Update(order);
+            return RedirectToAction("Index");
         }
 
         // GET: ProcessOrders/Delete/5

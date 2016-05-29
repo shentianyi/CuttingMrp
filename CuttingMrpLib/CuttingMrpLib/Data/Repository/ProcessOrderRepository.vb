@@ -67,7 +67,6 @@ Public Class ProcessOrderRepository
                 processOrders = processOrders.Where(Function(c) c.status.Equals(conditions.Status))
             End If
 
-
             Return processOrders.OrderByDescending(Function(c) c.proceeDate)
         Else
             Throw New ArgumentNullException

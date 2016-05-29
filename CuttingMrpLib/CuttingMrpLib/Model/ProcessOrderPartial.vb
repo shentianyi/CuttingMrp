@@ -17,6 +17,12 @@
         End Get
     End Property
 
+    Public ReadOnly Property requirementCount As Integer
+        Get
+            Return Me.OrderDerivations.Count
+        End Get
+    End Property
+
     Public Shared CanFinishStatus As List(Of ProcessOrderStatus) = New List(Of ProcessOrderStatus) From {ProcessOrderStatus.Open}
     Public Shared CanDeleteStatus As List(Of ProcessOrderStatus) = New List(Of ProcessOrderStatus) From {ProcessOrderStatus.Open}
 

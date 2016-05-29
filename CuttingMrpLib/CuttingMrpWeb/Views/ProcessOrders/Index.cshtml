@@ -61,6 +61,7 @@
                 <th>CompleteRate</th>
                 <th>Status</th>
                 <th>BatchQuantity</th>
+                <th>Requirements</th>
                 <th>Options</th>
             </tr>
         </thead>
@@ -94,6 +95,11 @@
                         <td>@Html.DisplayFor(modelItem => item.completeRate)</td>
                         <td>@Html.DisplayFor(modelItem => item.statusDisplay)</td>
                         <td>@Html.DisplayFor(modelItem => item.batchQuantity)</td>
+                        <td>
+                           <a href="@Url.Action("Search", "Requirements" , new { orderNr=item.orderNr }) ">
+                                @(item.requirementCount.ToString() + " Requirements")
+                              </a>
+                        </td>
                         <td class="IconA">
                             <a href="@Url.Action("Edit", "ProcessOrders" , new { id=item.orderNr }) "> <i class="glyphicon glyphicon-pencil"></i></a>
                             @*@Html.ActionLink("Edit", "Edit", new { id = item.orderNr }) |*@
