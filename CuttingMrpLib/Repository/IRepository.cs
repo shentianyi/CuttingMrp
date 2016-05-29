@@ -46,6 +46,8 @@ namespace Repository
         /// <summary>Persist the data context.</summary>
         void SaveAll();
 
+        int Count(Func<T, bool> exp);
+
        
     }
 }

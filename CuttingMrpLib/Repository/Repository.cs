@@ -9,6 +9,7 @@ namespace Repository
 {
     public class Repository<T> : IRepository<T>
 
+
         where T : class
     {
        
@@ -71,6 +72,11 @@ namespace Repository
         {
 
             _dataContextFactory.SaveAll();
+        }
+
+        public int Count(Func<T, bool> exp)
+        {
+            return GetTable.Count<T>(exp);
         }
 
         public Repository(IDataContextFactory dataContextFactory)

@@ -1,6 +1,7 @@
 ﻿Imports Repository
 Imports System.Globalization
 Imports System.Data.Linq
+Imports System.Transactions
 
 Public Class Calculator
     Inherits ServiceBase
@@ -33,7 +34,7 @@ Public Class Calculator
         '3 get net requirement
         '4 generate the order
         '5.find the related KANBAN card
-
+        ConvertMpsToRequirement()
         ResetOrders({ProcessOrderStatus.Open}, settings.ReservedType, ProcessOrderStatus.SystemCancel)
         Dim toInsertOrders As List(Of ProcessOrder) = New List(Of ProcessOrder)
         Dim procOrderRepo As Repository(Of ProcessOrder) = New Repository(Of ProcessOrder)(New DataContext(DBConn))
@@ -43,6 +44,47 @@ Public Class Calculator
         procOrderRepo.SaveAll()
     End Sub
 
+    Public Sub ConvertMpsToRequirement()
+        Dim dc As DataContext = New DataContext(DBConn)
+        Dim repo As Repository(Of MP) = New Repository(Of MP)(dc)
+        Dim tempBoms As Hashtable = New Hashtable
+        Dim requires As List(Of Requirement) = New List(Of Requirement)
+        For Each m As MP In repo.GetTable
+            If tempBoms.ContainsKey(m.partnr) = False Then
+                Dim bomRepo As Repository(Of BOM) = New Repository(Of BOM)(dc)
+                Dim counter As Integer = bomRepo.Count(Function(c) c.validFrom <= Now And c.validTo >= Now And c.partNr = m.partnr)
+                If counter < 1 Then
+                    Throw New Exception("没有找到相应的BOM")
+                End If
+                If counter > 1 Then
+                    Throw New Exception("找到两个生效的BOM")
+                End If
+                Dim bom As BOM = bomRepo.Single(Function(c) c.validFrom <= Now And c.validTo >= Now And c.partNr = m.partnr)
+                tempBoms.Add(m.partnr, bom.BomItems.Where(Function(c) c.validFrom <= Now And c.validTo >= Now).ToList)
+            End If
+            For Each item As BomItem In tempBoms(m.partnr)
+                requires.Add(New Requirement With {.derivedFrom = m.sourceDoc, .derivedType = m.source, .orderedDate = m.orderedDate, .requiredDate = m.requiredDate, .partNr = m.partnr, .status = RequirementStatus.Open, .quantity = item.quantity * m.quantity})
+            Next
+            repo.MarkForDeletion(m)
+        Next
+        Dim requireRepo As Repository(Of Requirement) = New Repository(Of Requirement)(dc)
+        requireRepo.GetTable.InsertAllOnSubmit(requires)
+        Using trans As New TransactionScope
+            Try
+                requireRepo.SaveAll()
+                repo.SaveAll()
+                trans.Complete()
+            Catch ex As Exception
+                Throw ex
+            Finally
+                'release resource
+                repo = Nothing
+                tempBoms = Nothing
+                requires = Nothing
+                requireRepo = Nothing
+            End Try
+        End Using
+    End Sub
     Private Sub ResetOrders(targetStatus() As ProcessOrderStatus, reserveTypes As List(Of String), status As ProcessOrderStatus)
         If reserveTypes Is Nothing Then
             reserveTypes = New List(Of String)
