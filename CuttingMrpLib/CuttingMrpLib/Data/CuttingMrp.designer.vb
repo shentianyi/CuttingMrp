@@ -97,17 +97,17 @@ Partial Public Class CuttingMrpDataContext
     End Sub
   Partial Private Sub DeleteMP(instance As MP)
     End Sub
-  Partial Private Sub InsertOrderDerivation(instance As OrderDerivation)
-    End Sub
-  Partial Private Sub UpdateOrderDerivation(instance As OrderDerivation)
-    End Sub
-  Partial Private Sub DeleteOrderDerivation(instance As OrderDerivation)
-    End Sub
   Partial Private Sub InsertProcessOrder(instance As ProcessOrder)
     End Sub
   Partial Private Sub UpdateProcessOrder(instance As ProcessOrder)
     End Sub
   Partial Private Sub DeleteProcessOrder(instance As ProcessOrder)
+    End Sub
+  Partial Private Sub InsertOrderDerivation(instance As OrderDerivation)
+    End Sub
+  Partial Private Sub UpdateOrderDerivation(instance As OrderDerivation)
+    End Sub
+  Partial Private Sub DeleteOrderDerivation(instance As OrderDerivation)
     End Sub
   #End Region
 	
@@ -208,15 +208,15 @@ Partial Public Class CuttingMrpDataContext
 		End Get
 	End Property
 	
-	Public ReadOnly Property OrderDerivations() As System.Data.Linq.Table(Of OrderDerivation)
-		Get
-			Return Me.GetTable(Of OrderDerivation)
-		End Get
-	End Property
-	
 	Public ReadOnly Property ProcessOrders() As System.Data.Linq.Table(Of ProcessOrder)
 		Get
 			Return Me.GetTable(Of ProcessOrder)
+		End Get
+	End Property
+	
+	Public ReadOnly Property OrderDerivations() As System.Data.Linq.Table(Of OrderDerivation)
+		Get
+			Return Me.GetTable(Of OrderDerivation)
 		End Get
 	End Property
 End Class
@@ -1240,7 +1240,7 @@ Partial Public Class Requirement
 	
 	Private _derivedType As String
 	
-	Private _OrderDerivation As EntityRef(Of OrderDerivation)
+	Private _OrderDerivations As EntitySet(Of OrderDerivation)
 	
 	Private _Part As EntityRef(Of Part)
 	
@@ -1287,7 +1287,7 @@ Partial Public Class Requirement
 	
 	Public Sub New()
 		MyBase.New
-		Me._OrderDerivation = CType(Nothing, EntityRef(Of OrderDerivation))
+		Me._OrderDerivations = New EntitySet(Of OrderDerivation)(AddressOf Me.attach_OrderDerivations, AddressOf Me.detach_OrderDerivations)
 		Me._Part = CType(Nothing, EntityRef(Of Part))
 		OnCreated
 	End Sub
@@ -1428,27 +1428,13 @@ Partial Public Class Requirement
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Requirement_OrderDerivation", Storage:="_OrderDerivation", ThisKey:="id", OtherKey:="id", IsUnique:=true, IsForeignKey:=false)>  _
-	Public Property OrderDerivation() As OrderDerivation
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Requirement_OrderDerivation", Storage:="_OrderDerivations", ThisKey:="id", OtherKey:="requirementId")>  _
+	Public Property OrderDerivations() As EntitySet(Of OrderDerivation)
 		Get
-			Return Me._OrderDerivation.Entity
+			Return Me._OrderDerivations
 		End Get
 		Set
-			Dim previousValue As OrderDerivation = Me._OrderDerivation.Entity
-			If ((Object.Equals(previousValue, value) = false)  _
-						OrElse (Me._OrderDerivation.HasLoadedOrAssignedValue = false)) Then
-				Me.SendPropertyChanging
-				If ((previousValue Is Nothing)  _
-							= false) Then
-					Me._OrderDerivation.Entity = Nothing
-					previousValue.Requirement = Nothing
-				End If
-				Me._OrderDerivation.Entity = value
-				If (Object.Equals(value, Nothing) = false) Then
-					value.Requirement = Me
-				End If
-				Me.SendPropertyChanged("OrderDerivation")
-			End If
+			Me._OrderDerivations.Assign(value)
 		End Set
 	End Property
 	
@@ -1496,6 +1482,16 @@ Partial Public Class Requirement
 					= false) Then
 			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
 		End If
+	End Sub
+	
+	Private Sub attach_OrderDerivations(ByVal entity As OrderDerivation)
+		Me.SendPropertyChanging
+		entity.Requirement = Me
+	End Sub
+	
+	Private Sub detach_OrderDerivations(ByVal entity As OrderDerivation)
+		Me.SendPropertyChanging
+		entity.Requirement = Nothing
 	End Sub
 End Class
 
@@ -2744,226 +2740,6 @@ Partial Public Class MP
 	End Sub
 End Class
 
-<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.OrderDerivation")>  _
-Partial Public Class OrderDerivation
-	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
-	
-	Private Shared emptyChangingEventArgs As PropertyChangingEventArgs = New PropertyChangingEventArgs(String.Empty)
-	
-	Private _id As Integer
-	
-	Private _orderId As String
-	
-	Private _requirementId As Integer
-	
-	Private _mrpRound As String
-	
-	Private _deriveQty As Double
-	
-	Private _Requirement As EntityRef(Of Requirement)
-	
-	Private _ProcessOrder As EntityRef(Of ProcessOrder)
-	
-    #Region "可扩展性方法定义"
-    Partial Private Sub OnLoaded()
-    End Sub
-    Partial Private Sub OnValidate(action As System.Data.Linq.ChangeAction)
-    End Sub
-    Partial Private Sub OnCreated()
-    End Sub
-    Partial Private Sub OnidChanging(value As Integer)
-    End Sub
-    Partial Private Sub OnidChanged()
-    End Sub
-    Partial Private Sub OnorderIdChanging(value As String)
-    End Sub
-    Partial Private Sub OnorderIdChanged()
-    End Sub
-    Partial Private Sub OnrequirementIdChanging(value As Integer)
-    End Sub
-    Partial Private Sub OnrequirementIdChanged()
-    End Sub
-    Partial Private Sub OnmrpRoundChanging(value As String)
-    End Sub
-    Partial Private Sub OnmrpRoundChanged()
-    End Sub
-    Partial Private Sub OnderiveQtyChanging(value As Double)
-    End Sub
-    Partial Private Sub OnderiveQtyChanged()
-    End Sub
-    #End Region
-	
-	Public Sub New()
-		MyBase.New
-		Me._Requirement = CType(Nothing, EntityRef(Of Requirement))
-		Me._ProcessOrder = CType(Nothing, EntityRef(Of ProcessOrder))
-		OnCreated
-	End Sub
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_id", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true)>  _
-	Public Property id() As Integer
-		Get
-			Return Me._id
-		End Get
-		Set
-			If ((Me._id = value)  _
-						= false) Then
-				If Me._Requirement.HasLoadedOrAssignedValue Then
-					Throw New System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException()
-				End If
-				Me.OnidChanging(value)
-				Me.SendPropertyChanging
-				Me._id = value
-				Me.SendPropertyChanged("id")
-				Me.OnidChanged
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_orderId", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
-	Public Property orderId() As String
-		Get
-			Return Me._orderId
-		End Get
-		Set
-			If (String.Equals(Me._orderId, value) = false) Then
-				If Me._ProcessOrder.HasLoadedOrAssignedValue Then
-					Throw New System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException()
-				End If
-				Me.OnorderIdChanging(value)
-				Me.SendPropertyChanging
-				Me._orderId = value
-				Me.SendPropertyChanged("orderId")
-				Me.OnorderIdChanged
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_requirementId", DbType:="Int NOT NULL")>  _
-	Public Property requirementId() As Integer
-		Get
-			Return Me._requirementId
-		End Get
-		Set
-			If ((Me._requirementId = value)  _
-						= false) Then
-				Me.OnrequirementIdChanging(value)
-				Me.SendPropertyChanging
-				Me._requirementId = value
-				Me.SendPropertyChanged("requirementId")
-				Me.OnrequirementIdChanged
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_mrpRound", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
-	Public Property mrpRound() As String
-		Get
-			Return Me._mrpRound
-		End Get
-		Set
-			If (String.Equals(Me._mrpRound, value) = false) Then
-				Me.OnmrpRoundChanging(value)
-				Me.SendPropertyChanging
-				Me._mrpRound = value
-				Me.SendPropertyChanged("mrpRound")
-				Me.OnmrpRoundChanged
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_deriveQty", DbType:="Float NOT NULL")>  _
-	Public Property deriveQty() As Double
-		Get
-			Return Me._deriveQty
-		End Get
-		Set
-			If ((Me._deriveQty = value)  _
-						= false) Then
-				Me.OnderiveQtyChanging(value)
-				Me.SendPropertyChanging
-				Me._deriveQty = value
-				Me.SendPropertyChanged("deriveQty")
-				Me.OnderiveQtyChanged
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Requirement_OrderDerivation", Storage:="_Requirement", ThisKey:="id", OtherKey:="id", IsForeignKey:=true)>  _
-	Public Property Requirement() As Requirement
-		Get
-			Return Me._Requirement.Entity
-		End Get
-		Set
-			Dim previousValue As Requirement = Me._Requirement.Entity
-			If ((Object.Equals(previousValue, value) = false)  _
-						OrElse (Me._Requirement.HasLoadedOrAssignedValue = false)) Then
-				Me.SendPropertyChanging
-				If ((previousValue Is Nothing)  _
-							= false) Then
-					Me._Requirement.Entity = Nothing
-					previousValue.OrderDerivation = Nothing
-				End If
-				Me._Requirement.Entity = value
-				If ((value Is Nothing)  _
-							= false) Then
-					value.OrderDerivation = Me
-					Me._id = value.id
-				Else
-					Me._id = CType(Nothing, Integer)
-				End If
-				Me.SendPropertyChanged("Requirement")
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="ProcessOrder_OrderDerivation", Storage:="_ProcessOrder", ThisKey:="orderId", OtherKey:="orderNr", IsForeignKey:=true)>  _
-	Public Property ProcessOrder() As ProcessOrder
-		Get
-			Return Me._ProcessOrder.Entity
-		End Get
-		Set
-			Dim previousValue As ProcessOrder = Me._ProcessOrder.Entity
-			If ((Object.Equals(previousValue, value) = false)  _
-						OrElse (Me._ProcessOrder.HasLoadedOrAssignedValue = false)) Then
-				Me.SendPropertyChanging
-				If ((previousValue Is Nothing)  _
-							= false) Then
-					Me._ProcessOrder.Entity = Nothing
-					previousValue.OrderDerivations.Remove(Me)
-				End If
-				Me._ProcessOrder.Entity = value
-				If ((value Is Nothing)  _
-							= false) Then
-					value.OrderDerivations.Add(Me)
-					Me._orderId = value.orderNr
-				Else
-					Me._orderId = CType(Nothing, String)
-				End If
-				Me.SendPropertyChanged("ProcessOrder")
-			End If
-		End Set
-	End Property
-	
-	Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
-	
-	Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
-	
-	Protected Overridable Sub SendPropertyChanging()
-		If ((Me.PropertyChangingEvent Is Nothing)  _
-					= false) Then
-			RaiseEvent PropertyChanging(Me, emptyChangingEventArgs)
-		End If
-	End Sub
-	
-	Protected Overridable Sub SendPropertyChanged(ByVal propertyName As [String])
-		If ((Me.PropertyChangedEvent Is Nothing)  _
-					= false) Then
-			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
-		End If
-	End Sub
-End Class
-
 <Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.ProcessOrder")>  _
 Partial Public Class ProcessOrder
 	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
@@ -3304,5 +3080,225 @@ Partial Public Class ProcessOrder
 	Private Sub detach_OrderDerivations(ByVal entity As OrderDerivation)
 		Me.SendPropertyChanging
 		entity.ProcessOrder = Nothing
+	End Sub
+End Class
+
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.OrderDerivation")>  _
+Partial Public Class OrderDerivation
+	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+	
+	Private Shared emptyChangingEventArgs As PropertyChangingEventArgs = New PropertyChangingEventArgs(String.Empty)
+	
+	Private _id As Integer
+	
+	Private _orderId As String
+	
+	Private _requirementId As Integer
+	
+	Private _mrpRound As String
+	
+	Private _deriveQty As Double
+	
+	Private _ProcessOrder As EntityRef(Of ProcessOrder)
+	
+	Private _Requirement As EntityRef(Of Requirement)
+	
+    #Region "可扩展性方法定义"
+    Partial Private Sub OnLoaded()
+    End Sub
+    Partial Private Sub OnValidate(action As System.Data.Linq.ChangeAction)
+    End Sub
+    Partial Private Sub OnCreated()
+    End Sub
+    Partial Private Sub OnidChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnidChanged()
+    End Sub
+    Partial Private Sub OnorderIdChanging(value As String)
+    End Sub
+    Partial Private Sub OnorderIdChanged()
+    End Sub
+    Partial Private Sub OnrequirementIdChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnrequirementIdChanged()
+    End Sub
+    Partial Private Sub OnmrpRoundChanging(value As String)
+    End Sub
+    Partial Private Sub OnmrpRoundChanged()
+    End Sub
+    Partial Private Sub OnderiveQtyChanging(value As Double)
+    End Sub
+    Partial Private Sub OnderiveQtyChanged()
+    End Sub
+    #End Region
+	
+	Public Sub New()
+		MyBase.New
+		Me._ProcessOrder = CType(Nothing, EntityRef(Of ProcessOrder))
+		Me._Requirement = CType(Nothing, EntityRef(Of Requirement))
+		OnCreated
+	End Sub
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_id", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true)>  _
+	Public Property id() As Integer
+		Get
+			Return Me._id
+		End Get
+		Set
+			If ((Me._id = value)  _
+						= false) Then
+				Me.OnidChanging(value)
+				Me.SendPropertyChanging
+				Me._id = value
+				Me.SendPropertyChanged("id")
+				Me.OnidChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_orderId", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
+	Public Property orderId() As String
+		Get
+			Return Me._orderId
+		End Get
+		Set
+			If (String.Equals(Me._orderId, value) = false) Then
+				If Me._ProcessOrder.HasLoadedOrAssignedValue Then
+					Throw New System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException()
+				End If
+				Me.OnorderIdChanging(value)
+				Me.SendPropertyChanging
+				Me._orderId = value
+				Me.SendPropertyChanged("orderId")
+				Me.OnorderIdChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_requirementId", DbType:="Int NOT NULL")>  _
+	Public Property requirementId() As Integer
+		Get
+			Return Me._requirementId
+		End Get
+		Set
+			If ((Me._requirementId = value)  _
+						= false) Then
+				If Me._Requirement.HasLoadedOrAssignedValue Then
+					Throw New System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException()
+				End If
+				Me.OnrequirementIdChanging(value)
+				Me.SendPropertyChanging
+				Me._requirementId = value
+				Me.SendPropertyChanged("requirementId")
+				Me.OnrequirementIdChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_mrpRound", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
+	Public Property mrpRound() As String
+		Get
+			Return Me._mrpRound
+		End Get
+		Set
+			If (String.Equals(Me._mrpRound, value) = false) Then
+				Me.OnmrpRoundChanging(value)
+				Me.SendPropertyChanging
+				Me._mrpRound = value
+				Me.SendPropertyChanged("mrpRound")
+				Me.OnmrpRoundChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_deriveQty", DbType:="Float NOT NULL")>  _
+	Public Property deriveQty() As Double
+		Get
+			Return Me._deriveQty
+		End Get
+		Set
+			If ((Me._deriveQty = value)  _
+						= false) Then
+				Me.OnderiveQtyChanging(value)
+				Me.SendPropertyChanging
+				Me._deriveQty = value
+				Me.SendPropertyChanged("deriveQty")
+				Me.OnderiveQtyChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="ProcessOrder_OrderDerivation", Storage:="_ProcessOrder", ThisKey:="orderId", OtherKey:="orderNr", IsForeignKey:=true)>  _
+	Public Property ProcessOrder() As ProcessOrder
+		Get
+			Return Me._ProcessOrder.Entity
+		End Get
+		Set
+			Dim previousValue As ProcessOrder = Me._ProcessOrder.Entity
+			If ((Object.Equals(previousValue, value) = false)  _
+						OrElse (Me._ProcessOrder.HasLoadedOrAssignedValue = false)) Then
+				Me.SendPropertyChanging
+				If ((previousValue Is Nothing)  _
+							= false) Then
+					Me._ProcessOrder.Entity = Nothing
+					previousValue.OrderDerivations.Remove(Me)
+				End If
+				Me._ProcessOrder.Entity = value
+				If ((value Is Nothing)  _
+							= false) Then
+					value.OrderDerivations.Add(Me)
+					Me._orderId = value.orderNr
+				Else
+					Me._orderId = CType(Nothing, String)
+				End If
+				Me.SendPropertyChanged("ProcessOrder")
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Requirement_OrderDerivation", Storage:="_Requirement", ThisKey:="requirementId", OtherKey:="id", IsForeignKey:=true)>  _
+	Public Property Requirement() As Requirement
+		Get
+			Return Me._Requirement.Entity
+		End Get
+		Set
+			Dim previousValue As Requirement = Me._Requirement.Entity
+			If ((Object.Equals(previousValue, value) = false)  _
+						OrElse (Me._Requirement.HasLoadedOrAssignedValue = false)) Then
+				Me.SendPropertyChanging
+				If ((previousValue Is Nothing)  _
+							= false) Then
+					Me._Requirement.Entity = Nothing
+					previousValue.OrderDerivations.Remove(Me)
+				End If
+				Me._Requirement.Entity = value
+				If ((value Is Nothing)  _
+							= false) Then
+					value.OrderDerivations.Add(Me)
+					Me._requirementId = value.id
+				Else
+					Me._requirementId = CType(Nothing, Integer)
+				End If
+				Me.SendPropertyChanged("Requirement")
+			End If
+		End Set
+	End Property
+	
+	Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
+	
+	Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
+	
+	Protected Overridable Sub SendPropertyChanging()
+		If ((Me.PropertyChangingEvent Is Nothing)  _
+					= false) Then
+			RaiseEvent PropertyChanging(Me, emptyChangingEventArgs)
+		End If
+	End Sub
+	
+	Protected Overridable Sub SendPropertyChanged(ByVal propertyName As [String])
+		If ((Me.PropertyChangedEvent Is Nothing)  _
+					= false) Then
+			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
+		End If
 	End Sub
 End Class
