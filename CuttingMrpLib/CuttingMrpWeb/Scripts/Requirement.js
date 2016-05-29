@@ -1,11 +1,6 @@
 ﻿var Requirement = {};
 
 Requirement.init = function () {
-    window.onload = function () {
-        $('.navbar-nav li').removeClass("nav-choosed");
-        $('.nav-requirements').addClass("nav-choosed");
-    }
-
     var partNr = $('#PartNr').val();
     var ordereddatefrom = $('#OrderedDateFrom').val();
     var ordereddateto = $('#OrderedDateTo').val();
@@ -13,7 +8,7 @@ Requirement.init = function () {
     var requiredtimeto = $('#RequiredTimeTo').val();
     var quantityfrom = $('#QuantityFrom').val() > 0 ? $('#QuantityFrom').val() : "";
     var quantityto = $('#QuantityTo').val() > 0 ? $('#QuantityTo').val() : "";
-    var status = $('#Status').val();
+    var status = $("#Status").children("option:selected").html();
     var derivedfrom = $('#DerivedFrom').val();
 
     Requirement.add_string_label_to_div(partNr, 'PartNr Like ', '.filter-p');
@@ -132,4 +127,9 @@ Requirement.run_mrp = function () {
             "<label style='text-align:center;color:"+fontColor+";font-size:1em;'>"+contentMsg+"</label>" +
             "</div></div>").appendTo($('#ProcessOrder'));
     }
+}
+
+window.onload = function () {
+    $('.navbar-nav li').removeClass("nav-choosed");
+    $('.nav-requirements').addClass("nav-choosed");
 }

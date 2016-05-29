@@ -11,15 +11,6 @@
     <div class="panel panel-default navbar-fixed-top" style="box-shadow: -2px 2px 4px #34313a;top:60px;">
         <div class="panel-body">
             <div class="col-sm-12" style="text-align:center;">
-                @*<div class="col-sm-2">
-                        <select class="form-control">
-                            <option>小时</option>
-                            <option>天</option>
-                            <option>周</option>
-                            <option>月</option>
-                        </select>
-                    </div>*@
-
                 <div class="col-sm-9 filter-content">
                     <span class="pull-right" id="basic-addon-filter"> <i class="glyphicon glyphicon-filter"></i> </span>
                     <div class="filter-p"></div>
@@ -147,16 +138,16 @@
         <hr style="margin:10px;" />
 
         <div class="col-sm-12">
-            <div class="col-sm-6" style="margin-left:-15px;">
+            <div class="col-sm-5" style="margin-left:-15px;">
                 <div class="input-group filter-detail">
                     <span class="input-group-addon" id="basic-addon-stat" style="width:80px;">Status</span>
                     @Html.DropDownList("Status", ViewData["statusList"] as IEnumerable<SelectListItem>, new { @class="from-control"})
                 </div>
             </div>
-            <div class="col-sm-6" style="margin-left:10px;">
+            <div class="col-sm-6" style="margin-left:-20px;">
                 <div class="input-group filter-detail">
                     <span class="input-group-addon" id="basic-addon-derivedfrom">DerivedFrom</span>
-                    <input type="text" class="form-control" style="width:145px;" name="DerivedFrom" id="DerivedFrom" value="@ViewBag.Query.DerivedFrom" placeholder="Derived From" aria-describedby="basic-addon-derivedfrom">
+                    <input type="text" class="form-control" style="width:115px;" name="DerivedFrom" id="DerivedFrom" value="@ViewBag.Query.DerivedFrom" placeholder="Derived From" aria-describedby="basic-addon-derivedfrom">
                 </div>
             </div>
         </div>

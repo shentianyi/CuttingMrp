@@ -1,11 +1,6 @@
 ﻿var Stock = {};
 
 Stock.init = function () {
-    window.onload = function () {
-        $('.navbar-nav li').removeClass("nav-choosed");
-        $('.nav-stocks').addClass("nav-choosed");
-    }
-
     var partNr = $('#PartNr').val();
     var fifofrom = $('#FIFOFrom').val();
     var fifoto = $('#FIFOTo').val();
@@ -65,3 +60,8 @@ Stock.click_filter = function () {
 $('.datetime-picker').datetimepicker({
     lang: 'ch'
 })
+
+window.onload = function () {
+    $('.navbar-nav li').removeClass("nav-choosed");
+    $('.nav-stocks').addClass("nav-choosed");
+}

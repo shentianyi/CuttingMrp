@@ -1,20 +1,16 @@
 ﻿var MrpRounds = {};
 
 MrpRounds.init = function () {
-    window.onload = function () {
-        $('.navbar-nav li').removeClass("nav-choosed");
-        $('.nav-mrp-round').addClass("nav-choosed");
-    }
-
     var mrproundid = $('#MrpRoundId').val();
     var timefrom = $('#TimeFrom').val();
     var timeto = $('#TimeTo').val();
-    var runningstatus = $('#RunningStatus').val();
+    var runningstatus = $("#RunningStatus").children("option:selected").html();
+    //var runningstatus = $('#RunningStatus').val();
     var launcher = $('#Launcher').val();
 
     MrpRounds.add_string_label_to_div(mrproundid, 'MrpRoundID Like ', '.filter-p');
     MrpRounds.add_range_label_to_div(timefrom + "~" + timeto, 'Time ', '.filter-p');
-    MrpRounds.add_string_label_to_div(runningstatus, 'Status Like', '.filter-p');
+    MrpRounds.add_string_label_to_div(runningstatus, 'Status =', '.filter-p');
     MrpRounds.add_string_label_to_div(launcher, 'Launcher Like', '.filter-p');
 }
 
@@ -62,3 +58,8 @@ MrpRounds.click_filter = function () {
 $('.datetime-picker').datetimepicker({
     lang: 'ch'
 })
+
+window.onload = function () {
+    $('.navbar-nav li').removeClass("nav-choosed");
+    $('.nav-mrp-round').addClass("nav-choosed");
+}
