@@ -165,7 +165,7 @@ Public Class Calculator
                 Case "MONTH"
                     key = coll.requiredDate.ToString("yyyy-MM") & "-01"
                 Case "YEAR"
-                    key = coll.requiredDate.ToString("yyyy") & "01-01"
+                    key = coll.requiredDate.ToString("yyyy") & "-01-01"
             End Select
             If result.ContainsKey(key) Then
                 result(key).add(coll)
