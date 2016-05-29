@@ -73,17 +73,17 @@ namespace CuttingMrpWeb.Controllers
         [HttpPost]
         public ActionResult Edit([Bind(Include = "id,partNr,orderedDate,requiredDate,quantity,status,derivedFrom,derivedType")] Requirement requirement)
         {
-            try
-            {
+            //try
+            //{
                 // TODO: Add update logic here
                 IRequirementService rs = new RequirementService(Settings.Default.db);
                 rs.Update(requirement);
                 return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            //}
+            //catch
+            //{
+            //    return View();
+            //}
         }
 
         // GET: Requirements/Delete/5
@@ -117,7 +117,7 @@ namespace CuttingMrpWeb.Controllers
         }
 
 
-        public ActionResult Search([Bind(Include = "PartNr,OrderedDateFrom,OrderedDateTo,RequiredTimeFrom,RequiredTimeTo,QuantityFrom,QuantityTo,Status,DerivedFrom,DerivedType")] RequirementSearchModel q)
+        public ActionResult Search([Bind(Include = "PartNr,OrderedDateFrom,OrderedDateTo,RequiredTimeFrom,RequiredTimeTo,QuantityFrom,QuantityTo,Status,DerivedFrom,DerivedType,OrderNr")] RequirementSearchModel q)
         {
             int pageIndex = 0;
             int.TryParse(Request.QueryString.Get("page"), out pageIndex);

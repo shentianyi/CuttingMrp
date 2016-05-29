@@ -52,6 +52,13 @@ Public Class RequirementRepository
             If Not String.IsNullOrEmpty(searchModel.PartNr) Then
                 requires = requires.Where(Function(c) c.partNr.Contains(searchModel.PartNr))
             End If
+
+            If Not String.IsNullOrWhiteSpace(searchModel.OrderNr) Then
+                Dim ids = _context.OrderDerivations.Where(Function(cc) cc.orderId.Equals(searchModel.OrderNr)).Select(Function(cc) cc.requirementId).ToList
+                requires = requires.Where(Function(c) ids.Contains(c.id))
+            End If
+
+
             '   requires = requires.Skip(searchModel.PageIndex * searchModel.PageSize)
             '  requires = requires.Take(searchModel.PageSize)
             Return requires

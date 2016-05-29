@@ -67,17 +67,17 @@ namespace CuttingMrpWeb.Controllers
         [HttpPost]
         public ActionResult Edit([Bind(Include = "id,partNr,fifo,quantity,container,wh,position,source,sourceType")] Stock stock)
         {
-            try
-            {
+            //try
+            //{
                 // TODO: Add update logic here 
                 IStockService ss = new StockService(Settings.Default.db);
                 ss.Update(stock);
                 return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            //}
+            //catch
+            //{
+            //    return View();
+            //}
         }
 
         // GET: Stocks/Delete/5
