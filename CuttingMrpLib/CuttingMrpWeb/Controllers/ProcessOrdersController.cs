@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using CuttingMrpLib;
@@ -135,6 +137,52 @@ namespace CuttingMrpWeb.Controllers
 
 
             return View("Index", processOrders);
+        }
+
+        public void Export([Bind(Include = "OrderNr,SourceDoc,DerivedFrom,ProceeDateFrom,ProceeDateTo,PartNr,ActualQuantityFrom,ActualQuantityTo,CompleteRateFrom,CompleteRateTo,Status,MrpRound")] ProcessOrderSearchModel q)
+        {
+            IProcessOrderService ps = new ProcessOrderService(Settings.Default.db);
+
+            List<ProcessOrder> processOrders = ps.Search(q).ToList();
+
+            ViewBag.Query = q;
+
+            MemoryStream ms = new MemoryStream();
+            using (StreamWriter sw = new StreamWriter(ms, Encoding.UTF8))
+            {
+                string[] head = new string[11] { " No.", "OrderNr", "SourceDoc", "DerivedFrom",
+                    "ProceeDate", "PartNr","SourceQuantity","ActualQuantity","CompleteRate","Status","BatchQuantity" };
+                sw.WriteLine(string.Join(",", head));
+                for(var i=0; i<processOrders.Count; i++)
+                {
+                    List<string> ii = new List<string>();
+                    ii.Add((i + 1).ToString());
+                    ii.Add(processOrders[i].orderNr);
+                    ii.Add(processOrders[i].sourceDoc);
+                    ii.Add(processOrders[i].derivedFrom);
+                    ii.Add(processOrders[i].proceeDate.ToString());
+                    ii.Add(processOrders[i].partNr);
+                    ii.Add(processOrders[i].sourceQuantity.ToString());
+                    ii.Add(processOrders[i].actualQuantity.ToString());
+                    ii.Add(processOrders[i].completeRate.ToString());
+                    ii.Add(processOrders[i].statusDisplay);
+                    ii.Add(processOrders[i].batchQuantity.ToString());
+                    
+
+                    sw.WriteLine(string.Join(",", ii.ToArray()));
+                }
+                //sw.WriteLine(max);
+            }
+            var filename = "Orders" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".csv";
+            var contenttype = "text/csv";
+            Response.Clear();
+            Response.ContentEncoding = Encoding.UTF8;
+            Response.ContentType = contenttype;
+            Response.AddHeader("content-disposition", "attachment;filename=" + filename);
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.BinaryWrite(ms.ToArray());
+            Response.End();
+
         }
 
         [HttpPost]

@@ -18,9 +18,25 @@
                 </div>
 
                 <div class="col-sm-2" style="border-right:1px solid #eeeeee;padding-bottom:20px; ">
-                    <button class="btn btn-primary" type="submit" style="width:120px; margin-top:10px;padding: 10px">Search All</button>
-                    @*<hr style="margin:5px;" />
-                    <button class="btn btn-success export-process-order" type="button" style="width:120px;">EXPORT</button>*@
+                    <button class="btn btn-primary" type="submit" style="width:120px;">Search All</button>
+                    <hr style="margin:5px;" />
+                    @*<button class="btn btn-success export-process-order"
+                             type="button" style="width:120px;" title="export searched results">EXPORT</button>*@
+                    @Html.ActionLink("EXPORT", "Export",new{
+                   OrderNr = ViewBag.Query.OrderNr,
+                   SourceDoc = ViewBag.Query.SourceDoc,
+                   DerivedFrom = ViewBag.Query.DerivedFrom,
+                   ProceeDateFrom = ViewBag.Query.ProceeDateFrom,
+                   ProceeDateTo = ViewBag.Query.ProceeDateTo,
+                   PartNr = ViewBag.Query.PartNr,
+                   ActualQuantityFrom = ViewBag.Query.ActualQuantityFrom,
+                   ActualQuantityTo = ViewBag.Query.ActualQuantityTo,
+                   CompleteRateFrom = ViewBag.Query.CompleteRateFrom,
+                   CompleteRateTo = ViewBag.Query.CompleteRateTo,
+                   Status = ViewBag.Query.Status,
+                   MrpRound = ViewBag.Query.MrpRound
+               }, new { @style = "width:120px;", @class = "btn btn-success export-process-order", @title= "export searched results" })
+
                 </div>
             </form>
 
@@ -82,14 +98,14 @@
         </thead>
         <tbody>
             @if (Model != null)
-            {
-                int i = 0;
-                foreach (var item in Model)
-                {
+                    {
+                        int i = 0;
+                        foreach (var item in Model)
+                        {
                     <tr>
                         <td>
                             @if (item.canFinish)
-                            {
+                                    {
                                 <input type="checkbox" class="orderNrCheck" id="orderNrCheck" name="orderNr" value="@item.orderNr" />
                                 @*@Html.CheckBox("orderNr",  new { value = item.orderNr})*@
                             }
@@ -237,5 +253,5 @@
     ProcessOrders.click_filter();
     ProcessOrders.finish_porcess_order();
     ProcessOrders.cancel_process_order();
-    ProcessOrders.export_porcess_order();
+    //ProcessOrders.export_porcess_order();
 </script>
