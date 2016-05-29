@@ -119,13 +119,38 @@ namespace CuttingMrpWeb.Controllers
             IProcessOrderService ps = new ProcessOrderService(Settings.Default.db);
 
             IPagedList<ProcessOrder> processOrders = ps.Search(q).ToPagedList(pageIndex, Settings.Default.pageSize);
-             
+
             ViewBag.Query = q;
 
             SetProcessOrderStatusList(q.Status);
             return View("Index", processOrders);
         }
 
+        [HttpPost]
+        public ActionResult Finish()
+        {
+            var v = Request.Form.Get("finishOrderIds");
+            IProcessOrderService ps = new ProcessOrderService(Settings.Default.db);
+            ps.FinishOrdersByIds(v.Split(',').ToList(),
+                DateTime.Now,
+                Settings.Default.stockContainer,
+                Settings.Default.stockWh,
+                Settings.Default.stockPosition,
+                Settings.Default.stockSource,
+                Settings.Default.stockSourceType);
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public ActionResult Cancel()
+        {
+            var v = Request.Form.Get("cancelOrderIds");
+            IProcessOrderService ps = new ProcessOrderService(Settings.Default.db);
+            ps.CancelOrdersByIds(v.Split(',').ToList(), false);
+
+            return RedirectToAction("Index");
+        }
 
         private ActionResult ValidateProcessOrder(ProcessOrder processOrder)
         {

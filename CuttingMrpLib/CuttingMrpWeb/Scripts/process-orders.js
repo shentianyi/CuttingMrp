@@ -67,3 +67,27 @@ ProcessOrders.add_range_label_to_div = function (content, name, cls) {
 $('.datetime-picker').datetimepicker({
     lang: 'ch'
 })
+
+function cancelOrders() {
+    var ids = getCheckedIds();
+    if (ids.length > 0 && confirm("Sure to Cancel Selected?")) {
+        $("#cancelOrderIds").val(ids);
+        $("#cancelForm").submit();
+    }
+}
+
+function finishOrders() {
+    var ids = getCheckedIds();
+    if (ids.length > 0 && confirm("Sure to Finish Selected?")) {
+        $("#finishOrderIds").val(ids);
+        $("#finishForm").submit();
+    }
+}
+
+function getCheckedIds() {
+    var ids = [];
+    $(".orderNrCheck:checked").each(function () {
+        ids.push($(this).val());
+    });
+    return ids;
+}

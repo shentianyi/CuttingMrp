@@ -75,7 +75,7 @@
                         <td>
                             @if (item.canFinish)
                             {
-                                <input type="checkbox" id="orderNr" name="orderNr" value="@item.orderNr" />
+                                <input type="checkbox" class="orderNrCheck" id="orderNrCheck" name="orderNr" value="@item.orderNr" />
                                 @*@Html.CheckBox("orderNr",  new { value = item.orderNr})*@
                             }
                             else
@@ -115,6 +115,22 @@
         </tbody>
     </table>
 </div>
+
+<div>
+    <form action="/ProcessOrders/Finish" method="post" id="finishForm">
+        <input type="hidden" id="finishOrderIds" name="finishOrderIds" />
+        <input type="button" value="Finish" onclick="finishOrders()" />
+    </form>
+</div>
+
+<div>
+    <form action="/ProcessOrders/Cancel" method="post" id="cancelForm">
+        <input type="hidden" id="cancelOrderIds" name="cancelOrderIds" />
+        <input type="button" value="Cancel" onclick="cancelOrders()" />
+    </form>
+</div>
+
+
 <div class="col-sm-12" style="text-align:center;">
     <div class="clearfix pagination">
         <div class="pagination-inner">

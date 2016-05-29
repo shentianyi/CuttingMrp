@@ -25,16 +25,6 @@ namespace CuttingMrpWeb.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=wangsong-pc;Initial Catalog=CuttingMrp;Persist Security Info=True;Use" +
-            "r ID=sa;Password=wangsong")]
-        public string db {
-            get {
-                return ((string)(this["db"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("10")]
         public int pageSize {
             get {
@@ -44,10 +34,65 @@ namespace CuttingMrpWeb.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("cuttingmrp")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=Charlot-PC\\SQLEXPRESS;Initial Catalog=CuttingMrp;Persist Security Inf" +
+            "o=True;User ID=sa;Password=123456@")]
+        public string db {
+            get {
+                return ((string)(this["db"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(".\\Private$\\cuttingMrp")]
         public string mrpQueue {
             get {
                 return ((string)(this["mrpQueue"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("MRPContainer")]
+        public string stockContainer {
+            get {
+                return ((string)(this["stockContainer"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("MRPWh")]
+        public string stockWh {
+            get {
+                return ((string)(this["stockWh"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("MRPPosition")]
+        public string stockPosition {
+            get {
+                return ((string)(this["stockPosition"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("MRP")]
+        public string stockSource {
+            get {
+                return ((string)(this["stockSource"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("MRP")]
+        public string stockSourceType {
+            get {
+                return ((string)(this["stockSourceType"]));
             }
         }
     }
