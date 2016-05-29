@@ -59,7 +59,7 @@ namespace CuttingMrpWeb.Controllers
         // GET: Requirements/Edit/5
         public ActionResult Edit(int? id)
         {
-            Requirement requirement = GetRequirementById(id);
+            Requirement requirement = GetRequirementById(id.Value);
 
             if (requirement != null)
             {
@@ -103,17 +103,17 @@ namespace CuttingMrpWeb.Controllers
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {
-            try
-            {
+            //try
+            //{
                 // TODO: Add delete logic here
                 IRequirementService rs = new RequirementService(Settings.Default.db);
                 rs.DeleteById(id);
                 return RedirectToAction("Index"); 
-            }
-            catch
-            {
-                return View();
-            }
+            //}
+            //catch
+            //{
+            //    return View();
+            //}
         }
 
 

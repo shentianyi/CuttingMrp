@@ -16,7 +16,7 @@ namespace CuttingMrpWeb
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Stocks", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Requirements", action = "Index", id = UrlParameter.Optional }
             );
         }
     }

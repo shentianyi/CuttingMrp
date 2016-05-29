@@ -75,7 +75,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CuttingMrp.dbml</DependentUpon>
     </Compile>
-    <Compile Include="Data\ProcessOrderEnum.vb" />
+    <Compile Include="Data\ProcessOrderStatus.vb" />
     <Compile Include="Data\Repository\CalculateRepository.vb" />
     <Compile Include="Data\Repository\ICalculateRepository.vb" />
     <Compile Include="Data\Repository\INumericBuildRepository.vb" />
@@ -89,6 +89,7 @@
     <Compile Include="Model\DeriveType.vb" />
     <Compile Include="Data\Repository\IStockRepository.vb" />
     <Compile Include="Data\Repository\StockRepository.vb" />
+    <Compile Include="Model\ProcessOrderPartial.vb" />
     <Compile Include="Model\RequirementPartial.vb" />
     <Compile Include="Model\RequirementStatistics.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />

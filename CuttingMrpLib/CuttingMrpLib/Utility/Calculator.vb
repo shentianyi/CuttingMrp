@@ -34,7 +34,7 @@ Public Class Calculator
         '4 generate the order
         '5.find the related KANBAN card
 
-        ResetOrders({ProcessOrderEnum.Open}, settings.ReservedType, ProcessOrderEnum.SystemCancel)
+        ResetOrders({ProcessOrderStatus.Open}, settings.ReservedType, ProcessOrderStatus.SystemCancel)
         Dim toInsertOrders As List(Of ProcessOrder) = New List(Of ProcessOrder)
         Dim procOrderRepo As Repository(Of ProcessOrder) = New Repository(Of ProcessOrder)(New DataContext(DBConn))
         Dim orders As Hashtable = GetValidRequirement()
@@ -43,7 +43,7 @@ Public Class Calculator
         procOrderRepo.SaveAll()
     End Sub
 
-    Private Sub ResetOrders(targetStatus() As ProcessOrderEnum, reserveTypes As List(Of String), status As ProcessOrderEnum)
+    Private Sub ResetOrders(targetStatus() As ProcessOrderStatus, reserveTypes As List(Of String), status As ProcessOrderStatus)
         If reserveTypes Is Nothing Then
             reserveTypes = New List(Of String)
         End If
@@ -94,7 +94,7 @@ Public Class Calculator
                 Dim toinsert As ProcessOrder = New ProcessOrder With {.orderNr = ordernr,
                     .partNr = dic.Key, .derivedFrom = "MRP", .proceeDate = dateresult,
                     .OrderDerivations = en, .requirementId = " ", .sourceDoc = " ",
-                    .status = ProcessOrderEnum.Open, .sourceQuantity = sum, .actualQuantity = actualQty,
+                    .status = ProcessOrderStatus.Open, .sourceQuantity = sum, .actualQuantity = actualQty,
                     .completeRate = completeRate, .batchQuantity = currPart.moq}
                 result.Add(toinsert)
             Next

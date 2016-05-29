@@ -2,19 +2,6 @@
     width:120px;
 }
 
-.filter-detail>select{
-    width:200px;
-    text-align:center;
-}
-
-.filter-detail>select>option{
-    height:30px;
-    padding-left:20px;
-    padding-top:5px;
-    text-align:left;
-    border-bottom:1px solid #eeeeee;
-}
-
 .input-group-addon{
     background:#eeeeee;
 }
@@ -43,7 +30,7 @@
     background-color:#ffffff;
     position:fixed;
     top:30%;
-    left:30%;
+    left:25%;
     z-index:10000;
     box-shadow:1px 2px 20px black;
     padding:20px;
@@ -51,14 +38,11 @@
 .remove-process-order{
      margin-top: -40px;
      font-size: 1.3em;
-     color: #ff0000;
+     color: #ff6700;
      cursor:pointer;
 }
 .confirm-process-order{
     width:200px;
-    background:#ff6700;
-    color:white;
-    border:none;
 }
 /*@-webkit-keyframes bounceIn{
     0% {
