@@ -39,6 +39,15 @@ textarea {
     min-width:800px;
 }
 
+.navbar-nav>li{
+    width:140px;
+    text-align:center;
+}
+
+.navbar-nav>li>a{
+    color:white!important;
+}
+
 .IconA{
     text-align:center;
     white-space:nowrap;
@@ -49,9 +58,8 @@ textarea {
     font-size:1.2em;
 }
 
-.nav-choosed{
-    background:steelblue!important;
-    border-radius:5px!important;
+.nav-choosed>a{
+    background:steelblue!important; 
 }
 
 .nav-choosed>a{

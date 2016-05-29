@@ -3,18 +3,21 @@
 }
 
 .filter-p {
-    overflow: hidden;
-    -ms-text-overflow: ellipsis;
-    -o-text-overflow: ellipsis;
-    text-overflow: ellipsis;
+    -ms-word-break: break-all;
+    word-break: break-all;
 }
 
 .filter-content{
     border:1px solid black; 
     border-radius:4px;
-    height:36px;
-    line-height:34px;
-    text-align:center;
+    height:55px;
+    line-height:22px;
+    text-align:left;
+    padding-top:2px;
+}
+
+#basic-addon-filter{
+line-height:49px;
 }
 
 .space-mark{

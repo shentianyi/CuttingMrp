@@ -25,13 +25,10 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                @*<li>@Html.ActionLink("主页", "Index", "Home")</li>
-                    <li>@Html.ActionLink("关于", "About", "Home")</li>
-                    <li>@Html.ActionLink("联系方式", "Contact", "Home")</li>*@
-                <li>@Html.ActionLink("Requirement", "Index", "Requirements")</li>
-                <li>@Html.ActionLink("ProcessOrder","Index","ProcessOrders")</li>
-                <li>@Html.ActionLink("MrpRound", "Index", "MrpRounds")</li>
-                <li>@Html.ActionLink("Stock", "Index", "Stocks")</li>
+                <li class="nav-requirements">@Html.ActionLink("Requirement", "Index", "Requirements")</li>
+                <li class="nav-process-orders">@Html.ActionLink("ProcessOrder","Index","ProcessOrders")</li>
+                <li class="nav-mrp-round">@Html.ActionLink("MrpRound", "Index", "MrpRounds")</li>
+                <li class="nav-stocks">@Html.ActionLink("Stock", "Index", "Stocks")</li>
             </ul>
             @*@Html.Partial("_LoginPartial")*@
         </div>

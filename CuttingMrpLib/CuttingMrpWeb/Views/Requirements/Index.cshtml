@@ -11,24 +11,15 @@
     <div class="panel panel-default navbar-fixed-top" style="box-shadow: -2px 2px 4px #34313a;top:60px;">
         <div class="panel-body">
             <div class="col-sm-12" style="text-align:center;">
-                @*<div class="col-sm-2">
-                        <select class="form-control">
-                            <option>小时</option>
-                            <option>天</option>
-                            <option>周</option>
-                            <option>月</option>
-                        </select>
-                    </div>*@
-
                 <div class="col-sm-9 filter-content">
                     <span class="pull-right" id="basic-addon-filter"> <i class="glyphicon glyphicon-filter"></i> </span>
                     <div class="filter-p"></div>
                 </div>
 
-                <div class="col-sm-1" style="text-align:left;">
+                <div class="col-sm-1" style="margin-top:10px;text-align:left;">
                     <button class="btn btn-primary" type="submit">Search All</button>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-2" style="margin-top:10px;">
                     <button class="btn btn-success runMrp" type="button">Run MRP</button>
                 </div>
 
@@ -40,7 +31,7 @@
     </div>
 </form>
 
-<table class="table table-bordered" style="margin-top:100px;">
+<table class="table table-bordered" style="margin-top:110px;">
     <thead>
         <tr>
             <th> No. </th>
@@ -71,7 +62,7 @@
                     <td>@Html.DisplayFor(modelItem => item.derivedType)</td>
                     <td class="IconA">
                         <a href="@Url.Action("Edit", "Requirements" , new { id=item.id }) "> <i class="glyphicon glyphicon-pencil"></i></a>
-                        @*@Html.ActionLink("Details", "Details", new { id = item.id })*@ 
+                        @*@Html.ActionLink("Details", "Details", new { id = item.id })*@
                         <a href="@Url.Action("Delete", "Requirements" , new { id=item.id })"> <i class="glyphicon glyphicon-trash" style="color:#ff0000;"></i></a>
                     </td>
                 </tr>
@@ -142,28 +133,29 @@
         <div class="col-sm-12">
             <div class="input-group filter-detail">
                 <span class="input-group-addon" id="basic-addon-quantity">Quantity</span>
-                <input type="number" class="form-control" step="5" name="QuantityFrom" id="QuantityFrom" value="@ViewBag.Query.QuantityFrom" placeholder="Quantity From" aria-describedby="basic-addon-quantity">
+                <input type="number" class="form-control" name="QuantityFrom" id="QuantityFrom" value="@ViewBag.Query.QuantityFrom" placeholder="Quantity From" aria-describedby="basic-addon-quantity">
                 <span class="space-mark">~</span>
-                <input type="number" class="form-control" step="5" name="QuantityTo" id="QuantityTo" value="@ViewBag.Query.QuantityTo" placeholder="Quantity To" />
+                <input type="number" class="form-control" name="QuantityTo" id="QuantityTo" value="@ViewBag.Query.QuantityTo" placeholder="Quantity To" />
             </div>
         </div>
 
         <hr style="margin:10px;" />
 
         <div class="col-sm-12">
-            <div class="col-sm-6" style="margin-left:-15px;">
+            <div class="col-sm-5" style="margin-left:-15px;">
                 <div class="input-group filter-detail">
                     <span class="input-group-addon" id="basic-addon-stat" style="width:80px;">Status</span>
-                    @Html.DropDownList("Status", ViewData["statusList"] as IEnumerable<SelectListItem>)
+                    @Html.DropDownList("Status", ViewData["statusList"] as IEnumerable<SelectListItem>, new { @class="from-control"})
                 </div>
             </div>
-            <div class="col-sm-6" style="margin-left:10px;">
+            <div class="col-sm-6" style="margin-left:-20px;">
                 <div class="input-group filter-detail">
                     <span class="input-group-addon" id="basic-addon-derivedfrom">DerivedFrom</span>
-                    <input type="text" class="form-control" style="width:145px;" name="DerivedFrom" id="DerivedFrom" value="@ViewBag.Query.DerivedFrom" placeholder="Derived From" aria-describedby="basic-addon-derivedfrom">
+                    <input type="text" class="form-control" style="width:115px;" name="DerivedFrom" id="DerivedFrom" value="@ViewBag.Query.DerivedFrom" placeholder="Derived From" aria-describedby="basic-addon-derivedfrom">
                 </div>
             </div>
         </div>
+
         <div class="popModal_footer">
             <input type="submit" value="Search" class="btn btn-success FilterSearchBtn" data-dialogModalBut="ok" />
         </div>
@@ -212,7 +204,7 @@
     <hr />
 
     <div class="col-sm-12" style="text-align:right;">
-        <button class="btn btn-warning confirm-process-order" >CONFIRM</button>
+        <button class="btn btn-warning confirm-process-order">CONFIRM</button>
     </div>
 </div>
 

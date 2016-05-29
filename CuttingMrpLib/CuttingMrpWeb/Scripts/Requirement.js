@@ -8,7 +8,7 @@ Requirement.init = function () {
     var requiredtimeto = $('#RequiredTimeTo').val();
     var quantityfrom = $('#QuantityFrom').val() > 0 ? $('#QuantityFrom').val() : "";
     var quantityto = $('#QuantityTo').val() > 0 ? $('#QuantityTo').val() : "";
-    var status = $('#Status').val();
+    var status = $("#Status").children("option:selected").html();
     var derivedfrom = $('#DerivedFrom').val();
 
     Requirement.add_string_label_to_div(partNr, 'PartNr Like ', '.filter-p');
@@ -129,6 +129,7 @@ Requirement.run_mrp = function () {
     }
 }
 
-$('.datetime-picker').datetimepicker({
-    lang: 'ch'
-})
+window.onload = function () {
+    $('.navbar-nav li').removeClass("nav-choosed");
+    $('.nav-requirements').addClass("nav-choosed");
+}

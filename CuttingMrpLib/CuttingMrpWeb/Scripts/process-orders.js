@@ -1,6 +1,6 @@
 ﻿var ProcessOrders = {};
 
-ProcessOrders.init = function (){ 
+ProcessOrders.init = function () {
     var ordernr= $('#OrderNr').val();
     var sourcedoc = $('#SourceDoc').val();
     var derivedfrom = $('#DerivedFrom').val();
@@ -11,16 +11,18 @@ ProcessOrders.init = function (){
     var actualquantityto = $('#ActualQuantityTo').val() > 0 ? $('#ActualQuantityTo').val() : "";
     var completeratefrom = $('#CompleteRateFrom').val();
     var completerateto = $('#CompleteRateTo').val();
-    var status = $('#Status').val();
+    var status = $("#Status").children("option:selected").html();
+    var mrpround = $("#MrpRound").children("option:selected").html();
 
     ProcessOrders.add_string_label_to_div(ordernr, 'OrderNr like ', '.filter-p');
     ProcessOrders.add_string_label_to_div(sourcedoc, 'SourceDoc like ', '.filter-p');
     ProcessOrders.add_string_label_to_div(derivedfrom, 'DerivedFrom like ', '.filter-p');
-    ProcessOrders.add_range_label_to_div(proceedatefrom + "~" + proceedateto, 'ProceeDate ', '.filter-p');
     ProcessOrders.add_string_label_to_div(partnr, 'PartNr like ', '.filter-p');
+    ProcessOrders.add_string_label_to_div(status, 'Status =', '.filter-p');
+    ProcessOrders.add_string_label_to_div(mrpround, 'MrpRound =', '.filter-p');
+    ProcessOrders.add_range_label_to_div(proceedatefrom + "~" + proceedateto, 'ProceeDate ', '.filter-p');
     ProcessOrders.add_range_label_to_div(actualquantityfrom + "~" + actualquantityto, 'ActualQuantity ', '.filter-p');
     ProcessOrders.add_range_label_to_div(completeratefrom + "~" + completerateto, 'CompleteRate ', '.filter-p');
-    ProcessOrders.add_string_label_to_div(status, 'Status =', '.filter-p');
 }
 
 ProcessOrders.click_filter = function () {
@@ -100,4 +102,9 @@ ProcessOrders.export_porcess_order = function () {
     $('.export-process-order').click(function () {
         console.log("Export");
     })
+}
+
+window.onload = function () {
+    $('.navbar-nav li').removeClass("nav-choosed");
+    $('.nav-process-orders').addClass("nav-choosed");
 }

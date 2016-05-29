@@ -17,7 +17,7 @@
                     <div class="filter-p"></div>
                 </div>
 
-                <div class="col-sm-2">
+                <div class="col-sm-2" style="padding-top:10px;">
                     <button class="btn btn-primary" type="submit">Search All</button>
                 </div>
             </div>
@@ -25,7 +25,7 @@
     </div>
 </form>
 
-<table class="table table-bordered" style="margin-top:100px;">
+<table class="table table-bordered" style="margin-top:110px;">
     <thead>
         <tr>
             <th> No. </th>
@@ -144,23 +144,6 @@
 
 <script type="text/javascript">
     Stock.init();
-
-    $('#basic-addon-filter').click(function () {
-        $('#basic-addon-filter').popModal({
-            html: $('#extra-filter-content'),
-            placement: 'bottomRight',
-            showCloseBut: false,
-            onDocumentClickClose: true,
-            onOkBut: function () {
-            },
-            onCancelBut: function () {
-            },
-            onLoad: function () {
-            },
-            onClose: function () {
-            }
-        })
-    });
-
+    Stock.click_filter();
 </script>
 

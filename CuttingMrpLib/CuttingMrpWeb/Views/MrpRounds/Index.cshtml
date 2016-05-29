@@ -5,19 +5,18 @@
     ViewBag.Title = "MrpRounds";
 }
 
-@Styles.Render("~/Content/requirement")
+@Styles.Render("~/Content/mrp-rounds")
 
 <form action="/MrpRounds/Search" method="get">
     <div class="panel panel-default navbar-fixed-top" style="box-shadow: -2px 2px 4px #34313a;top:60px;">
         <div class="panel-body">
             <div class="col-sm-12" style="text-align:center;">
-          
-                <div class="col-sm-9 filter-content">
+                <div class="col-sm-10 filter-content">
                     <span class="pull-right" id="basic-addon-filter"> <i class="glyphicon glyphicon-filter"></i> </span>
                     <div class="filter-p"></div>
                 </div>
 
-                <div class="col-sm-1" style="text-align:left;">
+                <div class="col-sm-2" style="margin-top:10px;">
                     <button class="btn btn-primary" type="submit">Search All</button>
                 </div>
 
@@ -26,7 +25,7 @@
     </div>
 </form>
 
-<table class="table table-bordered" style="margin-top:100px;">
+<table class="table table-bordered" style="margin-top:110px;">
     <thead>
         <tr>
             <th> No. </th>
@@ -35,7 +34,6 @@
             <th>Time</th>
             <th>Launcher</th>
             <th>Text</th>
-            <th>Options</th>
         </tr>
     </thead>
     <tbody>
@@ -51,9 +49,6 @@
                     <td>@Html.DisplayFor(modelItem => item.time)</td>
                     <td>@Html.DisplayFor(modelItem => item.launcher)</td>
                     <td>@Html.DisplayFor(modelItem => item.text)</td>
-                    <td class="IconA">
-                       
-                    </td>
                 </tr>
             }
         }
@@ -88,40 +83,46 @@
     <div id="extra-filter-content">
         <div class="col-sm-12">
             <div class="input-group filter-detail">
-                <span class="input-group-addon" id="basic-addon-partnr" style="background:#0088cc;color:white;">MrpRoundId</span>
-                <input type="text" class="form-control" name="MrpRoundId" id="MrpRoundId" value="@ViewBag.Query.MrpRoundId" placeholder="MrpRoundId" aria-describedby="basic-addon-partnr">
+                <span class="input-group-addon" id="basic-addon-mrp-round-id" style="background:#0088cc;color:white;">MrpRoundID</span>
+                <input type="text" class="form-control" name="MrpRoundId" id="MrpRoundId" value="@ViewBag.Query.MrpRoundId" placeholder="MrpRoundId" aria-describedby="basic-addon-mrp-round-id">
             </div>
         </div>
-        <hr style="border:1px solid #eeeeee; margin:10px -20px;" />
+        <hr style="border:1px solid #eeeeee; margin:10px -10px;" />
+
         <div class="col-sm-12">
             <div class="input-group filter-detail">
-                <span class="input-group-addon" id="basic-addon-ordered-date">TimeFrom</span>
-                <input type="text" class="form-control datetime-picker" autocomplete="off" name="TimeFrom" id="TimeFrom" value="@ViewBag.Query.TimeFrom" placeholder="Time From" aria-describedby="basic-addon-ordered-date">
+                <span class="input-group-addon" id="basic-addon-time">TimeFrom</span>
+                <input type="text" class="form-control datetime-picker" autocomplete="off" name="TimeFrom" id="TimeFrom" value="@ViewBag.Query.TimeFrom" placeholder="Time From" aria-describedby="basic-addon-time">
                 <span class="space-mark">~</span>
-                <input type="text" class="form-control datetime-picker" autocomplete="off" name="TimeTo" id="TimeTo" value="@ViewBag.Query.TimeTo" placeholder="Time To" />
+                <input type="text" style="width:190px;" class="form-control datetime-picker" autocomplete="off" name="TimeTo" id="TimeTo" value="@ViewBag.Query.TimeTo" placeholder="Time To" />
             </div>
         </div>
 
-        <hr style="margin:10px;" />
-
-        <hr style="margin:10px;" />
-
-        <div class="col-sm-12">
+        <hr style="margin:15px;" />
+        <div class="col-sm-12" style="height:40px;"> 
             <div class="col-sm-6" style="margin-left:-15px;">
                 <div class="input-group filter-detail">
-                    <span class="input-group-addon" id="basic-addon-stat" style="width:80px;">Status</span>
+                    <span class="input-group-addon" id="basic-addon-status">Status</span>
                     @Html.DropDownList("RunningStatus", ViewData["statusList"] as IEnumerable<SelectListItem>)
                 </div>
             </div>
-            <div class="col-sm-6" style="margin-left:10px;">
+            <div class="col-sm-6" style="margin-left:5px;">
                 <div class="input-group filter-detail">
-                    <span class="input-group-addon" id="basic-addon-partnr" style="background:#0088cc;color:white;">Launcher</span>
-                    <input type="text" class="form-control" name="Launcher" id="Launcher" value="@ViewBag.Query.Launcher" placeholder="Launcher" aria-describedby="basic-addon-partnr">
+                    <span class="input-group-addon" id="basic-addon-launcher">Launcher</span>
+                    <input type="text" class="form-control" name="Launcher" id="Launcher" value="@ViewBag.Query.Launcher" placeholder="Launcher" aria-describedby="basic-addon-launcher">
                 </div>
             </div>
         </div>
+
         <div class="popModal_footer">
             <input type="submit" value="Search" class="btn btn-success FilterSearchBtn" data-dialogModalBut="ok" />
         </div>
     </div>
 </div>
+
+@Scripts.Render("~/bundles/mrp-rounds")
+
+<script type="text/javascript">
+    MrpRounds.init();
+    MrpRounds.click_filter();
+</script>

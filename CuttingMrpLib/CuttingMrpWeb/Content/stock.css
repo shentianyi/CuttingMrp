@@ -1,3 +1,7 @@
 ﻿.col-sm-12{
     min-width:800px;
 }
+
+.filter-p{
+    line-height:45px;
+}

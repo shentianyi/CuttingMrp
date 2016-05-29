@@ -19,31 +19,17 @@
 
                 <div class="col-sm-2" style="border-right:1px solid #eeeeee;">
                     <button class="btn btn-primary" type="submit" style="width:120px;">Search All</button>
-                    <hr style="margin:10px;" />
+                    <hr style="margin:5px;" />
                     <button class="btn btn-success export-process-order" type="button" style="width:120px;">EXPORT</button>
                 </div>
             </form>
-
-            @*<div>
-                    <form action="/ProcessOrders/Finish" method="post" id="finishForm">
-                        <input type="hidden" id="finishOrderIds" name="finishOrderIds" />
-                        <input type="button" value="Finish" onclick="finishOrders()" />
-                    </form>
-                </div>
-
-                <div>
-                    <form action="/ProcessOrders/Cancel" method="post" id="cancelForm">
-                        <input type="hidden" id="cancelOrderIds" name="cancelOrderIds" />
-                        <input type="button" value="Cancel" onclick="cancelOrders()" />
-                    </form>
-                </div>*@
 
             <div class="col-sm-2">
                 <form action="/ProcessOrders/Finish" method="post" id="finishForm">
                     <input type="hidden" id="finishOrderIds" name="finishOrderIds" />
                     <button class="btn btn-primary finish-process-order" type="button" style="width:120px;">Finish</button>
                 </form>
-                <hr style="margin:10px;" />
+                <hr style="margin:5px;" />
                 <form action="/ProcessOrders/Cancel" method="post" id="cancelForm">
                     <input type="hidden" id="cancelOrderIds" name="cancelOrderIds" />
                     <button class="btn btn-warning cancel-process-order" type="button" style="width:120px;">Cancel</button>
@@ -53,17 +39,17 @@
     </div>
 </div>
 
-<div class="panel panel-primary" style="margin-top:150px;margin-bottom:10px;">
+<div class="panel panel-primary" style="margin-top:130px;margin-bottom:10px;">
     <div class="panel-body">
         <div class="col-md-12" style="text-align:center;">
             <div class="col-md-2" style="border-right:1px solid steelblue;padding:8px;">
                 <h3>Statistics</h3>
             </div>
             <div class="col-md-5" style="border-right:1px solid steelblue;padding:0;">
-                <label>Latest </label>
+                <label>Latest: </label>
                 <label>@ViewBag.Info.latestOrderDate</label>
                 <hr style="margin:10px;" />
-                <label>Oldest</label>
+                <label>Oldest: </label>
                 <label>@ViewBag.Info.oldestOrderDate</label>
             </div>
             <div class="col-md-5">
@@ -164,7 +150,7 @@
                         .Options(o => o.AddRouteValue("CompleteRateFrom", ViewBag.Query.CompleteRateFrom))
                         .Options(o => o.AddRouteValue("CompleteRateTo", ViewBag.Query.CompleteRateTo))
                         .Options(o => o.AddRouteValue("Status", ViewBag.Query.Status))
-                        .Options(o=>o.AddRouteValue("MrpRound",ViewBag.Query.MrpRound));
+                        .Options(o => o.AddRouteValue("MrpRound", ViewBag.Query.MrpRound));
                     @html
                 }
                 else
@@ -183,10 +169,9 @@
                 <span class="input-group-addon" id="basic-addon-ordernr" style="background:#0088cc;color:white;">OrderNr</span>
                 <input type="text" class="form-control" name="OrderNr" id="OrderNr" value="@ViewBag.Query.OrderNr" placeholder="OrderNr" aria-describedby="basic-addon-ordernr">
                 <span class="input-group-addon">MrpRound</span>
-                @Html.DropDownList("MrpRound", ViewData["mrpRoundSelect"] as IEnumerable<SelectListItem>, new { @class = "form-control" })
 
-
-              </div>
+                @Html.DropDownList("MrpRound", ViewData["mrpRoundSelect"] as IEnumerable<SelectListItem>, new { @class = "form-control" ,@style= "width: 170px" })
+            </div>
         </div>
 
         <hr style="border:1px solid #eeeeee; margin:10px -20px;" />
