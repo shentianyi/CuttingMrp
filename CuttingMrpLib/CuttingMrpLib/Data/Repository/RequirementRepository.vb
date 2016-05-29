@@ -29,11 +29,11 @@ Public Class RequirementRepository
                 requires = requires.Where(Function(c) c.requiredDate <= searchModel.RequiredTimeTo)
             End If
 
-            If searchModel.QuantityFrom.HasValue > 0 Then
+            If searchModel.QuantityFrom.HasValue Then
                 requires = requires.Where(Function(c) c.quantity >= searchModel.QuantityFrom)
             End If
 
-            If searchModel.QuantityTo.HasValue > 0 Then
+            If searchModel.QuantityTo.HasValue Then
                 requires = requires.Where(Function(c) c.quantity <= searchModel.QuantityTo)
             End If
 
