@@ -28,6 +28,10 @@ namespace CuttingMrpWeb.Controllers
             SetProcessOrderStatusList(null);
 
             SetProcessOrderMrpRoundList(null);
+
+            ProcessOrderInfoModel info = ps.GetProcessOrderInfo(q);
+            ViewBag.Info = info;
+
             return View(processOrders);
         }
         // GET: ProcessOrders/Details/5
@@ -125,6 +129,11 @@ namespace CuttingMrpWeb.Controllers
 
             SetProcessOrderStatusList(q.Status);
             SetProcessOrderMrpRoundList(q.MrpRound);
+
+            ProcessOrderInfoModel info = ps.GetProcessOrderInfo(q);
+            ViewBag.Info = info;
+
+
             return View("Index", processOrders);
         }
 

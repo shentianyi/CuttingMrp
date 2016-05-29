@@ -57,19 +57,19 @@
     <div class="panel-body">
         <div class="col-md-12" style="text-align:center;">
             <div class="col-md-2" style="border-right:1px solid steelblue;padding:8px;">
-                <h3>统计</h3>
+                <h3>Statistics</h3>
             </div>
             <div class="col-md-5" style="border-right:1px solid steelblue;padding:0;">
-                <label>最早 </label>
-                <label>2016-05-29 00:00:00</label>
+                <label>Latest </label>
+                <label>@ViewBag.Info.latestOrderDate</label>
                 <hr style="margin:10px;" />
-                <label>最晚 </label>
-                <label>2016-05-30 00:00:00</label>
+                <label>Oldest</label>
+                <label>@ViewBag.Info.oldestOrderDate</label>
             </div>
             <div class="col-md-5">
-                <label>共200个订单</label>
+                <label>Total: @ViewBag.Info.processOrderCount  Orders</label>
                 <hr style="margin:10px;" />
-                <label>来自100个需求</label>
+                <label>From: @ViewBag.Info.requirementCount Requirements</label>
             </div>
         </div>
     </div>

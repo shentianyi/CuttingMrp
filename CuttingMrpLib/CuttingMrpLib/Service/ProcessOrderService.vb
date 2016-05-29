@@ -126,4 +126,21 @@ Public Class ProcessOrderService
             End If
         End If
     End Sub
+
+    Public Function GetProcessOrderInfo(conditions As ProcessOrderSearchModel) As ProcessOrderInfoModel Implements IProcessOrderService.GetProcessOrderInfo
+
+        Dim info As ProcessOrderInfoModel = New ProcessOrderInfoModel
+        Dim context = New DataContext(DBConn)
+        Dim repo As ProcessOrderRepository = New ProcessOrderRepository(context)
+        Dim q As IQueryable(Of ProcessOrder) = repo.Search(conditions)
+
+        info.latestOrder = q.OrderByDescending(Function(c) c.proceeDate).FirstOrDefault()
+        info.oldestOrder = q.OrderBy(Function(c) c.proceeDate).FirstOrDefault()
+        info.processOrderCount = q.Count
+        info.requirementCount = q.Select(Function(c) c.requirementId).Distinct().Count
+
+
+        Return info
+
+    End Function
 End Class
