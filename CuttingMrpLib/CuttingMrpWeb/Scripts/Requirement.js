@@ -86,12 +86,14 @@ Requirement.run_mrp = function () {
         });
 
         $('.confirm-process-order').click(function () {
+            var OrderType = $("input[name='OrderTypes']:checked").val();
+            var MergeMethodType = $("input[name='MergeMethodType']:checked").val();
             $.ajax({
                 url: "/Requirements/RunMrp",
                 type: "post",
                 data:{
-                    "OrderType": "FIX",
-                    "MergeMethod":"DAY"
+                    "OrderType": OrderType,
+                    "MergeMethod": MergeMethodType
                 },
                 success: function (data) {
                     //{"Result":true,"Msg":"MRP 任务运行成功!"}

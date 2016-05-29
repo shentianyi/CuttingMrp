@@ -54,11 +54,13 @@
                     <td> 
                         @if (item.canFinish)
                         {
-                         @Html.CheckBox("orderNr", new { value = item.orderNr })
+                            <input type="checkbox" id="orderNr" name="orderNr" value="@item.orderNr" />
+                            @*@Html.CheckBox("orderNr",  new { value = item.orderNr})*@
                         }
                         else
                         {
-                            @Html.CheckBox("orderNr", new { value = item.orderNr,@disabled=true })
+                            <input type="checkbox" id="orderNr" name="orderNr" disabled value="@item.orderNr" />
+                            @*@Html.CheckBox("orderNr", new { value = item.orderNr,@disabled=true })*@
                         }
                     </td>
                     <td>@(i += 1)</td>
