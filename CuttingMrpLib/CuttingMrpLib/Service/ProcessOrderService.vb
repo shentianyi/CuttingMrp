@@ -25,7 +25,7 @@ Public Class ProcessOrderService
             Throw New ArgumentNullException
         Else
             Dim repo As ProcessOrderRepository = New ProcessOrderRepository(New DataContext(DBConn))
-            Dim toCancel As IEnumerable(Of ProcessOrder) = repo.FindAll(Function(c) c.status = ProcessOrderStatus.Open And ids.Contains(c.orderNr) = False)
+            Dim toCancel As IEnumerable(Of ProcessOrder) = repo.FindAll(Function(c) c.status = ProcessOrderStatus.Open And ids.Contains(c.orderNr))
 
             For Each toCancelOrder As ProcessOrder In toCancel
                 If isSystem = True Then
@@ -97,4 +97,33 @@ Public Class ProcessOrderService
         End If
         Return result
     End Function
+
+    Public Sub FinishOrdersByIds(ids As List(Of String), fifo As DateTime, container As String, wh As String, position As String, source As String, sourceType As String) Implements IProcessOrderService.FinishOrdersByIds
+        If ids Is Nothing Then
+            Throw New ArgumentNullException
+        Else
+            Dim context = New DataContext(DBConn)
+            Dim repo As ProcessOrderRepository = New ProcessOrderRepository(context)
+
+            Dim stockRep As StockRepository = New StockRepository(context)
+
+            Dim toFinish As IEnumerable(Of ProcessOrder) = repo.FindAll(Function(c) c.status = ProcessOrderStatus.Open And ids.Contains(c.orderNr))
+            Dim stocks As List(Of Stock) = New List(Of Stock)
+            For Each toFinishOrder As ProcessOrder In toFinish
+                stocks.Add(New Stock With {.partNr = toFinishOrder.partNr,
+                           .fifo = fifo,
+                           .quantity = toFinishOrder.actualQuantity,
+                           .container = container,
+                           .wh = wh,
+                           .position = position,
+                           .source = toFinishOrder.orderNr,
+                           .sourceType = "ProcessOrder"})
+                toFinishOrder.status = ProcessOrderStatus.Finish
+            Next
+            If stocks.Count > 0 Then
+                stockRep.Inserts(stocks)
+                stockRep.SaveAll()
+            End If
+        End If
+    End Sub
 End Class

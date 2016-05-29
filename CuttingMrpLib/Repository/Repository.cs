@@ -67,6 +67,15 @@ namespace Repository
             return entity;
         }
 
+        public virtual void Insert(T entity)
+        {
+            _dataContextFactory.Context.GetTable<T>().InsertOnSubmit(entity);
+        }
+
+        public virtual void Inserts(List<T> entities) {
+            _dataContextFactory.Context.GetTable<T>().InsertAllOnSubmit <T>(entities);
+        }
+
         /// <summary>See IRepository.</summary>
         public void SaveAll()
         {
