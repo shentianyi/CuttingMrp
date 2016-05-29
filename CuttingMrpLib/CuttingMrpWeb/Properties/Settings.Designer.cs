@@ -95,5 +95,14 @@ namespace CuttingMrpWeb.Properties {
                 return ((string)(this["stockSourceType"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("20")]
+        public int mrpRoundSelectLimit {
+            get {
+                return ((int)(this["mrpRoundSelectLimit"]));
+            }
+        }
     }
 }

@@ -149,7 +149,8 @@
                         .Options(o => o.AddRouteValue("ActualQuantityTo", ViewBag.Query.ActualQuantityTo))
                         .Options(o => o.AddRouteValue("CompleteRateFrom", ViewBag.Query.CompleteRateFrom))
                         .Options(o => o.AddRouteValue("CompleteRateTo", ViewBag.Query.CompleteRateTo))
-                        .Options(o => o.AddRouteValue("Status", ViewBag.Query.Status));
+                        .Options(o => o.AddRouteValue("Status", ViewBag.Query.Status))
+                        .Options(o=>o.AddRouteValue("MrpRound",ViewBag.Query.MrpRound));
                     @html
                 }
                 else
@@ -167,7 +168,11 @@
             <div class="input-group filter-detail">
                 <span class="input-group-addon" id="basic-addon-ordernr" style="background:#0088cc;color:white;">OrderNr</span>
                 <input type="text" class="form-control" name="OrderNr" id="OrderNr" value="@ViewBag.Query.OrderNr" placeholder="OrderNr" aria-describedby="basic-addon-ordernr">
-            </div>
+                <span class="input-group-addon">MrpRound</span>
+                @Html.DropDownList("MrpRound", ViewData["mrpRoundSelect"] as IEnumerable<SelectListItem>, new { @class = "form-control" })
+
+
+              </div>
         </div>
 
         <hr style="border:1px solid #eeeeee; margin:10px -20px;" />

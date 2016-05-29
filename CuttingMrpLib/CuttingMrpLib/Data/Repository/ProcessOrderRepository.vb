@@ -67,6 +67,13 @@ Public Class ProcessOrderRepository
                 processOrders = processOrders.Where(Function(c) c.status.Equals(conditions.Status))
             End If
 
+            If Not String.IsNullOrWhiteSpace(conditions.MrpRound) Then
+                Dim ids As List(Of String) = _context.OrderDerivations.Where(Function(c) c.mrpRound.Equals(conditions.MrpRound)).Select(Function(c) c.orderId).Distinct.ToList
+                processOrders = processOrders.Where(Function(c) ids.Contains(c.orderNr))
+
+                'processOrders = processOrders.Where(Function(c) c.OrderDerivations.Where(Function(cc) cc.mrpRound.Equals(conditions.MrpRound)))
+            End If
+
             Return processOrders.OrderByDescending(Function(c) c.proceeDate)
         Else
             Throw New ArgumentNullException

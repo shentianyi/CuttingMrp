@@ -27,6 +27,7 @@ namespace CuttingMrpWeb.Controllers
 
             SetProcessOrderStatusList(null);
 
+            SetProcessOrderMrpRoundList(null);
             return View(processOrders);
         }
         // GET: ProcessOrders/Details/5
@@ -98,10 +99,10 @@ namespace CuttingMrpWeb.Controllers
         {
             //try
             //{
-                // TODO: Add delete logic here
-                IProcessOrderService ps = new ProcessOrderService(Settings.Default.db);
-                ps.DeleteById(id);
-                return RedirectToAction("Index");
+            // TODO: Add delete logic here
+            IProcessOrderService ps = new ProcessOrderService(Settings.Default.db);
+            ps.DeleteById(id);
+            return RedirectToAction("Index");
             //}
             //catch
             //{
@@ -110,7 +111,7 @@ namespace CuttingMrpWeb.Controllers
         }
 
 
-        public ActionResult Search([Bind(Include = "OrderNr,SourceDoc,DerivedFrom,ProceeDateFrom,ProceeDateTo,PartNr,ActualQuantityFrom,ActualQuantityTo,CompleteRateFrom,CompleteRateTo,Status")] ProcessOrderSearchModel q)
+        public ActionResult Search([Bind(Include = "OrderNr,SourceDoc,DerivedFrom,ProceeDateFrom,ProceeDateTo,PartNr,ActualQuantityFrom,ActualQuantityTo,CompleteRateFrom,CompleteRateTo,Status,MrpRound")] ProcessOrderSearchModel q)
         {
             int pageIndex = 0;
             int.TryParse(Request.QueryString.Get("page"), out pageIndex);
@@ -123,6 +124,7 @@ namespace CuttingMrpWeb.Controllers
             ViewBag.Query = q;
 
             SetProcessOrderStatusList(q.Status);
+            SetProcessOrderMrpRoundList(q.MrpRound);
             return View("Index", processOrders);
         }
 
@@ -190,5 +192,34 @@ namespace CuttingMrpWeb.Controllers
             }
             ViewData["statusList"] = select;
         }
+
+
+        private void SetProcessOrderMrpRoundList(string mrpRound, bool allowBlank = true)
+        {
+            IMrpRoundService mrs = new MrpRoundService(Settings.Default.db);
+
+            List<MrpRound> rounds = mrs.GetRecents(Settings.Default.mrpRoundSelectLimit);
+
+
+            List<SelectListItem> select = new List<SelectListItem>();
+            if (allowBlank)
+            {
+                select.Add(new SelectListItem { Text = "", Value = "" });
+            }
+            foreach (var it in rounds)
+            {
+                if ((!string.IsNullOrWhiteSpace(mrpRound)) && mrpRound.Equals(it.mrpRound))
+                {
+                    select.Add(new SelectListItem { Text = it.mrpRound, Value = it.mrpRound.ToString(), Selected = true });
+                }
+                else
+                {
+                    select.Add(new SelectListItem { Text = it.mrpRound, Value = it.mrpRound, Selected = false });
+                }
+            }
+            ViewData["mrpRoundSelect"] = select;
+        }
+
+
     }
 }
