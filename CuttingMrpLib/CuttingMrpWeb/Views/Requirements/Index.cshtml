@@ -145,13 +145,13 @@
             <div class="col-sm-6" style="margin-left:-15px;">
                 <div class="input-group filter-detail">
                     <span class="input-group-addon" id="basic-addon-stat" style="width:80px;">Status</span>
-                    @Html.DropDownList("Status", ViewData["statusList"] as IEnumerable<SelectListItem>, new { @class="from-control"})
+                    @Html.DropDownList("Status", ViewData["statusList"] as IEnumerable<SelectListItem>, new { @class="from-control", @style="width:200px;"})
                 </div>
             </div>
-            <div class="col-sm-6" style="margin-left:10px;">
+            <div class="col-sm-6" style="margin-left:15px;">
                 <div class="input-group filter-detail">
                     <span class="input-group-addon" id="basic-addon-derivedfrom">DerivedFrom</span>
-                    <input type="text" class="form-control" style="width:145px;" name="DerivedFrom" id="DerivedFrom" value="@ViewBag.Query.DerivedFrom" placeholder="Derived From" aria-describedby="basic-addon-derivedfrom">
+                    <input type="text" class="form-control" style="width:140px;" name="DerivedFrom" id="DerivedFrom" value="@ViewBag.Query.DerivedFrom" placeholder="Derived From" aria-describedby="basic-addon-derivedfrom">
                 </div>
             </div>
         </div>

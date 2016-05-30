@@ -17,7 +17,7 @@
                     <div class="filter-p"></div>
                 </div>
 
-                <div class="col-sm-2" style="border-right:1px solid #eeeeee;padding-bottom:20px; ">
+                <div class="col-sm-2" style="border-right:1px solid #eeeeee;">
                     <button class="btn btn-primary" type="submit" style="width:120px;">Search All</button>
                     <hr style="margin:5px;" />
                     @*<button class="btn btn-success export-process-order"
@@ -55,7 +55,7 @@
     </div>
 </div>
 
-<div class="panel panel-primary" style="margin-top:130px;margin-bottom:10px;">
+<div class="panel panel-primary" style="margin-top:140px;margin-bottom:10px;">
     <div class="panel-body">
         <div class="col-md-12" style="text-align:center;">
             <div class="col-md-2" style="border-right:1px solid steelblue;padding:8px;">
@@ -197,7 +197,7 @@
                 <span class="input-group-addon" id="basic-addon-sourcedoc-date">SourceDoc</span>
                 <input type="text" class="form-control" autocomplete="off" name="SourceDoc" id="SourceDoc" value="@ViewBag.Query.SourceDoc" placeholder="SourceDoc" aria-describedby="basic-addon-sourcedoc-date">
                 <span class="input-group-addon">DerivedFrom</span>
-                <input type="text" class="form-control" autocomplete="off" name="DerivedFrom" id="DerivedFrom" value="@ViewBag.Query.DerivedFrom" placeholder="DerivedFrom" />
+                <input type="text" style="width: 155px;" class="form-control" autocomplete="off" name="DerivedFrom" id="DerivedFrom" value="@ViewBag.Query.DerivedFrom" placeholder="DerivedFrom" />
             </div>
         </div>
         <hr style="margin:10px;" />
@@ -207,7 +207,7 @@
                 <span class="input-group-addon" id="basic-addon-partnr-date">PartNr</span>
                 <input type="text" class="form-control" autocomplete="off" name="PartNr" id="PartNr" value="@ViewBag.Query.PartNr" placeholder="SourceDoc" aria-describedby="basic-addon-partnr-date">
                 <span class="input-group-addon">Status</span>
-                @Html.DropDownList("Status", ViewData["statusList"] as IEnumerable<SelectListItem>, new { @class = "form-control" })
+                @Html.DropDownList("Status", ViewData["statusList"] as IEnumerable<SelectListItem>, new { @class = "form-control" ,@style="width:175px;"})
             </div>
         </div>
         <hr style="margin:10px;" />
