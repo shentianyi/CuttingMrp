@@ -55,7 +55,7 @@
     </div>
 </div>
 
-<div class="panel panel-primary" style="margin-top:140px;margin-bottom:10px;">
+<div class="panel panel-primary" style="margin-top:140px;margin-bottom:10px;min-width:700px;">
     <div class="panel-body">
         <div class="col-md-12" style="text-align:center;">
             <div class="col-md-2" style="border-right:1px solid steelblue;padding:8px;">
@@ -119,7 +119,7 @@
                         <td>@Html.DisplayFor(modelItem => item.orderNr)</td>
                         <td>@Html.DisplayFor(modelItem => item.sourceDoc)</td>
                         <td>@Html.DisplayFor(modelItem => item.derivedFrom)</td>
-                        <td>@Html.DisplayFor(modelItem => item.proceeDate)</td>
+                        <td style="white-space:nowrap;">@Html.DisplayFor(modelItem => item.proceeDate)</td>
                         <td>@Html.DisplayFor(modelItem => item.partNr)</td>
                         <td>@Html.DisplayFor(modelItem => item.sourceQuantity)</td>
                         <td>@Html.DisplayFor(modelItem => item.actualQuantity)</td>
@@ -127,17 +127,15 @@
                         <td>@Html.DisplayFor(modelItem => item.statusDisplay)</td>
                         <td>@Html.DisplayFor(modelItem => item.batchQuantity)</td>
                         <td>
-                            <a href="@Url.Action("Search", "Requirements" , new { orderNr=item.orderNr }) ">
+                            <a href="@Url.Action("Search", "Requirements" , new { orderNr=item.orderNr })" style="white-space:nowrap;">
                                 @(item.requirementCount.ToString() + " Requirements")
                             </a>
                         </td>
                         <td class="IconA">
                             <a href="@Url.Action("Edit", "ProcessOrders" , new { id=item.orderNr }) "> <i class="glyphicon glyphicon-pencil"></i></a>
-                            @*@Html.ActionLink("Edit", "Edit", new { id = item.orderNr }) |*@
                             @if (item.canDelete)
                             {
                                 <a href="@Url.Action("Delete", "ProcessOrders" , new { id=item.orderNr }) "> <i class="glyphicon glyphicon-trash" style="color:red;"></i></a>
-                                @*@Html.ActionLink("Delete", "Delete", new { id = item.orderNr })*@
                             }
                         </td>
                     </tr>
