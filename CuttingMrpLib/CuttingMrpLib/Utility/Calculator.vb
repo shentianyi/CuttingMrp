@@ -157,13 +157,15 @@ Public Class Calculator
         Dim orders As Hashtable = New Hashtable
         For Each requires In toUse
             For Each inv As SumOfStock In stocks
-                If inv.SumOfStock >= requires.quantity Then
-                    inv.SumOfStock = inv.SumOfStock - requires.quantity
-                    requires = Nothing
-                    Exit For
-                Else
-                    requires.quantity = requires.quantity - inv.SumOfStock
-                    inv = Nothing
+                If inv.partNr = requires.partNr Then
+                    If inv.SumOfStock >= requires.quantity Then
+                        inv.SumOfStock = inv.SumOfStock - requires.quantity
+                        requires = Nothing
+                        Exit For
+                    Else
+                        requires.quantity = requires.quantity - inv.SumOfStock
+                        inv = Nothing
+                    End If
                 End If
             Next
             If requires IsNot Nothing Then
