@@ -79,10 +79,8 @@ Requirement.run_mrp = function () {
         $('.remove-process-order').click(function () {
             $('#ProcessOrderMask').fadeOut(400);
             $('#ProcessOrder').fadeOut(400);
-            //是否需要手动刷新？  
-            //如手动刷新，注释此行
-            //如自动刷新，此行去注释
-            //window.location.reload();
+            
+            window.location.reload();
         });
 
         $('.confirm-process-order').click(function () {
@@ -96,8 +94,6 @@ Requirement.run_mrp = function () {
                     "MergeMethod": MergeMethodType
                 },
                 success: function (data) {
-                    //{"Result":true,"Msg":"MRP 任务运行成功!"}
-                    //{"Result":false,"Msg":"队列中已经有待运行的任务，请稍后再试"}
                     if (data.Result) {
                         ShowMsg("生成成功--", "glyphicon glyphicon-ok-circle", "green", data.Msg);
                     } else if (!data.Result) {
