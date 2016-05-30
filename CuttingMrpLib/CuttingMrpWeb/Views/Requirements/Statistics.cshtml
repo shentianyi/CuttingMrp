@@ -1,0 +1,59 @@
+﻿
+@model List<CuttingMrpLib.RequirementStatistics>
+@{
+    ViewBag.Title = "RequirementStatistics";
+}
+<div class="panel panel-primary">
+    <div class="panel-body">
+        <form action="/Requirements/Statistics" method="get">
+            <div class="col-sm-12">
+                <div class="col-sm-4">
+                    <h4>Statistics</h4>
+                </div>
+                <div class="col-sm-4">
+                    <div class="input-group filter-detail" style="text-align:right;">
+                        <span class="input-group-addon" id="basic-addon-status">StatisticsType</span>
+                        @Html.DropDownList("StatisticsType", ViewData["typeList"] as IEnumerable<SelectListItem>, new { @class = "form-control", @style="width:200px;" })
+                    </div>
+                </div>
+                <div class="col-sm-4" style="text-align:left;">
+                    <button class="btn btn-primary" type="submit" style="width:150px;">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="col-md-12">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th> No. </th>
+                <th>PartNr</th>
+                <th>SumOfQuantity</th>
+                <th>Condition</th>
+               
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                int i = 0;
+                foreach (var item in Model)
+                {
+                    <tr>
+                        
+
+                        <td>@(i += 1)</td>
+                        <td>@Html.DisplayFor(modelItem => item.PartNr)</td>
+                        <td>@Html.DisplayFor(modelItem => item.SumOfQuantity)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Condition)</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+@Scripts.Render("~/bundles/requirements")
+

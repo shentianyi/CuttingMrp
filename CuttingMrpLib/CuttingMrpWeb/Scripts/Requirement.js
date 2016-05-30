@@ -8,7 +8,7 @@ Requirement.init = function () {
     var requiredtimeto = $('#RequiredTimeTo').val();
     var quantityfrom = $('#QuantityFrom').val() > 0 ? $('#QuantityFrom').val() : "";
     var quantityto = $('#QuantityTo').val() > 0 ? $('#QuantityTo').val() : "";
-    var status = $('#Status').val();
+    var status = $("#Status").children("option:selected").html();
     var derivedfrom = $('#DerivedFrom').val();
 
     Requirement.add_string_label_to_div(partNr, 'PartNr Like ', '.filter-p');
@@ -40,7 +40,7 @@ Requirement.click_filter = function () {
 
 Requirement.add_string_label_to_div = function (content, name, cls) {
     if (content != null && content != "") {
-        $("<p class='label label-primary' style='margin-left:5px;font-size:.8em;'>" + name + " " + content + "</p>").appendTo(cls).ready(function () {
+        $("<p class='label label-primary' style='margin-left:5px;font-size:.8em;white-space:normal;'>" + name + " " + content + "</p>").appendTo(cls).ready(function () {
         });
     }
 }
@@ -49,13 +49,13 @@ Requirement.add_range_label_to_div = function (content, name, cls) {
     var from = content.split("~")[0];
     var to = content.split("~")[1];
     if ((from != "" && from != null) && (to != null && to != "")) {
-        $("<p class='label label-primary' style='margin-left:5px;font-size:.8em;'>" + name + " : " + from + "~" + to + "</p>").appendTo(cls).ready(function () {
+        $("<p class='label label-primary' style='margin-left:5px;font-size:.8em;white-space:normal;'>" + name + " : " + from + "~" + to + "</p>").appendTo(cls).ready(function () {
         });
     } else if ((from != "" && from != null) && (to == null || to == "")) {
-        $("<p class='label label-primary' style='margin-left:5px;font-size:.8em;'>" + name + ">=" + from + "</p>").appendTo(cls).ready(function () {
+        $("<p class='label label-primary' style='margin-left:5px;font-size:.8em;white-space:normal;'>" + name + ">=" + from + "</p>").appendTo(cls).ready(function () {
         });
     } else if ((from == "" || from == null) && (to != null && to != "")) {
-        $("<p class='label label-primary' style='margin-left:5px;font-size:.8em;'>" + name + "<=" + to + "</p>").appendTo(cls).ready(function () {
+        $("<p class='label label-primary' style='margin-left:5px;font-size:.8em;white-space:normal;'>" + name + "<=" + to + "</p>").appendTo(cls).ready(function () {
         });
     }
 }
@@ -127,4 +127,9 @@ Requirement.run_mrp = function () {
             "<label style='text-align:center;color:"+fontColor+";font-size:1em;'>"+contentMsg+"</label>" +
             "</div></div>").appendTo($('#ProcessOrder'));
     }
+}
+
+window.onload = function () {
+    $('.navbar-nav li').removeClass("nav-choosed");
+    $('.nav-requirements').addClass("nav-choosed");
 }

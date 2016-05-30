@@ -26,4 +26,6 @@ Public Class ProcessOrderSearchModel
 
     Public Property Status As Integer?
 
+    Public Property MrpRound As String
+
 End Class

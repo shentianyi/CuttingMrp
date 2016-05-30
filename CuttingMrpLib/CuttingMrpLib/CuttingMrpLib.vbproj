@@ -78,18 +78,21 @@
     <Compile Include="Data\ProcessOrderStatus.vb" />
     <Compile Include="Data\Repository\CalculateRepository.vb" />
     <Compile Include="Data\Repository\ICalculateRepository.vb" />
+    <Compile Include="Data\Repository\IMrpRoundRepository.vb" />
     <Compile Include="Data\Repository\INumericBuildRepository.vb" />
     <Compile Include="Data\Repository\IProcessOrderRepository.vb" />
     <Compile Include="Data\Repository\IRequirementRepository.vb" />
     <Compile Include="Data\Repository\NumericDefinitionRepository.vb" />
     <Compile Include="Data\Repository\ProcessOrderRepository.vb" />
     <Compile Include="Data\Repository\RequirementRepository.vb" />
+    <Compile Include="Data\Repository\MrpRoundRepository.vb" />
     <Compile Include="Data\RequirementStatus.vb" />
     <Compile Include="Model\CalculateSetting.vb" />
     <Compile Include="Model\DeriveType.vb" />
     <Compile Include="Data\Repository\IStockRepository.vb" />
     <Compile Include="Data\Repository\StockRepository.vb" />
     <Compile Include="Model\ProcessOrderPartial.vb" />
+    <Compile Include="Model\MrpRoundPartial.vb" />
     <Compile Include="Model\RequirementPartial.vb" />
     <Compile Include="Model\RequirementStatistics.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -112,16 +115,19 @@
     <Compile Include="Service\INumericService.vb" />
     <Compile Include="Service\IProcessOrderService.vb" />
     <Compile Include="Service\IRequirementService.vb" />
+    <Compile Include="Service\IMrpRoundService.vb" />
     <Compile Include="Service\NumericService.vb" />
     <Compile Include="Service\ProcessOrderService.vb" />
     <Compile Include="Service\RequirementService.vb" />
     <Compile Include="Service\ServiceBase.vb" />
     <Compile Include="Service\IStockService.vb" />
+    <Compile Include="Service\MrpRoundService.vb" />
     <Compile Include="Service\StockService.vb" />
     <Compile Include="Utility\EnumItem.vb" />
     <Compile Include="Utility\EnumUtility.vb" />
     <Compile Include="Utility\Calculator.vb" />
     <Compile Include="Utility\CalculatorSingleton.vb" />
+    <Compile Include="ViewModel\PageViewModel\ProcessOrderInfoModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\MRPSearchModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\ProcessOrderSearchModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\RequirementSearchModel.vb" />
@@ -157,9 +163,7 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModel\PageViewModel\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
   </ItemGroup>

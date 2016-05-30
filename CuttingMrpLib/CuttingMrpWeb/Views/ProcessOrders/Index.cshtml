@@ -7,40 +7,71 @@
 
 @Styles.Render("~/Content/process-order")
 
-<form action="/ProcessOrders/Search" method="get">
-    <div class="panel panel-default navbar-fixed-top" style="box-shadow: -2px 2px 4px #34313a;top:60px;">
-        <div class="panel-body">
-            <div class="col-sm-12" style="text-align:center;">
-                <div class="col-sm-10 filter-content">
+<div class="panel panel-default navbar-fixed-top" style="box-shadow: -2px 2px 4px #34313a;top:60px;">
+    <div class="panel-body">
+        <div class="col-sm-12" style="text-align:center;">
+            <form action="/ProcessOrders/Search" method="get">
+
+                <div class="col-sm-8 filter-content">
                     <span class="pull-right" id="basic-addon-filter"> <i class="glyphicon glyphicon-filter"></i> </span>
                     <div class="filter-p"></div>
                 </div>
 
-                <div class="col-sm-2" style="text-align:left;">
-                    <button class="btn btn-primary" type="submit">Search All</button>
+                <div class="col-sm-2" style="border-right:1px solid #eeeeee;">
+                    <button class="btn btn-primary" type="submit" style="width:120px;">Search All</button>
+                    <hr style="margin:5px;" />
+                    @*<button class="btn btn-success export-process-order"
+                             type="button" style="width:120px;" title="export searched results">EXPORT</button>*@
+                    @Html.ActionLink("EXPORT", "Export",new{
+                   OrderNr = ViewBag.Query.OrderNr,
+                   SourceDoc = ViewBag.Query.SourceDoc,
+                   DerivedFrom = ViewBag.Query.DerivedFrom,
+                   ProceeDateFrom = ViewBag.Query.ProceeDateFrom,
+                   ProceeDateTo = ViewBag.Query.ProceeDateTo,
+                   PartNr = ViewBag.Query.PartNr,
+                   ActualQuantityFrom = ViewBag.Query.ActualQuantityFrom,
+                   ActualQuantityTo = ViewBag.Query.ActualQuantityTo,
+                   CompleteRateFrom = ViewBag.Query.CompleteRateFrom,
+                   CompleteRateTo = ViewBag.Query.CompleteRateTo,
+                   Status = ViewBag.Query.Status,
+                   MrpRound = ViewBag.Query.MrpRound
+               }, new { @style = "width:120px;", @class = "btn btn-success export-process-order", @title= "export searched results" })
+
                 </div>
+            </form>
+
+            <div class="col-sm-2">
+                <form action="/ProcessOrders/Finish" method="post" id="finishForm">
+                    <input type="hidden" id="finishOrderIds" name="finishOrderIds" />
+                    <button class="btn btn-primary finish-process-order" type="button" style="width:120px;">Finish</button>
+                </form>
+                <hr style="margin:5px;" />
+                <form action="/ProcessOrders/Cancel" method="post" id="cancelForm">
+                    <input type="hidden" id="cancelOrderIds" name="cancelOrderIds" />
+                    <button class="btn btn-warning cancel-process-order" type="button" style="width:120px;">Cancel</button>
+                </form>
             </div>
         </div>
     </div>
-</form>
+</div>
 
-<div class="panel panel-primary" style="margin-top:100px;margin-bottom:10px;">
+<div class="panel panel-primary" style="margin-top:140px;margin-bottom:10px;min-width:700px;">
     <div class="panel-body">
         <div class="col-md-12" style="text-align:center;">
             <div class="col-md-2" style="border-right:1px solid steelblue;padding:8px;">
-                <h3>统计</h3>
+                <h3>Statistics</h3>
             </div>
             <div class="col-md-5" style="border-right:1px solid steelblue;padding:0;">
-                <label>最早 </label>
-                <label>2016-05-29 00:00:00</label>
+                <label>Latest: </label>
+                <label>@ViewBag.Info.latestOrderDate</label>
                 <hr style="margin:10px;" />
-                <label>最晚 </label>
-                <label>2016-05-30 00:00:00</label>
+                <label>Oldest: </label>
+                <label>@ViewBag.Info.oldestOrderDate</label>
             </div>
             <div class="col-md-5">
-                <label>共200个订单</label>
+                <label>Total: @ViewBag.Info.processOrderCount  Orders</label>
                 <hr style="margin:10px;" />
-                <label>来自100个需求</label>
+                <label>From: @ViewBag.Info.requirementCount Requirements</label>
             </div>
         </div>
     </div>
@@ -67,14 +98,14 @@
         </thead>
         <tbody>
             @if (Model != null)
-            {
-                int i = 0;
-                foreach (var item in Model)
-                {
+                    {
+                        int i = 0;
+                        foreach (var item in Model)
+                        {
                     <tr>
                         <td>
                             @if (item.canFinish)
-                            {
+                                    {
                                 <input type="checkbox" class="orderNrCheck" id="orderNrCheck" name="orderNr" value="@item.orderNr" />
                                 @*@Html.CheckBox("orderNr",  new { value = item.orderNr})*@
                             }
@@ -88,7 +119,7 @@
                         <td>@Html.DisplayFor(modelItem => item.orderNr)</td>
                         <td>@Html.DisplayFor(modelItem => item.sourceDoc)</td>
                         <td>@Html.DisplayFor(modelItem => item.derivedFrom)</td>
-                        <td>@Html.DisplayFor(modelItem => item.proceeDate)</td>
+                        <td style="white-space:nowrap;">@Html.DisplayFor(modelItem => item.proceeDate)</td>
                         <td>@Html.DisplayFor(modelItem => item.partNr)</td>
                         <td>@Html.DisplayFor(modelItem => item.sourceQuantity)</td>
                         <td>@Html.DisplayFor(modelItem => item.actualQuantity)</td>
@@ -96,17 +127,15 @@
                         <td>@Html.DisplayFor(modelItem => item.statusDisplay)</td>
                         <td>@Html.DisplayFor(modelItem => item.batchQuantity)</td>
                         <td>
-                           <a href="@Url.Action("Search", "Requirements" , new { orderNr=item.orderNr }) ">
+                            <a href="@Url.Action("Search", "Requirements" , new { orderNr=item.orderNr })" style="white-space:nowrap;">
                                 @(item.requirementCount.ToString() + " Requirements")
-                              </a>
+                            </a>
                         </td>
                         <td class="IconA">
                             <a href="@Url.Action("Edit", "ProcessOrders" , new { id=item.orderNr }) "> <i class="glyphicon glyphicon-pencil"></i></a>
-                            @*@Html.ActionLink("Edit", "Edit", new { id = item.orderNr }) |*@
                             @if (item.canDelete)
                             {
                                 <a href="@Url.Action("Delete", "ProcessOrders" , new { id=item.orderNr }) "> <i class="glyphicon glyphicon-trash" style="color:red;"></i></a>
-                                @*@Html.ActionLink("Delete", "Delete", new { id = item.orderNr })*@
                             }
                         </td>
                     </tr>
@@ -115,21 +144,6 @@
         </tbody>
     </table>
 </div>
-
-<div>
-    <form action="/ProcessOrders/Finish" method="post" id="finishForm">
-        <input type="hidden" id="finishOrderIds" name="finishOrderIds" />
-        <input type="button" value="Finish" onclick="finishOrders()" />
-    </form>
-</div>
-
-<div>
-    <form action="/ProcessOrders/Cancel" method="post" id="cancelForm">
-        <input type="hidden" id="cancelOrderIds" name="cancelOrderIds" />
-        <input type="button" value="Cancel" onclick="cancelOrders()" />
-    </form>
-</div>
-
 
 <div class="col-sm-12" style="text-align:center;">
     <div class="clearfix pagination">
@@ -149,7 +163,8 @@
                         .Options(o => o.AddRouteValue("ActualQuantityTo", ViewBag.Query.ActualQuantityTo))
                         .Options(o => o.AddRouteValue("CompleteRateFrom", ViewBag.Query.CompleteRateFrom))
                         .Options(o => o.AddRouteValue("CompleteRateTo", ViewBag.Query.CompleteRateTo))
-                        .Options(o => o.AddRouteValue("Status", ViewBag.Query.Status));
+                        .Options(o => o.AddRouteValue("Status", ViewBag.Query.Status))
+                        .Options(o => o.AddRouteValue("MrpRound", ViewBag.Query.MrpRound));
                     @html
                 }
                 else
@@ -167,6 +182,9 @@
             <div class="input-group filter-detail">
                 <span class="input-group-addon" id="basic-addon-ordernr" style="background:#0088cc;color:white;">OrderNr</span>
                 <input type="text" class="form-control" name="OrderNr" id="OrderNr" value="@ViewBag.Query.OrderNr" placeholder="OrderNr" aria-describedby="basic-addon-ordernr">
+                <span class="input-group-addon">MrpRound</span>
+
+                @Html.DropDownList("MrpRound", ViewData["mrpRoundSelect"] as IEnumerable<SelectListItem>, new { @class = "form-control" ,@style= "width: 170px" })
             </div>
         </div>
 
@@ -177,7 +195,7 @@
                 <span class="input-group-addon" id="basic-addon-sourcedoc-date">SourceDoc</span>
                 <input type="text" class="form-control" autocomplete="off" name="SourceDoc" id="SourceDoc" value="@ViewBag.Query.SourceDoc" placeholder="SourceDoc" aria-describedby="basic-addon-sourcedoc-date">
                 <span class="input-group-addon">DerivedFrom</span>
-                <input type="text" class="form-control" autocomplete="off" name="DerivedFrom" id="DerivedFrom" value="@ViewBag.Query.DerivedFrom" placeholder="DerivedFrom" />
+                <input type="text" style="width: 155px;" class="form-control" autocomplete="off" name="DerivedFrom" id="DerivedFrom" value="@ViewBag.Query.DerivedFrom" placeholder="DerivedFrom" />
             </div>
         </div>
         <hr style="margin:10px;" />
@@ -187,7 +205,7 @@
                 <span class="input-group-addon" id="basic-addon-partnr-date">PartNr</span>
                 <input type="text" class="form-control" autocomplete="off" name="PartNr" id="PartNr" value="@ViewBag.Query.PartNr" placeholder="SourceDoc" aria-describedby="basic-addon-partnr-date">
                 <span class="input-group-addon">Status</span>
-                @Html.DropDownList("Status", ViewData["statusList"] as IEnumerable<SelectListItem>, new { @class = "form-control" })
+                @Html.DropDownList("Status", ViewData["statusList"] as IEnumerable<SelectListItem>, new { @class = "form-control" ,@style="width:175px;"})
             </div>
         </div>
         <hr style="margin:10px;" />
@@ -231,4 +249,7 @@
 <script type="text/javascript">
     ProcessOrders.init();
     ProcessOrders.click_filter();
+    ProcessOrders.finish_porcess_order();
+    ProcessOrders.cancel_process_order();
+    //ProcessOrders.export_porcess_order();
 </script>

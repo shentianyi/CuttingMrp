@@ -9,4 +9,5 @@
     Function FindById(id As String) As ProcessOrder
     Function DeleteById(id As String) As Boolean
     Function Update(processOrder As ProcessOrder) As Boolean
+    Function GetProcessOrderInfo(conditions As ProcessOrderSearchModel) As ProcessOrderInfoModel
 End Interface

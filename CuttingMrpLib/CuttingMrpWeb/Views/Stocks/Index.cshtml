@@ -17,7 +17,7 @@
                     <div class="filter-p"></div>
                 </div>
 
-                <div class="col-sm-2">
+                <div class="col-sm-2" style="padding-top:10px;">
                     <button class="btn btn-primary" type="submit">Search All</button>
                 </div>
             </div>
@@ -25,7 +25,7 @@
     </div>
 </form>
 
-<table class="table table-bordered" style="margin-top:100px;">
+<table class="table table-bordered" style="margin-top:110px;">
     <thead>
         <tr>
             <th> No. </th>
@@ -127,15 +127,15 @@
                     <input type="text" class="form-control" name="Wh" id="Wh" value="@ViewBag.Query.Wh" placeholder="Wh" aria-describedby="basic-addon-wh">
                 </div>
             </div>
-            <div class="col-sm-6" style="text-align:left;margin-left: -32px;">
+            <div class="col-sm-6" style="text-align:left;margin-left: 30px;">
                 <div class="input-group filter-detail">
                     <span class="input-group-addon" id="basic-addon-position">Position</span>
-                    <input style="width:130px;" type="text" class="form-control" name="Position" id="Position" value="@ViewBag.Query.Position" placeholder="Position" aria-describedby="basic-addon-position">
+                    <input style="width:165px;" type="text" class="form-control" name="Position" id="Position" value="@ViewBag.Query.Position" placeholder="Position" aria-describedby="basic-addon-position">
                 </div>
             </div>
         </div>
-        <div class="popModal_footer">
-            <input type="submit" value="查询" class="btn btn-success FilterSearchBtn" data-dialogModalBut="ok" />
+        <div class="popModal_footer" style="padding-right:65px;">
+            <input type="submit" value="Serach" class="btn btn-success FilterSearchBtn" data-dialogModalBut="ok" />
         </div>
     </div>
 </div>
@@ -144,23 +144,6 @@
 
 <script type="text/javascript">
     Stock.init();
-
-    $('#basic-addon-filter').click(function () {
-        $('#basic-addon-filter').popModal({
-            html: $('#extra-filter-content'),
-            placement: 'bottomRight',
-            showCloseBut: false,
-            onDocumentClickClose: true,
-            onOkBut: function () {
-            },
-            onCancelBut: function () {
-            },
-            onLoad: function () {
-            },
-            onClose: function () {
-            }
-        })
-    });
-
+    Stock.click_filter();
 </script>
 
