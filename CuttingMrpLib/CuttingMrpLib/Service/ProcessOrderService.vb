@@ -134,10 +134,12 @@ Public Class ProcessOrderService
         Dim repo As ProcessOrderRepository = New ProcessOrderRepository(context)
         Dim q As IQueryable(Of ProcessOrder) = repo.Search(conditions)
 
+
         info.latestOrder = q.OrderByDescending(Function(c) c.proceeDate).FirstOrDefault()
         info.oldestOrder = q.OrderBy(Function(c) c.proceeDate).FirstOrDefault()
         info.processOrderCount = q.Count
-        info.requirementCount = q.Select(Function(c) c.requirementId).Distinct().Count
+        info.requirementCount = context.Context.GetTable(Of OrderDerivation).Where(Function(o) q.Select(Function(c) c.orderNr).Contains(o.orderId)).Count
+        'q.Select(Function(c) c.OrderDerivations).Distinct.Count
 
 
         Return info
