@@ -125,7 +125,7 @@ Public Class Calculator
                         actualQty = currPart.spq
                     Else
                         If sum Mod currPart.spq <> 0 Then
-                            actualQty = sum + sum - (sum Mod currPart.spq)
+                            actualQty = sum + (currPart.spq - (sum Mod currPart.spq))
                         End If
                     End If
                 End If
@@ -151,6 +151,7 @@ Public Class Calculator
         searchConditions.DerivedType = DeriveType.MRP
         searchConditions.Status = RequirementStatus.Open
         Dim toUse As List(Of Requirement) = requireRepo.Search(searchConditions).ToList
+        toUse = (From f In toUse Order By f.requiredDate, f.partNr Ascending).ToList
         Dim parts As List(Of String) = (From t In toUse Select t.partNr).ToList
         Dim stockrepo As Repository(Of SumOfStock) = New Repository(Of SumOfStock)(New DataContext(DBConn))
         Dim stocks As List(Of SumOfStock) = stockrepo.FindAll(Function(c) parts.Contains(c.partNr)).ToList
@@ -165,16 +166,13 @@ Public Class Calculator
         Next
         For Each requires In toUse
             If stockRecords.ContainsKey(requires.partNr) Then
-
                 If stockRecords(requires.partNr) >= requires.quantity Then
                     stockRecords(requires.partNr) = stockRecords(requires.partNr) - requires.quantity
                     requires = Nothing
-
                 Else
                     requires.quantity = requires.quantity - stockRecords(requires.partNr)
-                    stockRecords(requires.partNr) = Nothing
+                    stockRecords.Remove(requires.partNr)
                 End If
-
             End If
 
             If requires IsNot Nothing Then
