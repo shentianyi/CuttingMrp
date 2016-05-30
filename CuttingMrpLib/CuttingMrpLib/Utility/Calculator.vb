@@ -153,21 +153,30 @@ Public Class Calculator
         Dim toUse As IQueryable(Of Requirement) = requireRepo.Search(searchConditions)
         Dim parts As IQueryable(Of String) = (From t In toUse Select t.partNr)
         Dim stockrepo As Repository(Of SumOfStock) = New Repository(Of SumOfStock)(New DataContext(DBConn))
-        Dim stocks As IEnumerable(Of SumOfStock) = stockrepo.FindAll(Function(c) parts.Contains(c.partNr))
+        Dim stocks As List(Of SumOfStock) = stockrepo.FindAll(Function(c) parts.Contains(c.partNr)).ToList
         Dim orders As Hashtable = New Hashtable
+        Dim stockRecords As Hashtable = New Hashtable
+        For Each sto As SumOfStock In stocks
+            If stockRecords.ContainsKey(sto.partNr) Then
+                stockRecords(sto.partNr) = stockRecords(sto.partNr) + sto.SumOfStock
+            Else
+                stockRecords(sto.partNr) = sto.SumOfStock
+            End If
+        Next
         For Each requires In toUse
-            For Each inv As SumOfStock In stocks
-                If inv.partNr = requires.partNr Then
-                    If inv.SumOfStock >= requires.quantity Then
-                        inv.SumOfStock = inv.SumOfStock - requires.quantity
-                        requires = Nothing
-                        Exit For
-                    Else
-                        requires.quantity = requires.quantity - inv.SumOfStock
-                        inv = Nothing
-                    End If
+            If stockRecords.ContainsKey(requires.partNr) Then
+
+                If stockRecords(requires.partNr) >= requires.quantity Then
+                    stockRecords(requires.partNr) = stockRecords(requires.partNr) - requires.quantity
+                    requires = Nothing
+
+                Else
+                    requires.quantity = requires.quantity - stockRecords(requires.partNr)
+                    stockRecords(requires.partNr) = Nothing
                 End If
-            Next
+
+            End If
+           
             If requires IsNot Nothing Then
                 If orders.ContainsKey(requires.partNr) Then
                     orders(requires.partNr).add(requires)
