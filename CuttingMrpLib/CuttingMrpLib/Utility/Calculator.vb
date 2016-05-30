@@ -150,8 +150,8 @@ Public Class Calculator
         Dim searchConditions As RequirementSearchModel = New RequirementSearchModel
         searchConditions.DerivedType = DeriveType.MRP
         searchConditions.Status = RequirementStatus.Open
-        Dim toUse As IQueryable(Of Requirement) = requireRepo.Search(searchConditions).ToList
-        Dim parts As IQueryable(Of String) = (From t In toUse Select t.partNr)
+        Dim toUse As List(Of Requirement) = requireRepo.Search(searchConditions).ToList
+        Dim parts As List(Of String) = (From t In toUse Select t.partNr).ToList
         Dim stockrepo As Repository(Of SumOfStock) = New Repository(Of SumOfStock)(New DataContext(DBConn))
         Dim stocks As List(Of SumOfStock) = stockrepo.FindAll(Function(c) parts.Contains(c.partNr)).ToList
         Dim orders As Hashtable = New Hashtable
