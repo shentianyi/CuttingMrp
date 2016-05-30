@@ -176,7 +176,7 @@ Public Class Calculator
                 End If
 
             End If
-           
+
             If requires IsNot Nothing Then
                 If orders.ContainsKey(requires.partNr) Then
                     orders(requires.partNr).add(requires)
