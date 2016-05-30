@@ -50,7 +50,7 @@
 
     <!--text notification-->
     <appender type="log4net.Appender.RollingFileAppender" name="serviceLog">
-      <file value=".\svc.txt" />
+      <file value="svc.txt" />
       <appendToFile value="true" />
       <rollingStyle value="Size" />
       <maxSizeRollBackups value="10" />
@@ -62,7 +62,7 @@
     </appender>
 
     <appender type="log4net.Appender.RollingFileAppender" name="processLog">
-      <file value=".\proc.txt" />
+      <file value="proc.txt" />
       <appendToFile value="true" />
       <rollingStyle value="Size" />
       <maxSizeRollBackups value="10" />

@@ -31,7 +31,7 @@ Public Class Service1
                 MessageQueue.Create(My.Settings.queuepath)
             End If
             Dim qu As MessageQueue = New MessageQueue(My.Settings.queuepath)
-            qu.Formatter = New XmlMessageFormatter({GetType(String)})
+            qu.Formatter = New XmlMessageFormatter({GetType(CalculateSetting)})
             Dim msg As Message = qu.Receive
             If msg IsNot Nothing Then
                 Dim settings As CalculateSetting = msg.Body
