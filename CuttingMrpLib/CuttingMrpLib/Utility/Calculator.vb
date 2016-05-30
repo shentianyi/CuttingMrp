@@ -90,7 +90,7 @@ Public Class Calculator
         If reserveTypes Is Nothing Then
             reserveTypes = New List(Of String)
         End If
-        Dim repo As ProcessOrderRepository = New ProcessOrderRepository(New DataContext(My.Settings.db))
+        Dim repo As ProcessOrderRepository = New ProcessOrderRepository(New DataContext(DBConn))
         Dim toCancel As IEnumerable(Of ProcessOrder) = repo.FindAll(Function(c) targetStatus.Contains(c.status) And reserveTypes.Contains(c.derivedFrom) = False)
 
         For Each toCancelOrder As ProcessOrder In toCancel
