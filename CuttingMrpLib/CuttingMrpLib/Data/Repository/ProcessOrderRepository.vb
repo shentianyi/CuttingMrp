@@ -75,9 +75,9 @@ Public Class ProcessOrderRepository
             End If
 
             If Not String.IsNullOrWhiteSpace(conditions.KanbanNr) Then
-                processOrders = From o In processOrders
-                                From k In _context.BatchOrderTemplates
-                                Where o.Part.partNr.Equals(k.partNr) And k.orderNr.Contains(conditions.KanbanNr)
+                ' processOrders = processOrders.Where(Function(c) c.Part.BatchOrderTemplates.Where(Function(b) c.orderNr.Contains(conditions.KanbanNr)).Count > 0)
+
+
             End If
 
             Return processOrders.OrderByDescending(Function(c) c.proceeDate)

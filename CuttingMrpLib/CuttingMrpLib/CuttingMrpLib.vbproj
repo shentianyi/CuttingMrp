@@ -87,10 +87,13 @@
     <Compile Include="Data\Repository\RequirementRepository.vb" />
     <Compile Include="Data\Repository\MrpRoundRepository.vb" />
     <Compile Include="Data\RequirementStatus.vb" />
+    <Compile Include="Model\BatchFinishOrderRecord.vb" />
     <Compile Include="Model\CalculateSetting.vb" />
     <Compile Include="Model\DeriveType.vb" />
     <Compile Include="Data\Repository\IStockRepository.vb" />
     <Compile Include="Data\Repository\StockRepository.vb" />
+    <Compile Include="Model\PartPartial.vb" />
+    <Compile Include="Model\PartType.vb" />
     <Compile Include="Model\ProcessOrderPartial.vb" />
     <Compile Include="Model\MrpRoundPartial.vb" />
     <Compile Include="Model\RequirementPartial.vb" />

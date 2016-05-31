@@ -196,8 +196,8 @@
 
         <div class="col-sm-12">
             <div class="input-group filter-detail">
-                <span class="input-group-addon" id="basic-addon-sourcedoc-date">Kanbans</span>
-                <input type="text" class="form-control" autocomplete="off" name="SourceDoc" id="SourceDoc" value="@ViewBag.Query.SourceDoc" placeholder="Kanbans" aria-describedby="basic-addon-sourcedoc-date">
+                <span class="input-group-addon" id="basic-addon-sourcedoc-date">Kanban</span>
+                <input type="text" class="form-control" autocomplete="off" name="KanbanNr" id="KanbanNr" value="@ViewBag.Query.KanbanNr" placeholder="Kanban" aria-describedby="basic-addon-sourcedoc-date">
                 <span class="input-group-addon">KanbansType</span>
                 @Html.DropDownList("KanBansType", ViewData["mrpRoundSelect"] as IEnumerable<SelectListItem>, new { @class = "form-control", @style = "width: 170px" })
             </div>
