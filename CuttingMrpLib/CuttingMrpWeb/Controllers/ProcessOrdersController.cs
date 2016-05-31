@@ -254,9 +254,12 @@ namespace CuttingMrpWeb.Controllers
         }
 
         [HttpPost]
-        public void ImportForceRecord(HttpPostedFile file) {
-            string s = file.FileName;
+        public ActionResult ImportForceRecord(HttpPostedFileBase forceFile) {
+          
+            //HttpPostedFileBase file = Request.Files.Get(0);
+            string s = forceFile.FileName;
 
+            return null;
         }
 
         private ActionResult ValidateProcessOrder(ProcessOrder processOrder)

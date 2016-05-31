@@ -18,21 +18,25 @@ namespace CuttingMrpWeb.Controllers
         }
 
         // GET: Parts/Details/5
-    
+
         [HttpGet]
         public JsonResult Details(string id)
         {
             IPartService ps = new PartService(Settings.Default.db);
             Part part = ps.FindById(id);
-            PartViewModel pv = new PartViewModel()
+            PartViewModel pv = null;
+            if (part != null)
             {
-                partNr = part.partNr,
-                partTypeDisplay = part.partTypeDisplay,
-                partDesc = part.partDesc,
-                moq = part.moq,
-                spq = part.spq,
-                kanbanNr = part.kanbanNrs
-            };
+                pv = new PartViewModel()
+                {
+                    partNr = part.partNr,
+                    partTypeDisplay = part.partTypeDisplay,
+                    partDesc = part.partDesc,
+                    moq = part.moq,
+                    spq = part.spq,
+                    kanbanNr = part.kanbanNrs
+                };
+            }
             return Json(pv, JsonRequestBehavior.AllowGet);
         }
 
