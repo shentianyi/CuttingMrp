@@ -80,15 +80,15 @@
                 {
                     var html = Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
                         .Options(o => o.AddRouteValue("PartNr", ViewBag.Query.PartNr))
-                        .Options(o => o.AddRouteValue("OrderedDateFrom", ViewBag.Query.PartNr))
-                        .Options(o => o.AddRouteValue("OrderedDateTo", ViewBag.Query.PartNr))
-                        .Options(o => o.AddRouteValue("RequiredTimeFrom", ViewBag.Query.PartNr))
-                        .Options(o => o.AddRouteValue("RequiredTimeTo", ViewBag.Query.PartNr))
-                        .Options(o => o.AddRouteValue("QuantityFrom", ViewBag.Query.PartNr))
-                        .Options(o => o.AddRouteValue("QuantityTo", ViewBag.Query.PartNr))
-                        .Options(o => o.AddRouteValue("Status", ViewBag.Query.PartNr))
-                        .Options(o => o.AddRouteValue("DerivedFrom", ViewBag.Query.PartNr))
-                        .Options(o => o.AddRouteValue("DerivedType", ViewBag.Query.PartNr));
+                        .Options(o => o.AddRouteValue("OrderedDateFrom", ViewBag.Query.OrderedDateFrom))
+                        .Options(o => o.AddRouteValue("OrderedDateTo", ViewBag.Query.OrderedDateTo))
+                        .Options(o => o.AddRouteValue("RequiredTimeFrom", ViewBag.Query.RequiredTimeFrom))
+                        .Options(o => o.AddRouteValue("RequiredTimeTo", ViewBag.Query.RequiredTimeTo))
+                        .Options(o => o.AddRouteValue("QuantityFrom", ViewBag.Query.QuantityFrom))
+                        .Options(o => o.AddRouteValue("QuantityTo", ViewBag.Query.QuantityTo))
+                        .Options(o => o.AddRouteValue("Status", ViewBag.Query.Status))
+                        .Options(o => o.AddRouteValue("DerivedFrom", ViewBag.Query.DerivedFrom))
+                        .Options(o => o.AddRouteValue("DerivedType", ViewBag.Query.DerivedType));
                     @html
                 }
                 else
