@@ -69,7 +69,7 @@ Public Class Calculator
             ' repo.MarkForDeletion(m)
         Next
         Dim requireRepo As Repository(Of Requirement) = New Repository(Of Requirement)(dc)
-        Dim todeactives As IQueryable(Of Requirement) = requireRepo.FindAll(Function(c) c.status = RequirementStatus.Open)
+        Dim todeactives As IEnumerable(Of Requirement) = requireRepo.FindAll(Function(c) c.status = RequirementStatus.Open)
         For Each todeactive As Requirement In todeactives
             todeactive.status = RequirementStatus.CancelSystem
         Next
