@@ -219,6 +219,12 @@ Partial Public Class CuttingMrpDataContext
 			Return Me.GetTable(Of BatchOrderTemplate)
 		End Get
 	End Property
+	
+	Public ReadOnly Property ProcessOrderViews() As System.Data.Linq.Table(Of ProcessOrderView)
+		Get
+			Return Me.GetTable(Of ProcessOrderView)
+		End Get
+	End Property
 End Class
 
 <Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.StatusControl")>  _
@@ -3345,4 +3351,243 @@ Partial Public Class BatchOrderTemplate
 			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
 		End If
 	End Sub
+End Class
+
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.ProcessOrderView")>  _
+Partial Public Class ProcessOrderView
+	
+	Private _orderNr As String
+	
+	Private _sourceDoc As String
+	
+	Private _derivedFrom As String
+	
+	Private _proceeDate As Date
+	
+	Private _partNr As String
+	
+	Private _sourceQuantity As Double
+	
+	Private _actualQuantity As Double
+	
+	Private _completeRate As Double
+	
+	Private _status As Integer
+	
+	Private _requirementId As System.Nullable(Of Integer)
+	
+	Private _batchQuantity As System.Nullable(Of Double)
+	
+	Private _spq As System.Nullable(Of Double)
+	
+	Private _moq As System.Nullable(Of Double)
+	
+	Private _partStatus As Integer
+	
+	Private _partDesc As String
+	
+	Private _partType As Integer
+	
+	Public Sub New()
+		MyBase.New
+	End Sub
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_orderNr", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
+	Public Property orderNr() As String
+		Get
+			Return Me._orderNr
+		End Get
+		Set
+			If (String.Equals(Me._orderNr, value) = false) Then
+				Me._orderNr = value
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_sourceDoc", DbType:="VarChar(50)")>  _
+	Public Property sourceDoc() As String
+		Get
+			Return Me._sourceDoc
+		End Get
+		Set
+			If (String.Equals(Me._sourceDoc, value) = false) Then
+				Me._sourceDoc = value
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_derivedFrom", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
+	Public Property derivedFrom() As String
+		Get
+			Return Me._derivedFrom
+		End Get
+		Set
+			If (String.Equals(Me._derivedFrom, value) = false) Then
+				Me._derivedFrom = value
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_proceeDate", DbType:="DateTime NOT NULL")>  _
+	Public Property proceeDate() As Date
+		Get
+			Return Me._proceeDate
+		End Get
+		Set
+			If ((Me._proceeDate = value)  _
+						= false) Then
+				Me._proceeDate = value
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partNr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
+	Public Property partNr() As String
+		Get
+			Return Me._partNr
+		End Get
+		Set
+			If (String.Equals(Me._partNr, value) = false) Then
+				Me._partNr = value
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_sourceQuantity", DbType:="Float NOT NULL")>  _
+	Public Property sourceQuantity() As Double
+		Get
+			Return Me._sourceQuantity
+		End Get
+		Set
+			If ((Me._sourceQuantity = value)  _
+						= false) Then
+				Me._sourceQuantity = value
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_actualQuantity", DbType:="Float NOT NULL")>  _
+	Public Property actualQuantity() As Double
+		Get
+			Return Me._actualQuantity
+		End Get
+		Set
+			If ((Me._actualQuantity = value)  _
+						= false) Then
+				Me._actualQuantity = value
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_completeRate", DbType:="Float NOT NULL")>  _
+	Public Property completeRate() As Double
+		Get
+			Return Me._completeRate
+		End Get
+		Set
+			If ((Me._completeRate = value)  _
+						= false) Then
+				Me._completeRate = value
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_status", DbType:="Int NOT NULL")>  _
+	Public Property status() As Integer
+		Get
+			Return Me._status
+		End Get
+		Set
+			If ((Me._status = value)  _
+						= false) Then
+				Me._status = value
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_requirementId", DbType:="Int")>  _
+	Public Property requirementId() As System.Nullable(Of Integer)
+		Get
+			Return Me._requirementId
+		End Get
+		Set
+			If (Me._requirementId.Equals(value) = false) Then
+				Me._requirementId = value
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_batchQuantity", DbType:="Float")>  _
+	Public Property batchQuantity() As System.Nullable(Of Double)
+		Get
+			Return Me._batchQuantity
+		End Get
+		Set
+			If (Me._batchQuantity.Equals(value) = false) Then
+				Me._batchQuantity = value
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_spq", DbType:="Float")>  _
+	Public Property spq() As System.Nullable(Of Double)
+		Get
+			Return Me._spq
+		End Get
+		Set
+			If (Me._spq.Equals(value) = false) Then
+				Me._spq = value
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_moq", DbType:="Float")>  _
+	Public Property moq() As System.Nullable(Of Double)
+		Get
+			Return Me._moq
+		End Get
+		Set
+			If (Me._moq.Equals(value) = false) Then
+				Me._moq = value
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partStatus", DbType:="Int NOT NULL")>  _
+	Public Property partStatus() As Integer
+		Get
+			Return Me._partStatus
+		End Get
+		Set
+			If ((Me._partStatus = value)  _
+						= false) Then
+				Me._partStatus = value
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partDesc", DbType:="Text NOT NULL", CanBeNull:=false, UpdateCheck:=UpdateCheck.Never)>  _
+	Public Property partDesc() As String
+		Get
+			Return Me._partDesc
+		End Get
+		Set
+			If (String.Equals(Me._partDesc, value) = false) Then
+				Me._partDesc = value
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partType", DbType:="Int NOT NULL")>  _
+	Public Property partType() As Integer
+		Get
+			Return Me._partType
+		End Get
+		Set
+			If ((Me._partType = value)  _
+						= false) Then
+				Me._partType = value
+			End If
+		End Set
+	End Property
 End Class

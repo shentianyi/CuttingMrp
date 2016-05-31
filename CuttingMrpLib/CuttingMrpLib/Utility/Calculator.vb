@@ -66,14 +66,17 @@ Public Class Calculator
             For Each item As BomItem In tempBoms(m.partnr)
                 requires.Add(New Requirement With {.derivedFrom = m.sourceDoc, .derivedType = m.source, .orderedDate = m.orderedDate, .requiredDate = m.requiredDate, .partNr = item.componentId, .status = RequirementStatus.Open, .quantity = item.quantity * m.quantity})
             Next
-            repo.MarkForDeletion(m)
+            ' repo.MarkForDeletion(m)
         Next
         Dim requireRepo As Repository(Of Requirement) = New Repository(Of Requirement)(dc)
+        Dim todeactives As IQueryable(Of Requirement) = requireRepo.FindAll(Function(c) c.status = RequirementStatus.Open)
+        For Each todeactive As Requirement In todeactives
+            todeactive.status = RequirementStatus.CancelSystem
+        Next
         requireRepo.GetTable.InsertAllOnSubmit(requires)
         Using trans As New TransactionScope
             Try
                 requireRepo.SaveAll()
-                repo.SaveAll()
                 trans.Complete()
             Catch ex As Exception
                 Throw ex
@@ -220,13 +223,18 @@ Public Class Calculator
             Throw New ArgumentNullException
         End If
         Dim result As Hashtable = New Hashtable
-
+        collections = (From coll In collections Select coll Order By coll.requiredDate Ascending).ToList
         For Each coll As Requirement In collections
             Dim key As String = ""
             Select Case dateType.MergeType
                 Case "DAY"
-
-                    key = coll.requiredDate.ToString("yyyy-MM-dd")
+                    If dateType.Count < 1 Then
+                        Throw New Exception("Unsupported count" & dateType.Count & " of DAY method")
+                    Else
+                        If coll.requiredDate <= dateType.FirstDay Then
+                        End If
+                        key = coll.requiredDate.ToString("yyyy-MM-dd")
+                    End If
                 Case "WEEK"
                     'get the monday of each week
                     Dim delta As Integer = DayOfWeek.Monday - coll.requiredDate.DayOfWeek
