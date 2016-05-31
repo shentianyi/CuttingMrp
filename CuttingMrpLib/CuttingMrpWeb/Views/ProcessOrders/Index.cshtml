@@ -101,7 +101,7 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th> # </th>
+                <th><input type="button" value="All" onclick="check_all_cb()" current-state="0" /></th>
                 <th> No. </th>
                 <th>OrderNr</th>
                 <th>PartNr</th>
@@ -132,7 +132,7 @@
                             }
                             else
                             {
-                                <input type="checkbox" id="orderNr" name="orderNr" disabled value="@item.orderNr" />
+                                @*<input type="checkbox" id="orderNr" name="orderNr" disabled value="@item.orderNr" />*@
                             }
                         </td>
 

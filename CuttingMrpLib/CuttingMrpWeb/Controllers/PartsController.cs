@@ -34,7 +34,8 @@ namespace CuttingMrpWeb.Controllers
                     partDesc = part.partDesc,
                     moq = part.moq,
                     spq = part.spq,
-                    kanbanNr = part.kanbanNrs
+                    kanbanNr = part.kanbanNrs,
+                    position=part.kanbanPositions
                 };
             }
             return Json(pv, JsonRequestBehavior.AllowGet);

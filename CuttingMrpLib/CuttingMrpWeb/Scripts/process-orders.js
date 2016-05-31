@@ -124,11 +124,12 @@ ProcessOrders.show_part_nr_msg = function () {
                         $(NowPartNr).attr("title", "<strong>" + data.partNr + "</strong>");
                         $(NowPartNr).attr("data-content", "<ul class='part-nr-ul'>" +
                            "<li><label>labelartNr:</label>" + data.partNr + "</li>" +
-                           "<li><label>partTypeDisplay:</label>" + data.partTypeDisplay + "</li>" +
                            "<li><label>PartDesc:</label>" + data.partDesc + "</li>" +
+                           "<li><label>Kanban:</label>" + data.kanbanNr + "</li>" +
+                           "<li><label>partTypeDisplay:</label>" + data.partTypeDisplay + "</li>" +
                            "<li><label>moq(BundleQty):</label>" + data.moq + "</li>" +
                            "<li><label>spq(BatchQty):</label>" + data.spq + "</li>" +
-                           "<li><label>Type:</label>" + data.kanbanNr + "</li>" +
+                           "<li><label>Position:</label>" + data.position + "</li>" +
                            "</ul>");
                         $(NowPartNr).popover('show');
                     },

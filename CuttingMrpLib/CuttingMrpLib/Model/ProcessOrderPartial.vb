@@ -29,6 +29,23 @@
         End Get
     End Property
 
+    Public ReadOnly Property needChangeKbQty As Boolean
+        Get
+            ' Dim kb As BatchOrderTemplate = Me.Part.BatchOrderTemplates.FirstOrDefault
+            ' If kb IsNot Nothing Then
+            ' Return Me.actualQuantity <> kb.batchQuantity
+            ' End If
+            ' Return False
+            Return Me.actualQuantity <> Me.Part.spq
+        End Get
+    End Property
+
+    Public ReadOnly Property needChangeKbQtyDisplay As String
+        Get
+            Return If(Me.needChangeKbQty, "Y", "N")
+        End Get
+    End Property
+
     Public Shared CanFinishStatus As List(Of ProcessOrderStatus) = New List(Of ProcessOrderStatus) From {ProcessOrderStatus.Open}
     Public Shared CanDeleteStatus As List(Of ProcessOrderStatus) = New List(Of ProcessOrderStatus) From {ProcessOrderStatus.Open}
 

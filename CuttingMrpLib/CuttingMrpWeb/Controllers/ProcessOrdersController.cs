@@ -1,12 +1,16 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using CsvHelper;
+using CsvHelper.Configuration;
 using CuttingMrpLib;
 using CuttingMrpWeb.Helpers;
+using CuttingMrpWeb.Models;
 using CuttingMrpWeb.Properties;
 using MvcPaging;
 
@@ -153,7 +157,7 @@ namespace CuttingMrpWeb.Controllers
             {
                 List<string> head = new List<string> { " No.", "OrderNr", "PartNr", "Kanban","PartType(KB Type)","Status",
                     "ProceeDate","SourceQuantity","ActualQuantity","BatchQuantity","CompleteRate", "DerivedFrom" };
-                sw.WriteLine(string.Join(",", head));
+                sw.WriteLine(string.Join(Settings.Default.csvDelimiter, head));
                 for(var i=0; i<processOrders.Count; i++)
                 {
                     List<string> ii = new List<string>();
@@ -170,7 +174,7 @@ namespace CuttingMrpWeb.Controllers
                     ii.Add(processOrders[i].completeRate.ToString());
                     ii.Add(processOrders[i].derivedFrom);
 
-                    sw.WriteLine(string.Join(",", ii.ToArray()));
+                    sw.WriteLine(string.Join(Settings.Default.csvDelimiter, ii.ToArray()));
                 }
                 //sw.WriteLine(max);
             }
@@ -197,21 +201,23 @@ namespace CuttingMrpWeb.Controllers
             MemoryStream ms = new MemoryStream();
             using (StreamWriter sw = new StreamWriter(ms, Encoding.UTF8))
             {
-                List<string> head = new List<string> { " No.", "Kanban","Product", "PartNr", "PartType(KB Type)", "SourceQuantity", "ActualQuantity", "BatchQuantity" };
-                sw.WriteLine(string.Join(",", head));
+                List<string> head = new List<string> { " No.","Product", "PartNr", "Kanban", "PartType(KB Type)","Position", "ActualQuantity", "BundleQuantity", "BatchQuantity","ChangeQty" };
+                sw.WriteLine(string.Join(Settings.Default.csvDelimiter, head));
                 for (var i = 0; i < processOrders.Count; i++)
                 {
                     List<string> ii = new List<string>();
                     ii.Add((i + 1).ToString());
-                    ii.Add(processOrders[i].Part.kanbanNrs);
                     ii.Add(processOrders[i].Part.productNr);
                     ii.Add(processOrders[i].partNr);
+                    ii.Add(processOrders[i].Part.kanbanNrs);
                     ii.Add(processOrders[i].Part.partTypeDisplay);
-                    ii.Add(processOrders[i].sourceQuantity.ToString());
-                    ii.Add(processOrders[i].actualQuantity.ToString());
-                    ii.Add(processOrders[i].batchQuantity.ToString());
 
-                    sw.WriteLine(string.Join(",", ii.ToArray()));
+                    ii.Add(processOrders[i].Part.kanbanPositions);
+                    ii.Add(processOrders[i].actualQuantity.ToString());
+                    ii.Add(processOrders[i].Part.moq.ToString());
+                    ii.Add(processOrders[i].Part.spq.ToString());
+                    ii.Add(processOrders[i].needChangeKbQtyDisplay);
+                    sw.WriteLine(string.Join(Settings.Default.csvDelimiter, ii.ToArray()));
                 }
                 //sw.WriteLine(max);
             }
@@ -254,12 +260,70 @@ namespace CuttingMrpWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult ImportForceRecord(HttpPostedFileBase forceFile) {
-          
-            //HttpPostedFileBase file = Request.Files.Get(0);
-            string s = forceFile.FileName;
+        public ActionResult ImportForceRecord(HttpPostedFileBase forceFile)
+        {
+            try
+            {
+                string s = forceFile.FileName;
+                var appData = Server.MapPath("~/TmpFile/");
+                var filename = Path.Combine(appData,
+                    DateTime.Now.ToString("yyyyMMddHHmmss") + "_" + Path.GetFileName(forceFile.FileName));
+                forceFile.SaveAs(filename);
 
-            return null;
+                CsvConfiguration configuration = new CsvConfiguration();
+                configuration.Delimiter = Settings.Default.csvDelimiter;
+                configuration.HasHeaderRecord = true;
+                configuration.SkipEmptyRecords = true;
+                configuration.RegisterClassMap<ProcessOrderCsvModelMap>();
+                List<ProcessOrderCsvModel> records = new List<ProcessOrderCsvModel>();
+                using (var reader = new CsvReader(new StreamReader(filename), configuration))
+                {
+                    //reader.Read();
+                    //var header=  reader.FieldHeaders;
+                    records = reader.GetRecords<ProcessOrderCsvModel>().ToList();
+                }
+                bool success = true;
+                if (records.Count > 0)
+                {
+                    List<BatchFinishOrderRecord> vr = new List<BatchFinishOrderRecord>();
+                    foreach (ProcessOrderCsvModel r in records)
+                    {
+                        vr.Add(new BatchFinishOrderRecord()
+                        {
+                            FixOrderNr = r.KanbanNumber,
+                            PartNr = r.PartNumber,
+                            Amount =r.CutQty,
+                            ProdTime = r.CutDateTime
+                        });
+                    }
+                    IProcessOrderService ps = new ProcessOrderService(Settings.Default.db);
+                    Hashtable results = ps.ValidateFinishOrder(vr);
+                    success = !results.ContainsKey("WARN");
+                    ViewBag.Success = success;
+                    if (success)
+                    {
+                        ps.BatchFinishOrder(vr, true);
+                        ViewBag.Msg = "Finish Success!";
+
+                        return View();
+                    }
+                    else
+                    {
+                        ViewBag.Msg = "Validate Warning!";
+                        return View(results["WARN"] as List<BatchFinishOrderRecord>);
+                    }
+                }
+                else
+                {
+                    ViewBag.Msg = "No Record";
+
+                    return View();
+                }
+            }
+            catch (Exception ex) {
+                ViewBag.Msg = ex.Message;
+                return View();
+            }
         }
 
         private ActionResult ValidateProcessOrder(ProcessOrder processOrder)

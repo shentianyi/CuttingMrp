@@ -25,15 +25,6 @@ namespace CuttingMrpWeb.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("10")]
-        public int pageSize {
-            get {
-                return ((int)(this["pageSize"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute(".\\Private$\\cuttingMrp")]
         public string mrpQueue {
             get {
@@ -108,9 +99,18 @@ namespace CuttingMrpWeb.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute(";")]
-        public string importCsvDelimiter {
+        public string csvDelimiter {
             get {
-                return ((string)(this["importCsvDelimiter"]));
+                return ((string)(this["csvDelimiter"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
+        public int pageSize {
+            get {
+                return ((int)(this["pageSize"]));
             }
         }
     }
