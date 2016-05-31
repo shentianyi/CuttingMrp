@@ -239,12 +239,16 @@ Public Class ProcessOrderService
         End If
         Dim warning As List(Of BatchFinishOrderRecord) = New List(Of BatchFinishOrderRecord)
         Dim succ As List(Of BatchFinishOrderRecord) = New List(Of BatchFinishOrderRecord)
+        Dim kanbanRepo As Repository(Of BatchOrderTemplate) = New Repository(Of BatchOrderTemplate)(New DataContext(DBConn))
+
         For Each rec As BatchFinishOrderRecord In records
-            If PartExists(rec.PartNr) = False Then
+            Dim kanban As BatchOrderTemplate = kanbanRepo.SingleOrDefault(Function(c) c.orderNr = rec.FixOrderNr)
+            If kanban Is Nothing Then
                 rec.Warnings.Add("Part Nr " & rec.PartNr & " does not exist in the system")
                 warning.Add(rec)
             Else
-
+                rec.PartNr = kanban.partNr
+                succ.Add(rec)
             End If
         Next
         Dim result As Hashtable = New Hashtable

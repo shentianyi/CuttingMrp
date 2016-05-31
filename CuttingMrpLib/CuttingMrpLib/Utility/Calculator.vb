@@ -135,7 +135,7 @@ Public Class Calculator
                     completeRate = actualQty / sum
                 End If
                 Dim sourceDoc As String = " "
-                If settings.MergeMethod = "FIX" Then
+                If settings.OrderType = "FIX" Then
                     Dim fixorderrepo As Repository(Of BatchOrderTemplate) = New Repository(Of BatchOrderTemplate)(New DataContext(DBConn))
                     Dim fixorders As List(Of BatchOrderTemplate) = (From kbors In fixorderrepo.GetTable Where kbors.partNr = dic.Key Select kbors).ToList
                     If fixorders.Count > 0 Then
@@ -215,7 +215,7 @@ Public Class Calculator
     ''' </param>
     ''' <param name="collections"></param>
     ''' <returns></returns>
-    Public Function GroupByDate(dateType As String, collections As List(Of Requirement))
+    Public Function GroupByDate(dateType As MergeMethod, collections As List(Of Requirement))
         If collections Is Nothing Or dateType Is Nothing Then
             Throw New ArgumentNullException
         End If
@@ -223,8 +223,9 @@ Public Class Calculator
 
         For Each coll As Requirement In collections
             Dim key As String = ""
-            Select Case dateType
+            Select Case dateType.MergeType
                 Case "DAY"
+
                     key = coll.requiredDate.ToString("yyyy-MM-dd")
                 Case "WEEK"
                     'get the monday of each week
@@ -245,5 +246,4 @@ Public Class Calculator
         Next
         Return result
     End Function
-
 End Class

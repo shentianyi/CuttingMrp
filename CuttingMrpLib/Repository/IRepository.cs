@@ -26,6 +26,7 @@ namespace Repository
         /// Throws an exception if there is not exactly one such entity.</summary>
         /// <param name="exp"></param><returns></returns>
         T Single(Func<T, bool> exp);
+        T SingleOrDefault(Func<T, bool> exp);
 
         /// <summary>Returns the first element satisfying the condition.</summary>
         /// <param name="exp"></param><returns></returns>
