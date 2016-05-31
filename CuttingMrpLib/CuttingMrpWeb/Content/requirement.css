@@ -15,7 +15,7 @@
    position:fixed;
    top:0;
    left:0;
-   z-index:9999;
+   z-index:999;
    display:none;
 }
 
@@ -24,14 +24,14 @@
     border:5px solid #34313a;
     border-radius:20px;
     width:600px;
-    height:340px;
+    height:420px;
     margin:0 auto;
     display:none;
     background-color:#ffffff;
     position:fixed;
-    top:30%;
+    top:28%;
     left:25%;
-    z-index:10000;
+    z-index:1000;
     box-shadow:1px 2px 20px black;
     padding:20px;
 }
