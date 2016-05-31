@@ -121,7 +121,7 @@ Public Class Calculator
                 Dim en As EntitySet(Of OrderDerivation) = New EntitySet(Of OrderDerivation)
                 en.AddRange(toInsertRefer)
                 Dim partRepo As Repository(Of Part) = New Repository(Of Part)(New DataContext(DBConn))
-                Dim currPart As Part = partRepo.First(Function(c) c.partNr = dic.Key)
+                Dim currPart As Part = partRepo.First(Function(c) c.partNr = CType(dic.Key, String))
                 Dim actualQty As Double
                 If sum > 0 Then
                     If sum < currPart.spq Then
@@ -241,7 +241,7 @@ Public Class Calculator
                                 key = FindBasicDate(dateType.FirstDay, coll.requiredDate, dateType.Count).ToString("yyyy-MM-dd")
                             End If
                         End If
-                        key = coll.requiredDate.ToString("yyyy-MM-dd")
+
                     End If
                 Case "WEEK"
                     'get the monday of each week
@@ -254,6 +254,8 @@ Public Class Calculator
                 Case "YEAR"
                     key = coll.requiredDate.ToString("yyyy") & "-01-01"
                     Throw New NotImplementedException
+                Case Else
+                    Throw New Exception("Unsupported Merge Method")
             End Select
             If result.ContainsKey(key) Then
                 result(key).add(coll)
