@@ -83,10 +83,13 @@ Requirement.run_mrp = function () {
         $('#ProcessOrderMask').fadeIn(0);
         $('#ProcessOrder').fadeIn(400);
 
+        $("input[name='MergeMethodType']").change(function () {
+            $('.choosed-merge-method-type').html($(this).val());
+        });
+
         $('.remove-process-order').click(function () {
             $('#ProcessOrderMask').fadeOut(400);
             $('#ProcessOrder').fadeOut(400);
-            
             window.location.reload();
         });
 
