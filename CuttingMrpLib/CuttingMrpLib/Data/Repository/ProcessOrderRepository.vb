@@ -74,6 +74,12 @@ Public Class ProcessOrderRepository
                 'processOrders = processOrders.Where(Function(c) c.OrderDerivations.Where(Function(cc) cc.mrpRound.Equals(conditions.MrpRound)))
             End If
 
+            If Not String.IsNullOrWhiteSpace(conditions.KanbanNr) Then
+                processOrders = From o In processOrders
+                                From k In _context.BatchOrderTemplates
+                                Where o.Part.partNr.Equals(k.partNr) And k.orderNr.Contains(conditions.KanbanNr)
+            End If
+
             Return processOrders.OrderByDescending(Function(c) c.proceeDate)
         Else
             Throw New ArgumentNullException
