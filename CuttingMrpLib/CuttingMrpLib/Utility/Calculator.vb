@@ -66,14 +66,17 @@ Public Class Calculator
             For Each item As BomItem In tempBoms(m.partnr)
                 requires.Add(New Requirement With {.derivedFrom = m.sourceDoc, .derivedType = m.source, .orderedDate = m.orderedDate, .requiredDate = m.requiredDate, .partNr = item.componentId, .status = RequirementStatus.Open, .quantity = item.quantity * m.quantity})
             Next
-            repo.MarkForDeletion(m)
+            ' repo.MarkForDeletion(m)
         Next
         Dim requireRepo As Repository(Of Requirement) = New Repository(Of Requirement)(dc)
+        Dim todeactives As IQueryable(Of Requirement) = requireRepo.FindAll(Function(c) c.status = RequirementStatus.Open)
+        For Each todeactive As Requirement In todeactives
+            todeactive.status = RequirementStatus.CancelSystem
+        Next
         requireRepo.GetTable.InsertAllOnSubmit(requires)
         Using trans As New TransactionScope
             Try
                 requireRepo.SaveAll()
-                repo.SaveAll()
                 trans.Complete()
             Catch ex As Exception
                 Throw ex
@@ -220,21 +223,37 @@ Public Class Calculator
             Throw New ArgumentNullException
         End If
         Dim result As Hashtable = New Hashtable
-
+        collections = (From coll In collections Select coll Order By coll.requiredDate Ascending).ToList
         For Each coll As Requirement In collections
             Dim key As String = ""
             Select Case dateType.MergeType
                 Case "DAY"
+                    If dateType.Count < 1 Then
+                        Throw New Exception("Unsupported count" & dateType.Count & " of DAY method")
+                    Else
+                        '有需求日期小于基准日的订单
+                        If coll.requiredDate < dateType.FirstDay Then
 
-                    key = coll.requiredDate.ToString("yyyy-MM-dd")
+                        Else
+                            If coll.requiredDate < dateType.FirstDay.AddDays(dateType.Count) Then
+                                key = dateType.FirstDay.ToString("yyyy-MM-dd")
+                            Else
+                                key = FindBasicDate(dateType.FirstDay, coll.requiredDate, dateType.Count).ToString("yyyy-MM-dd")
+                            End If
+                        End If
+                        key = coll.requiredDate.ToString("yyyy-MM-dd")
+                    End If
                 Case "WEEK"
                     'get the monday of each week
                     Dim delta As Integer = DayOfWeek.Monday - coll.requiredDate.DayOfWeek
                     key = coll.requiredDate.AddDays(delta).ToString("yyyy-MM-dd")
+                    Throw New NotImplementedException
                 Case "MONTH"
                     key = coll.requiredDate.ToString("yyyy-MM") & "-01"
+                    Throw New NotImplementedException
                 Case "YEAR"
                     key = coll.requiredDate.ToString("yyyy") & "-01-01"
+                    Throw New NotImplementedException
             End Select
             If result.ContainsKey(key) Then
                 result(key).add(coll)
@@ -246,4 +265,35 @@ Public Class Calculator
         Next
         Return result
     End Function
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="firstBasicDate">基准日</param>
+    ''' <param name="currentDate">当前时间（需要计算归属合并日的时间）</param>
+    ''' <param name="count">时间跨度</param>
+    ''' <returns></returns>
+    Public Function FindBasicDate(firstBasicDate As Date, currentDate As Date, count As Integer) As Date
+        Dim returnedDate As Date
+        Dim daydiff As Integer
+        If currentDate < firstBasicDate Then
+            If Math.Floor((firstBasicDate - currentDate).TotalDays) < count Then
+                returnedDate = firstBasicDate.AddDays(-count)
+            Else
+                Dim element As Double = (firstBasicDate - currentDate).TotalDays
+                daydiff = -(Math.Floor((firstBasicDate - currentDate).TotalDays) Mod count)
+                returnedDate = currentDate.AddDays(daydiff)
+            End If
+        Else
+            If Math.Ceiling((currentDate - firstBasicDate).TotalDays) < count Then
+                returnedDate = firstBasicDate
+            Else
+                daydiff = -(Math.Ceiling((currentDate - firstBasicDate).TotalDays) Mod count)
+                returnedDate = currentDate.AddDays(daydiff)
+            End If
+
+        End If
+        Return returnedDate
+    End Function
+
+
 End Class

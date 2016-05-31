@@ -215,7 +215,6 @@ Public Class ProcessOrderService
                 orderrepo.SaveAll()
                 stockrepo.SaveAll()
                 scope.Complete()
-
             Catch ex As Exception
                 Throw New Exception("写入数据库时出现错误", ex)
             End Try

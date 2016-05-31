@@ -168,4 +168,24 @@
       <Association Name="Part_BatchOrderTemplate" Member="Part" ThisKey="partNr" OtherKey="partNr" Type="Part" IsForeignKey="true" />
     </Type>
   </Table>
+  <Table Name="dbo.ProcessOrderView" Member="ProcessOrderViews">
+    <Type Name="ProcessOrderView">
+      <Column Name="orderNr" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="sourceDoc" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="derivedFrom" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="proceeDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="partNr" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="sourceQuantity" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="actualQuantity" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="completeRate" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="requirementId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="batchQuantity" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="spq" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="moq" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="partStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="partDesc" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="partType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
 </Database>
