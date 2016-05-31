@@ -69,7 +69,7 @@ Public Class Calculator
             ' repo.MarkForDeletion(m)
         Next
         Dim requireRepo As Repository(Of Requirement) = New Repository(Of Requirement)(dc)
-        Dim todeactives As IQueryable(Of Requirement) = requireRepo.FindAll(Function(c) c.status = RequirementStatus.Open)
+        Dim todeactives As IEnumerable(Of Requirement) = requireRepo.FindAll(Function(c) c.status = RequirementStatus.Open)
         For Each todeactive As Requirement In todeactives
             todeactive.status = RequirementStatus.CancelSystem
         Next
@@ -121,7 +121,7 @@ Public Class Calculator
                 Dim en As EntitySet(Of OrderDerivation) = New EntitySet(Of OrderDerivation)
                 en.AddRange(toInsertRefer)
                 Dim partRepo As Repository(Of Part) = New Repository(Of Part)(New DataContext(DBConn))
-                Dim currPart As Part = partRepo.First(Function(c) c.partNr = dic.Key)
+                Dim currPart As Part = partRepo.First(Function(c) c.partNr = CType(dic.Key, String))
                 Dim actualQty As Double
                 If sum > 0 Then
                     If sum < currPart.spq Then
@@ -140,7 +140,7 @@ Public Class Calculator
                 Dim sourceDoc As String = " "
                 If settings.OrderType = "FIX" Then
                     Dim fixorderrepo As Repository(Of BatchOrderTemplate) = New Repository(Of BatchOrderTemplate)(New DataContext(DBConn))
-                    Dim fixorders As List(Of BatchOrderTemplate) = (From kbors In fixorderrepo.GetTable Where kbors.partNr = dic.Key Select kbors).ToList
+                    Dim fixorders As List(Of BatchOrderTemplate) = (From kbors In fixorderrepo.GetTable Where kbors.partNr = CType(dic.Key, String) Select kbors).ToList
                     If fixorders.Count > 0 Then
                         sourceDoc = ""
                         For Each fo As BatchOrderTemplate In fixorders
@@ -241,7 +241,7 @@ Public Class Calculator
                                 key = FindBasicDate(dateType.FirstDay, coll.requiredDate, dateType.Count).ToString("yyyy-MM-dd")
                             End If
                         End If
-                        key = coll.requiredDate.ToString("yyyy-MM-dd")
+
                     End If
                 Case "WEEK"
                     'get the monday of each week
@@ -254,6 +254,8 @@ Public Class Calculator
                 Case "YEAR"
                     key = coll.requiredDate.ToString("yyyy") & "-01-01"
                     Throw New NotImplementedException
+                Case Else
+                    Throw New Exception("Unsupported Merge Method")
             End Select
             If result.ContainsKey(key) Then
                 result(key).add(coll)
