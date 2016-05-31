@@ -17,3 +17,7 @@
 .filter-detail>select{
     text-align:center;
 }
+
+.partNrMsg{
+    cursor:pointer;
+}
