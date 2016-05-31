@@ -2,7 +2,7 @@
 
 ProcessOrders.init = function () {
     var ordernr= $('#OrderNr').val();
-    var kanbans = $('#SourceDoc').val();
+    var kanbans = $('#KanbanNr').val();
     var derivedfrom = $('#DerivedFrom').val();
     var proceedatefrom = $('#ProceeDateFrom').val();
     var proceedateto = $('#ProceeDateTo').val();
@@ -13,7 +13,8 @@ ProcessOrders.init = function () {
     var completerateto = $('#CompleteRateTo').val();
     var status = $("#Status").children("option:selected").html();
     var mrpround = $("#MrpRound").children("option:selected").html();
-    var kanbanstype = $("#KanBansType").children("option:selected").html();
+    var kanbanstype = $("#PartType").children("option:selected").html();
+
 
     ProcessOrders.add_string_label_to_div(ordernr, 'OrderNr like ', '.filter-p');
     ProcessOrders.add_string_label_to_div(kanbans, 'Kanbans like ', '.filter-p');
@@ -21,7 +22,7 @@ ProcessOrders.init = function () {
     ProcessOrders.add_string_label_to_div(partnr, 'PartNr like ', '.filter-p');
     ProcessOrders.add_string_label_to_div(status, 'Status =', '.filter-p');
     ProcessOrders.add_string_label_to_div(mrpround, 'MrpRound =', '.filter-p');
-    ProcessOrders.add_string_label_to_div(kanbanstype, 'KanBansType =', '.filter-p');
+    ProcessOrders.add_string_label_to_div(kanbanstype, 'PartType(KB Type) =', '.filter-p');
     ProcessOrders.add_range_label_to_div(proceedatefrom + "~" + proceedateto, 'ProceeDate ', '.filter-p');
     ProcessOrders.add_range_label_to_div(actualquantityfrom + "~" + actualquantityto, 'ActualQuantity ', '.filter-p');
     ProcessOrders.add_range_label_to_div(completeratefrom + "~" + completerateto, 'CompleteRate ', '.filter-p');
@@ -146,7 +147,9 @@ ProcessOrders.show_part_nr_msg = function () {
                             "<li><label>spq(BatchQty):</label>" + data.spq + "</li>" +
                             "<li><label>Type:</label>" + data.type + "</li>" +
                             "</ul>");
-                        $(NowPartNr).popover('show');
+
+                        console.log($(NowPartNr).popover('show'));
+                        $(NowPartNr).popover('show')
                         console.log("Something error.")
                     }
                 });
