@@ -27,15 +27,15 @@ Imports System.Messaging
         End Try
     End Sub
 
-    '<TestMethod> Public Sub TestGenerate()
-    '    Dim cal As Calculator = New Calculator("Data Source=vm08;Initial Catalog=CuttingMrp;User ID=sa;Password=brilliantech123@")
-    '    Try
-    '        cal.GenerateProcessOrderByRequirement("0001", New CalculateSetting With {.MergeMethod = "WEEK", .OrderType = "FIX", .RoundId = "001"})
+    <TestMethod> Public Sub TestGenerate()
+        Dim cal As Calculator = New Calculator("Data Source=vm08;Initial Catalog=CuttingMrp;User ID=sa;Password=brilliantech123@")
+        Try
+            cal.GenerateProcessOrderByRequirement("0003", New CalculateSetting With {.MergeMethod = New MergeMethod With {.Count = 2, .FirstDay = New DateTime(2016, 6, 1), .MergeType = "DAY"}, .OrderType = "FIX", .RoundId = "001"})
 
-    '    Catch ex As Exception
+        Catch ex As Exception
 
-    '    End Try
-    'End Sub
+        End Try
+    End Sub
 
     '<TestMethod> Public Sub TestQueue()
     '    Dim cal As CalculateService = New CalculateService("Data Source=vm08;Initial Catalog=CuttingMrp;User ID=sa;Password=brilliantech123@")

@@ -68,17 +68,20 @@ Public Class Calculator
             Next
             ' repo.MarkForDeletion(m)
         Next
-        Dim requireRepo As Repository(Of Requirement) = New Repository(Of Requirement)(dc)
+
+        Dim requireRepo As Repository(Of Requirement) = New Repository(Of Requirement)(New DataContext(DBConn))
         Dim todeactives As IEnumerable(Of Requirement) = requireRepo.FindAll(Function(c) c.status = RequirementStatus.Open)
         For Each todeactive As Requirement In todeactives
             todeactive.status = RequirementStatus.CancelSystem
         Next
-        requireRepo.GetTable.InsertAllOnSubmit(requires)
-        Using trans As New TransactionScope
-            Try
+
+        'Using trans As New TransactionScope
+        Try
+            ' requireRepo.SaveAll()
+            requireRepo.GetTable.InsertAllOnSubmit(requires)
                 requireRepo.SaveAll()
-                trans.Complete()
-            Catch ex As Exception
+            ' trans.Complete()
+        Catch ex As Exception
                 Throw ex
             Finally
                 'release resource
@@ -87,7 +90,7 @@ Public Class Calculator
                 requires = Nothing
                 requireRepo = Nothing
             End Try
-        End Using
+        'End Using
     End Sub
     Public Sub ResetOrders(targetStatus() As ProcessOrderStatus, reserveTypes As List(Of String), status As ProcessOrderStatus)
         If reserveTypes Is Nothing Then
@@ -127,8 +130,10 @@ Public Class Calculator
                     If sum < currPart.spq Then
                         actualQty = currPart.spq
                     Else
-                        If sum Mod currPart.spq <> 0 Then
+                        If (sum Mod currPart.spq) <> 0 Then
                             actualQty = sum + (currPart.spq - (sum Mod currPart.spq))
+                        Else
+                            actualQty = sum
                         End If
                     End If
                 End If
