@@ -140,7 +140,7 @@ Public Class Calculator
                 Dim sourceDoc As String = " "
                 If settings.OrderType = "FIX" Then
                     Dim fixorderrepo As Repository(Of BatchOrderTemplate) = New Repository(Of BatchOrderTemplate)(New DataContext(DBConn))
-                    Dim fixorders As List(Of BatchOrderTemplate) = (From kbors In fixorderrepo.GetTable Where kbors.partNr = dic.Key Select kbors).ToList
+                    Dim fixorders As List(Of BatchOrderTemplate) = (From kbors In fixorderrepo.GetTable Where kbors.partNr = CType(dic.Key, String) Select kbors).ToList
                     If fixorders.Count > 0 Then
                         sourceDoc = ""
                         For Each fo As BatchOrderTemplate In fixorders
