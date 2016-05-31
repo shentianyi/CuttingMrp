@@ -27,24 +27,24 @@ Imports System.Messaging
         End Try
     End Sub
 
-    <TestMethod> Public Sub TestGenerate()
-        Dim cal As Calculator = New Calculator("Data Source=vm08;Initial Catalog=CuttingMrp;User ID=sa;Password=brilliantech123@")
-        Try
-            cal.GenerateProcessOrderByRequirement("0001", New CalculateSetting With {.MergeMethod = "WEEK", .OrderType = "FIX", .RoundId = "001"})
+    '<TestMethod> Public Sub TestGenerate()
+    '    Dim cal As Calculator = New Calculator("Data Source=vm08;Initial Catalog=CuttingMrp;User ID=sa;Password=brilliantech123@")
+    '    Try
+    '        cal.GenerateProcessOrderByRequirement("0001", New CalculateSetting With {.MergeMethod = "WEEK", .OrderType = "FIX", .RoundId = "001"})
 
-        Catch ex As Exception
+    '    Catch ex As Exception
 
-        End Try
-    End Sub
+    '    End Try
+    'End Sub
 
-    <TestMethod> Public Sub TestQueue()
-        Dim cal As CalculateService = New CalculateService("Data Source=vm08;Initial Catalog=CuttingMrp;User ID=sa;Password=brilliantech123@")
-        Try
-            cal.Start(".\Private$\CuttingMrp", New CalculateSetting With {.MergeMethod = "DAY", .OrderType = "FIX"})
-        Catch ex As Exception
+    '<TestMethod> Public Sub TestQueue()
+    '    Dim cal As CalculateService = New CalculateService("Data Source=vm08;Initial Catalog=CuttingMrp;User ID=sa;Password=brilliantech123@")
+    '    Try
+    '        cal.Start(".\Private$\CuttingMrp", New CalculateSetting With {.MergeMethod = "DAY", .OrderType = "FIX"})
+    '    Catch ex As Exception
 
-        End Try
-    End Sub
+    '    End Try
+    'End Sub
 
     <TestMethod> Public Sub TestQueueRead()
         Dim cal As Calculator = New Calculator("Data Source=vm08;Initial Catalog=CuttingMrp;User ID=sa;Password=brilliantech123@")
@@ -64,7 +64,23 @@ Imports System.Messaging
 
         End Try
     End Sub
+
+
+    <TestMethod> Public Sub TestFindDate()
+        Dim cal As Calculator = New Calculator("Data Source=vm08;Initial Catalog=CuttingMrp;User ID=sa;Password=brilliantech123@")
+        Dim udays As Integer = (New DateTime(2016, 5, 31) - New DateTime(2016, 6, 5)).Days
+        Dim datetime As DateTime = cal.FindBasicDate(Now, Now, 2)
+        Assert.IsNotNull(datetime)
+        datetime = cal.FindBasicDate(Now, New DateTime(2016, 6, 5), 2)
+        Assert.IsNotNull(datetime)
+        datetime = cal.FindBasicDate(Now, New DateTime(2016, 5, 26), 2)
+        Assert.IsNotNull(datetime)
+        datetime = cal.FindBasicDate(New DateTime(2016, 6, 1), Now, 2)
+        Assert.IsNotNull(datetime)
+    End Sub
 End Class
+
+
 
 Public Class SumResult
     Private _partnr As String

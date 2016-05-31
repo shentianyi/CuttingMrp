@@ -21,3 +21,20 @@
 .partNrMsg{
     cursor:pointer;
 }
+
+.part-nr-ul{
+    margin-left:-30px;
+    list-style:none;
+}
+
+.part-nr-ul>li{
+    border-bottom:1px solid #eeeeee;
+    height:30px;
+    line-height:28px;
+}
+
+.part-nr-ul>li>label{
+    border-right:1px solid #eeeeee;
+    width:120px;
+    margin-right:20px;
+}
