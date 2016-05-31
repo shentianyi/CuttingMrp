@@ -23,6 +23,12 @@
         End Get
     End Property
 
+    Public ReadOnly Property completeRateDisplay As Double
+        Get
+            Return Math.Round(Me.completeRate, 2)
+        End Get
+    End Property
+
     Public Shared CanFinishStatus As List(Of ProcessOrderStatus) = New List(Of ProcessOrderStatus) From {ProcessOrderStatus.Open}
     Public Shared CanDeleteStatus As List(Of ProcessOrderStatus) = New List(Of ProcessOrderStatus) From {ProcessOrderStatus.Open}
 

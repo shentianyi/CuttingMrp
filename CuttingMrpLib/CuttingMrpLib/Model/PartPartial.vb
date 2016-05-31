@@ -17,7 +17,7 @@
         End Get
     End Property
 
-    Public ReadOnly Property KanbanNrs As String
+    Public ReadOnly Property kanbanNrs As String
         Get
             Return String.Join("/", Me.BatchOrderTemplates.Select(Function(c) c.orderNr).ToArray())
         End Get

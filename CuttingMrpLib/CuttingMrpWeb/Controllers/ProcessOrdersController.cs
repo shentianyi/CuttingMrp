@@ -28,7 +28,7 @@ namespace CuttingMrpWeb.Controllers
             ViewBag.Query = q;
 
             SetProcessOrderStatusList(null);
-
+            SetPartTypeList(null);
             SetProcessOrderMrpRoundList(null);
 
             ProcessOrderInfoModel info = ps.GetProcessOrderInfo(q);
@@ -117,7 +117,7 @@ namespace CuttingMrpWeb.Controllers
         }
 
 
-        public ActionResult Search([Bind(Include = "OrderNr,SourceDoc,DerivedFrom,ProceeDateFrom,ProceeDateTo,PartNr,ActualQuantityFrom,ActualQuantityTo,CompleteRateFrom,CompleteRateTo,Status,MrpRound,KanbanNr")] ProcessOrderSearchModel q)
+        public ActionResult Search([Bind(Include = "OrderNr,SourceDoc,DerivedFrom,ProceeDateFrom,ProceeDateTo,PartNr,ActualQuantityFrom,ActualQuantityTo,CompleteRateFrom,CompleteRateTo,Status,MrpRound,KanbanNr,PartType")] ProcessOrderSearchModel q)
         {
             int pageIndex = 0;
             int.TryParse(Request.QueryString.Get("page"), out pageIndex);
@@ -130,6 +130,7 @@ namespace CuttingMrpWeb.Controllers
             ViewBag.Query = q;
 
             SetProcessOrderStatusList(q.Status);
+            SetPartTypeList(q.PartType);
             SetProcessOrderMrpRoundList(q.MrpRound);
 
             ProcessOrderInfoModel info = ps.GetProcessOrderInfo(q);
@@ -139,7 +140,7 @@ namespace CuttingMrpWeb.Controllers
             return View("Index", processOrders);
         }
 
-        public void Export([Bind(Include = "OrderNr,SourceDoc,DerivedFrom,ProceeDateFrom,ProceeDateTo,PartNr,ActualQuantityFrom,ActualQuantityTo,CompleteRateFrom,CompleteRateTo,Status,MrpRound")] ProcessOrderSearchModel q)
+        public void Export([Bind(Include = "OrderNr,SourceDoc,DerivedFrom,ProceeDateFrom,ProceeDateTo,PartNr,ActualQuantityFrom,ActualQuantityTo,CompleteRateFrom,CompleteRateTo,Status,MrpRound,KanbanNr,PartType")] ProcessOrderSearchModel q)
         {
             IProcessOrderService ps = new ProcessOrderService(Settings.Default.db);
 
@@ -150,24 +151,65 @@ namespace CuttingMrpWeb.Controllers
             MemoryStream ms = new MemoryStream();
             using (StreamWriter sw = new StreamWriter(ms, Encoding.UTF8))
             {
-                string[] head = new string[11] { " No.", "OrderNr", "SourceDoc", "DerivedFrom",
-                    "ProceeDate", "PartNr","SourceQuantity","ActualQuantity","CompleteRate","Status","BatchQuantity" };
+                List<string> head = new List<string> { " No.", "OrderNr", "PartNr", "Kanban","PartType(KB Type)","Status",
+                    "ProceeDate","SourceQuantity","ActualQuantity","BatchQuantity","CompleteRate", "DerivedFrom" };
                 sw.WriteLine(string.Join(",", head));
                 for(var i=0; i<processOrders.Count; i++)
                 {
                     List<string> ii = new List<string>();
                     ii.Add((i + 1).ToString());
                     ii.Add(processOrders[i].orderNr);
-                    ii.Add(processOrders[i].sourceDoc);
-                    ii.Add(processOrders[i].derivedFrom);
+                    ii.Add(processOrders[i].partNr); 
+                    ii.Add(processOrders[i].Part.kanbanNrs);
+                    ii.Add(processOrders[i].Part.partTypeDisplay);
+                    ii.Add(processOrders[i].statusDisplay);
                     ii.Add(processOrders[i].proceeDate.ToString());
-                    ii.Add(processOrders[i].partNr);
                     ii.Add(processOrders[i].sourceQuantity.ToString());
                     ii.Add(processOrders[i].actualQuantity.ToString());
-                    ii.Add(processOrders[i].completeRate.ToString());
-                    ii.Add(processOrders[i].statusDisplay);
                     ii.Add(processOrders[i].batchQuantity.ToString());
-                    
+                    ii.Add(processOrders[i].completeRate.ToString());
+                    ii.Add(processOrders[i].derivedFrom);
+
+                    sw.WriteLine(string.Join(",", ii.ToArray()));
+                }
+                //sw.WriteLine(max);
+            }
+            var filename = "Orders" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".csv";
+            var contenttype = "text/csv";
+            Response.Clear();
+            Response.ContentEncoding = Encoding.UTF8;
+            Response.ContentType = contenttype;
+            Response.AddHeader("content-disposition", "attachment;filename=" + filename);
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.BinaryWrite(ms.ToArray());
+            Response.End();
+
+        }
+
+        public void ExportKB([Bind(Include = "OrderNr,SourceDoc,DerivedFrom,ProceeDateFrom,ProceeDateTo,PartNr,ActualQuantityFrom,ActualQuantityTo,CompleteRateFrom,CompleteRateTo,Status,MrpRound,PartType")] ProcessOrderSearchModel q)
+        {
+            IProcessOrderService ps = new ProcessOrderService(Settings.Default.db);
+
+            List<ProcessOrder> processOrders = ps.Search(q).ToList();
+
+            ViewBag.Query = q;
+
+            MemoryStream ms = new MemoryStream();
+            using (StreamWriter sw = new StreamWriter(ms, Encoding.UTF8))
+            {
+                List<string> head = new List<string> { " No.", "Kanban","Product", "PartNr", "PartType(KB Type)", "SourceQuantity", "ActualQuantity", "BatchQuantity" };
+                sw.WriteLine(string.Join(",", head));
+                for (var i = 0; i < processOrders.Count; i++)
+                {
+                    List<string> ii = new List<string>();
+                    ii.Add((i + 1).ToString());
+                    ii.Add(processOrders[i].Part.kanbanNrs);
+                    ii.Add(processOrders[i].Part.productNr);
+                    ii.Add(processOrders[i].partNr);
+                    ii.Add(processOrders[i].Part.partTypeDisplay);
+                    ii.Add(processOrders[i].sourceQuantity.ToString());
+                    ii.Add(processOrders[i].actualQuantity.ToString());
+                    ii.Add(processOrders[i].batchQuantity.ToString());
 
                     sw.WriteLine(string.Join(",", ii.ToArray()));
                 }
@@ -277,6 +319,30 @@ namespace CuttingMrpWeb.Controllers
             ViewData["mrpRoundSelect"] = select;
         }
 
+
+
+        private void SetPartTypeList(int? type, bool allowBlank = true)
+        {
+            List<EnumItem> item = EnumUtility.GetList(typeof(PartType));
+
+            List<SelectListItem> select = new List<SelectListItem>();
+            if (allowBlank)
+            {
+                select.Add(new SelectListItem { Text = "", Value = "" });
+            }
+            foreach (var it in item)
+            {
+                if (type.HasValue && type.ToString().Equals(it.Value))
+                {
+                    select.Add(new SelectListItem { Text = it.Text, Value = it.Value.ToString(), Selected = true });
+                }
+                else
+                {
+                    select.Add(new SelectListItem { Text = it.Text, Value = it.Value.ToString(), Selected = false });
+                }
+            }
+            ViewData["partTypeList"] = select;
+        }
 
     }
 }

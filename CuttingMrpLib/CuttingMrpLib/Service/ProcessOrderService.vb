@@ -255,4 +255,9 @@ Public Class ProcessOrderService
         result.Add("SUCCESS", succ)
         Return result
     End Function
+
+    Public Function SearchView(conditions As ProcessOrderSearchModel) As IQueryable(Of ProcessOrderView) Implements IProcessOrderService.SearchView
+        Dim reqRepo As IProcessOrderRepository = New ProcessOrderRepository(New DataContext(DBConn))
+        Return reqRepo.SearchView(conditions)
+    End Function
 End Class
