@@ -60,6 +60,13 @@ Requirement.add_range_label_to_div = function (content, name, cls) {
     }
 }
 
+$('.date-picker').datetimepicker({
+    lang: 'ch',
+    timepicker: false,
+    format: 'Y/m/d',
+    formatDate: 'Y/m/d'
+})
+
 $('.datetime-picker').datetimepicker({
     lang: 'ch'
 })

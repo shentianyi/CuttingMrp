@@ -232,7 +232,7 @@
 					optimal = bl;
 				} else if (deltaBL > 0 && deltaBL == maxDelta) {
 					optimal = br;
-				} else if (deltaBC > 0 && deltaC == maxDelta) {
+				} else if (deltaC > 0 && deltaC == maxDelta) {
 					optimal = bc;
 				} else {
 					optimal = current;
@@ -566,7 +566,7 @@
 							optimal = bl;
 						} else if (deltaBL > 0 && deltaBL == maxDelta) {
 							optimal = br;
-						} else if (deltaBC > 0 && deltaC == maxDelta) {
+						} else if (deltaC > 0 && deltaC == maxDelta) {
 							optimal = bc;
 						} else {
 							optimal = current;
