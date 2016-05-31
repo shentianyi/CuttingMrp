@@ -83,10 +83,13 @@ Requirement.run_mrp = function () {
         $('#ProcessOrderMask').fadeIn(0);
         $('#ProcessOrder').fadeIn(400);
 
+        $("input[name='MergeMethodType']").change(function () {
+            $('.choosed-merge-method-type').html($(this).val());
+        });
+
         $('.remove-process-order').click(function () {
             $('#ProcessOrderMask').fadeOut(400);
             $('#ProcessOrder').fadeOut(400);
-            
             window.location.reload();
         });
 
@@ -133,7 +136,7 @@ Requirement.run_mrp = function () {
         $("<hr/><div class='col-sm-12' style='text-align:center;'>" +
             "<i class='" + iconClass + "' style='font-size:9em;color:" + fontColor + "'></i>" +
             "<br/><br/><div class='col-sm-12'>" +
-            "<label style='text-align:center;color:"+fontColor+";font-size:1em;'>"+contentMsg+"</label>" +
+            "<label style='text-align:center; color:"+fontColor+";font-size:1.5em;'>"+contentMsg+"</label>" +
             "</div></div>").appendTo($('#ProcessOrder'));
     }
 }
