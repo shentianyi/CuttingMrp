@@ -10,6 +10,7 @@ namespace Repository
     public class Repository<T> : IRepository<T>
 
 
+
         where T : class
     {
        
@@ -86,6 +87,11 @@ namespace Repository
         public int Count(Func<T, bool> exp)
         {
             return GetTable.Count<T>(exp);
+        }
+
+        public T SingleOrDefault(Func<T, bool> exp)
+        {
+            return GetTable.SingleOrDefault(exp);
         }
 
         public Repository(IDataContextFactory dataContextFactory)

@@ -2,6 +2,7 @@
 Public Class CalculateSetting
     Private _roundId As String
     Private _reserveTypes As List(Of String)
+    Private _mergeMethod As MergeMethod
     Public MergeMethodType() As String = {"DAY", "WEEK", "MONTH", "YEAR"}
     Public OrderTypes() As String = {"FIX", "ACTUAL"}
 
@@ -27,13 +28,12 @@ Public Class CalculateSetting
     ''' <summary>
     ''' DAY, WEEK, MONTH, YEAR
     ''' </summary>
-    Private _mergeMethod As String
-    Public Property MergeMethod As String
+    Public Property MergeMethod As MergeMethod
         Get
             Return _mergeMethod
         End Get
-        Set(value As String)
-            If MergeMethodType.Contains(value) = False Then
+        Set(value As MergeMethod)
+            If MergeMethodType.Contains(value.MergeType) = False Then
                 Throw New Exception("Merge method not supported")
             Else
                 _mergeMethod = value
@@ -58,4 +58,37 @@ Public Class CalculateSetting
         End Set
     End Property
 
+End Class
+
+Public Class MergeMethod
+    Private _type As String
+    Private _firstDay As DateTime
+    Private _count As Integer
+
+    Public Property MergeType As String
+        Get
+            Return _type
+        End Get
+        Set(value As String)
+            _type = value
+        End Set
+    End Property
+
+    Public Property FirstDay As DateTime
+        Get
+            Return _firstDay
+        End Get
+        Set(value As DateTime)
+            _firstDay = value
+        End Set
+    End Property
+
+    Public Property Count As Integer
+        Get
+            Return _count
+        End Get
+        Set(value As Integer)
+            _count = value
+        End Set
+    End Property
 End Class

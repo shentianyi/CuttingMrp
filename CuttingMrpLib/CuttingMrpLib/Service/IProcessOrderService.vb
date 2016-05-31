@@ -10,4 +10,6 @@
     Function DeleteById(id As String) As Boolean
     Function Update(processOrder As ProcessOrder) As Boolean
     Function GetProcessOrderInfo(conditions As ProcessOrderSearchModel) As ProcessOrderInfoModel
+    Sub BatchFinishOrder(records As List(Of BatchFinishOrderRecord), ignoreErrors As Boolean)
+    Function ValidateFinishOrder(records As List(Of BatchFinishOrderRecord)) As Hashtable 
 End Interface

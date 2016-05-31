@@ -1,18 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="CuttingMrp" Class="CuttingMrpDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Connection Mode="AppSettings" ConnectionString="Data Source=vm08;Initial Catalog=CuttingMrp;User ID=sa" SettingsObjectName="CuttingMrpLib.My.MySettings" SettingsPropertyName="CuttingMrpConnectionString1" Provider="System.Data.SqlClient" />
-  <Table Name="dbo.BatchOrderTemplate" Member="BatchOrderTemplates">
-    <Type Name="BatchOrderTemplate">
-      <Column Name="orderNr" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="partNr" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
-      <Column Name="batchQuantity" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Column Name="type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="bundle" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Column Name="createdAt" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="updatedAt" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="operator" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Association Name="Part_BatchOrderTemplate" Member="Part" ThisKey="partNr" OtherKey="partNr" Type="Part" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.StatusControl" Member="StatusControls">
     <Type Name="StatusControl">
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -108,12 +95,12 @@
       <Column Name="partStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="moq" Type="System.Double" DbType="Float" CanBeNull="true" />
       <Column Name="spq" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Association Name="Part_BatchOrderTemplate" Member="BatchOrderTemplates" ThisKey="partNr" OtherKey="partNr" Type="BatchOrderTemplate" />
       <Association Name="Part_BOM" Member="BOMs" ThisKey="partNr" OtherKey="partNr" Type="BOM" />
       <Association Name="Part_Requirement" Member="Requirements" ThisKey="partNr" OtherKey="partNr" Type="Requirement" />
       <Association Name="Part_Stock" Member="Stocks" ThisKey="partNr" OtherKey="partNr" Type="Stock" />
       <Association Name="Part_MP" Member="MPs" ThisKey="partNr" OtherKey="partnr" Type="MP" />
       <Association Name="Part_ProcessOrder" Member="ProcessOrders" ThisKey="partNr" OtherKey="partNr" Type="ProcessOrder" />
+      <Association Name="Part_BatchOrderTemplate" Member="BatchOrderTemplates" ThisKey="partNr" OtherKey="partNr" Type="BatchOrderTemplate" />
     </Type>
   </Table>
   <Table Name="dbo.MrpRound" Member="MrpRounds">
@@ -164,6 +151,21 @@
       <Column Name="batchQuantity" Type="System.Double" DbType="Float" CanBeNull="true" />
       <Association Name="ProcessOrder_OrderDerivation" Member="OrderDerivations" ThisKey="orderNr" OtherKey="orderId" Type="OrderDerivation" />
       <Association Name="Part_ProcessOrder" Member="Part" ThisKey="partNr" OtherKey="partNr" Type="Part" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.BatchOrderTemplate" Member="BatchOrderTemplates">
+    <Type Name="BatchOrderTemplate">
+      <Column Name="orderNr" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="partNr" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="batchQuantity" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="bundle" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="createdAt" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="updatedAt" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="operator" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="remark1" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="remark2" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
+      <Association Name="Part_BatchOrderTemplate" Member="Part" ThisKey="partNr" OtherKey="partNr" Type="Part" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

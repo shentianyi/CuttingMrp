@@ -90,7 +90,7 @@ Public Class Calculator
         If reserveTypes Is Nothing Then
             reserveTypes = New List(Of String)
         End If
-        Dim repo As ProcessOrderRepository = New ProcessOrderRepository(New DataContext(My.Settings.db))
+        Dim repo As ProcessOrderRepository = New ProcessOrderRepository(New DataContext(DBConn))
         Dim toCancel As IEnumerable(Of ProcessOrder) = repo.FindAll(Function(c) targetStatus.Contains(c.status) And reserveTypes.Contains(c.derivedFrom) = False)
 
         For Each toCancelOrder As ProcessOrder In toCancel
@@ -125,7 +125,7 @@ Public Class Calculator
                         actualQty = currPart.spq
                     Else
                         If sum Mod currPart.spq <> 0 Then
-                            actualQty = sum + sum - (sum Mod currPart.spq)
+                            actualQty = sum + (currPart.spq - (sum Mod currPart.spq))
                         End If
                     End If
                 End If
@@ -134,14 +134,30 @@ Public Class Calculator
                 If sum <> 0 And actualQty <> 0 Then
                     completeRate = actualQty / sum
                 End If
+                Dim sourceDoc As String = " "
+                If settings.OrderType = "FIX" Then
+                    Dim fixorderrepo As Repository(Of BatchOrderTemplate) = New Repository(Of BatchOrderTemplate)(New DataContext(DBConn))
+                    Dim fixorders As List(Of BatchOrderTemplate) = (From kbors In fixorderrepo.GetTable Where kbors.partNr = dic.Key Select kbors).ToList
+                    If fixorders.Count > 0 Then
+                        sourceDoc = ""
+                        For Each fo As BatchOrderTemplate In fixorders
+                            If String.IsNullOrEmpty(sourceDoc) Then
+                                sourceDoc = fo.orderNr
+                            Else
+                                sourceDoc = fo.orderNr & "/" & sourceDoc
+                            End If
+                        Next
+                    End If
 
+                End If
                 Dim toinsert As ProcessOrder = New ProcessOrder With {.orderNr = ordernr,
-                    .partNr = dic.Key, .derivedFrom = "MRP", .proceeDate = dateresult,
+                    .partNr = dic.Key, .derivedFrom = "MRP", .proceeDate = dateresult, .sourceDoc = sourceDoc,
                     .status = ProcessOrderStatus.Open, .sourceQuantity = sum, .actualQuantity = actualQty,
                     .completeRate = completeRate, .batchQuantity = currPart.moq, .OrderDerivations = en}
                 result.Add(toinsert)
             Next
         Next
+
         Return result
     End Function
 
@@ -150,22 +166,31 @@ Public Class Calculator
         Dim searchConditions As RequirementSearchModel = New RequirementSearchModel
         searchConditions.DerivedType = DeriveType.MRP
         searchConditions.Status = RequirementStatus.Open
-        Dim toUse As IQueryable(Of Requirement) = requireRepo.Search(searchConditions)
-        Dim parts As IQueryable(Of String) = (From t In toUse Select t.partNr)
+        Dim toUse As List(Of Requirement) = requireRepo.Search(searchConditions).ToList
+        toUse = (From f In toUse Order By f.requiredDate, f.partNr Ascending).ToList
+        Dim parts As List(Of String) = (From t In toUse Select t.partNr).ToList
         Dim stockrepo As Repository(Of SumOfStock) = New Repository(Of SumOfStock)(New DataContext(DBConn))
-        Dim stocks As IEnumerable(Of SumOfStock) = stockrepo.FindAll(Function(c) parts.Contains(c.partNr))
+        Dim stocks As List(Of SumOfStock) = stockrepo.FindAll(Function(c) parts.Contains(c.partNr)).ToList
         Dim orders As Hashtable = New Hashtable
+        Dim stockRecords As Hashtable = New Hashtable
+        For Each sto As SumOfStock In stocks
+            If stockRecords.ContainsKey(sto.partNr) Then
+                stockRecords(sto.partNr) = stockRecords(sto.partNr) + sto.SumOfStock
+            Else
+                stockRecords(sto.partNr) = sto.SumOfStock
+            End If
+        Next
         For Each requires In toUse
-            For Each inv As SumOfStock In stocks
-                If inv.SumOfStock >= requires.quantity Then
-                    inv.SumOfStock = inv.SumOfStock - requires.quantity
+            If stockRecords.ContainsKey(requires.partNr) Then
+                If stockRecords(requires.partNr) >= requires.quantity Then
+                    stockRecords(requires.partNr) = stockRecords(requires.partNr) - requires.quantity
                     requires = Nothing
-                    Exit For
                 Else
-                    requires.quantity = requires.quantity - inv.SumOfStock
-                    inv = Nothing
+                    requires.quantity = requires.quantity - stockRecords(requires.partNr)
+                    stockRecords.Remove(requires.partNr)
                 End If
-            Next
+            End If
+
             If requires IsNot Nothing Then
                 If orders.ContainsKey(requires.partNr) Then
                     orders(requires.partNr).add(requires)
@@ -190,7 +215,7 @@ Public Class Calculator
     ''' </param>
     ''' <param name="collections"></param>
     ''' <returns></returns>
-    Public Function GroupByDate(dateType As String, collections As List(Of Requirement))
+    Public Function GroupByDate(dateType As MergeMethod, collections As List(Of Requirement))
         If collections Is Nothing Or dateType Is Nothing Then
             Throw New ArgumentNullException
         End If
@@ -198,8 +223,9 @@ Public Class Calculator
 
         For Each coll As Requirement In collections
             Dim key As String = ""
-            Select Case dateType
+            Select Case dateType.MergeType
                 Case "DAY"
+
                     key = coll.requiredDate.ToString("yyyy-MM-dd")
                 Case "WEEK"
                     'get the monday of each week
@@ -220,5 +246,4 @@ Public Class Calculator
         Next
         Return result
     End Function
-
 End Class
