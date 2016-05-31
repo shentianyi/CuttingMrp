@@ -47,8 +47,10 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Messaging" />
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -87,6 +89,7 @@
     <Compile Include="Data\Repository\RequirementRepository.vb" />
     <Compile Include="Data\Repository\MrpRoundRepository.vb" />
     <Compile Include="Data\RequirementStatus.vb" />
+    <Compile Include="Model\BatchFinishOrderRecord.vb" />
     <Compile Include="Model\CalculateSetting.vb" />
     <Compile Include="Model\DeriveType.vb" />
     <Compile Include="Data\Repository\IStockRepository.vb" />

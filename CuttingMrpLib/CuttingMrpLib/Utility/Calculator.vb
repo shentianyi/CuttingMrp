@@ -231,7 +231,15 @@ Public Class Calculator
                     If dateType.Count < 1 Then
                         Throw New Exception("Unsupported count" & dateType.Count & " of DAY method")
                     Else
-                        If coll.requiredDate <= dateType.FirstDay Then
+                        '有需求日期小于基准日的订单
+                        If coll.requiredDate < dateType.FirstDay Then
+
+                        Else
+                            If coll.requiredDate < dateType.FirstDay.AddDays(dateType.Count) Then
+                                key = dateType.FirstDay.ToString("yyyy-MM-dd")
+                            Else
+                                key = FindBasicDate(dateType.FirstDay, coll.requiredDate, dateType.Count).ToString("yyyy-MM-dd")
+                            End If
                         End If
                         key = coll.requiredDate.ToString("yyyy-MM-dd")
                     End If
@@ -239,10 +247,13 @@ Public Class Calculator
                     'get the monday of each week
                     Dim delta As Integer = DayOfWeek.Monday - coll.requiredDate.DayOfWeek
                     key = coll.requiredDate.AddDays(delta).ToString("yyyy-MM-dd")
+                    Throw New NotImplementedException
                 Case "MONTH"
                     key = coll.requiredDate.ToString("yyyy-MM") & "-01"
+                    Throw New NotImplementedException
                 Case "YEAR"
                     key = coll.requiredDate.ToString("yyyy") & "-01-01"
+                    Throw New NotImplementedException
             End Select
             If result.ContainsKey(key) Then
                 result(key).add(coll)
@@ -254,4 +265,35 @@ Public Class Calculator
         Next
         Return result
     End Function
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="firstBasicDate">基准日</param>
+    ''' <param name="currentDate">当前时间（需要计算归属合并日的时间）</param>
+    ''' <param name="count">时间跨度</param>
+    ''' <returns></returns>
+    Public Function FindBasicDate(firstBasicDate As Date, currentDate As Date, count As Integer) As Date
+        Dim returnedDate As Date
+        Dim daydiff As Integer
+        If currentDate < firstBasicDate Then
+            If Math.Floor((firstBasicDate - currentDate).TotalDays) < count Then
+                returnedDate = firstBasicDate.AddDays(-count)
+            Else
+                Dim element As Double = (firstBasicDate - currentDate).TotalDays
+                daydiff = -(Math.Floor((firstBasicDate - currentDate).TotalDays) Mod count)
+                returnedDate = currentDate.AddDays(daydiff)
+            End If
+        Else
+            If Math.Ceiling((currentDate - firstBasicDate).TotalDays) < count Then
+                returnedDate = firstBasicDate
+            Else
+                daydiff = -(Math.Ceiling((currentDate - firstBasicDate).TotalDays) Mod count)
+                returnedDate = currentDate.AddDays(daydiff)
+            End If
+
+        End If
+        Return returnedDate
+    End Function
+
+
 End Class
