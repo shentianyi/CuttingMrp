@@ -15,7 +15,6 @@ ProcessOrders.init = function () {
     var mrpround = $("#MrpRound").children("option:selected").html();
     var kanbanstype = $("#PartType").children("option:selected").html();
 
-
     ProcessOrders.add_string_label_to_div(ordernr, 'OrderNr like ', '.filter-p');
     ProcessOrders.add_string_label_to_div(kanbans, 'Kanbans like ', '.filter-p');
     ProcessOrders.add_string_label_to_div(derivedfrom, 'DerivedFrom like ', '.filter-p');
@@ -112,7 +111,7 @@ ProcessOrders.show_part_nr_msg = function () {
                 $(NowPartNr).popover('show');
             } else {
                 $.ajax({
-                    url: '/parts/Details/',
+                    url: '/parts/Details',
                     type: 'get',
                     data: {
                         part_nr: PartNrMouseOver,

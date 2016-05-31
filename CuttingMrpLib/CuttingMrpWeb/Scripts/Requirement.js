@@ -127,7 +127,7 @@ Requirement.run_mrp = function () {
         $("<hr/><div class='col-sm-12' style='text-align:center;'>" +
             "<i class='" + iconClass + "' style='font-size:9em;color:" + fontColor + "'></i>" +
             "<br/><br/><div class='col-sm-12'>" +
-            "<label style='text-align:center;color:"+fontColor+";font-size:1em;'>"+contentMsg+"</label>" +
+            "<label style='text-align:center; color:"+fontColor+";font-size:1.5em;'>"+contentMsg+"</label>" +
             "</div></div>").appendTo($('#ProcessOrder'));
     }
 }
