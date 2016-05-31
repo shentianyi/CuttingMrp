@@ -134,14 +134,30 @@ Public Class Calculator
                 If sum <> 0 And actualQty <> 0 Then
                     completeRate = actualQty / sum
                 End If
+                Dim sourceDoc As String = " "
+                If settings.MergeMethod = "FIX" Then
+                    Dim fixorderrepo As Repository(Of BatchOrderTemplate) = New Repository(Of BatchOrderTemplate)(New DataContext(DBConn))
+                    Dim fixorders As List(Of BatchOrderTemplate) = (From kbors In fixorderrepo.GetTable Where kbors.partNr = dic.Key Select kbors).ToList
+                    If fixorders.Count > 0 Then
+                        sourceDoc = ""
+                        For Each fo As BatchOrderTemplate In fixorders
+                            If String.IsNullOrEmpty(sourceDoc) Then
+                                sourceDoc = fo.orderNr
+                            Else
+                                sourceDoc = fo.orderNr & "/" & sourceDoc
+                            End If
+                        Next
+                    End If
 
+                End If
                 Dim toinsert As ProcessOrder = New ProcessOrder With {.orderNr = ordernr,
-                    .partNr = dic.Key, .derivedFrom = "MRP", .proceeDate = dateresult,
+                    .partNr = dic.Key, .derivedFrom = "MRP", .proceeDate = dateresult, .sourceDoc = sourceDoc,
                     .status = ProcessOrderStatus.Open, .sourceQuantity = sum, .actualQuantity = actualQty,
                     .completeRate = completeRate, .batchQuantity = currPart.moq, .OrderDerivations = en}
                 result.Add(toinsert)
             Next
         Next
+
         Return result
     End Function
 

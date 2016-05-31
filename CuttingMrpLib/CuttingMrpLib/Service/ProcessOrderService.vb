@@ -145,4 +145,74 @@ Public Class ProcessOrderService
         Return info
 
     End Function
+
+
+
+    Public Function BatchFinishOrder(records As List(Of BatchFinishOrderRecord), ignoreError As Boolean) As Boolean Implements IProcessOrderService.BatchFinishOrder
+        Dim validated As Hashtable = ValidateFinishOrder(records)
+        If validated.ContainsKey("WARN") Then
+            If ignoreError = False Then
+                Throw New Exception("文件验证失败")
+            End If
+        End If
+        Dim conditions As ProcessOrderSearchModel = New ProcessOrderSearchModel With {.Status = ProcessOrderStatus.Open, .PageSize = Integer.MaxValue}
+        Dim sortedOrders As Hashtable = New Hashtable
+        Dim toUpdate As List(Of ProcessOrder) = New List(Of ProcessOrder)
+        Dim toFinish As List(Of ProcessOrder) = New List(Of ProcessOrder)
+        Dim existingOrders As List(Of ProcessOrder) = Me.Search(conditions).ToList
+        existingOrders = (From order In existingOrders Select order Order By order.proceeDate Ascending).ToList
+        'group by order nr
+        For Each ord As ProcessOrder In existingOrders
+            If sortedOrders.ContainsKey(ord.partNr) Then
+                sortedOrders(ord.partNr).add(ord)
+            Else
+                Dim li As New List(Of ProcessOrder)
+                li.Add(ord)
+                sortedOrders(ord.partNr) = li
+            End If
+        Next
+
+
+        For Each rec As BatchFinishOrderRecord In validated("SUCCESS")
+
+        Next
+
+        Using scope As New TransactionScope
+            Try
+
+            Catch ex As Exception
+                Throw New Exception("写入数据库时出现错误", ex)
+            End Try
+        End Using
+    End Function
+
+    Private Function PartExists(partNr As String) As Boolean
+        Dim partRepo As Repository(Of Part) = New Repository(Of Part)(New DataContext(DBConn))
+        Dim counter As Integer = partRepo.Count(Function(c) c.partNr = partNr)
+        If counter > 0 Then
+            Return True
+        Else
+            Return False
+        End If
+    End Function
+
+    Public Function ValidateFinishOrder(records As List(Of BatchFinishOrderRecord)) As Hashtable Implements IProcessOrderService.ValidateFinishOrder
+        If records Is Nothing Then
+            Throw New ArgumentNullException
+        End If
+        Dim warning As List(Of BatchFinishOrderRecord) = New List(Of BatchFinishOrderRecord)
+        Dim succ As List(Of BatchFinishOrderRecord) = New List(Of BatchFinishOrderRecord)
+        For Each rec As BatchFinishOrderRecord In records
+            If PartExists(rec.PartNr) = False Then
+                rec.Warnings.Add("Part Nr " & rec.PartNr & " does not exist in the system")
+                warning.Add(rec)
+            Else
+
+            End If
+        Next
+        Dim result As Hashtable = New Hashtable
+        result.Add("WARN", warning)
+        result.Add("SUCCESS", succ)
+        Return result
+    End Function
 End Class
