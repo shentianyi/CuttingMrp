@@ -93,12 +93,18 @@ Requirement.run_mrp = function () {
         $('.confirm-process-order').click(function () {
             var OrderType = $("input[name='OrderTypes']:checked").val();
             var MergeMethodType = $("input[name='MergeMethodType']:checked").val();
+            if ($("#FirstDay").val().length == 0) {
+                alert("please select datetime!");
+                return;
+            }
             $.ajax({
                 url: "/Requirements/RunMrp",
                 type: "post",
                 data:{
                     "OrderType": OrderType,
-                    "MergeMethod": MergeMethodType
+                    "MergeType": MergeMethodType,
+                    "FirstDay": $("#FirstDay").val(),
+                    "Count": $("#Count").val()
                 },
                 success: function (data) {
                     if (data.Result) {

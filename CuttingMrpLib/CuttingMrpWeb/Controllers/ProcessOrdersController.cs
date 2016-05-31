@@ -215,7 +215,7 @@ namespace CuttingMrpWeb.Controllers
                 }
                 //sw.WriteLine(max);
             }
-            var filename = "Orders" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".csv";
+            var filename = "Kanban" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".csv";
             var contenttype = "text/csv";
             Response.Clear();
             Response.ContentEncoding = Encoding.UTF8;
@@ -253,6 +253,12 @@ namespace CuttingMrpWeb.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public void ImportForceRecord(HttpPostedFile file) {
+            string s = file.FileName;
+
+        }
+
         private ActionResult ValidateProcessOrder(ProcessOrder processOrder)
         {
             if (processOrder == null)
@@ -261,6 +267,8 @@ namespace CuttingMrpWeb.Controllers
             }
             return View(processOrder);
         }
+
+        
 
         private ProcessOrder GetProcessOrderById(string id)
         {
@@ -319,7 +327,7 @@ namespace CuttingMrpWeb.Controllers
             ViewData["mrpRoundSelect"] = select;
         }
 
-
+        
 
         private void SetPartTypeList(int? type, bool allowBlank = true)
         {
