@@ -145,4 +145,127 @@ Public Class ProcessOrderService
         Return info
 
     End Function
+
+
+
+    Public Sub BatchFinishOrder(records As List(Of BatchFinishOrderRecord), ignoreError As Boolean) Implements IProcessOrderService.BatchFinishOrder
+        Dim validated As Hashtable = ValidateFinishOrder(records)
+        If validated.ContainsKey("WARN") Then
+            If ignoreError = False Then
+                Throw New Exception("文件验证失败")
+            End If
+        End If
+        Dim conditions As ProcessOrderSearchModel = New ProcessOrderSearchModel With {.Status = ProcessOrderStatus.Open, .PageSize = Integer.MaxValue}
+        Dim sortedOrders As Hashtable = New Hashtable
+        Dim toUpdate As List(Of ProcessOrder) = New List(Of ProcessOrder)
+        Dim toFinish As List(Of ProcessOrder) = New List(Of ProcessOrder)
+        Dim toStock As List(Of Stock) = New List(Of Stock)
+        Dim existingOrders As List(Of ProcessOrder) = Me.Search(conditions).ToList
+        existingOrders = (From order In existingOrders Select order Order By order.proceeDate Ascending).ToList
+        'group by order nr
+        For Each ord As ProcessOrder In existingOrders
+            If sortedOrders.ContainsKey(ord.partNr) Then
+                sortedOrders(ord.partNr).add(ord)
+            Else
+                Dim li As New List(Of ProcessOrder)
+                li.Add(ord)
+                sortedOrders(ord.partNr) = li
+            End If
+        Next
+
+
+        For Each rec As BatchFinishOrderRecord In validated("SUCCESS")
+            If sortedOrders.ContainsKey(rec.PartNr) Then
+                For Each toCompareOrder As ProcessOrder In sortedOrders(rec.PartNr)
+                    If rec.Amount >= toCompareOrder.actualQuantity Then
+                        rec.Amount = rec.Amount - toCompareOrder.actualQuantity
+                        toFinish.Add(toCompareOrder)
+                        If rec.Amount > 0 Then
+                            toStock.Add(New Stock With {.partNr = rec.PartNr,
+                                .fifo = Now, .sourceType = "BATCHUPLOAD",
+                                .source = "BATCHUPLOAD",
+                                .quantity = rec.Amount, .wh = "ORIGINAL",
+                                .position = "ORIGINAL", .container = "ORIGINAL"})
+                        End If
+
+                    Else
+                        toStock.Add(New Stock With {.partNr = rec.PartNr,
+                                    .fifo = Now, .sourceType = "PROCESSORDER",
+                                    .source = toCompareOrder.orderNr,
+                                    .quantity = rec.Amount, .wh = "ORIGINAL",
+                                    .position = "ORIGINAL", .container = "ORIGINAL"})
+                        toCompareOrder.actualQuantity = toCompareOrder.actualQuantity - rec.Amount
+                        toUpdate.Add(toCompareOrder)
+                    End If
+                Next
+            Else
+                toStock.Add(New Stock With {.partNr = rec.PartNr, .fifo = Now,
+                            .sourceType = "BATCHUPLOAD", .container = "ORIGINAL",
+                            .position = "ORIGINAL", .quantity = rec.Amount,
+                            .source = "BATCHUPLOAD", .wh = "ORGINAL"})
+
+            End If
+        Next
+
+        Using scope As New TransactionScope
+            Try
+                Dim ids As List(Of String) = (From tof In toFinish Select tof.orderNr Distinct).ToList
+                FinishOrdersByIds(ids, Now, "ORIGINAL", "ORIGINAL", "ORIGINAL", "", "")
+                Dim context As DataContext = New DataContext(DBConn)
+                Dim stockrepo As Repository(Of Stock) = New Repository(Of Stock)(context)
+                stockrepo.GetTable.InsertAllOnSubmit(toStock)
+                Dim orderrepo As New ProcessOrderRepository(context)
+                For Each toup As ProcessOrder In toUpdate
+                    Dim towrite As ProcessOrder = orderrepo.Single(Function(c) c.orderNr = toup.orderNr)
+                    towrite.sourceDoc = towrite.sourceDoc & "/" & "BATCHBALANCE: from " & towrite.actualQuantity & "to " & toup.actualQuantity
+                    towrite.actualQuantity = toup.actualQuantity
+                Next
+                orderrepo.SaveAll()
+                stockrepo.SaveAll()
+                scope.Complete()
+            Catch ex As Exception
+                Throw New Exception("写入数据库时出现错误", ex)
+            End Try
+        End Using
+
+    End Sub
+
+    Private Function PartExists(partNr As String) As Boolean
+        Dim partRepo As Repository(Of Part) = New Repository(Of Part)(New DataContext(DBConn))
+        Dim counter As Integer = partRepo.Count(Function(c) c.partNr = partNr)
+        If counter > 0 Then
+            Return True
+        Else
+            Return False
+        End If
+    End Function
+
+    Public Function ValidateFinishOrder(records As List(Of BatchFinishOrderRecord)) As Hashtable Implements IProcessOrderService.ValidateFinishOrder
+        If records Is Nothing Then
+            Throw New ArgumentNullException
+        End If
+        Dim warning As List(Of BatchFinishOrderRecord) = New List(Of BatchFinishOrderRecord)
+        Dim succ As List(Of BatchFinishOrderRecord) = New List(Of BatchFinishOrderRecord)
+        Dim kanbanRepo As Repository(Of BatchOrderTemplate) = New Repository(Of BatchOrderTemplate)(New DataContext(DBConn))
+
+        For Each rec As BatchFinishOrderRecord In records
+            Dim kanban As BatchOrderTemplate = kanbanRepo.SingleOrDefault(Function(c) c.orderNr = rec.FixOrderNr)
+            If kanban Is Nothing Then
+                rec.Warnings.Add("Part Nr " & rec.PartNr & " does not exist in the system")
+                warning.Add(rec)
+            Else
+                rec.PartNr = kanban.partNr
+                succ.Add(rec)
+            End If
+        Next
+        Dim result As Hashtable = New Hashtable
+        result.Add("WARN", warning)
+        result.Add("SUCCESS", succ)
+        Return result
+    End Function
+
+    Public Function SearchView(conditions As ProcessOrderSearchModel) As IQueryable(Of ProcessOrderView) Implements IProcessOrderService.SearchView
+        Dim reqRepo As IProcessOrderRepository = New ProcessOrderRepository(New DataContext(DBConn))
+        Return reqRepo.SearchView(conditions)
+    End Function
 End Class

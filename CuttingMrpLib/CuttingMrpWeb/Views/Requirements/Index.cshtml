@@ -8,7 +8,7 @@
 @Styles.Render("~/Content/requirement")
 
 <form action="/Requirements/Search" method="get">
-    <div class="panel panel-default navbar-fixed-top" style="box-shadow: -2px 2px 4px #34313a;top:60px;">
+    <div class="panel panel-default navbar-fixed-top" style="box-shadow: -2px 2px 4px #34313a;top:60px;z-index:888;">
         <div class="panel-body">
             <div class="col-sm-12" style="text-align:center;">
                 <div class="col-sm-9 filter-content">
@@ -80,15 +80,15 @@
                 {
                     var html = Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
                         .Options(o => o.AddRouteValue("PartNr", ViewBag.Query.PartNr))
-                        .Options(o => o.AddRouteValue("OrderedDateFrom", ViewBag.Query.PartNr))
-                        .Options(o => o.AddRouteValue("OrderedDateTo", ViewBag.Query.PartNr))
-                        .Options(o => o.AddRouteValue("RequiredTimeFrom", ViewBag.Query.PartNr))
-                        .Options(o => o.AddRouteValue("RequiredTimeTo", ViewBag.Query.PartNr))
-                        .Options(o => o.AddRouteValue("QuantityFrom", ViewBag.Query.PartNr))
-                        .Options(o => o.AddRouteValue("QuantityTo", ViewBag.Query.PartNr))
-                        .Options(o => o.AddRouteValue("Status", ViewBag.Query.PartNr))
-                        .Options(o => o.AddRouteValue("DerivedFrom", ViewBag.Query.PartNr))
-                        .Options(o => o.AddRouteValue("DerivedType", ViewBag.Query.PartNr));
+                        .Options(o => o.AddRouteValue("OrderedDateFrom", ViewBag.Query.OrderedDateFrom))
+                        .Options(o => o.AddRouteValue("OrderedDateTo", ViewBag.Query.OrderedDateTo))
+                        .Options(o => o.AddRouteValue("RequiredTimeFrom", ViewBag.Query.RequiredTimeFrom))
+                        .Options(o => o.AddRouteValue("RequiredTimeTo", ViewBag.Query.RequiredTimeTo))
+                        .Options(o => o.AddRouteValue("QuantityFrom", ViewBag.Query.QuantityFrom))
+                        .Options(o => o.AddRouteValue("QuantityTo", ViewBag.Query.QuantityTo))
+                        .Options(o => o.AddRouteValue("Status", ViewBag.Query.Status))
+                        .Options(o => o.AddRouteValue("DerivedFrom", ViewBag.Query.DerivedFrom))
+                        .Options(o => o.AddRouteValue("DerivedType", ViewBag.Query.DerivedType));
                     @html
                 }
                 else
@@ -182,25 +182,38 @@
 
     <div class="panel panel-primary">
         <div class="panel-body">
-            <div class="col-sm-12">
-                <div class="col-sm-3">
+            <div class="row">
+                <div class="col-md-6 input-group">
+                    <span class="input-group-addon">FirstDay</span>
+                    <input type="datetime" value="" name="FirstDay" id="FirstDay" class="form-control date-picker" />
+                </div>
+                <div class="col-md-6 input-group">
+                    <span class="input-group-addon">Nearly</span>
+                    <input type="number" value="2" name="Count" id="Count" class="form-control"/>
+                    <span class="input-group-addon choosed-merge-method-type" style="width:80px;">DAY</span>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row" style="text-align:center;">
+                <div class="col-md-3">
                     <input type="radio" checked name="MergeMethodType" value="DAY" /> DAY
                 </div>
-                <div class="col-sm-3">
+                <div class="col-md-3">
                     <input type="radio" disabled name="MergeMethodType" value="WEEK" /> WEEK
                 </div>
 
-                <div class="col-sm-3">
+                <div class="col-md-3">
                     <input type="radio" disabled name="MergeMethodType" value="MONTH" /> MONTH
                 </div>
 
-                <div class="col-sm-3">
+                <div class="col-md-3">
                     <input type="radio" disabled name="MergeMethodType" value="YEAR" /> YEAR
                 </div>
             </div>
         </div>
     </div>
-
     <hr />
 
     <div class="col-sm-12" style="text-align:right;">

@@ -2,7 +2,7 @@
 
 ProcessOrders.init = function () {
     var ordernr= $('#OrderNr').val();
-    var sourcedoc = $('#SourceDoc').val();
+    var kanbans = $('#KanbanNr').val();
     var derivedfrom = $('#DerivedFrom').val();
     var proceedatefrom = $('#ProceeDateFrom').val();
     var proceedateto = $('#ProceeDateTo').val();
@@ -13,13 +13,15 @@ ProcessOrders.init = function () {
     var completerateto = $('#CompleteRateTo').val();
     var status = $("#Status").children("option:selected").html();
     var mrpround = $("#MrpRound").children("option:selected").html();
+    var kanbanstype = $("#PartType").children("option:selected").html();
 
     ProcessOrders.add_string_label_to_div(ordernr, 'OrderNr like ', '.filter-p');
-    ProcessOrders.add_string_label_to_div(sourcedoc, 'SourceDoc like ', '.filter-p');
+    ProcessOrders.add_string_label_to_div(kanbans, 'Kanbans like ', '.filter-p');
     ProcessOrders.add_string_label_to_div(derivedfrom, 'DerivedFrom like ', '.filter-p');
     ProcessOrders.add_string_label_to_div(partnr, 'PartNr like ', '.filter-p');
     ProcessOrders.add_string_label_to_div(status, 'Status =', '.filter-p');
     ProcessOrders.add_string_label_to_div(mrpround, 'MrpRound =', '.filter-p');
+    ProcessOrders.add_string_label_to_div(kanbanstype, 'PartType(KB Type) =', '.filter-p');
     ProcessOrders.add_range_label_to_div(proceedatefrom + "~" + proceedateto, 'ProceeDate ', '.filter-p');
     ProcessOrders.add_range_label_to_div(actualquantityfrom + "~" + actualquantityto, 'ActualQuantity ', '.filter-p');
     ProcessOrders.add_range_label_to_div(completeratefrom + "~" + completerateto, 'CompleteRate ', '.filter-p');
@@ -98,10 +100,69 @@ function getCheckedIds() {
     return ids;
 }
 
-ProcessOrders.export_porcess_order = function () {
-    $('.export-process-order').click(function () {
-        console.log("Export");
-    })
+ProcessOrders.show_part_nr_msg = function () {
+    var AllPartNr = document.getElementsByClassName("partNrMsg");
+    for (var i = 0; i < AllPartNr.length; i++) {
+        AllPartNr[i].onmouseover = function () {
+            var PartNrMouseOver = $(this).html();
+            var NowPartNr = $(this);
+            if (NowPartNr.attr("data-content")) {
+                console.log(NowPartNr.attr("data-content"));
+                $(NowPartNr).popover('show');
+            } else {
+                $.ajax({
+                    url: '/parts/Details/'+PartNrMouseOver,
+                    type: 'get',
+                    success: function (data) {
+                        //{"partNr":"91C540301220",
+                        //    "partTypeDisplay":"WhiteCard",
+                        //    "partDesc":"91C540301220",
+                        //    "moq":100,
+                        //    "spq":100,
+                        //    "kanbanNr":"419300"
+                        //}
+                        $(NowPartNr).attr("title", "<strong>" + data.partNr + "</strong>");
+                        $(NowPartNr).attr("data-content", "<ul class='part-nr-ul'>" +
+                           "<li><label>labelartNr:</label>" + data.partNr + "</li>" +
+                           "<li><label>partTypeDisplay:</label>" + data.partTypeDisplay + "</li>" +
+                           "<li><label>PartDesc:</label>" + data.partDesc + "</li>" +
+                           "<li><label>moq(BundleQty):</label>" + data.moq + "</li>" +
+                           "<li><label>spq(BatchQty):</label>" + data.spq + "</li>" +
+                           "<li><label>Type:</label>" + data.kanbanNr + "</li>" +
+                           "</ul>");
+                        $(NowPartNr).popover('show');
+                    },
+                    error: function () {
+                        console.log("Something error.")
+                    }
+                });
+
+            }
+        }
+
+        AllPartNr[i].onmouseout = function () {
+            var NowPartNr = $(this);
+            $(NowPartNr).popover('hide');
+        }
+    }
+}
+
+ProcessOrders.import_force_record = function () {
+    $('.import-force-record').click(function () {
+        $('#dialog_content').dialogModal({
+            onOkBut: function () {
+            },
+            onCancelBut: function () { },
+            onLoad: function () { },
+            onClose: function () { },
+        });
+    });
+}
+
+ProcessOrders.export_kanbans = function () {
+    $('.export-kanbans').click(function () {
+        console.log("export kanban")
+    });
 }
 
 window.onload = function () {

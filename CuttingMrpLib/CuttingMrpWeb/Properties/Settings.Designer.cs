@@ -34,16 +34,6 @@ namespace CuttingMrpWeb.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=Charlot-PC\\SQLEXPRESS;Initial Catalog=CuttingMrp;Persist Security Inf" +
-            "o=True;User ID=sa;Password=123456@")]
-        public string db {
-            get {
-                return ((string)(this["db"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute(".\\Private$\\cuttingMrp")]
         public string mrpQueue {
             get {
@@ -102,6 +92,25 @@ namespace CuttingMrpWeb.Properties {
         public int mrpRoundSelectLimit {
             get {
                 return ((int)(this["mrpRoundSelectLimit"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=BV001;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=s" +
+            "a;Password=1")]
+        public string db {
+            get {
+                return ((string)(this["db"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(";")]
+        public string importCsvDelimiter {
+            get {
+                return ((string)(this["importCsvDelimiter"]));
             }
         }
     }

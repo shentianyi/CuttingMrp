@@ -60,6 +60,13 @@ Requirement.add_range_label_to_div = function (content, name, cls) {
     }
 }
 
+$('.date-picker').datetimepicker({
+    lang: 'ch',
+    timepicker: false,
+    format: 'Y/m/d',
+    formatDate: 'Y/m/d'
+})
+
 $('.datetime-picker').datetimepicker({
     lang: 'ch'
 })
@@ -76,22 +83,31 @@ Requirement.run_mrp = function () {
         $('#ProcessOrderMask').fadeIn(0);
         $('#ProcessOrder').fadeIn(400);
 
+        $("input[name='MergeMethodType']").change(function () {
+            $('.choosed-merge-method-type').html($(this).val());
+        });
+
         $('.remove-process-order').click(function () {
             $('#ProcessOrderMask').fadeOut(400);
             $('#ProcessOrder').fadeOut(400);
-            
             window.location.reload();
         });
 
         $('.confirm-process-order').click(function () {
             var OrderType = $("input[name='OrderTypes']:checked").val();
             var MergeMethodType = $("input[name='MergeMethodType']:checked").val();
+            if ($("#FirstDay").val().length == 0) {
+                alert("please select datetime!");
+                return;
+            }
             $.ajax({
                 url: "/Requirements/RunMrp",
                 type: "post",
                 data:{
                     "OrderType": OrderType,
-                    "MergeMethod": MergeMethodType
+                    "MergeType": MergeMethodType,
+                    "FirstDay": $("#FirstDay").val(),
+                    "Count": $("#Count").val()
                 },
                 success: function (data) {
                     if (data.Result) {
@@ -120,7 +136,7 @@ Requirement.run_mrp = function () {
         $("<hr/><div class='col-sm-12' style='text-align:center;'>" +
             "<i class='" + iconClass + "' style='font-size:9em;color:" + fontColor + "'></i>" +
             "<br/><br/><div class='col-sm-12'>" +
-            "<label style='text-align:center;color:"+fontColor+";font-size:1em;'>"+contentMsg+"</label>" +
+            "<label style='text-align:center; color:"+fontColor+";font-size:1.5em;'>"+contentMsg+"</label>" +
             "</div></div>").appendTo($('#ProcessOrder'));
     }
 }

@@ -47,8 +47,10 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Messaging" />
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -87,10 +89,13 @@
     <Compile Include="Data\Repository\RequirementRepository.vb" />
     <Compile Include="Data\Repository\MrpRoundRepository.vb" />
     <Compile Include="Data\RequirementStatus.vb" />
+    <Compile Include="Model\BatchFinishOrderRecord.vb" />
     <Compile Include="Model\CalculateSetting.vb" />
     <Compile Include="Model\DeriveType.vb" />
     <Compile Include="Data\Repository\IStockRepository.vb" />
     <Compile Include="Data\Repository\StockRepository.vb" />
+    <Compile Include="Model\PartPartial.vb" />
+    <Compile Include="Model\PartType.vb" />
     <Compile Include="Model\ProcessOrderPartial.vb" />
     <Compile Include="Model\MrpRoundPartial.vb" />
     <Compile Include="Model\RequirementPartial.vb" />
@@ -112,10 +117,12 @@
     </Compile>
     <Compile Include="Service\CalculateService.vb" />
     <Compile Include="Service\ICalculateService.vb" />
+    <Compile Include="Service\IPartService.vb" />
     <Compile Include="Service\INumericService.vb" />
     <Compile Include="Service\IProcessOrderService.vb" />
     <Compile Include="Service\IRequirementService.vb" />
     <Compile Include="Service\IMrpRoundService.vb" />
+    <Compile Include="Service\PartService.vb" />
     <Compile Include="Service\NumericService.vb" />
     <Compile Include="Service\ProcessOrderService.vb" />
     <Compile Include="Service\RequirementService.vb" />

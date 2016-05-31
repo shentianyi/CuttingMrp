@@ -66,16 +66,22 @@ Public Class Calculator
             For Each item As BomItem In tempBoms(m.partnr)
                 requires.Add(New Requirement With {.derivedFrom = m.sourceDoc, .derivedType = m.source, .orderedDate = m.orderedDate, .requiredDate = m.requiredDate, .partNr = item.componentId, .status = RequirementStatus.Open, .quantity = item.quantity * m.quantity})
             Next
-            repo.MarkForDeletion(m)
+            ' repo.MarkForDeletion(m)
         Next
-        Dim requireRepo As Repository(Of Requirement) = New Repository(Of Requirement)(dc)
-        requireRepo.GetTable.InsertAllOnSubmit(requires)
-        Using trans As New TransactionScope
-            Try
+
+        Dim requireRepo As Repository(Of Requirement) = New Repository(Of Requirement)(New DataContext(DBConn))
+        Dim todeactives As IEnumerable(Of Requirement) = requireRepo.FindAll(Function(c) c.status = RequirementStatus.Open)
+        For Each todeactive As Requirement In todeactives
+            todeactive.status = RequirementStatus.CancelSystem
+        Next
+
+        'Using trans As New TransactionScope
+        Try
+            ' requireRepo.SaveAll()
+            requireRepo.GetTable.InsertAllOnSubmit(requires)
                 requireRepo.SaveAll()
-                repo.SaveAll()
-                trans.Complete()
-            Catch ex As Exception
+            ' trans.Complete()
+        Catch ex As Exception
                 Throw ex
             Finally
                 'release resource
@@ -84,7 +90,7 @@ Public Class Calculator
                 requires = Nothing
                 requireRepo = Nothing
             End Try
-        End Using
+        'End Using
     End Sub
     Public Sub ResetOrders(targetStatus() As ProcessOrderStatus, reserveTypes As List(Of String), status As ProcessOrderStatus)
         If reserveTypes Is Nothing Then
@@ -118,14 +124,16 @@ Public Class Calculator
                 Dim en As EntitySet(Of OrderDerivation) = New EntitySet(Of OrderDerivation)
                 en.AddRange(toInsertRefer)
                 Dim partRepo As Repository(Of Part) = New Repository(Of Part)(New DataContext(DBConn))
-                Dim currPart As Part = partRepo.First(Function(c) c.partNr = dic.Key)
+                Dim currPart As Part = partRepo.First(Function(c) c.partNr = CType(dic.Key, String))
                 Dim actualQty As Double
                 If sum > 0 Then
                     If sum < currPart.spq Then
                         actualQty = currPart.spq
                     Else
-                        If sum Mod currPart.spq <> 0 Then
+                        If (sum Mod currPart.spq) <> 0 Then
                             actualQty = sum + (currPart.spq - (sum Mod currPart.spq))
+                        Else
+                            actualQty = sum
                         End If
                     End If
                 End If
@@ -134,14 +142,30 @@ Public Class Calculator
                 If sum <> 0 And actualQty <> 0 Then
                     completeRate = actualQty / sum
                 End If
+                Dim sourceDoc As String = " "
+                If settings.OrderType = "FIX" Then
+                    Dim fixorderrepo As Repository(Of BatchOrderTemplate) = New Repository(Of BatchOrderTemplate)(New DataContext(DBConn))
+                    Dim fixorders As List(Of BatchOrderTemplate) = (From kbors In fixorderrepo.GetTable Where kbors.partNr = CType(dic.Key, String) Select kbors).ToList
+                    If fixorders.Count > 0 Then
+                        sourceDoc = ""
+                        For Each fo As BatchOrderTemplate In fixorders
+                            If String.IsNullOrEmpty(sourceDoc) Then
+                                sourceDoc = fo.orderNr
+                            Else
+                                sourceDoc = fo.orderNr & "/" & sourceDoc
+                            End If
+                        Next
+                    End If
 
+                End If
                 Dim toinsert As ProcessOrder = New ProcessOrder With {.orderNr = ordernr,
-                    .partNr = dic.Key, .derivedFrom = "MRP", .proceeDate = dateresult,
+                    .partNr = dic.Key, .derivedFrom = "MRP", .proceeDate = dateresult, .sourceDoc = sourceDoc,
                     .status = ProcessOrderStatus.Open, .sourceQuantity = sum, .actualQuantity = actualQty,
                     .completeRate = completeRate, .batchQuantity = currPart.moq, .OrderDerivations = en}
                 result.Add(toinsert)
             Next
         Next
+
         Return result
     End Function
 
@@ -199,25 +223,44 @@ Public Class Calculator
     ''' </param>
     ''' <param name="collections"></param>
     ''' <returns></returns>
-    Public Function GroupByDate(dateType As String, collections As List(Of Requirement))
+    Public Function GroupByDate(dateType As MergeMethod, collections As List(Of Requirement))
         If collections Is Nothing Or dateType Is Nothing Then
             Throw New ArgumentNullException
         End If
         Dim result As Hashtable = New Hashtable
-
+        collections = (From coll In collections Select coll Order By coll.requiredDate Ascending).ToList
         For Each coll As Requirement In collections
             Dim key As String = ""
-            Select Case dateType
+            Select Case dateType.MergeType
                 Case "DAY"
-                    key = coll.requiredDate.ToString("yyyy-MM-dd")
+                    If dateType.Count < 1 Then
+                        Throw New Exception("Unsupported count" & dateType.Count & " of DAY method")
+                    Else
+                        '有需求日期小于基准日的订单
+                        If coll.requiredDate < dateType.FirstDay Then
+
+                        Else
+                            If coll.requiredDate < dateType.FirstDay.AddDays(dateType.Count) Then
+                                key = dateType.FirstDay.ToString("yyyy-MM-dd")
+                            Else
+                                key = FindBasicDate(dateType.FirstDay, coll.requiredDate, dateType.Count).ToString("yyyy-MM-dd")
+                            End If
+                        End If
+
+                    End If
                 Case "WEEK"
                     'get the monday of each week
                     Dim delta As Integer = DayOfWeek.Monday - coll.requiredDate.DayOfWeek
                     key = coll.requiredDate.AddDays(delta).ToString("yyyy-MM-dd")
+                    Throw New NotImplementedException
                 Case "MONTH"
                     key = coll.requiredDate.ToString("yyyy-MM") & "-01"
+                    Throw New NotImplementedException
                 Case "YEAR"
                     key = coll.requiredDate.ToString("yyyy") & "-01-01"
+                    Throw New NotImplementedException
+                Case Else
+                    Throw New Exception("Unsupported Merge Method")
             End Select
             If result.ContainsKey(key) Then
                 result(key).add(coll)
@@ -229,5 +272,35 @@ Public Class Calculator
         Next
         Return result
     End Function
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="firstBasicDate">基准日</param>
+    ''' <param name="currentDate">当前时间（需要计算归属合并日的时间）</param>
+    ''' <param name="count">时间跨度</param>
+    ''' <returns></returns>
+    Public Function FindBasicDate(firstBasicDate As Date, currentDate As Date, count As Integer) As Date
+        Dim returnedDate As Date
+        Dim daydiff As Integer
+        If currentDate < firstBasicDate Then
+            If Math.Floor((firstBasicDate - currentDate).TotalDays) < count Then
+                returnedDate = firstBasicDate.AddDays(-count)
+            Else
+                Dim element As Double = (firstBasicDate - currentDate).TotalDays
+                daydiff = -(Math.Floor((firstBasicDate - currentDate).TotalDays) Mod count)
+                returnedDate = currentDate.AddDays(daydiff)
+            End If
+        Else
+            If Math.Ceiling((currentDate - firstBasicDate).TotalDays) < count Then
+                returnedDate = firstBasicDate
+            Else
+                daydiff = -(Math.Ceiling((currentDate - firstBasicDate).TotalDays) Mod count)
+                returnedDate = currentDate.AddDays(daydiff)
+            End If
+
+        End If
+        Return returnedDate
+    End Function
+
 
 End Class
