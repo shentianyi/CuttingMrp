@@ -180,6 +180,14 @@ Public Class ProcessOrderService
                     If rec.Amount >= toCompareOrder.actualQuantity Then
                         rec.Amount = rec.Amount - toCompareOrder.actualQuantity
                         toFinish.Add(toCompareOrder)
+                        If rec.Amount > 0 Then
+                            toStock.Add(New Stock With {.partNr = rec.PartNr,
+                                .fifo = Now, .sourceType = "BATCHUPLOAD",
+                                .source = "BATCHUPLOAD",
+                                .quantity = rec.Amount, .wh = "ORIGINAL",
+                                .position = "ORIGINAL", .container = "ORIGINAL"})
+                        End If
+
                     Else
                         toStock.Add(New Stock With {.partNr = rec.PartNr,
                                     .fifo = Now, .sourceType = "PROCESSORDER",
@@ -201,7 +209,7 @@ Public Class ProcessOrderService
 
         Using scope As New TransactionScope
             Try
-                Dim ids As List(Of String) = (From tof In toFinish Select tof.partNr Distinct).ToList
+                Dim ids As List(Of String) = (From tof In toFinish Select tof.orderNr Distinct).ToList
                 FinishOrdersByIds(ids, Now, "ORIGINAL", "ORIGINAL", "ORIGINAL", "", "")
                 Dim context As DataContext = New DataContext(DBConn)
                 Dim stockrepo As Repository(Of Stock) = New Repository(Of Stock)(context)
