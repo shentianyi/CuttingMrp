@@ -28,4 +28,12 @@ Public Class ProcessOrderSearchModel
 
     Public Property MrpRound As String
 
+    Public Property KanbanNr As String
+
+    ''' <summary>
+    ''' part type equals to kanban type
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property PartType As Integer?
+
 End Class

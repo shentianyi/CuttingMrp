@@ -1,6 +1,7 @@
 ﻿Public Interface IProcessOrderService
 
     Function Search(conditions As ProcessOrderSearchModel) As IQueryable(Of ProcessOrder)
+    Function SearchView(conditions As ProcessOrderSearchModel) As IQueryable(Of ProcessOrderView)
     Sub UpdateOrderQuantity(toUpdateId As String, quantity As Double)
     Sub CancelOrdersByIds(ids As List(Of String), isSystem As Boolean)
     Sub FinishOrdersByIds(ids As List(Of String), fifo As DateTime, container As String, wh As String, position As String, source As String, sourceType As String)

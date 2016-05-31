@@ -126,7 +126,7 @@ ProcessOrders.show_part_nr_msg = function () {
                             "PartDesc:" + data.partDesc + "<br/>" +
                             "moq(BundleQty):" + data.moq + "<br/>" +
                             "spq(BatchQty):" + data.spq + "<br/>" +
-                            "type:"+data.type+"</div></div></div>");
+                            "type:" + data.partTypeDisplay + "</div></div></div>");
                         $(NowPartNr).popover('show');
                     },
                     error: function () {
