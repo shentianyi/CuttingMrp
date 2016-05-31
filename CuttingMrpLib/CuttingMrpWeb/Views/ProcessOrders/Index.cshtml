@@ -9,49 +9,49 @@
 
 <div class="panel panel-default navbar-fixed-top" style="box-shadow: -2px 2px 4px #34313a;top:60px;">
     <div class="panel-body">
-        <div class="col-sm-12" style="text-align:center;">
+        <div class="col-md-12" style="text-align:center;">
             <form action="/ProcessOrders/Search" method="get">
-
-                <div class="col-sm-6 filter-content">
+                <div class="col-md-7 filter-content">
                     <span class="pull-right" id="basic-addon-filter"> <i class="glyphicon glyphicon-filter"></i> </span>
                     <div class="filter-p"></div>
                 </div>
-
-                <div class="col-sm-2" style="border-right:1px solid #eeeeee;">
-                    <button class="btn btn-primary" type="submit" style="width:100px;">Search All</button>
-                    <hr style="margin:5px;" />
-                    <button class="btn btn-primary import-force-record" title="Import Force Record" data-toggle="tooltip" data-placement="bottom" type="button" style="width:100px;">Import</button>
-                </div>
+                    <div class="col-md-2" style="border-right:1px solid #eeeeee;">
+                        <button class="btn btn-primary" type="submit" style="width:100px;">Search All</button>
+                        <hr style="margin:5px;" />
+                        <button class="btn btn-primary import-force-record" title="Import Force Record" data-toggle="tooltip" data-placement="bottom" type="button" style="width:100px;">Import</button>
+                    </div>
             </form>
-            <div class="col-sm-2" style="border-right:1px solid #eeeeee;">
-                <button class="btn btn-success export-kanbans" title="Export Kanbans" data-toggle="tooltip" data-placement="bottom" type="button" style="width:100px;">Export KB</button>
-                <hr style="margin:5px;" />
-                @Html.ActionLink("Export Full", "Export", new
-           {
-               OrderNr = ViewBag.Query.OrderNr,
-               Kanbans = ViewBag.Query.SourceDoc,
-               DerivedFrom = ViewBag.Query.DerivedFrom,
-               ProceeDateFrom = ViewBag.Query.ProceeDateFrom,
-               ProceeDateTo = ViewBag.Query.ProceeDateTo,
-               PartNr = ViewBag.Query.PartNr,
-               ActualQuantityFrom = ViewBag.Query.ActualQuantityFrom,
-               ActualQuantityTo = ViewBag.Query.ActualQuantityTo,
-               CompleteRateFrom = ViewBag.Query.CompleteRateFrom,
-               CompleteRateTo = ViewBag.Query.CompleteRateTo,
-               Status = ViewBag.Query.Status,
-               MrpRound = ViewBag.Query.MrpRound
-           }, new { @style = "width:100px;", @class = "btn btn-success", @title = "export searched results" })
-            </div>
-            <div class="col-sm-2">
-                <form action="/ProcessOrders/Finish" method="post" id="finishForm">
-                    <input type="hidden" id="finishOrderIds" name="finishOrderIds" />
-                    <button class="btn btn-primary finish-process-order" type="button" style="width:100px;">Finish</button>
-                </form>
-                <hr style="margin:5px;" />
-                <form action="/ProcessOrders/Cancel" method="post" id="cancelForm">
-                    <input type="hidden" id="cancelOrderIds" name="cancelOrderIds" />
-                    <button class="btn btn-warning cancel-process-order" type="button" style="width:100px;">Cancel</button>
-                </form>
+            <div class="col-md-3">
+                <div class="col-md-7" style="border-right:1px solid #eeeeee;">
+                    <button class="btn btn-success export-kanbans" title="Export Kanbans" data-toggle="tooltip" data-placement="bottom" type="button" style="width:100px;">Export KB</button>
+                    <hr style="margin:5px;" />
+                    @Html.ActionLink("Export Full", "Export", new
+               {
+                   OrderNr = ViewBag.Query.OrderNr,
+                   Kanbans = ViewBag.Query.SourceDoc,
+                   DerivedFrom = ViewBag.Query.DerivedFrom,
+                   ProceeDateFrom = ViewBag.Query.ProceeDateFrom,
+                   ProceeDateTo = ViewBag.Query.ProceeDateTo,
+                   PartNr = ViewBag.Query.PartNr,
+                   ActualQuantityFrom = ViewBag.Query.ActualQuantityFrom,
+                   ActualQuantityTo = ViewBag.Query.ActualQuantityTo,
+                   CompleteRateFrom = ViewBag.Query.CompleteRateFrom,
+                   CompleteRateTo = ViewBag.Query.CompleteRateTo,
+                   Status = ViewBag.Query.Status,
+                   MrpRound = ViewBag.Query.MrpRound
+               }, new { @style = "width:100px;", @class = "btn btn-success", @title = "Export All Results", data_toggle="tooltip", data_placement="bottom", role="button"})
+                </div>
+                <div class="col-md-5">
+                    <form action="/ProcessOrders/Finish" method="post" id="finishForm"> 
+                        <input type="hidden" id="finishOrderIds" name="finishOrderIds" />
+                        <button class="btn btn-primary finish-process-order" type="button" style="width:80px;">Finish</button>
+                    </form>
+                    <hr style="margin:5px;" />
+                    <form action="/ProcessOrders/Cancel" method="post" id="cancelForm">
+                        <input type="hidden" id="cancelOrderIds" name="cancelOrderIds" />
+                        <button class="btn btn-warning cancel-process-order" type="button" style="width:80px;">Cancel</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -82,7 +82,7 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                <td> # </td>
+                <th> # </th>
                 <th> No. </th>
                 <th>OrderNr</th>
                 <th>PartNr</th>
@@ -111,18 +111,20 @@
                             @if (item.canFinish)
                             {
                                 <input type="checkbox" class="orderNrCheck" id="orderNrCheck" name="orderNr" value="@item.orderNr" />
-                                @*@Html.CheckBox("orderNr",  new { value = item.orderNr})*@
                             }
                             else
                             {
                                 <input type="checkbox" id="orderNr" name="orderNr" disabled value="@item.orderNr" />
-                                @*@Html.CheckBox("orderNr", new { value = item.orderNr,@disabled=true })*@
                             }
                         </td>
 
                         <td>@(i += 1)</td>
                         <td>@Html.DisplayFor(modelItem => item.orderNr)</td>
-                        <td class="partNrMsg" onmousemove="part_nr_mouse_over('@item.orderNr')">@Html.DisplayFor(modelItem => item.partNr)</td>
+
+                        @*<td class="partNrMsg" data-html="true" title="" data-toggle="tooltip" data-placement="right">@Html.DisplayFor(modelItem => item.partNr)</td>*@
+
+                        <td class="partNrMsg" title="Part" data-toggle="popover" data-placement="right" data-trigger="focus" data-html="true" data-content="">@Html.DisplayFor(modelItem => item.partNr)</td>
+
                         <td>@Html.DisplayFor(modelItem => item.sourceDoc)</td>
                         <td>KanbanType</td>
                         <td>@Html.DisplayFor(modelItem => item.statusDisplay)</td>
@@ -277,7 +279,6 @@
     }
 </div>
 
-
 @Scripts.Render("~/bundles/process-orders")
 
 <script type="text/javascript">
@@ -287,4 +288,5 @@
     ProcessOrders.cancel_process_order();
     ProcessOrders.import_force_record();
     ProcessOrders.export_kanbans();
+    ProcessOrders.show_part_nr_msg();
 </script>
