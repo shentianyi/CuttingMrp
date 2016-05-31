@@ -148,7 +148,7 @@ Public Class ProcessOrderService
 
 
 
-    Public Function BatchFinishOrder(records As List(Of BatchFinishOrderRecord), ignoreError As Boolean) As Boolean Implements IProcessOrderService.BatchFinishOrder
+    Public Sub BatchFinishOrder(records As List(Of BatchFinishOrderRecord), ignoreError As Boolean) Implements IProcessOrderService.BatchFinishOrder
         Dim validated As Hashtable = ValidateFinishOrder(records)
         If validated.ContainsKey("WARN") Then
             If ignoreError = False Then
@@ -159,6 +159,7 @@ Public Class ProcessOrderService
         Dim sortedOrders As Hashtable = New Hashtable
         Dim toUpdate As List(Of ProcessOrder) = New List(Of ProcessOrder)
         Dim toFinish As List(Of ProcessOrder) = New List(Of ProcessOrder)
+        Dim toStock As List(Of Stock) = New List(Of Stock)
         Dim existingOrders As List(Of ProcessOrder) = Me.Search(conditions).ToList
         existingOrders = (From order In existingOrders Select order Order By order.proceeDate Ascending).ToList
         'group by order nr
@@ -174,17 +175,53 @@ Public Class ProcessOrderService
 
 
         For Each rec As BatchFinishOrderRecord In validated("SUCCESS")
+            If sortedOrders.ContainsKey(rec.PartNr) Then
+                For Each toCompareOrder As ProcessOrder In sortedOrders(rec.PartNr)
+                    If rec.Amount >= toCompareOrder.actualQuantity Then
+                        rec.Amount = rec.Amount - toCompareOrder.actualQuantity
+                        toFinish.Add(toCompareOrder)
+                    Else
+                        toStock.Add(New Stock With {.partNr = rec.PartNr,
+                                    .fifo = Now, .sourceType = "PROCESSORDER",
+                                    .source = toCompareOrder.orderNr,
+                                    .quantity = rec.Amount, .wh = "ORIGINAL",
+                                    .position = "ORIGINAL", .container = "ORIGINAL"})
+                        toCompareOrder.actualQuantity = toCompareOrder.actualQuantity - rec.Amount
+                        toUpdate.Add(toCompareOrder)
+                    End If
+                Next
+            Else
+                toStock.Add(New Stock With {.partNr = rec.PartNr, .fifo = Now,
+                            .sourceType = "BATCHUPLOAD", .container = "ORIGINAL",
+                            .position = "ORIGINAL", .quantity = rec.Amount,
+                            .source = "BATCHUPLOAD", .wh = "ORGINAL"})
 
+            End If
         Next
 
         Using scope As New TransactionScope
             Try
+                Dim ids As List(Of String) = (From tof In toFinish Select tof.partNr Distinct).ToList
+                FinishOrdersByIds(ids, Now, "ORIGINAL", "ORIGINAL", "ORIGINAL", "", "")
+                Dim context As DataContext = New DataContext(DBConn)
+                Dim stockrepo As Repository(Of Stock) = New Repository(Of Stock)(context)
+                stockrepo.GetTable.InsertAllOnSubmit(toStock)
+                Dim orderrepo As New ProcessOrderRepository(context)
+                For Each toup As ProcessOrder In toUpdate
+                    Dim towrite As ProcessOrder = orderrepo.Single(Function(c) c.orderNr = toup.orderNr)
+                    towrite.sourceDoc = towrite.sourceDoc & "/" & "BATCHBALANCE: from " & towrite.actualQuantity & "to " & toup.actualQuantity
+                    towrite.actualQuantity = toup.actualQuantity
+                Next
+                orderrepo.SaveAll()
+                stockrepo.SaveAll()
+                scope.Complete()
 
             Catch ex As Exception
                 Throw New Exception("写入数据库时出现错误", ex)
             End Try
         End Using
-    End Function
+
+    End Sub
 
     Private Function PartExists(partNr As String) As Boolean
         Dim partRepo As Repository(Of Part) = New Repository(Of Part)(New DataContext(DBConn))
