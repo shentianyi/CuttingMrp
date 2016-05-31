@@ -31,6 +31,7 @@
     border-bottom:1px solid #eeeeee;
     height:30px;
     line-height:28px;
+    white-space:nowrap;
 }
 
 .part-nr-ul>li>label{

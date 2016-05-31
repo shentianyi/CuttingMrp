@@ -114,38 +114,25 @@ ProcessOrders.show_part_nr_msg = function () {
                     url: '/parts/Details/'+PartNrMouseOver,
                     type: 'get',
                     success: function (data) {
-                        console.log(JSON.stringfy(data));
-                        $(NowPartNr).attr("data-content", "<div class='panel panel-default'>" +
-                            "<div class='panel panel-heading'>" +
-                            "<div class='panel-title'>Part Details</div>" +
-                            "<div class='panel-body'>" +
-                            "PartNr:" + data.partNr + "<br/>" +
-                            "PartDesc:" + data.partDesc + "<br/>" +
-                            "moq(BundleQty):" + data.moq + "<br/>" +
-                            "spq(BatchQty):" + data.spq + "<br/>" +
-                            "type:" + data.partTypeDisplay + "</div></div></div>");
+                        //{"partNr":"91C540301220",
+                        //    "partTypeDisplay":"WhiteCard",
+                        //    "partDesc":"91C540301220",
+                        //    "moq":100,
+                        //    "spq":100,
+                        //    "kanbanNr":"419300"
+                        //}
+                        $(NowPartNr).attr("title", "<strong>" + data.partNr + "</strong>");
+                        $(NowPartNr).attr("data-content", "<ul class='part-nr-ul'>" +
+                           "<li><label>labelartNr:</label>" + data.partNr + "</li>" +
+                           "<li><label>partTypeDisplay:</label>" + data.partTypeDisplay + "</li>" +
+                           "<li><label>PartDesc:</label>" + data.partDesc + "</li>" +
+                           "<li><label>moq(BundleQty):</label>" + data.moq + "</li>" +
+                           "<li><label>spq(BatchQty):</label>" + data.spq + "</li>" +
+                           "<li><label>Type:</label>" + data.kanbanNr + "</li>" +
+                           "</ul>");
                         $(NowPartNr).popover('show');
                     },
                     error: function () {
-                        var data = {
-                            partNr: "P001",
-                            partDesc: "P001",
-                            moq: 400,
-                            spq: 400,
-                            type: "TYPE"
-                        }
-
-                        $(NowPartNr).attr("title","<strong>"+data.partNr+"</strong>");
-                        $(NowPartNr).attr("data-content", "<ul class='part-nr-ul'>" +
-                            "<li><label>labelartNr:</label>" + data.partNr + "</li>" +
-                            "<li><label>PartDesc:</label>" + data.partDesc + "</li>" +
-                            "<li><label>moq(BundleQty):</label>" + data.moq + "</li>" +
-                            "<li><label>spq(BatchQty):</label>" + data.spq + "</li>" +
-                            "<li><label>Type:</label>" + data.type + "</li>" +
-                            "</ul>");
-
-                        console.log($(NowPartNr).popover('show'));
-                        $(NowPartNr).popover('show')
                         console.log("Something error.")
                     }
                 });
