@@ -2,7 +2,7 @@
 
 ProcessOrders.init = function () {
     var ordernr= $('#OrderNr').val();
-    var kanbans = $('#SourceDoc').val();
+    var kanbans = $('#KanbanNr').val();
     var derivedfrom = $('#DerivedFrom').val();
     var proceedatefrom = $('#ProceeDateFrom').val();
     var proceedateto = $('#ProceeDateTo').val();
@@ -13,7 +13,7 @@ ProcessOrders.init = function () {
     var completerateto = $('#CompleteRateTo').val();
     var status = $("#Status").children("option:selected").html();
     var mrpround = $("#MrpRound").children("option:selected").html();
-    var kanbanstype = $("#KanBansType").children("option:selected").html();
+    var kanbanstype = $("#PartType").children("option:selected").html();
 
     ProcessOrders.add_string_label_to_div(ordernr, 'OrderNr like ', '.filter-p');
     ProcessOrders.add_string_label_to_div(kanbans, 'Kanbans like ', '.filter-p');
@@ -21,7 +21,7 @@ ProcessOrders.init = function () {
     ProcessOrders.add_string_label_to_div(partnr, 'PartNr like ', '.filter-p');
     ProcessOrders.add_string_label_to_div(status, 'Status =', '.filter-p');
     ProcessOrders.add_string_label_to_div(mrpround, 'MrpRound =', '.filter-p');
-    ProcessOrders.add_string_label_to_div(kanbanstype, 'KanBansType =', '.filter-p');
+    ProcessOrders.add_string_label_to_div(kanbanstype, 'PartType(KB Type) =', '.filter-p');
     ProcessOrders.add_range_label_to_div(proceedatefrom + "~" + proceedateto, 'ProceeDate ', '.filter-p');
     ProcessOrders.add_range_label_to_div(actualquantityfrom + "~" + actualquantityto, 'ActualQuantity ', '.filter-p');
     ProcessOrders.add_range_label_to_div(completeratefrom + "~" + completerateto, 'CompleteRate ', '.filter-p');
@@ -111,42 +111,28 @@ ProcessOrders.show_part_nr_msg = function () {
                 $(NowPartNr).popover('show');
             } else {
                 $.ajax({
-                    url: '/parts/Details/',
+                    url: '/parts/Details/'+PartNrMouseOver,
                     type: 'get',
-                    data: {
-                        part_nr: PartNrMouseOver,
-                    },
                     success: function (data) {
-                        console.log(JSON.stringfy(data));
-                        $(NowPartNr).attr("data-content", "<div class='panel panel-default'>" +
-                            "<div class='panel panel-heading'>" +
-                            "<div class='panel-title'>Part Details</div>" +
-                            "<div class='panel-body'>" +
-                            "PartNr:" + data.partNr + "<br/>" +
-                            "PartDesc:" + data.partDesc + "<br/>" +
-                            "moq(BundleQty):" + data.moq + "<br/>" +
-                            "spq(BatchQty):" + data.spq + "<br/>" +
-                            "type:" + data.partTypeDisplay + "</div></div></div>");
+                        //{"partNr":"91C540301220",
+                        //    "partTypeDisplay":"WhiteCard",
+                        //    "partDesc":"91C540301220",
+                        //    "moq":100,
+                        //    "spq":100,
+                        //    "kanbanNr":"419300"
+                        //}
+                        $(NowPartNr).attr("title", "<strong>" + data.partNr + "</strong>");
+                        $(NowPartNr).attr("data-content", "<ul class='part-nr-ul'>" +
+                           "<li><label>labelartNr:</label>" + data.partNr + "</li>" +
+                           "<li><label>partTypeDisplay:</label>" + data.partTypeDisplay + "</li>" +
+                           "<li><label>PartDesc:</label>" + data.partDesc + "</li>" +
+                           "<li><label>moq(BundleQty):</label>" + data.moq + "</li>" +
+                           "<li><label>spq(BatchQty):</label>" + data.spq + "</li>" +
+                           "<li><label>Type:</label>" + data.kanbanNr + "</li>" +
+                           "</ul>");
                         $(NowPartNr).popover('show');
                     },
                     error: function () {
-                        var data = {
-                            partNr: "P001",
-                            partDesc: "P001",
-                            moq: 400,
-                            spq: 400,
-                            type: "TYPE"
-                        }
-
-                        $(NowPartNr).attr("title","<strong>"+data.partNr+"</strong>");
-                        $(NowPartNr).attr("data-content", "<ul class='part-nr-ul'>" +
-                            "<li><label>labelartNr:</label>" + data.partNr + "</li>" +
-                            "<li><label>PartDesc:</label>" + data.partDesc + "</li>" +
-                            "<li><label>moq(BundleQty):</label>" + data.moq + "</li>" +
-                            "<li><label>spq(BatchQty):</label>" + data.spq + "</li>" +
-                            "<li><label>Type:</label>" + data.type + "</li>" +
-                            "</ul>");
-                        $(NowPartNr).popover('show');
                         console.log("Something error.")
                     }
                 });

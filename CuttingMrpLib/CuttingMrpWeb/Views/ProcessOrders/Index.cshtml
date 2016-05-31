@@ -18,7 +18,7 @@
                 <div class="col-md-2" style="border-right:1px solid #eeeeee;">
                     <button class="btn btn-primary" type="submit" style="width:100px;">Search All</button>
                     <hr style="margin:5px;" />
-                    <button class="btn btn-primary import-force-record" title="Import Force Record" data-toggle="tooltip" data-placement="bottom" type="button" style="width:100px;">Import</button>
+                    <button class="btn btn-info import-force-record" title="Import Force Record" data-toggle="tooltip" data-placement="bottom" type="button" style="width:100px;">Import</button>
                 </div>
             </form>
             <div class="col-md-3">
@@ -40,7 +40,7 @@
                    MrpRound = ViewBag.Query.MrpRound,
                    KanbanNr = ViewBag.Query.KanbanNr,
                    PartType = ViewBag.Query.PartType
-               }, new { @style = "width:100px;", @class = "btn btn-success export-kanbans", @title = "export searched results" })
+               }, new { @style = "width:100px;", @class = "btn btn-primary export-kanbans", @title = "export searched results", data_toggle = "tooltip", data_placement = "bottom"})
                     <hr style="margin:5px;" />
                     @Html.ActionLink("Export Full", "Export", new
                {
@@ -56,7 +56,7 @@
                    CompleteRateTo = ViewBag.Query.CompleteRateTo,
                    Status = ViewBag.Query.Status,
                    MrpRound = ViewBag.Query.MrpRound
-               }, new { @style = "width:100px;", @class = "btn btn-success", @title = "Export All Results", data_toggle = "tooltip", data_placement = "bottom", role = "button" })
+               }, new { @style = "width:100px;", @class = "btn btn-success", @title = "Export All Results", data_toggle = "tooltip", data_placement = "bottom"})
                 </div>
                 <div class="col-md-5">
                     <form action="/ProcessOrders/Finish" method="post" id="finishForm">
@@ -106,7 +106,7 @@
                 <th>OrderNr</th>
                 <th>PartNr</th>
                 <th>Kanbans</th>
-                <th>PartType(KB Type)</th>
+                <th style="white-space:nowrap;">PartType(KB Type)</th>
                 <th>Status</th>
                 <th>ProceeDate</th>
                 <th>SourceQuantity</th>
@@ -138,8 +138,7 @@
 
                         <td>@(i += 1)</td>
                         <td>@Html.DisplayFor(modelItem => item.orderNr)</td>
-                        <td class="partNrMsg" title="Part" data-toggle="popover" data-placement="right" data-trigger="focus" data-html="true" data-content="">@Html.DisplayFor(modelItem => item.partNr)</td>
-
+                        <td class="partNrMsg" title="Part" data-toggle="popover" data-placement="right" data-container="body" data-trigger="focus" data-html="true" data-content="">@Html.DisplayFor(modelItem => item.partNr)</td>
                         <td>@Html.DisplayFor(modelItem => item.Part.kanbanNrs)</td>
                         <td>@Html.DisplayFor(modelItem => item.Part.partTypeDisplay)</td>
                         <td>@Html.DisplayFor(modelItem => item.statusDisplay)</td>
@@ -287,9 +286,9 @@
             Import Force Record
         </div>
         <div class="dialogModal_content">
-            <strong>请选择文件:</strong>
+            <strong>Select Force File:</strong>
             <hr />
-            <input type="file" value="file" />
+            <input type="file" value="file" name="forceFile" />
         </div>
         <div class="dialogModal_footer">
             <button type="submit" class="btn btn-primary" style="width:200px;" data-dialogModalBut="ok">OK</button>

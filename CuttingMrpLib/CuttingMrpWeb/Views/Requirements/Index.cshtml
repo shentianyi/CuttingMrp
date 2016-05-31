@@ -80,15 +80,15 @@
                 {
                     var html = Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
                         .Options(o => o.AddRouteValue("PartNr", ViewBag.Query.PartNr))
-                        .Options(o => o.AddRouteValue("OrderedDateFrom", ViewBag.Query.PartNr))
-                        .Options(o => o.AddRouteValue("OrderedDateTo", ViewBag.Query.PartNr))
-                        .Options(o => o.AddRouteValue("RequiredTimeFrom", ViewBag.Query.PartNr))
-                        .Options(o => o.AddRouteValue("RequiredTimeTo", ViewBag.Query.PartNr))
-                        .Options(o => o.AddRouteValue("QuantityFrom", ViewBag.Query.PartNr))
-                        .Options(o => o.AddRouteValue("QuantityTo", ViewBag.Query.PartNr))
-                        .Options(o => o.AddRouteValue("Status", ViewBag.Query.PartNr))
-                        .Options(o => o.AddRouteValue("DerivedFrom", ViewBag.Query.PartNr))
-                        .Options(o => o.AddRouteValue("DerivedType", ViewBag.Query.PartNr));
+                        .Options(o => o.AddRouteValue("OrderedDateFrom", ViewBag.Query.OrderedDateFrom))
+                        .Options(o => o.AddRouteValue("OrderedDateTo", ViewBag.Query.OrderedDateTo))
+                        .Options(o => o.AddRouteValue("RequiredTimeFrom", ViewBag.Query.RequiredTimeFrom))
+                        .Options(o => o.AddRouteValue("RequiredTimeTo", ViewBag.Query.RequiredTimeTo))
+                        .Options(o => o.AddRouteValue("QuantityFrom", ViewBag.Query.QuantityFrom))
+                        .Options(o => o.AddRouteValue("QuantityTo", ViewBag.Query.QuantityTo))
+                        .Options(o => o.AddRouteValue("Status", ViewBag.Query.Status))
+                        .Options(o => o.AddRouteValue("DerivedFrom", ViewBag.Query.DerivedFrom))
+                        .Options(o => o.AddRouteValue("DerivedType", ViewBag.Query.DerivedType));
                     @html
                 }
                 else
@@ -184,13 +184,13 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-6 input-group">
-                    <span class="input-group-addon">Start Date</span>
-                    <input type="datetime" value="" class="form-control date-picker" />
+                    <span class="input-group-addon">FirstDay</span>
+                    <input type="datetime" value="" name="FirstDay" id="FirstDay" class="form-control date-picker" />
                 </div>
                 <div class="col-md-6 input-group">
                     <span class="input-group-addon">Nearly</span>
-                    <input type="number" value="" class="form-control"/>
-                    <span class="input-group-addon">DAY</span>
+                    <input type="number" value="2" name="Count" id="Count" class="form-control"/>
+                    <span class="input-group-addon choosed-merge-method-type" style="width:80px;">DAY</span>
                 </div>
             </div>
 

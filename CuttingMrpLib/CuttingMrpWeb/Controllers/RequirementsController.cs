@@ -148,8 +148,19 @@ namespace CuttingMrpWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult RunMrp([Bind(Include = "OrderType,MergeMethod")] CalculateSetting setting)
+        public ActionResult RunMrp()
         {
+            // [Bind(Include = "OrderType,MergeMethod")]
+            CalculateSetting setting = new CalculateSetting()
+            {
+                OrderType = Request.Form.Get("OrderType"),
+                MergeMethod = new MergeMethod()
+                {
+                    FirstDay = DateTime.Parse(Request.Form.Get("FirstDay")),
+                    Count = int.Parse(Request.Form.Get("Count")),
+                    MergeType = Request.Form.Get("MergeType")
+                }
+            };
             Message msg = new Message() { Result = false };
             try
             {
