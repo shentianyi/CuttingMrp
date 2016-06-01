@@ -103,7 +103,7 @@ function getCheckedIds() {
 ProcessOrders.show_part_nr_msg = function () {
     var AllPartNr = document.getElementsByClassName("partNrMsg");
     for (var i = 0; i < AllPartNr.length; i++) {
-        AllPartNr[i].onmouseover = function () {
+        AllPartNr[i].onclick = function () {
             var PartNrMouseOver = $(this).html();
             var NowPartNr = $(this);
             if (NowPartNr.attr("data-content")) {
@@ -142,7 +142,7 @@ ProcessOrders.show_part_nr_msg = function () {
 
         AllPartNr[i].onmouseout = function () {
             var NowPartNr = $(this);
-            $(NowPartNr).popover('hide');
+            //$(NowPartNr).popover('hide');
         }
     }
 }
