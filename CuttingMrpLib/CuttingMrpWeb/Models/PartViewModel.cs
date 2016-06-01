@@ -13,5 +13,7 @@ namespace CuttingMrpWeb.Models
         public double? moq { get; set; }
         public double? spq { get; set; }
         public string kanbanNr { get; set;}
+
+        public string position { get; set; }
     }
 }

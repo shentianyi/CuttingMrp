@@ -1,0 +1,40 @@
+﻿@model List<CuttingMrpLib.BatchFinishOrderRecord>
+
+@if (ViewBag.Msg != null)
+{
+    <div>
+        <h3>@ViewBag.Msg</h3>
+    </div>
+}
+
+
+@if (Model != null)
+{
+    int i = 0;
+
+    <table class="table table-bordered" style="margin-top:10px;">
+        <thead>
+            <tr>
+                <th> No. </th>
+                <th>PartNr</th>
+                <th>FixOrderNr</th>
+                <th>Amount</th>
+                <th>ProdTime</th>
+                <th>Msg</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@(i += 1)</td>
+                    <td>@Html.DisplayFor(modelItem => item.PartNr)</td>
+                    <td>@Html.DisplayFor(modelItem => item.FixOrderNr)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+                    <td>@Html.DisplayFor(modelItem => item.ProdTime)</td>
+                    <td>@string.Join("/", item.Warnings.ToArray())</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

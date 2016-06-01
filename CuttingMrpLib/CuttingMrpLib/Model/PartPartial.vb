@@ -22,4 +22,16 @@
             Return String.Join("/", Me.BatchOrderTemplates.Select(Function(c) c.orderNr).ToArray())
         End Get
     End Property
+
+
+
+    Public ReadOnly Property kanbanPositions As String
+        Get
+            Dim kanban As BatchOrderTemplate = Me.BatchOrderTemplates.FirstOrDefault
+            If kanban IsNot Nothing Then
+                Return If(kanban.remark1 Is Nothing, String.Empty, kanban.remark1)
+            End If
+            Return String.Empty
+        End Get
+    End Property
 End Class

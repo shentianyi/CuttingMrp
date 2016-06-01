@@ -103,7 +103,8 @@ function getCheckedIds() {
 ProcessOrders.show_part_nr_msg = function () {
     var AllPartNr = document.getElementsByClassName("partNrMsg");
     for (var i = 0; i < AllPartNr.length; i++) {
-        AllPartNr[i].onclick = function () {
+        AllPartNr[i].onclick = function (e) {
+            e.stopPropagation();
             var PartNrMouseOver = $(this).html();
             var NowPartNr = $(this);
             if (NowPartNr.attr("data-content")) {
@@ -136,15 +137,17 @@ ProcessOrders.show_part_nr_msg = function () {
                         console.log("Something error.")
                     }
                 });
-
             }
         }
-
-        AllPartNr[i].onmouseout = function () {
-            var NowPartNr = $(this);
+        //AllPartNr[i].onmouseout = function () {
+        //    var NowPartNr = $(this);
             //$(NowPartNr).popover('hide');
-        }
+        //}
     }
+    
+    $('body').click(function () {
+        $('.popover').remove();
+    });
 }
 
 ProcessOrders.import_force_record = function () {
