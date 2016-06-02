@@ -2,6 +2,8 @@
 Public Class ProcessOrderSearchModel
     Inherits SearchModelBase
 
+    Private isOrderByKanban As Boolean = True
+
 
     Public Property OrderNr As String
 
@@ -35,5 +37,17 @@ Public Class ProcessOrderSearchModel
     ''' </summary>
     ''' <returns></returns>
     Public Property PartType As Integer?
+
+    Public Property IsOrderyKanban As Boolean?
+        Get
+            Return Me.isOrderByKanban
+        End Get
+        Set(value As Boolean?)
+            If value.HasValue Then
+                Me.isOrderByKanban = value
+            End If
+        End Set
+    End Property
+
 
 End Class
