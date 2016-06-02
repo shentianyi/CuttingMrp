@@ -104,6 +104,7 @@ ProcessOrders.show_part_nr_msg = function () {
     var AllPartNr = document.getElementsByClassName("partNrMsg");
     for (var i = 0; i < AllPartNr.length; i++) {
         AllPartNr[i].onclick = function (e) {
+            $('.popover').remove();
             e.stopPropagation();
             var PartNrMouseOver = $(this).html();
             var NowPartNr = $(this);
@@ -129,7 +130,7 @@ ProcessOrders.show_part_nr_msg = function () {
                            "<li><label>PartDesc:</label>" + data.partDesc + "</li>" +
                            "<li><label>moq(BundleQty):</label>" + data.moq + "</li>" +
                            "<li><label>spq(BatchQty):</label>" + data.spq + "</li>" +
-                           "<li><label>Type:</label>" + data.kanbanNr + "</li>" +
+                           "<li><label>KanBans:</label>" + data.kanbanNr + "</li>" +
                            "</ul>");
                         $(NowPartNr).popover('show');
                     },

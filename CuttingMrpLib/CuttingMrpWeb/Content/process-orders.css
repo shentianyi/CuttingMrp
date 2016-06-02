@@ -6,6 +6,12 @@
 #basic-addon-filter{
     line-height:60px;
 }
+
+#extra-filter-content{
+    overflow-x:hidden;
+    overflow-y:auto;
+}
+
 .filter-p{
     line-height:30px;
 }

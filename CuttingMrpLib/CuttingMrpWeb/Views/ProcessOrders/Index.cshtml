@@ -23,7 +23,6 @@
             </form>
             <div class="col-md-3">
                 <div class="col-md-7" style="border-right:1px solid #eeeeee;">
-
                     @Html.ActionLink("Export KB", "ExportKB", new
                {
                    OrderNr = ViewBag.Query.OrderNr,
@@ -71,8 +70,6 @@
                         <button class="btn btn-warning cancel-process-order" type="button" style="width:80px;">Cancel</button>
                     </form>
                 </div>
-
-
             </div>
         </div>
     </div>
@@ -115,6 +112,8 @@
                 <th>ActualQuantity</th>
                 <th>BatchQuantity</th>
                 <th>BundleQuantity</th>
+                <th>KanBanPosition</th>
+                <th>RouteNr</th>
                 <th>CompleteRate</th>
                 <th>DerivedFrom</th>
                 <th>Requirements</th>
@@ -150,6 +149,8 @@
                         <td>@Html.DisplayFor(modelItem => item.actualQuantity)</td>
                         <td>@Html.DisplayFor(modelItem => item.Part.kanbanBatchQty)</td>
                         <td>@Html.DisplayFor(modelItem => item.Part.kanbanBundleQty)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Part.kanbanPosition)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Part.routeNr)</td>
                         <td>@Html.DisplayFor(modelItem => item.completeRateDisplay)</td>
                         <td>@Html.DisplayFor(modelItem => item.derivedFrom)</td>
 
@@ -214,7 +215,7 @@
             </div>
         </div>
 
-        <hr style="border:1px solid #eeeeee; margin:10px -20px;" />
+        <hr style="border:1px solid #eeeeee; margin:5px -20px;" />
 
         <div class="col-sm-12">
             <div class="input-group filter-detail">
@@ -224,7 +225,7 @@
                 @Html.DropDownList("PartType", ViewData["partTypeList"] as IEnumerable<SelectListItem>, new { @class = "form-control", @style = "width: 170px", @name = "PartType", @id = "PartType" })
             </div>
         </div>
-        <hr style="margin:10px;" />
+        <hr style="margin:5px;" />
 
         <div class="col-sm-12">
             <div class="input-group filter-detail">
@@ -235,7 +236,7 @@
                 @Html.DropDownList("MrpRound", ViewData["mrpRoundSelect"] as IEnumerable<SelectListItem>, new { @class = "form-control", @style = "width: 170px" })
             </div>
         </div>
-        <hr style="margin:10px;" />
+        <hr style="margin:5px;" />
 
         <div class="col-sm-12">
             <div class="input-group filter-detail">
@@ -245,7 +246,7 @@
                 @Html.DropDownList("Status", ViewData["statusList"] as IEnumerable<SelectListItem>, new { @class = "form-control", @style = "width:175px;" })
             </div>
         </div>
-        <hr style="margin:10px;" />
+        <hr style="margin:5px;" />
 
         <div class="col-sm-12">
             <div class="input-group filter-detail">
@@ -255,7 +256,7 @@
                 <input type="text" style="width:170px;" class="form-control datetime-picker" autocomplete="off" name="ProceeDateTo" id="ProceeDateTo" value="@ViewBag.Query.ProceeDateTo" placeholder="ProceeDate To" />
             </div>
         </div>
-        <hr style="margin:10px;" />
+        <hr style="margin:5px;" />
 
         <div class="col-sm-12">
             <div class="input-group filter-detail">
@@ -265,7 +266,7 @@
                 <input type="text" style="width:170px;" class="form-control" autocomplete="off" name="ActualQuantityTo" id="ActualQuantityTo" value="@ViewBag.Query.ActualQuantityTo" placeholder="ActualQuantity To" />
             </div>
         </div>
-        <hr style="margin:10px;" />
+        <hr style="margin:5px;" />
 
         <div class="col-sm-12">
             <div class="input-group filter-detail">
