@@ -26,7 +26,6 @@ Public Class ProcessOrderService
         Else
             Dim repo As ProcessOrderRepository = New ProcessOrderRepository(New DataContext(DBConn))
             Dim toCancel As IEnumerable(Of ProcessOrder) = repo.FindAll(Function(c) c.status = ProcessOrderStatus.Open And ids.Contains(c.orderNr))
-
             For Each toCancelOrder As ProcessOrder In toCancel
                 If isSystem = True Then
                     toCancelOrder.status = ProcessOrderStatus.SystemCancel

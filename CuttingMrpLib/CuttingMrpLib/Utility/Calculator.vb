@@ -124,14 +124,28 @@ Public Class Calculator
                 Dim en As EntitySet(Of OrderDerivation) = New EntitySet(Of OrderDerivation)
                 en.AddRange(toInsertRefer)
                 Dim partRepo As Repository(Of Part) = New Repository(Of Part)(New DataContext(DBConn))
-                Dim currPart As Part = partRepo.First(Function(c) c.partNr = CType(dic.Key, String))
+                Dim spq As Double = 0
+                Dim moq As Double = 0
+                If settings.OrderType = OrderType.Fix Then
+                    Dim kanbanrepo As Repository(Of BatchOrderTemplate) = New Repository(Of BatchOrderTemplate)(New DataContext(DBConn))
+                    Dim kanban As BatchOrderTemplate = kanbanrepo.First(Function(c) c.partNr = CType(dic.Key, String))
+
+                    spq = kanban.bundle
+                        moq = kanban.batchQuantity
+
+                ElseIf settings.OrderType = OrderType.Fix Then
+                    Dim currPart As Part = partRepo.First(Function(c) c.partNr = CType(dic.Key, String))
+                    spq = currPart.spq
+                    moq = currPart.moq
+                End If
+
                 Dim actualQty As Double
                 If sum > 0 Then
-                    If sum < currPart.spq Then
-                        actualQty = currPart.spq
+                    If sum < spq Then
+                        actualQty = spq
                     Else
-                        If (sum Mod currPart.spq) <> 0 Then
-                            actualQty = sum + (currPart.spq - (sum Mod currPart.spq))
+                        If (sum Mod spq) <> 0 Then
+                            actualQty = sum + (spq - (sum Mod spq))
                         Else
                             actualQty = sum
                         End If
@@ -161,7 +175,7 @@ Public Class Calculator
                 Dim toinsert As ProcessOrder = New ProcessOrder With {.orderNr = ordernr,
                     .partNr = dic.Key, .derivedFrom = "MRP", .proceeDate = dateresult, .sourceDoc = sourceDoc,
                     .status = ProcessOrderStatus.Open, .sourceQuantity = sum, .actualQuantity = actualQty,
-                    .completeRate = completeRate, .batchQuantity = currPart.moq, .OrderDerivations = en}
+                    .completeRate = completeRate, .batchQuantity = moq, .OrderDerivations = en}
                 result.Add(toinsert)
             Next
         Next

@@ -85,12 +85,6 @@ Partial Public Class CuttingMrpDataContext
     End Sub
   Partial Private Sub DeleteMrpRound(instance As MrpRound)
     End Sub
-  Partial Private Sub InsertMP(instance As MP)
-    End Sub
-  Partial Private Sub UpdateMP(instance As MP)
-    End Sub
-  Partial Private Sub DeleteMP(instance As MP)
-    End Sub
   Partial Private Sub InsertOrderDerivation(instance As OrderDerivation)
     End Sub
   Partial Private Sub UpdateOrderDerivation(instance As OrderDerivation)
@@ -108,6 +102,24 @@ Partial Public Class CuttingMrpDataContext
   Partial Private Sub UpdateBatchOrderTemplate(instance As BatchOrderTemplate)
     End Sub
   Partial Private Sub DeleteBatchOrderTemplate(instance As BatchOrderTemplate)
+    End Sub
+  Partial Private Sub InsertMP(instance As MP)
+    End Sub
+  Partial Private Sub UpdateMP(instance As MP)
+    End Sub
+  Partial Private Sub DeleteMP(instance As MP)
+    End Sub
+  Partial Private Sub InsertProductioUnit(instance As ProductioUnit)
+    End Sub
+  Partial Private Sub UpdateProductioUnit(instance As ProductioUnit)
+    End Sub
+  Partial Private Sub DeleteProductioUnit(instance As ProductioUnit)
+    End Sub
+  Partial Private Sub InsertCapacityPlan(instance As CapacityPlan)
+    End Sub
+  Partial Private Sub UpdateCapacityPlan(instance As CapacityPlan)
+    End Sub
+  Partial Private Sub DeleteCapacityPlan(instance As CapacityPlan)
     End Sub
   #End Region
 	
@@ -196,12 +208,6 @@ Partial Public Class CuttingMrpDataContext
 		End Get
 	End Property
 	
-	Public ReadOnly Property MPs() As System.Data.Linq.Table(Of MP)
-		Get
-			Return Me.GetTable(Of MP)
-		End Get
-	End Property
-	
 	Public ReadOnly Property OrderDerivations() As System.Data.Linq.Table(Of OrderDerivation)
 		Get
 			Return Me.GetTable(Of OrderDerivation)
@@ -223,6 +229,24 @@ Partial Public Class CuttingMrpDataContext
 	Public ReadOnly Property ProcessOrderViews() As System.Data.Linq.Table(Of ProcessOrderView)
 		Get
 			Return Me.GetTable(Of ProcessOrderView)
+		End Get
+	End Property
+	
+	Public ReadOnly Property MPs() As System.Data.Linq.Table(Of MP)
+		Get
+			Return Me.GetTable(Of MP)
+		End Get
+	End Property
+	
+	Public ReadOnly Property ProductioUnits() As System.Data.Linq.Table(Of ProductioUnit)
+		Get
+			Return Me.GetTable(Of ProductioUnit)
+		End Get
+	End Property
+	
+	Public ReadOnly Property CapacityPlans() As System.Data.Linq.Table(Of CapacityPlan)
+		Get
+			Return Me.GetTable(Of CapacityPlan)
 		End Get
 	End Property
 End Class
@@ -1800,11 +1824,11 @@ Partial Public Class Part
 	
 	Private _Stocks As EntitySet(Of Stock)
 	
-	Private _MPs As EntitySet(Of MP)
-	
 	Private _ProcessOrders As EntitySet(Of ProcessOrder)
 	
 	Private _BatchOrderTemplates As EntitySet(Of BatchOrderTemplate)
+	
+	Private _MPs As EntitySet(Of MP)
 	
     #Region "可扩展性方法定义"
     Partial Private Sub OnLoaded()
@@ -1844,9 +1868,9 @@ Partial Public Class Part
 		Me._BOMs = New EntitySet(Of BOM)(AddressOf Me.attach_BOMs, AddressOf Me.detach_BOMs)
 		Me._Requirements = New EntitySet(Of Requirement)(AddressOf Me.attach_Requirements, AddressOf Me.detach_Requirements)
 		Me._Stocks = New EntitySet(Of Stock)(AddressOf Me.attach_Stocks, AddressOf Me.detach_Stocks)
-		Me._MPs = New EntitySet(Of MP)(AddressOf Me.attach_MPs, AddressOf Me.detach_MPs)
 		Me._ProcessOrders = New EntitySet(Of ProcessOrder)(AddressOf Me.attach_ProcessOrders, AddressOf Me.detach_ProcessOrders)
 		Me._BatchOrderTemplates = New EntitySet(Of BatchOrderTemplate)(AddressOf Me.attach_BatchOrderTemplates, AddressOf Me.detach_BatchOrderTemplates)
+		Me._MPs = New EntitySet(Of MP)(AddressOf Me.attach_MPs, AddressOf Me.detach_MPs)
 		OnCreated
 	End Sub
 	
@@ -1978,16 +2002,6 @@ Partial Public Class Part
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_MP", Storage:="_MPs", ThisKey:="partNr", OtherKey:="partnr")>  _
-	Public Property MPs() As EntitySet(Of MP)
-		Get
-			Return Me._MPs
-		End Get
-		Set
-			Me._MPs.Assign(value)
-		End Set
-	End Property
-	
 	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_ProcessOrder", Storage:="_ProcessOrders", ThisKey:="partNr", OtherKey:="partNr")>  _
 	Public Property ProcessOrders() As EntitySet(Of ProcessOrder)
 		Get
@@ -2005,6 +2019,16 @@ Partial Public Class Part
 		End Get
 		Set
 			Me._BatchOrderTemplates.Assign(value)
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_MP", Storage:="_MPs", ThisKey:="partNr", OtherKey:="partnr")>  _
+	Public Property MPs() As EntitySet(Of MP)
+		Get
+			Return Me._MPs
+		End Get
+		Set
+			Me._MPs.Assign(value)
 		End Set
 	End Property
 	
@@ -2056,16 +2080,6 @@ Partial Public Class Part
 		entity.Part = Nothing
 	End Sub
 	
-	Private Sub attach_MPs(ByVal entity As MP)
-		Me.SendPropertyChanging
-		entity.Part = Me
-	End Sub
-	
-	Private Sub detach_MPs(ByVal entity As MP)
-		Me.SendPropertyChanging
-		entity.Part = Nothing
-	End Sub
-	
 	Private Sub attach_ProcessOrders(ByVal entity As ProcessOrder)
 		Me.SendPropertyChanging
 		entity.Part = Me
@@ -2082,6 +2096,16 @@ Partial Public Class Part
 	End Sub
 	
 	Private Sub detach_BatchOrderTemplates(ByVal entity As BatchOrderTemplate)
+		Me.SendPropertyChanging
+		entity.Part = Nothing
+	End Sub
+	
+	Private Sub attach_MPs(ByVal entity As MP)
+		Me.SendPropertyChanging
+		entity.Part = Me
+	End Sub
+	
+	Private Sub detach_MPs(ByVal entity As MP)
 		Me.SendPropertyChanging
 		entity.Part = Nothing
 	End Sub
@@ -2215,260 +2239,6 @@ Partial Public Class MrpRound
 				Me._text = value
 				Me.SendPropertyChanged("text")
 				Me.OntextChanged
-			End If
-		End Set
-	End Property
-	
-	Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
-	
-	Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
-	
-	Protected Overridable Sub SendPropertyChanging()
-		If ((Me.PropertyChangingEvent Is Nothing)  _
-					= false) Then
-			RaiseEvent PropertyChanging(Me, emptyChangingEventArgs)
-		End If
-	End Sub
-	
-	Protected Overridable Sub SendPropertyChanged(ByVal propertyName As [String])
-		If ((Me.PropertyChangedEvent Is Nothing)  _
-					= false) Then
-			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
-		End If
-	End Sub
-End Class
-
-<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.MPS")>  _
-Partial Public Class MP
-	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
-	
-	Private Shared emptyChangingEventArgs As PropertyChangingEventArgs = New PropertyChangingEventArgs(String.Empty)
-	
-	Private _id As Integer
-	
-	Private _partnr As String
-	
-	Private _orderedDate As Date
-	
-	Private _requiredDate As Date
-	
-	Private _quantity As Double
-	
-	Private _source As String
-	
-	Private _sourceDoc As String
-	
-	Private _status As Integer
-	
-	Private _Part As EntityRef(Of Part)
-	
-    #Region "可扩展性方法定义"
-    Partial Private Sub OnLoaded()
-    End Sub
-    Partial Private Sub OnValidate(action As System.Data.Linq.ChangeAction)
-    End Sub
-    Partial Private Sub OnCreated()
-    End Sub
-    Partial Private Sub OnidChanging(value As Integer)
-    End Sub
-    Partial Private Sub OnidChanged()
-    End Sub
-    Partial Private Sub OnpartnrChanging(value As String)
-    End Sub
-    Partial Private Sub OnpartnrChanged()
-    End Sub
-    Partial Private Sub OnorderedDateChanging(value As Date)
-    End Sub
-    Partial Private Sub OnorderedDateChanged()
-    End Sub
-    Partial Private Sub OnrequiredDateChanging(value As Date)
-    End Sub
-    Partial Private Sub OnrequiredDateChanged()
-    End Sub
-    Partial Private Sub OnquantityChanging(value As Double)
-    End Sub
-    Partial Private Sub OnquantityChanged()
-    End Sub
-    Partial Private Sub OnsourceChanging(value As String)
-    End Sub
-    Partial Private Sub OnsourceChanged()
-    End Sub
-    Partial Private Sub OnsourceDocChanging(value As String)
-    End Sub
-    Partial Private Sub OnsourceDocChanged()
-    End Sub
-    Partial Private Sub OnstatusChanging(value As Integer)
-    End Sub
-    Partial Private Sub OnstatusChanged()
-    End Sub
-    #End Region
-	
-	Public Sub New()
-		MyBase.New
-		Me._Part = CType(Nothing, EntityRef(Of Part))
-		OnCreated
-	End Sub
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_id", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true)>  _
-	Public Property id() As Integer
-		Get
-			Return Me._id
-		End Get
-		Set
-			If ((Me._id = value)  _
-						= false) Then
-				Me.OnidChanging(value)
-				Me.SendPropertyChanging
-				Me._id = value
-				Me.SendPropertyChanged("id")
-				Me.OnidChanged
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partnr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
-	Public Property partnr() As String
-		Get
-			Return Me._partnr
-		End Get
-		Set
-			If (String.Equals(Me._partnr, value) = false) Then
-				If Me._Part.HasLoadedOrAssignedValue Then
-					Throw New System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException()
-				End If
-				Me.OnpartnrChanging(value)
-				Me.SendPropertyChanging
-				Me._partnr = value
-				Me.SendPropertyChanged("partnr")
-				Me.OnpartnrChanged
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_orderedDate", DbType:="DateTime NOT NULL")>  _
-	Public Property orderedDate() As Date
-		Get
-			Return Me._orderedDate
-		End Get
-		Set
-			If ((Me._orderedDate = value)  _
-						= false) Then
-				Me.OnorderedDateChanging(value)
-				Me.SendPropertyChanging
-				Me._orderedDate = value
-				Me.SendPropertyChanged("orderedDate")
-				Me.OnorderedDateChanged
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_requiredDate", DbType:="DateTime NOT NULL")>  _
-	Public Property requiredDate() As Date
-		Get
-			Return Me._requiredDate
-		End Get
-		Set
-			If ((Me._requiredDate = value)  _
-						= false) Then
-				Me.OnrequiredDateChanging(value)
-				Me.SendPropertyChanging
-				Me._requiredDate = value
-				Me.SendPropertyChanged("requiredDate")
-				Me.OnrequiredDateChanged
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_quantity", DbType:="Float NOT NULL")>  _
-	Public Property quantity() As Double
-		Get
-			Return Me._quantity
-		End Get
-		Set
-			If ((Me._quantity = value)  _
-						= false) Then
-				Me.OnquantityChanging(value)
-				Me.SendPropertyChanging
-				Me._quantity = value
-				Me.SendPropertyChanged("quantity")
-				Me.OnquantityChanged
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_source", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
-	Public Property source() As String
-		Get
-			Return Me._source
-		End Get
-		Set
-			If (String.Equals(Me._source, value) = false) Then
-				Me.OnsourceChanging(value)
-				Me.SendPropertyChanging
-				Me._source = value
-				Me.SendPropertyChanged("source")
-				Me.OnsourceChanged
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_sourceDoc", DbType:="VarChar(200)")>  _
-	Public Property sourceDoc() As String
-		Get
-			Return Me._sourceDoc
-		End Get
-		Set
-			If (String.Equals(Me._sourceDoc, value) = false) Then
-				Me.OnsourceDocChanging(value)
-				Me.SendPropertyChanging
-				Me._sourceDoc = value
-				Me.SendPropertyChanged("sourceDoc")
-				Me.OnsourceDocChanged
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_status", DbType:="Int NOT NULL")>  _
-	Public Property status() As Integer
-		Get
-			Return Me._status
-		End Get
-		Set
-			If ((Me._status = value)  _
-						= false) Then
-				Me.OnstatusChanging(value)
-				Me.SendPropertyChanging
-				Me._status = value
-				Me.SendPropertyChanged("status")
-				Me.OnstatusChanged
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_MP", Storage:="_Part", ThisKey:="partnr", OtherKey:="partNr", IsForeignKey:=true)>  _
-	Public Property Part() As Part
-		Get
-			Return Me._Part.Entity
-		End Get
-		Set
-			Dim previousValue As Part = Me._Part.Entity
-			If ((Object.Equals(previousValue, value) = false)  _
-						OrElse (Me._Part.HasLoadedOrAssignedValue = false)) Then
-				Me.SendPropertyChanging
-				If ((previousValue Is Nothing)  _
-							= false) Then
-					Me._Part.Entity = Nothing
-					previousValue.MPs.Remove(Me)
-				End If
-				Me._Part.Entity = value
-				If ((value Is Nothing)  _
-							= false) Then
-					value.MPs.Add(Me)
-					Me._partnr = value.partNr
-				Else
-					Me._partnr = CType(Nothing, String)
-				End If
-				Me.SendPropertyChanged("Part")
 			End If
 		End Set
 	End Property
@@ -3590,4 +3360,629 @@ Partial Public Class ProcessOrderView
 			End If
 		End Set
 	End Property
+End Class
+
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.MPS")>  _
+Partial Public Class MP
+	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+	
+	Private Shared emptyChangingEventArgs As PropertyChangingEventArgs = New PropertyChangingEventArgs(String.Empty)
+	
+	Private _id As Integer
+	
+	Private _partnr As String
+	
+	Private _orderedDate As Date
+	
+	Private _requiredDate As Date
+	
+	Private _quantity As Double
+	
+	Private _source As String
+	
+	Private _sourceDoc As String
+	
+	Private _status As Integer
+	
+	Private _unitId As String
+	
+	Private _Part As EntityRef(Of Part)
+	
+	Private _ProductioUnit As EntityRef(Of ProductioUnit)
+	
+    #Region "可扩展性方法定义"
+    Partial Private Sub OnLoaded()
+    End Sub
+    Partial Private Sub OnValidate(action As System.Data.Linq.ChangeAction)
+    End Sub
+    Partial Private Sub OnCreated()
+    End Sub
+    Partial Private Sub OnidChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnidChanged()
+    End Sub
+    Partial Private Sub OnpartnrChanging(value As String)
+    End Sub
+    Partial Private Sub OnpartnrChanged()
+    End Sub
+    Partial Private Sub OnorderedDateChanging(value As Date)
+    End Sub
+    Partial Private Sub OnorderedDateChanged()
+    End Sub
+    Partial Private Sub OnrequiredDateChanging(value As Date)
+    End Sub
+    Partial Private Sub OnrequiredDateChanged()
+    End Sub
+    Partial Private Sub OnquantityChanging(value As Double)
+    End Sub
+    Partial Private Sub OnquantityChanged()
+    End Sub
+    Partial Private Sub OnsourceChanging(value As String)
+    End Sub
+    Partial Private Sub OnsourceChanged()
+    End Sub
+    Partial Private Sub OnsourceDocChanging(value As String)
+    End Sub
+    Partial Private Sub OnsourceDocChanged()
+    End Sub
+    Partial Private Sub OnstatusChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnstatusChanged()
+    End Sub
+    Partial Private Sub OnunitIdChanging(value As String)
+    End Sub
+    Partial Private Sub OnunitIdChanged()
+    End Sub
+    #End Region
+	
+	Public Sub New()
+		MyBase.New
+		Me._Part = CType(Nothing, EntityRef(Of Part))
+		Me._ProductioUnit = CType(Nothing, EntityRef(Of ProductioUnit))
+		OnCreated
+	End Sub
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_id", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true)>  _
+	Public Property id() As Integer
+		Get
+			Return Me._id
+		End Get
+		Set
+			If ((Me._id = value)  _
+						= false) Then
+				Me.OnidChanging(value)
+				Me.SendPropertyChanging
+				Me._id = value
+				Me.SendPropertyChanged("id")
+				Me.OnidChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partnr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
+	Public Property partnr() As String
+		Get
+			Return Me._partnr
+		End Get
+		Set
+			If (String.Equals(Me._partnr, value) = false) Then
+				If Me._Part.HasLoadedOrAssignedValue Then
+					Throw New System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException()
+				End If
+				Me.OnpartnrChanging(value)
+				Me.SendPropertyChanging
+				Me._partnr = value
+				Me.SendPropertyChanged("partnr")
+				Me.OnpartnrChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_orderedDate", DbType:="Date NOT NULL")>  _
+	Public Property orderedDate() As Date
+		Get
+			Return Me._orderedDate
+		End Get
+		Set
+			If ((Me._orderedDate = value)  _
+						= false) Then
+				Me.OnorderedDateChanging(value)
+				Me.SendPropertyChanging
+				Me._orderedDate = value
+				Me.SendPropertyChanged("orderedDate")
+				Me.OnorderedDateChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_requiredDate", DbType:="Date NOT NULL")>  _
+	Public Property requiredDate() As Date
+		Get
+			Return Me._requiredDate
+		End Get
+		Set
+			If ((Me._requiredDate = value)  _
+						= false) Then
+				Me.OnrequiredDateChanging(value)
+				Me.SendPropertyChanging
+				Me._requiredDate = value
+				Me.SendPropertyChanged("requiredDate")
+				Me.OnrequiredDateChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_quantity", DbType:="Float NOT NULL")>  _
+	Public Property quantity() As Double
+		Get
+			Return Me._quantity
+		End Get
+		Set
+			If ((Me._quantity = value)  _
+						= false) Then
+				Me.OnquantityChanging(value)
+				Me.SendPropertyChanging
+				Me._quantity = value
+				Me.SendPropertyChanged("quantity")
+				Me.OnquantityChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_source", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
+	Public Property source() As String
+		Get
+			Return Me._source
+		End Get
+		Set
+			If (String.Equals(Me._source, value) = false) Then
+				Me.OnsourceChanging(value)
+				Me.SendPropertyChanging
+				Me._source = value
+				Me.SendPropertyChanged("source")
+				Me.OnsourceChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_sourceDoc", DbType:="VarChar(200)")>  _
+	Public Property sourceDoc() As String
+		Get
+			Return Me._sourceDoc
+		End Get
+		Set
+			If (String.Equals(Me._sourceDoc, value) = false) Then
+				Me.OnsourceDocChanging(value)
+				Me.SendPropertyChanging
+				Me._sourceDoc = value
+				Me.SendPropertyChanged("sourceDoc")
+				Me.OnsourceDocChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_status", DbType:="Int NOT NULL")>  _
+	Public Property status() As Integer
+		Get
+			Return Me._status
+		End Get
+		Set
+			If ((Me._status = value)  _
+						= false) Then
+				Me.OnstatusChanging(value)
+				Me.SendPropertyChanging
+				Me._status = value
+				Me.SendPropertyChanged("status")
+				Me.OnstatusChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_unitId", DbType:="VarChar(50)")>  _
+	Public Property unitId() As String
+		Get
+			Return Me._unitId
+		End Get
+		Set
+			If (String.Equals(Me._unitId, value) = false) Then
+				If Me._ProductioUnit.HasLoadedOrAssignedValue Then
+					Throw New System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException()
+				End If
+				Me.OnunitIdChanging(value)
+				Me.SendPropertyChanging
+				Me._unitId = value
+				Me.SendPropertyChanged("unitId")
+				Me.OnunitIdChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_MP", Storage:="_Part", ThisKey:="partnr", OtherKey:="partNr", IsForeignKey:=true)>  _
+	Public Property Part() As Part
+		Get
+			Return Me._Part.Entity
+		End Get
+		Set
+			Dim previousValue As Part = Me._Part.Entity
+			If ((Object.Equals(previousValue, value) = false)  _
+						OrElse (Me._Part.HasLoadedOrAssignedValue = false)) Then
+				Me.SendPropertyChanging
+				If ((previousValue Is Nothing)  _
+							= false) Then
+					Me._Part.Entity = Nothing
+					previousValue.MPs.Remove(Me)
+				End If
+				Me._Part.Entity = value
+				If ((value Is Nothing)  _
+							= false) Then
+					value.MPs.Add(Me)
+					Me._partnr = value.partNr
+				Else
+					Me._partnr = CType(Nothing, String)
+				End If
+				Me.SendPropertyChanged("Part")
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="ProductioUnit_MP", Storage:="_ProductioUnit", ThisKey:="unitId", OtherKey:="unitId", IsForeignKey:=true)>  _
+	Public Property ProductioUnit() As ProductioUnit
+		Get
+			Return Me._ProductioUnit.Entity
+		End Get
+		Set
+			Dim previousValue As ProductioUnit = Me._ProductioUnit.Entity
+			If ((Object.Equals(previousValue, value) = false)  _
+						OrElse (Me._ProductioUnit.HasLoadedOrAssignedValue = false)) Then
+				Me.SendPropertyChanging
+				If ((previousValue Is Nothing)  _
+							= false) Then
+					Me._ProductioUnit.Entity = Nothing
+					previousValue.MPs.Remove(Me)
+				End If
+				Me._ProductioUnit.Entity = value
+				If ((value Is Nothing)  _
+							= false) Then
+					value.MPs.Add(Me)
+					Me._unitId = value.unitId
+				Else
+					Me._unitId = CType(Nothing, String)
+				End If
+				Me.SendPropertyChanged("ProductioUnit")
+			End If
+		End Set
+	End Property
+	
+	Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
+	
+	Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
+	
+	Protected Overridable Sub SendPropertyChanging()
+		If ((Me.PropertyChangingEvent Is Nothing)  _
+					= false) Then
+			RaiseEvent PropertyChanging(Me, emptyChangingEventArgs)
+		End If
+	End Sub
+	
+	Protected Overridable Sub SendPropertyChanged(ByVal propertyName As [String])
+		If ((Me.PropertyChangedEvent Is Nothing)  _
+					= false) Then
+			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
+		End If
+	End Sub
+End Class
+
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.ProductioUnit")>  _
+Partial Public Class ProductioUnit
+	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+	
+	Private Shared emptyChangingEventArgs As PropertyChangingEventArgs = New PropertyChangingEventArgs(String.Empty)
+	
+	Private _unitId As String
+	
+	Private _name As String
+	
+	Private _MPs As EntitySet(Of MP)
+	
+	Private _CapacityPlans As EntitySet(Of CapacityPlan)
+	
+    #Region "可扩展性方法定义"
+    Partial Private Sub OnLoaded()
+    End Sub
+    Partial Private Sub OnValidate(action As System.Data.Linq.ChangeAction)
+    End Sub
+    Partial Private Sub OnCreated()
+    End Sub
+    Partial Private Sub OnunitIdChanging(value As String)
+    End Sub
+    Partial Private Sub OnunitIdChanged()
+    End Sub
+    Partial Private Sub OnnameChanging(value As String)
+    End Sub
+    Partial Private Sub OnnameChanged()
+    End Sub
+    #End Region
+	
+	Public Sub New()
+		MyBase.New
+		Me._MPs = New EntitySet(Of MP)(AddressOf Me.attach_MPs, AddressOf Me.detach_MPs)
+		Me._CapacityPlans = New EntitySet(Of CapacityPlan)(AddressOf Me.attach_CapacityPlans, AddressOf Me.detach_CapacityPlans)
+		OnCreated
+	End Sub
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_unitId", DbType:="VarChar(50) NOT NULL", CanBeNull:=false, IsPrimaryKey:=true)>  _
+	Public Property unitId() As String
+		Get
+			Return Me._unitId
+		End Get
+		Set
+			If (String.Equals(Me._unitId, value) = false) Then
+				Me.OnunitIdChanging(value)
+				Me.SendPropertyChanging
+				Me._unitId = value
+				Me.SendPropertyChanged("unitId")
+				Me.OnunitIdChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_name", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
+	Public Property name() As String
+		Get
+			Return Me._name
+		End Get
+		Set
+			If (String.Equals(Me._name, value) = false) Then
+				Me.OnnameChanging(value)
+				Me.SendPropertyChanging
+				Me._name = value
+				Me.SendPropertyChanged("name")
+				Me.OnnameChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="ProductioUnit_MP", Storage:="_MPs", ThisKey:="unitId", OtherKey:="unitId")>  _
+	Public Property MPs() As EntitySet(Of MP)
+		Get
+			Return Me._MPs
+		End Get
+		Set
+			Me._MPs.Assign(value)
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="ProductioUnit_CapacityPlan", Storage:="_CapacityPlans", ThisKey:="unitId", OtherKey:="unitId")>  _
+	Public Property CapacityPlans() As EntitySet(Of CapacityPlan)
+		Get
+			Return Me._CapacityPlans
+		End Get
+		Set
+			Me._CapacityPlans.Assign(value)
+		End Set
+	End Property
+	
+	Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
+	
+	Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
+	
+	Protected Overridable Sub SendPropertyChanging()
+		If ((Me.PropertyChangingEvent Is Nothing)  _
+					= false) Then
+			RaiseEvent PropertyChanging(Me, emptyChangingEventArgs)
+		End If
+	End Sub
+	
+	Protected Overridable Sub SendPropertyChanged(ByVal propertyName As [String])
+		If ((Me.PropertyChangedEvent Is Nothing)  _
+					= false) Then
+			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
+		End If
+	End Sub
+	
+	Private Sub attach_MPs(ByVal entity As MP)
+		Me.SendPropertyChanging
+		entity.ProductioUnit = Me
+	End Sub
+	
+	Private Sub detach_MPs(ByVal entity As MP)
+		Me.SendPropertyChanging
+		entity.ProductioUnit = Nothing
+	End Sub
+	
+	Private Sub attach_CapacityPlans(ByVal entity As CapacityPlan)
+		Me.SendPropertyChanging
+		entity.ProductioUnit = Me
+	End Sub
+	
+	Private Sub detach_CapacityPlans(ByVal entity As CapacityPlan)
+		Me.SendPropertyChanging
+		entity.ProductioUnit = Nothing
+	End Sub
+End Class
+
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.CapacityPlan")>  _
+Partial Public Class CapacityPlan
+	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+	
+	Private Shared emptyChangingEventArgs As PropertyChangingEventArgs = New PropertyChangingEventArgs(String.Empty)
+	
+	Private _planId As String
+	
+	Private _planDay As Date
+	
+	Private _workinghour As Integer
+	
+	Private _yieldPerHour As Integer
+	
+	Private _unitId As String
+	
+	Private _ProductioUnit As EntityRef(Of ProductioUnit)
+	
+    #Region "可扩展性方法定义"
+    Partial Private Sub OnLoaded()
+    End Sub
+    Partial Private Sub OnValidate(action As System.Data.Linq.ChangeAction)
+    End Sub
+    Partial Private Sub OnCreated()
+    End Sub
+    Partial Private Sub OnplanIdChanging(value As String)
+    End Sub
+    Partial Private Sub OnplanIdChanged()
+    End Sub
+    Partial Private Sub OnplanDayChanging(value As Date)
+    End Sub
+    Partial Private Sub OnplanDayChanged()
+    End Sub
+    Partial Private Sub OnworkinghourChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnworkinghourChanged()
+    End Sub
+    Partial Private Sub OnyieldPerHourChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnyieldPerHourChanged()
+    End Sub
+    Partial Private Sub OnunitIdChanging(value As String)
+    End Sub
+    Partial Private Sub OnunitIdChanged()
+    End Sub
+    #End Region
+	
+	Public Sub New()
+		MyBase.New
+		Me._ProductioUnit = CType(Nothing, EntityRef(Of ProductioUnit))
+		OnCreated
+	End Sub
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_planId", DbType:="VarChar(100) NOT NULL", CanBeNull:=false, IsPrimaryKey:=true)>  _
+	Public Property planId() As String
+		Get
+			Return Me._planId
+		End Get
+		Set
+			If (String.Equals(Me._planId, value) = false) Then
+				Me.OnplanIdChanging(value)
+				Me.SendPropertyChanging
+				Me._planId = value
+				Me.SendPropertyChanged("planId")
+				Me.OnplanIdChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_planDay", DbType:="Date NOT NULL")>  _
+	Public Property planDay() As Date
+		Get
+			Return Me._planDay
+		End Get
+		Set
+			If ((Me._planDay = value)  _
+						= false) Then
+				Me.OnplanDayChanging(value)
+				Me.SendPropertyChanging
+				Me._planDay = value
+				Me.SendPropertyChanged("planDay")
+				Me.OnplanDayChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_workinghour", DbType:="Int NOT NULL")>  _
+	Public Property workinghour() As Integer
+		Get
+			Return Me._workinghour
+		End Get
+		Set
+			If ((Me._workinghour = value)  _
+						= false) Then
+				Me.OnworkinghourChanging(value)
+				Me.SendPropertyChanging
+				Me._workinghour = value
+				Me.SendPropertyChanged("workinghour")
+				Me.OnworkinghourChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_yieldPerHour", DbType:="Int NOT NULL")>  _
+	Public Property yieldPerHour() As Integer
+		Get
+			Return Me._yieldPerHour
+		End Get
+		Set
+			If ((Me._yieldPerHour = value)  _
+						= false) Then
+				Me.OnyieldPerHourChanging(value)
+				Me.SendPropertyChanging
+				Me._yieldPerHour = value
+				Me.SendPropertyChanged("yieldPerHour")
+				Me.OnyieldPerHourChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_unitId", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
+	Public Property unitId() As String
+		Get
+			Return Me._unitId
+		End Get
+		Set
+			If (String.Equals(Me._unitId, value) = false) Then
+				If Me._ProductioUnit.HasLoadedOrAssignedValue Then
+					Throw New System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException()
+				End If
+				Me.OnunitIdChanging(value)
+				Me.SendPropertyChanging
+				Me._unitId = value
+				Me.SendPropertyChanged("unitId")
+				Me.OnunitIdChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="ProductioUnit_CapacityPlan", Storage:="_ProductioUnit", ThisKey:="unitId", OtherKey:="unitId", IsForeignKey:=true)>  _
+	Public Property ProductioUnit() As ProductioUnit
+		Get
+			Return Me._ProductioUnit.Entity
+		End Get
+		Set
+			Dim previousValue As ProductioUnit = Me._ProductioUnit.Entity
+			If ((Object.Equals(previousValue, value) = false)  _
+						OrElse (Me._ProductioUnit.HasLoadedOrAssignedValue = false)) Then
+				Me.SendPropertyChanging
+				If ((previousValue Is Nothing)  _
+							= false) Then
+					Me._ProductioUnit.Entity = Nothing
+					previousValue.CapacityPlans.Remove(Me)
+				End If
+				Me._ProductioUnit.Entity = value
+				If ((value Is Nothing)  _
+							= false) Then
+					value.CapacityPlans.Add(Me)
+					Me._unitId = value.unitId
+				Else
+					Me._unitId = CType(Nothing, String)
+				End If
+				Me.SendPropertyChanged("ProductioUnit")
+			End If
+		End Set
+	End Property
+	
+	Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
+	
+	Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
+	
+	Protected Overridable Sub SendPropertyChanging()
+		If ((Me.PropertyChangingEvent Is Nothing)  _
+					= false) Then
+			RaiseEvent PropertyChanging(Me, emptyChangingEventArgs)
+		End If
+	End Sub
+	
+	Protected Overridable Sub SendPropertyChanged(ByVal propertyName As [String])
+		If ((Me.PropertyChangedEvent Is Nothing)  _
+					= false) Then
+			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
+		End If
+	End Sub
 End Class

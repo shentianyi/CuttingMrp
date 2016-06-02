@@ -47,9 +47,13 @@ namespace Repository
         /// <param name="exp"></param><returns></returns>
         public T First(Func<T, bool> exp)
         {
-            return GetTable.FirstOrDefault(exp);
+            return GetTable.First(exp);
         }
 
+        public T FirstOrDefault(Func<T, bool> exp)
+        {
+            return GetTable.FirstOrDefault(exp);
+        }
         /// <summary>See IRepository.</summary>
         /// <param name="entity"></param>
         public virtual void MarkForDeletion(T entity)

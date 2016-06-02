@@ -77,6 +77,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CuttingMrp.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Data\OrderType.vb" />
     <Compile Include="Data\ProcessOrderStatus.vb" />
     <Compile Include="Data\Repository\CalculateRepository.vb" />
     <Compile Include="Data\Repository\ICalculateRepository.vb" />
@@ -116,7 +117,9 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Service\CalculateService.vb" />
+    <Compile Include="Service\CapacityPlanService.vb" />
     <Compile Include="Service\ICalculateService.vb" />
+    <Compile Include="Service\ICapacityPlanService.vb" />
     <Compile Include="Service\IPartService.vb" />
     <Compile Include="Service\INumericService.vb" />
     <Compile Include="Service\IProcessOrderService.vb" />

@@ -31,6 +31,7 @@ namespace Repository
         /// <summary>Returns the first element satisfying the condition.</summary>
         /// <param name="exp"></param><returns></returns>
         T First(Func<T, bool> exp);
+        T FirstOrDefault(Func<T, bool> exp);
 
         /// <summary>
         /// Mark an entity to be deleted when the context is saved.
