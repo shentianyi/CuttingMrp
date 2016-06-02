@@ -175,7 +175,7 @@ Public Class Calculator
                 Dim toinsert As ProcessOrder = New ProcessOrder With {.orderNr = ordernr,
                     .partNr = dic.Key, .derivedFrom = "MRP", .proceeDate = dateresult, .sourceDoc = sourceDoc,
                     .status = ProcessOrderStatus.Open, .sourceQuantity = sum, .actualQuantity = actualQty,
-                    .completeRate = completeRate, .batchQuantity = moq, .OrderDerivations = en}
+                    .completeRate = completeRate, .batchQuantity = moq, .OrderDerivations = en, .orderType = settings.OrderType}
                 result.Add(toinsert)
             Next
         Next
