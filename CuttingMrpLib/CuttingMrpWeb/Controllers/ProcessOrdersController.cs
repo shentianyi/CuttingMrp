@@ -156,7 +156,7 @@ namespace CuttingMrpWeb.Controllers
             using (StreamWriter sw = new StreamWriter(ms, Encoding.UTF8))
             {
                 List<string> head = new List<string> { " No.", "OrderNr", "PartNr", "Kanban","PartType(KB Type)","Status",
-                    "ProceeDate","SourceQuantity","ActualQuantity","BatchQuantity","CompleteRate", "DerivedFrom" };
+                    "ProceeDate","SourceQuantity","ActualQuantity","BatchQuantity","BundleQuantity","KanBanPosition","RouteNr","CompleteRate", "DerivedFrom" };
                 sw.WriteLine(string.Join(Settings.Default.csvDelimiter, head));
                 for(var i=0; i<processOrders.Count; i++)
                 {
@@ -170,10 +170,12 @@ namespace CuttingMrpWeb.Controllers
                     ii.Add(processOrders[i].proceeDate.ToString());
                     ii.Add(processOrders[i].sourceQuantity.ToString());
                     ii.Add(processOrders[i].actualQuantity.ToString());
-                    ii.Add(processOrders[i].batchQuantity.ToString());
+                    ii.Add(processOrders[i].Part.kanbanBatchQty.ToString());
+                    ii.Add(processOrders[i].Part.kanbanBundleQty.ToString());
+                    ii.Add(processOrders[i].Part.kanbanPosition.ToString());
+                    ii.Add(processOrders[i].Part.routeNr.ToString());
                     ii.Add(processOrders[i].completeRate.ToString());
                     ii.Add(processOrders[i].derivedFrom);
-
                     sw.WriteLine(string.Join(Settings.Default.csvDelimiter, ii.ToArray()));
                 }
                 //sw.WriteLine(max);
@@ -201,7 +203,7 @@ namespace CuttingMrpWeb.Controllers
             MemoryStream ms = new MemoryStream();
             using (StreamWriter sw = new StreamWriter(ms, Encoding.UTF8))
             {
-                List<string> head = new List<string> { " No.","Product", "PartNr", "Kanban", "PartType(KB Type)","Position", "ActualQuantity", "BundleQuantity", "BatchQuantity","ChangeQty" };
+                List<string> head = new List<string> { " No.","Product", "PartNr", "Kanban", "PartType(KB Type)","Position", "ActualQuantity", "BundleQuantity", "BatchQuantity","KanBanPosition","RouteNr","ChangeQty" };
                 sw.WriteLine(string.Join(Settings.Default.csvDelimiter, head));
                 for (var i = 0; i < processOrders.Count; i++)
                 {
@@ -211,11 +213,12 @@ namespace CuttingMrpWeb.Controllers
                     ii.Add(processOrders[i].partNr);
                     ii.Add(processOrders[i].Part.kanbanNrs);
                     ii.Add(processOrders[i].Part.partTypeDisplay);
-
                     ii.Add(processOrders[i].Part.kanbanPosition);
                     ii.Add(processOrders[i].actualQuantity.ToString());
-                    ii.Add(processOrders[i].Part.moq.ToString());
-                    ii.Add(processOrders[i].Part.spq.ToString());
+                    ii.Add(processOrders[i].Part.kanbanBundleQty.ToString());
+                    ii.Add(processOrders[i].Part.kanbanBatchQty.ToString());
+                    ii.Add(processOrders[i].Part.kanbanPosition.ToString());
+                    ii.Add(processOrders[i].Part.routeNr.ToString());
                     ii.Add(processOrders[i].needChangeKbQtyDisplay);
                     sw.WriteLine(string.Join(Settings.Default.csvDelimiter, ii.ToArray()));
                 }

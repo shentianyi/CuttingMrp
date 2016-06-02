@@ -23,7 +23,6 @@
             </form>
             <div class="col-md-3">
                 <div class="col-md-7" style="border-right:1px solid #eeeeee;">
-
                     @Html.ActionLink("Export KB", "ExportKB", new
                {
                    OrderNr = ViewBag.Query.OrderNr,
@@ -71,8 +70,6 @@
                         <button class="btn btn-warning cancel-process-order" type="button" style="width:80px;">Cancel</button>
                     </form>
                 </div>
-
-
             </div>
         </div>
     </div>
@@ -115,6 +112,8 @@
                 <th>ActualQuantity</th>
                 <th>BatchQuantity</th>
                 <th>BundleQuantity</th>
+                <th>KanBanPosition</th>
+                <th>RouteNr</th>
                 <th>CompleteRate</th>
                 <th>DerivedFrom</th>
                 <th>Requirements</th>
@@ -150,6 +149,8 @@
                         <td>@Html.DisplayFor(modelItem => item.actualQuantity)</td>
                         <td>@Html.DisplayFor(modelItem => item.Part.kanbanBatchQty)</td>
                         <td>@Html.DisplayFor(modelItem => item.Part.kanbanBundleQty)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Part.kanbanPosition)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Part.routeNr)</td>
                         <td>@Html.DisplayFor(modelItem => item.completeRateDisplay)</td>
                         <td>@Html.DisplayFor(modelItem => item.derivedFrom)</td>
 

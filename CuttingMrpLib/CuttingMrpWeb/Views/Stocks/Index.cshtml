@@ -12,13 +12,23 @@
     <div class="panel panel-default navbar-fixed-top" style="box-shadow: -2px 2px 4px #34313a;top:60px;">
         <div class="panel-body">
             <div class="col-sm-12" style="text-align:center;">
-                <div class="col-sm-10 filter-content">
+                <div class="col-sm-9 filter-content">
                     <span class="pull-right" id="basic-addon-filter"> <i class="glyphicon glyphicon-filter"></i> </span>
                     <div class="filter-p"></div>
                 </div>
 
-                <div class="col-sm-2" style="padding-top:10px;">
+                <div class="col-sm-3" style="padding-top:10px;">
                     <button class="btn btn-primary" type="submit">Search All</button>
+                    @Html.ActionLink("Export Full", "Export", new
+               {
+                   PartNr = ViewBag.Query.PartNr,
+                   FIFOFrom = ViewBag.Query.FIFOFrom,
+                   FIFOTo = ViewBag.Query.FIFOTo,
+                   QuantityFrom = ViewBag.Query.QuantityFrom,
+                   QuantityTo = ViewBag.Query.QuantityTo,
+                   Wh = ViewBag.Query.Wh,
+                   Position = ViewBag.Query.Position,
+               }, new { @style = "width:100px;margin-left:20px;", @class = "btn btn-success", @title = "Export All Results", data_toggle = "tooltip", data_placement = "bottom" })
                 </div>
             </div>
         </div>
@@ -34,7 +44,8 @@
             <th>Quantity</th>
             <th>Container</th>
             <th>WH</th>
-            <th>Position</th>
+            <th>KanBanNr</th>
+            <th>KanBanPosition</th>
             <th>Source</th>
             <th>SourceType</th>
             <th>Options</th>
@@ -53,7 +64,9 @@
                     <td>@Html.DisplayFor(modelItem => item.quantity)</td>
                     <td>@Html.DisplayFor(modelItem => item.container)</td>
                     <td>@Html.DisplayFor(modelItem => item.wh)</td>
-                    <td>@Html.DisplayFor(modelItem => item.position)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Part.kanbanNrs)</td>
+                    @*<td>@Html.DisplayFor(modelItem => item.position)</td>*@
+                    <td>@Html.DisplayFor(modelItem => item.Part.kanbanPosition)</td>
                     <td>@Html.DisplayFor(modelItem => item.source)</td>
                     <td>@Html.DisplayFor(modelItem => item.sourceType)</td>
                     <td class="IconA">
@@ -101,7 +114,7 @@
                 <input type="text" class="form-control" name="PartNr" id="PartNr" value="@ViewBag.Query.PartNr" placeholder="PartNr" aria-describedby="basic-addon-partnr">
             </div>
         </div>
-        <hr style="border:1px solid #eeeeee; margin:10px -20px;" />
+        <hr style="border:1px solid #eeeeee; margin:10px -10px;" />
         <div class="col-sm-12">
             <div class="input-group filter-detail">
                 <span class="input-group-addon" id="basic-addon-fifo">FIFO </span>
@@ -119,7 +132,7 @@
                 <input type="number" class="form-control" name="QuantityTo" id="QuantityTo" value="@ViewBag.Query.QuantityTo" placeholder="Quantity To" />
             </div>
         </div>
-        <hr style="margin:10px;" />
+        @*<hr style="margin:10px;" />
         <div class="col-sm-12">
             <div class="col-sm-5" style="margin-left:-15px;">
                 <div class="input-group filter-detail">
@@ -133,7 +146,7 @@
                     <input style="width:165px;" type="text" class="form-control" name="Position" id="Position" value="@ViewBag.Query.Position" placeholder="Position" aria-describedby="basic-addon-position">
                 </div>
             </div>
-        </div>
+        </div>*@
         <div class="popModal_footer" style="padding-right:65px;">
             <input type="submit" value="Serach" class="btn btn-success FilterSearchBtn" data-dialogModalBut="ok" />
         </div>

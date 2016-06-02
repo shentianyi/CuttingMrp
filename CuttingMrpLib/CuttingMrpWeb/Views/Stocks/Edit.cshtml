@@ -78,7 +78,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    @*<div class="col-md-4">
                         <div class="form-group">
                             @Html.LabelFor(model => model.position, "Position", htmlAttributes: new { @class = "control-label col-md-3" })
                             <div class="col-md-9">
@@ -86,7 +86,7 @@
                                 @Html.ValidationMessageFor(model => model.position, "", new { @class = "text-danger" })
                             </div>
                         </div>
-                    </div>
+                    </div>*@
                     <div class="col-md-4">
                         <div class="form-group">
                             @Html.LabelFor(model => model.source, "Source",htmlAttributes: new { @class = "control-label col-md-3" })
@@ -96,9 +96,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="col-md-12">
                     <div class="col-md-4">
                         <div class="form-group">
                             @Html.LabelFor(model => model.sourceType, "SourceType", htmlAttributes: new { @class = "control-label col-md-3" })
