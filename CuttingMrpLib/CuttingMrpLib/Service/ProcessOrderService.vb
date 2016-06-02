@@ -207,8 +207,8 @@ Public Class ProcessOrderService
         Next
 
         Using scope As New TransactionScope
-            Try
-                Dim ids As List(Of String) = (From tof In toFinish Select tof.orderNr Distinct).ToList
+            ' Try
+            Dim ids As List(Of String) = (From tof In toFinish Select tof.orderNr Distinct).ToList
                 FinishOrdersByIds(ids, Now, "ORIGINAL", "ORIGINAL", "ORIGINAL", "", "")
                 Dim context As DataContext = New DataContext(DBConn)
                 Dim stockrepo As Repository(Of Stock) = New Repository(Of Stock)(context)
@@ -222,9 +222,9 @@ Public Class ProcessOrderService
                 orderrepo.SaveAll()
                 stockrepo.SaveAll()
                 scope.Complete()
-            Catch ex As Exception
-                Throw New Exception("写入数据库时出现错误", ex)
-            End Try
+            ' Catch ex As Exception
+            '  Throw New Exception("写入数据库时出现错误", ex)
+            ' End Try
         End Using
 
     End Sub
@@ -245,12 +245,13 @@ Public Class ProcessOrderService
         End If
         Dim warning As List(Of BatchFinishOrderRecord) = New List(Of BatchFinishOrderRecord)
         Dim succ As List(Of BatchFinishOrderRecord) = New List(Of BatchFinishOrderRecord)
+
         Dim kanbanRepo As Repository(Of BatchOrderTemplate) = New Repository(Of BatchOrderTemplate)(New DataContext(DBConn))
 
         For Each rec As BatchFinishOrderRecord In records
-            Dim kanban As BatchOrderTemplate = kanbanRepo.SingleOrDefault(Function(c) c.orderNr = rec.FixOrderNr)
+            Dim kanban As BatchOrderTemplate = kanbanRepo.First(Function(c) c.orderNr = rec.FixOrderNr)
             If kanban Is Nothing Then
-                rec.Warnings.Add("Part Nr " & rec.PartNr & " does not exist in the system")
+                rec.Warnings.Add("Kanban: " & rec.FixOrderNr & " does not exist in the system")
                 warning.Add(rec)
             Else
                 rec.PartNr = kanban.partNr
@@ -258,8 +259,12 @@ Public Class ProcessOrderService
             End If
         Next
         Dim result As Hashtable = New Hashtable
-        result.Add("WARN", warning)
-        result.Add("SUCCESS", succ)
+        If warning.Count > 0 Then
+            result.Add("WARN", warning)
+        End If
+        If succ.Count > 0 Then
+            result.Add("SUCCESS", succ)
+        End If
         Return result
     End Function
 
