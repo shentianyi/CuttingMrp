@@ -55,7 +55,9 @@
                    CompleteRateFrom = ViewBag.Query.CompleteRateFrom,
                    CompleteRateTo = ViewBag.Query.CompleteRateTo,
                    Status = ViewBag.Query.Status,
-                   MrpRound = ViewBag.Query.MrpRound
+                   MrpRound = ViewBag.Query.MrpRound,
+                   KanbanNr = ViewBag.Query.KanbanNr,
+                   PartType = ViewBag.Query.PartType
                }, new { @style = "width:100px;", @class = "btn btn-success", @title = "Export All Results", data_toggle = "tooltip", data_placement = "bottom"})
                 </div>
                 <div class="col-md-5">
@@ -112,6 +114,7 @@
                 <th>SourceQuantity</th>
                 <th>ActualQuantity</th>
                 <th>BatchQuantity</th>
+                <th>BundleQuantity</th>
                 <th>CompleteRate</th>
                 <th>DerivedFrom</th>
                 <th>Requirements</th>
@@ -145,9 +148,9 @@
                         <td style="white-space:nowrap;">@Html.DisplayFor(modelItem => item.proceeDate)</td>
                         <td>@Html.DisplayFor(modelItem => item.sourceQuantity)</td>
                         <td>@Html.DisplayFor(modelItem => item.actualQuantity)</td>
-                        <td>@Html.DisplayFor(modelItem => item.batchQuantity)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Part.kanbanBatchQty)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Part.kanbanBundleQty)</td>
                         <td>@Html.DisplayFor(modelItem => item.completeRateDisplay)</td>
-
                         <td>@Html.DisplayFor(modelItem => item.derivedFrom)</td>
 
                         <td>

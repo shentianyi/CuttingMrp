@@ -212,7 +212,7 @@ namespace CuttingMrpWeb.Controllers
                     ii.Add(processOrders[i].Part.kanbanNrs);
                     ii.Add(processOrders[i].Part.partTypeDisplay);
 
-                    ii.Add(processOrders[i].Part.kanbanPositions);
+                    ii.Add(processOrders[i].Part.kanbanPosition);
                     ii.Add(processOrders[i].actualQuantity.ToString());
                     ii.Add(processOrders[i].Part.moq.ToString());
                     ii.Add(processOrders[i].Part.spq.ToString());

@@ -29,6 +29,7 @@
         End Get
     End Property
 
+
     Public ReadOnly Property needChangeKbQty As Boolean
         Get
             ' Dim kb As BatchOrderTemplate = Me.Part.BatchOrderTemplates.FirstOrDefault
