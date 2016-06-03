@@ -23,7 +23,7 @@ Public Class StockService
         ' Try
         Dim context As DataContext = New DataContext(Me.DBConn)
         Dim rep As Repository(Of Stock) = New Repository.Repository(Of Stock)(context)
-        stock = rep.First(Function(s) s.id.Equals(id))
+        stock = rep.FirstOrDefault(Function(s) s.id.Equals(id))
         '  Catch ex As Exception
         ' Throw ex
         ' End Try
@@ -35,7 +35,7 @@ Public Class StockService
         ' Try
         Dim context As DataContext = New DataContext(Me.DBConn)
         Dim rep As Repository(Of Stock) = New Repository.Repository(Of Stock)(context)
-        Dim stock As Stock = rep.First(Function(s) s.id.Equals(id))
+        Dim stock As Stock = rep.FirstOrDefault(Function(s) s.id.Equals(id))
         If (stock IsNot Nothing) Then
             rep.MarkForDeletion(stock)
             context.SaveAll()
@@ -52,7 +52,7 @@ Public Class StockService
         '   Try
         Dim context As DataContext = New DataContext(Me.DBConn)
         Dim rep As Repository(Of Stock) = New Repository.Repository(Of Stock)(context)
-        Dim ustock As Stock = rep.First(Function(s) s.id.Equals(stock.id))
+        Dim ustock As Stock = rep.FirstOrDefault(Function(s) s.id.Equals(stock.id))
         If (ustock IsNot Nothing) Then
             ustock.fifo = stock.fifo
             ustock.quantity = stock.quantity

@@ -39,7 +39,7 @@ Public Class ProcessOrderService
 
     Public Sub UpdateOrderQuantity(toUpdateId As String, quantity As Double) Implements IProcessOrderService.UpdateOrderQuantity
         Dim repo As ProcessOrderRepository = New ProcessOrderRepository(New DataContext(DBConn))
-        Dim toupdate As ProcessOrder = repo.First(Function(c) c.orderNr = toUpdateId)
+        Dim toupdate As ProcessOrder = repo.FirstOrDefault(Function(c) c.orderNr = toUpdateId)
         If toupdate Is Nothing Then
             Throw New Exception("Cannot find Order")
         Else
@@ -56,7 +56,7 @@ Public Class ProcessOrderService
     Public Function DeleteById(id As String) As Boolean Implements IProcessOrderService.DeleteById
         Dim result As Boolean = False
         Dim repo As ProcessOrderRepository = New ProcessOrderRepository(New DataContext(DBConn))
-        Dim order As ProcessOrder = repo.First(Function(c) c.orderNr = id)
+        Dim order As ProcessOrder = repo.FirstOrDefault(Function(c) c.orderNr = id)
         If order Is Nothing Then
             Throw New Exception("Cannot find Order")
         Else
@@ -76,7 +76,7 @@ Public Class ProcessOrderService
 
         Dim context As DataContext = New DataContext(Me.DBConn)
         Dim rep As ProcessOrderRepository = New ProcessOrderRepository(context)
-        Return rep.First(Function(o) o.orderNr.Equals(id))
+        Return rep.FirstOrDefault(Function(o) o.orderNr.Equals(id))
     End Function
 
     Public Function Update(processOrder As ProcessOrder) As Boolean Implements IProcessOrderService.Update
@@ -84,7 +84,7 @@ Public Class ProcessOrderService
 
         Dim context As DataContext = New DataContext(Me.DBConn)
         Dim rep As ProcessOrderRepository = New ProcessOrderRepository(context)
-        Dim uorder As ProcessOrder = rep.First(Function(s) s.orderNr.Equals(processOrder.orderNr))
+        Dim uorder As ProcessOrder = rep.FirstOrDefault(Function(s) s.orderNr.Equals(processOrder.orderNr))
         If (uorder IsNot Nothing) Then
             'uorder.proceeDate = processOrder.proceeDate
 

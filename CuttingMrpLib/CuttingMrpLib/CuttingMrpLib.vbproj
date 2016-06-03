@@ -118,13 +118,16 @@
     </Compile>
     <Compile Include="Service\CalculateService.vb" />
     <Compile Include="Service\CapacityPlanService.vb" />
+    <Compile Include="Service\DashboardService.vb" />
     <Compile Include="Service\ICalculateService.vb" />
     <Compile Include="Service\ICapacityPlanService.vb" />
+    <Compile Include="Service\IDashboardService.vb" />
     <Compile Include="Service\IPartService.vb" />
     <Compile Include="Service\INumericService.vb" />
     <Compile Include="Service\IProcessOrderService.vb" />
     <Compile Include="Service\IRequirementService.vb" />
     <Compile Include="Service\IMrpRoundService.vb" />
+    <Compile Include="Service\IStockSumRecordService.vb" />
     <Compile Include="Service\PartService.vb" />
     <Compile Include="Service\NumericService.vb" />
     <Compile Include="Service\ProcessOrderService.vb" />
@@ -133,11 +136,14 @@
     <Compile Include="Service\IStockService.vb" />
     <Compile Include="Service\MrpRoundService.vb" />
     <Compile Include="Service\StockService.vb" />
+    <Compile Include="Service\StockSumRecordService.vb" />
     <Compile Include="Utility\EnumItem.vb" />
     <Compile Include="Utility\EnumUtility.vb" />
     <Compile Include="Utility\Calculator.vb" />
     <Compile Include="Utility\CalculatorSingleton.vb" />
+    <Compile Include="ViewModel\PageViewModel\DashboardItem.vb" />
     <Compile Include="ViewModel\PageViewModel\ProcessOrderInfoModel.vb" />
+    <Compile Include="ViewModel\SearchViewModel\DashboardSearchModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\MRPSearchModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\ProcessOrderSearchModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\RequirementSearchModel.vb" />
