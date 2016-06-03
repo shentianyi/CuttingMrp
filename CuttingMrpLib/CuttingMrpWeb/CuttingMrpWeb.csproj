@@ -229,6 +229,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Startup.cs" />
+    <Content Include="Scripts\highcharts\highcharts.js" />
+    <Content Include="Scripts\highcharts\highcharts.src.js" />
     <Content Include="TmpFile\read.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

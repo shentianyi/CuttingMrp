@@ -30,6 +30,9 @@ namespace CuttingMrpWeb
             bundles.Add(new ScriptBundle("~/bundles/jquery-plug-in").Include(
                       "~/Scripts/jquery-popModal.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/highcharts").Include(
+                      "~/Scripts/highcharts/highcharts.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/requirements").Include(
                       "~/Scripts/requirement.js"));
 
