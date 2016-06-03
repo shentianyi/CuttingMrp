@@ -234,7 +234,10 @@
     </Compile>
     <Compile Include="Startup.cs" />
     <Content Include="Content\dashboards.css" />
+    <Content Include="Scripts\bootstrap-typeahead.js" />
+    <Content Include="Scripts\dashboard\complete-rate.js" />
     <Content Include="Scripts\dashboard\dashboard.js" />
+    <Content Include="Scripts\dashboard\part-stock.js" />
     <Content Include="Scripts\highcharts\highcharts.js" />
     <Content Include="TmpFile\read.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

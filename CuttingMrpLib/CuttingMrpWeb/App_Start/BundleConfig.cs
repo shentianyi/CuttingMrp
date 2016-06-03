@@ -22,7 +22,9 @@ namespace CuttingMrpWeb
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/jquery.datetimepicker.full.js",
-                      "~/Scripts/respond.js"));
+                      "~/Scripts/respond.js",
+                      "~/Scripts/bootstrap-typeahead.js"
+                      ));
 
             bundles.Add(new ScriptBundle("~/bundles/basic").Include(
                    "~/Scripts/basics.js"));
@@ -47,6 +49,12 @@ namespace CuttingMrpWeb
 
             bundles.Add(new ScriptBundle("~/bundles/dashboard").Include(
                       "~/Scripts/dashboard/dashboard.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/part_stock").Include(
+                      "~/Scripts/dashboard/part-stock.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/complete_rate").Include(
+                      "~/Scripts/dashboard/complete-rate.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
