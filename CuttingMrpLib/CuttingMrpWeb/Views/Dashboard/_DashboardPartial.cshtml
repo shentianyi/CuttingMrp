@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "_DashboardPartial";
+}
+
+<h2 style="color:#999999;padding-left:30px;padding-bottom:10px;">Dashboard</h2>
+
+<ul class="list-unstyled dashboard-left-nav">
+    <li class="dashboard-nav-active dashboard-part" menuID="1">
+        <i class="glyphicon glyphicon-wrench"></i>
+        <label><a href="@Url.Action("Index", "Dashboard") ">Part Stock</a></label>
+    </li>
+    <li menuID="2">
+        <i class="glyphicon glyphicon-stats"></i>
+        <label><a href="@Url.Action("Rate", "Dashboard") ">Complete Rate</a></label>
+    </li>
+</ul>

@@ -45,6 +45,9 @@ namespace CuttingMrpWeb
             bundles.Add(new ScriptBundle("~/bundles/process-orders").Include(
                       "~/Scripts/process-orders.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/dashboard").Include(
+                      "~/Scripts/dashboard/dashboard.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/jquery.datetimepicker.css",
@@ -64,6 +67,9 @@ namespace CuttingMrpWeb
 
             bundles.Add(new StyleBundle("~/Content/mrp-rounds").Include(
                      "~/Content/mrp-round.css"));
+
+            bundles.Add(new StyleBundle("~/Content/dashboards").Include(
+                     "~/Content/dashboards.css"));
         }
     }
 }

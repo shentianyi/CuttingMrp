@@ -1,0 +1,64 @@
+﻿.LeftNav{
+    width:200px;
+    background:#f5f5f5;
+    position:absolute;
+    left:0;
+    top:50px;
+    bottom:0;
+}
+
+.date-picker{
+    width:150px;
+}
+
+.RightContent{
+    left:200px;
+    position:absolute;
+    top:50px;
+    bottom:0;
+    right:0;
+    background:#eeeeee;
+    padding:10px;
+}
+
+.dashboard-left-nav>li:first-child{
+    border-top:1px solid #0088cc;
+}
+.dashboard-left-nav>li{
+    padding-left:20px;
+    height:40px;
+    line-height:38px;
+    border-bottom:1px solid #0088cc;
+    cursor:pointer;
+}
+
+.dashboard-left-nav>li>i{
+    width:35px;
+}
+
+.dashboard-left-nav> a{
+    outline:none;
+    padding-left:10px;
+}
+
+.dashboard-left-nav a:hover, .dashboard-left-nav a:active{
+    outline:none;
+    text-decoration:none;
+}
+
+.dashboard-nav-active{
+    background:steelblue;
+    color:white;
+}
+
+.dashboard-nav-active a{
+    text-decoration:none;
+    outline:none;
+    color:white;
+}
+
+.dashboard-nav-active a:hover, .dashboard-nav-active a:active{
+    text-decoration:none;
+    outline:none;
+    color:#eeeeee;
+}
