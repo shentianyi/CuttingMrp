@@ -1,21 +1,29 @@
 ﻿var PartStock = {};
 PartStock.InitPartNr = function () {
+    var part_nr_value=$('.part-nr').val();
     $('#part_nr').typeahead({
-        source: [
-            { id: 1, full_name: 'Toronto', first_two_letters: 'To' },
-            { id: 2, full_name: 'Montreal', first_two_letters: 'Mo' },
-            { id: 3, full_name: 'New York', first_two_letters: 'Ne' },
-            { id: 4, full_name: 'Buffalo', first_two_letters: 'Bu' },
-            { id: 5, full_name: 'Boston', first_two_letters: 'Bo' },
-            { id: 6, full_name: 'Columbus', first_two_letters: 'Co' },
-            { id: 7, full_name: 'Dallas', first_two_letters: 'Da' },
-            { id: 8, full_name: 'Vancouver', first_two_letters: 'Va' },
-            { id: 9, full_name: 'Seattle', first_two_letters: 'Se' },
-            { id: 10, full_name: 'Los Angeles', first_two_letters: 'Lo' }
-        ],
-        display: 'full_name'
+        //source: [
+        //    { id: 1, full_name: 'Toronto', first_two_letters: 'To' },
+        //    { id: 2, full_name: 'Montreal', first_two_letters: 'Mo' },
+        //    { id: 3, full_name: 'New York', first_two_letters: 'Ne' },
+        //    { id: 4, full_name: 'Buffalo', first_two_letters: 'Bu' },
+        //    { id: 5, full_name: 'Boston', first_two_letters: 'Bo' },
+        //    { id: 6, full_name: 'Columbus', first_two_letters: 'Co' },
+        //    { id: 7, full_name: 'Dallas', first_two_letters: 'Da' },
+        //    { id: 8, full_name: 'Vancouver', first_two_letters: 'Va' },
+        //    { id: 9, full_name: 'Seattle', first_two_letters: 'Se' },
+        //    { id: 10, full_name: 'Los Angeles', first_two_letters: 'Lo' }
+        //],
+        //display: 'full_name'
+
+        ajax: {
+            url: '/Parts/Fuzzies?id=91',
+            type: 'get',
+            triggerLength: 1
+        }
     });
 }
+
 PartStock.PartStockSearch = function () {
     $('.part-stock-search').click(function () {
         var DateFrom = $('.date-from').val();
@@ -40,8 +48,6 @@ PartStock.PartStockSearch = function () {
         })
     })
 }
-
-
 
 PartStock.DrawCharts = function () {
     $('#container').highcharts({
