@@ -199,5 +199,11 @@
         <elementListCompartment Id="95c32024-ed7b-4054-81f4-4d9f7c2e8c3d" absoluteBounds="6.265, 1.21, 1.9700000000000002, 1.0115458170572915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
+    <classShape Id="0a2e957e-2aa2-43c5-993f-a0fe55e5ea19" absoluteBounds="5.875, 0.625, 2, 1.3805261230468751">
+      <DataClassMoniker Name="/CuttingMrpDataContext/AvgOfCompleteRate" />
+      <nestedChildShapes>
+        <elementListCompartment Id="48d2b29f-027b-43e5-8cf6-5a3054356882" absoluteBounds="5.89, 1.085, 1.9700000000000002, 0.820526123046875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
   </nestedChildShapes>
 </ordesignerObjectsDiagram>

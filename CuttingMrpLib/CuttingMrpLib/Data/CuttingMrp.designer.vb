@@ -285,6 +285,12 @@ Partial Public Class CuttingMrpDataContext
 			Return Me.GetTable(Of StockSumRecord)
 		End Get
 	End Property
+	
+	Public ReadOnly Property AvgOfCompleteRates() As System.Data.Linq.Table(Of AvgOfCompleteRate)
+		Get
+			Return Me.GetTable(Of AvgOfCompleteRate)
+		End Get
+	End Property
 End Class
 
 <Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.StatusControl")>  _
@@ -4568,4 +4574,55 @@ Partial Public Class StockSumRecord
 			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
 		End If
 	End Sub
+End Class
+
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.AvgOfCompleteRate")>  _
+Partial Public Class AvgOfCompleteRate
+	
+	Private _partNr As String
+	
+	Private _proceeDate As Date
+	
+	Private _rate As System.Nullable(Of Double)
+	
+	Public Sub New()
+		MyBase.New
+	End Sub
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partNr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
+	Public Property partNr() As String
+		Get
+			Return Me._partNr
+		End Get
+		Set
+			If (String.Equals(Me._partNr, value) = false) Then
+				Me._partNr = value
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_proceeDate", DbType:="DateTime NOT NULL")>  _
+	Public Property proceeDate() As Date
+		Get
+			Return Me._proceeDate
+		End Get
+		Set
+			If ((Me._proceeDate = value)  _
+						= false) Then
+				Me._proceeDate = value
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_rate", DbType:="Float")>  _
+	Public Property rate() As System.Nullable(Of Double)
+		Get
+			Return Me._rate
+		End Get
+		Set
+			If (Me._rate.Equals(value) = false) Then
+				Me._rate = value
+			End If
+		End Set
+	End Property
 End Class
