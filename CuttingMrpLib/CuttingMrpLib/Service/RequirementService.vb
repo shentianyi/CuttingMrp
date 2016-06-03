@@ -30,7 +30,7 @@ Public Class RequirementService
         Try
             Dim context As DataContext = New DataContext(Me.DBConn)
             Dim rep As Repository(Of Requirement) = New Repository.Repository(Of Requirement)(context)
-            requirement = rep.First(Function(s) s.id.Equals(id))
+            requirement = rep.FirstOrDefault(Function(s) s.id.Equals(id))
         Catch ex As Exception
             Dim s = ex.Message
         End Try
@@ -43,7 +43,7 @@ Public Class RequirementService
         Try
             Dim context As DataContext = New DataContext(Me.DBConn)
             Dim rep As Repository(Of Requirement) = New Repository.Repository(Of Requirement)(context)
-            Dim requirement As Requirement = rep.First(Function(s) s.id.Equals(id))
+            Dim requirement As Requirement = rep.FirstOrDefault(Function(s) s.id.Equals(id))
             If (requirement IsNot Nothing) Then
                 rep.MarkForDeletion(requirement)
                 context.SaveAll()
@@ -60,7 +60,7 @@ Public Class RequirementService
         Try
             Dim context As DataContext = New DataContext(Me.DBConn)
             Dim rep As Repository(Of Requirement) = New Repository.Repository(Of Requirement)(context)
-            Dim urequirement As Requirement = rep.First(Function(s) s.id.Equals(requirement.id))
+            Dim urequirement As Requirement = rep.FirstOrDefault(Function(s) s.id.Equals(requirement.id))
             If (urequirement IsNot Nothing) Then
                 urequirement.partNr = requirement.partNr
                 urequirement.orderedDate = requirement.orderedDate

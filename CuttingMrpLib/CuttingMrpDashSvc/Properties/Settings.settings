@@ -5,5 +5,8 @@
     <Setting Name="db" Type="System.String" Scope="User">
       <Value Profile="(Default)">Data Source=WANGSONG-PC;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=sa;Password=wangsong</Value>
     </Setting>
+    <Setting Name="stockSumDashCron" Type="System.String" Scope="User">
+      <Value Profile="(Default)">*/3 * * * * ? *</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

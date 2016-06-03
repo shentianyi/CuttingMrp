@@ -1,4 +1,8 @@
-﻿using log4net;
+﻿using Brilliantech.Framwork.Utils.LogUtil;
+using CuttingMrpDashSvc.Job;
+using log4net;
+using Quartz;
+using Quartz.Impl;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,21 +17,55 @@ namespace CuttingMrpDashSvc
 {
     public partial class DashService : ServiceBase
     {
-        ILog log = LogManager.GetLogger("ServiceLog");
+        private static IScheduler scheduler;
+
         public DashService()
         {
             InitializeComponent();
-            log4net.Config.XmlConfigurator.ConfigureAndWatch(new FileInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "log4.config")));
         }
 
         protected override void OnStart(string[] args)
         {
-            log.Info("CZ CuttingMrpDash Start!");
+            try
+            {
+                LogUtil.Logger.Info("CZ CuttingMrpDash Starting...");
+                ISchedulerFactory sf = new StdSchedulerFactory();
+                Scheduler = sf.GetScheduler();
+
+                new StockSumRecordTigger();
+
+                Scheduler.Start();
+
+                LogUtil.Logger.Info("CZ CuttingMrpDash Started");
+            }
+            catch (Exception ex)
+            {
+                LogUtil.Logger.Error("CZ CuttingMrpDash Start Fail");
+                LogUtil.Logger.Error(ex.Message);
+                LogUtil.Logger.Error(ex.StackTrace);
+                this.Stop();
+            }
         }
 
         protected override void OnStop()
         {
-            log.Info("CZ CuttingMrpDash Stop!");
+            try
+            {
+                if (Scheduler != null) {
+                    Scheduler.Shutdown();
+
+                    LogUtil.Logger.Info("CuttingMrpDash Cron Task Stoped.");
+                }
+                LogUtil.Logger.Info("CZ CuttingMrpDash Stoped!");
+            }
+            catch (Exception ex)
+            {
+                LogUtil.Logger.Error("CZ CuttingMrpDash Stop Fail");
+                LogUtil.Logger.Error(ex.Message);
+                LogUtil.Logger.Error(ex.StackTrace);
+            }
         }
+
+        public static IScheduler Scheduler { get { return scheduler; } set { scheduler = value; } }
     }
 }
