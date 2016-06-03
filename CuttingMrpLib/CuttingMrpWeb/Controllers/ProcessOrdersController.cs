@@ -156,7 +156,7 @@ namespace CuttingMrpWeb.Controllers
             using (StreamWriter sw = new StreamWriter(ms, Encoding.UTF8))
             {
                 List<string> head = new List<string> { " No.", "OrderNr", "PartNr", "Kanban","PartType(KB Type)","Status",
-                    "ProceeDate","SourceQuantity","ActualQuantity","BatchQuantity","CompleteRate", "DerivedFrom" };
+                    "ProceeDate","SourceQuantity","ActualQuantity","BatchQuantity","BundleQuantity","KanBanPosition","RouteNr","CompleteRate", "DerivedFrom" };
                 sw.WriteLine(string.Join(Settings.Default.csvDelimiter, head));
                 for(var i=0; i<processOrders.Count; i++)
                 {
@@ -170,10 +170,12 @@ namespace CuttingMrpWeb.Controllers
                     ii.Add(processOrders[i].proceeDate.ToString());
                     ii.Add(processOrders[i].sourceQuantity.ToString());
                     ii.Add(processOrders[i].actualQuantity.ToString());
-                    ii.Add(processOrders[i].batchQuantity.ToString());
+                    ii.Add(processOrders[i].Part.kanbanBatchQty.ToString());
+                    ii.Add(processOrders[i].Part.kanbanBundleQty.ToString());
+                    ii.Add(processOrders[i].Part.kanbanPosition.ToString());
+                    ii.Add(processOrders[i].Part.routeNr.ToString());
                     ii.Add(processOrders[i].completeRate.ToString());
                     ii.Add(processOrders[i].derivedFrom);
-
                     sw.WriteLine(string.Join(Settings.Default.csvDelimiter, ii.ToArray()));
                 }
                 //sw.WriteLine(max);
@@ -201,7 +203,7 @@ namespace CuttingMrpWeb.Controllers
             MemoryStream ms = new MemoryStream();
             using (StreamWriter sw = new StreamWriter(ms, Encoding.UTF8))
             {
-                List<string> head = new List<string> { " No.","Product", "PartNr", "Kanban", "PartType(KB Type)","Position", "ActualQuantity", "BundleQuantity", "BatchQuantity","ChangeQty" };
+                List<string> head = new List<string> { " No.","Product", "PartNr", "Kanban", "PartType(KB Type)","Position", "ActualQuantity", "BundleQuantity", "BatchQuantity","KanBanPosition","RouteNr","ChangeQty" };
                 sw.WriteLine(string.Join(Settings.Default.csvDelimiter, head));
                 for (var i = 0; i < processOrders.Count; i++)
                 {
@@ -211,11 +213,12 @@ namespace CuttingMrpWeb.Controllers
                     ii.Add(processOrders[i].partNr);
                     ii.Add(processOrders[i].Part.kanbanNrs);
                     ii.Add(processOrders[i].Part.partTypeDisplay);
-
-                    ii.Add(processOrders[i].Part.kanbanPositions);
+                    ii.Add(processOrders[i].Part.kanbanPosition);
                     ii.Add(processOrders[i].actualQuantity.ToString());
-                    ii.Add(processOrders[i].Part.moq.ToString());
-                    ii.Add(processOrders[i].Part.spq.ToString());
+                    ii.Add(processOrders[i].Part.kanbanBundleQty.ToString());
+                    ii.Add(processOrders[i].Part.kanbanBatchQty.ToString());
+                    ii.Add(processOrders[i].Part.kanbanPosition.ToString());
+                    ii.Add(processOrders[i].Part.routeNr.ToString());
                     ii.Add(processOrders[i].needChangeKbQtyDisplay);
                     sw.WriteLine(string.Join(Settings.Default.csvDelimiter, ii.ToArray()));
                 }
@@ -262,9 +265,12 @@ namespace CuttingMrpWeb.Controllers
         [HttpPost]
         public ActionResult ImportForceRecord(HttpPostedFileBase forceFile)
         {
-            try
-            {
-                string s = forceFile.FileName;
+            int startFromLine = 16;
+            //try
+            //{
+                if (forceFile == null){
+                    throw new Exception("No file is uploaded to system");
+                } 
                 var appData = Server.MapPath("~/TmpFile/");
                 var filename = Path.Combine(appData,
                     DateTime.Now.ToString("yyyyMMddHHmmss") + "_" + Path.GetFileName(forceFile.FileName));
@@ -275,12 +281,45 @@ namespace CuttingMrpWeb.Controllers
                 configuration.HasHeaderRecord = true;
                 configuration.SkipEmptyRecords = true;
                 configuration.RegisterClassMap<ProcessOrderCsvModelMap>();
+                configuration.TrimHeaders = true;
+                configuration.TrimFields = true;
+             
+
                 List<ProcessOrderCsvModel> records = new List<ProcessOrderCsvModel>();
-                using (var reader = new CsvReader(new StreamReader(filename), configuration))
+                using (TextReader treader = System.IO.File.OpenText(filename))
                 {
+                    for (int i=0;true; i++) {
+                       string s= treader.ReadLine();
+                        if (string.IsNullOrWhiteSpace(s)) {
+                            break;
+                        }
+                        if (i >= startFromLine) {
+                            string[] fields = s.Split(char.Parse(Settings.Default.csvDelimiter));
+                            records.Add(new ProcessOrderCsvModel()
+                            {
+                                Date=fields[0],
+                                Time= fields[1],
+                                CuttingOrder=fields[2],
+                                CuttingPosition= fields[3],
+                                SingleResource= fields[4],
+                                ResourceGroup= fields[5],
+                                StaffNumber= fields[6],
+                                WireNumber=fields[7],
+                                PartNumber= fields[8],
+                                KanbanNumber=fields[9],
+                                CutQtyDisplay= fields[10]
+                            });
+                        }
+                    }
                     //reader.Read();
                     //var header=  reader.FieldHeaders;
-                    records = reader.GetRecords<ProcessOrderCsvModel>().ToList();
+                    //using (var reader = new CsvReader(treader, configuration))
+                    //{
+                    //    var ss = reader.FieldHeaders() ;
+                    //    var sss = "";
+                    //   // records = reader.GetRecords<ProcessOrderCsvModel>().ToList();
+                    //}
+
                 }
                 bool success = true;
                 if (records.Count > 0)
@@ -319,11 +358,12 @@ namespace CuttingMrpWeb.Controllers
 
                     return View();
                 }
-            }
-            catch (Exception ex) {
-                ViewBag.Msg = ex.Message;
-                return View();
-            }
+            //}
+            //catch (Exception ex) {
+            //    throw ex;
+            //    ViewBag.Msg = ex.Message;
+            //    return View();
+            //}
         }
 
         private ActionResult ValidateProcessOrder(ProcessOrder processOrder)

@@ -249,7 +249,7 @@ Public Class ProcessOrderService
         Dim kanbanRepo As Repository(Of BatchOrderTemplate) = New Repository(Of BatchOrderTemplate)(New DataContext(DBConn))
 
         For Each rec As BatchFinishOrderRecord In records
-            Dim kanban As BatchOrderTemplate = kanbanRepo.First(Function(c) c.orderNr = rec.FixOrderNr)
+            Dim kanban As BatchOrderTemplate = kanbanRepo.FirstOrDefault(Function(c) c.orderNr = rec.FixOrderNr)
             If kanban Is Nothing Then
                 rec.Warnings.Add("Kanban: " & rec.FixOrderNr & " does not exist in the system")
                 warning.Add(rec)
