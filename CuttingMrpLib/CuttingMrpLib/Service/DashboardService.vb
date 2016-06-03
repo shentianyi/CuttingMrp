@@ -17,9 +17,15 @@ Public Class DashboardService
         Dim items As List(Of DashboardItem) = New List(Of DashboardItem)
         Dim d As DateTime = searchModel.DateFrom
 
-        For Each r In rates
-            items.Add(New DashboardItem() With {.XValue = r.proceeDate.Date.ToString, .YValue = r.rate})
-        Next
+        '  For Each r In rates
+        ' items.Add(New DashboardItem() With {.XValue = r.proceeDate.Date.ToString, .YValue = r.rate})
+        'Next
+
+        While d <= searchModel.DateTo
+            Dim rate = rates.Where(Function(r) r.proceeDate.Equals(d)).FirstOrDefault
+            items.Add(New DashboardItem() With {.XValue = d.Date.ToString, .YValue = If(rate Is Nothing, 0, rate.rate)})
+            d = d.AddDays(1)
+        End While
 
         Return items
     End Function
