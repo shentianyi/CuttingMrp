@@ -118,8 +118,10 @@
     </Compile>
     <Compile Include="Service\CalculateService.vb" />
     <Compile Include="Service\CapacityPlanService.vb" />
+    <Compile Include="Service\DashboardService.vb" />
     <Compile Include="Service\ICalculateService.vb" />
     <Compile Include="Service\ICapacityPlanService.vb" />
+    <Compile Include="Service\IDashboardService.vb" />
     <Compile Include="Service\IPartService.vb" />
     <Compile Include="Service\INumericService.vb" />
     <Compile Include="Service\IProcessOrderService.vb" />
@@ -139,7 +141,9 @@
     <Compile Include="Utility\EnumUtility.vb" />
     <Compile Include="Utility\Calculator.vb" />
     <Compile Include="Utility\CalculatorSingleton.vb" />
+    <Compile Include="ViewModel\PageViewModel\DashboardItem.vb" />
     <Compile Include="ViewModel\PageViewModel\ProcessOrderInfoModel.vb" />
+    <Compile Include="ViewModel\SearchViewModel\DashboardSearchModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\MRPSearchModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\ProcessOrderSearchModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\RequirementSearchModel.vb" />
