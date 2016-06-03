@@ -41,6 +41,22 @@ namespace CuttingMrpWeb.Controllers
             return Json(pv, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+        public JsonResult Fuzzies(string id) {
+            IPartService ps = new PartService(Settings.Default.db);
+            List<Part> parts = ps.FuzzyById(id);
+
+           List< PartViewModel> pvs = new List<PartViewModel> ();
+            foreach (var part in parts)
+            {
+                pvs.Add(new PartViewModel()
+                {
+                    partNr = part.partNr
+                });
+            }
+            return Json(pvs, JsonRequestBehavior.AllowGet);
+        }
+
         // GET: Parts/Create
         public ActionResult Create()
         {

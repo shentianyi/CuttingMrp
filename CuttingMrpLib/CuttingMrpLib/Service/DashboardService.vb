@@ -32,7 +32,7 @@ Public Class DashboardService
         Dim d As DateTime = searchModel.DateFrom
         While d <= searchModel.DateTo
             Dim stock = stocks.Where(Function(s) s.date.Equals(d)).FirstOrDefault
-            items.Add(New DashboardItem() With {.XValue = d.Date.ToString, .YValue = If(stock Is Nothing, 0, stock.ToString)})
+            items.Add(New DashboardItem() With {.XValue = d.Date.ToString, .YValue = If(stock Is Nothing, 0, stock.quantity)})
             d = d.AddDays(1)
         End While
         Return items
