@@ -121,6 +121,18 @@ Partial Public Class CuttingMrpDataContext
     End Sub
   Partial Private Sub DeleteProcessOrder(instance As ProcessOrder)
     End Sub
+  Partial Private Sub InsertStockMovement(instance As StockMovement)
+    End Sub
+  Partial Private Sub UpdateStockMovement(instance As StockMovement)
+    End Sub
+  Partial Private Sub DeleteStockMovement(instance As StockMovement)
+    End Sub
+  Partial Private Sub InsertBackflushRecord(instance As BackflushRecord)
+    End Sub
+  Partial Private Sub UpdateBackflushRecord(instance As BackflushRecord)
+    End Sub
+  Partial Private Sub DeleteBackflushRecord(instance As BackflushRecord)
+    End Sub
   #End Region
 	
 	Public Sub New()
@@ -247,6 +259,18 @@ Partial Public Class CuttingMrpDataContext
 	Public ReadOnly Property ProcessOrders() As System.Data.Linq.Table(Of ProcessOrder)
 		Get
 			Return Me.GetTable(Of ProcessOrder)
+		End Get
+	End Property
+	
+	Public ReadOnly Property StockMovements() As System.Data.Linq.Table(Of StockMovement)
+		Get
+			Return Me.GetTable(Of StockMovement)
+		End Get
+	End Property
+	
+	Public ReadOnly Property BackflushRecords() As System.Data.Linq.Table(Of BackflushRecord)
+		Get
+			Return Me.GetTable(Of BackflushRecord)
 		End Get
 	End Property
 End Class
@@ -4006,5 +4030,400 @@ Partial Public Class ProcessOrder
 	Private Sub detach_OrderDerivations(ByVal entity As OrderDerivation)
 		Me.SendPropertyChanging
 		entity.ProcessOrder = Nothing
+	End Sub
+End Class
+
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.StockMovement")>  _
+Partial Public Class StockMovement
+	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+	
+	Private Shared emptyChangingEventArgs As PropertyChangingEventArgs = New PropertyChangingEventArgs(String.Empty)
+	
+	Private _id As String
+	
+	Private _partNr As String
+	
+	Private _quantity As Double
+	
+	Private _fifo As Date
+	
+	Private _moveType As Integer
+	
+	Private _sourceDoc As String
+	
+    #Region "可扩展性方法定义"
+    Partial Private Sub OnLoaded()
+    End Sub
+    Partial Private Sub OnValidate(action As System.Data.Linq.ChangeAction)
+    End Sub
+    Partial Private Sub OnCreated()
+    End Sub
+    Partial Private Sub OnidChanging(value As String)
+    End Sub
+    Partial Private Sub OnidChanged()
+    End Sub
+    Partial Private Sub OnpartNrChanging(value As String)
+    End Sub
+    Partial Private Sub OnpartNrChanged()
+    End Sub
+    Partial Private Sub OnquantityChanging(value As Double)
+    End Sub
+    Partial Private Sub OnquantityChanged()
+    End Sub
+    Partial Private Sub OnfifoChanging(value As Date)
+    End Sub
+    Partial Private Sub OnfifoChanged()
+    End Sub
+    Partial Private Sub OnmoveTypeChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnmoveTypeChanged()
+    End Sub
+    Partial Private Sub OnsourceDocChanging(value As String)
+    End Sub
+    Partial Private Sub OnsourceDocChanged()
+    End Sub
+    #End Region
+	
+	Public Sub New()
+		MyBase.New
+		OnCreated
+	End Sub
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_id", DbType:="VarChar(100) NOT NULL", CanBeNull:=false, IsPrimaryKey:=true)>  _
+	Public Property id() As String
+		Get
+			Return Me._id
+		End Get
+		Set
+			If (String.Equals(Me._id, value) = false) Then
+				Me.OnidChanging(value)
+				Me.SendPropertyChanging
+				Me._id = value
+				Me.SendPropertyChanged("id")
+				Me.OnidChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partNr", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
+	Public Property partNr() As String
+		Get
+			Return Me._partNr
+		End Get
+		Set
+			If (String.Equals(Me._partNr, value) = false) Then
+				Me.OnpartNrChanging(value)
+				Me.SendPropertyChanging
+				Me._partNr = value
+				Me.SendPropertyChanged("partNr")
+				Me.OnpartNrChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_quantity", DbType:="Float NOT NULL")>  _
+	Public Property quantity() As Double
+		Get
+			Return Me._quantity
+		End Get
+		Set
+			If ((Me._quantity = value)  _
+						= false) Then
+				Me.OnquantityChanging(value)
+				Me.SendPropertyChanging
+				Me._quantity = value
+				Me.SendPropertyChanged("quantity")
+				Me.OnquantityChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_fifo", DbType:="Date NOT NULL")>  _
+	Public Property fifo() As Date
+		Get
+			Return Me._fifo
+		End Get
+		Set
+			If ((Me._fifo = value)  _
+						= false) Then
+				Me.OnfifoChanging(value)
+				Me.SendPropertyChanging
+				Me._fifo = value
+				Me.SendPropertyChanged("fifo")
+				Me.OnfifoChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_moveType", DbType:="Int NOT NULL")>  _
+	Public Property moveType() As Integer
+		Get
+			Return Me._moveType
+		End Get
+		Set
+			If ((Me._moveType = value)  _
+						= false) Then
+				Me.OnmoveTypeChanging(value)
+				Me.SendPropertyChanging
+				Me._moveType = value
+				Me.SendPropertyChanged("moveType")
+				Me.OnmoveTypeChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_sourceDoc", DbType:="Text", UpdateCheck:=UpdateCheck.Never)>  _
+	Public Property sourceDoc() As String
+		Get
+			Return Me._sourceDoc
+		End Get
+		Set
+			If (String.Equals(Me._sourceDoc, value) = false) Then
+				Me.OnsourceDocChanging(value)
+				Me.SendPropertyChanging
+				Me._sourceDoc = value
+				Me.SendPropertyChanged("sourceDoc")
+				Me.OnsourceDocChanged
+			End If
+		End Set
+	End Property
+	
+	Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
+	
+	Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
+	
+	Protected Overridable Sub SendPropertyChanging()
+		If ((Me.PropertyChangingEvent Is Nothing)  _
+					= false) Then
+			RaiseEvent PropertyChanging(Me, emptyChangingEventArgs)
+		End If
+	End Sub
+	
+	Protected Overridable Sub SendPropertyChanged(ByVal propertyName As [String])
+		If ((Me.PropertyChangedEvent Is Nothing)  _
+					= false) Then
+			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
+		End If
+	End Sub
+End Class
+
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.BackflushRecord")>  _
+Partial Public Class BackflushRecord
+	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+	
+	Private Shared emptyChangingEventArgs As PropertyChangingEventArgs = New PropertyChangingEventArgs(String.Empty)
+	
+	Private _backflushId As Integer
+	
+	Private _partnr As Integer
+	
+	Private _fifo As Date
+	
+	Private _sourceDoc As String
+	
+	Private _quantity As Double
+	
+	Private _status As Integer
+	
+	Private _message As String
+	
+	Private _launchTime As Date
+	
+    #Region "可扩展性方法定义"
+    Partial Private Sub OnLoaded()
+    End Sub
+    Partial Private Sub OnValidate(action As System.Data.Linq.ChangeAction)
+    End Sub
+    Partial Private Sub OnCreated()
+    End Sub
+    Partial Private Sub OnbackflushIdChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnbackflushIdChanged()
+    End Sub
+    Partial Private Sub OnpartnrChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnpartnrChanged()
+    End Sub
+    Partial Private Sub OnfifoChanging(value As Date)
+    End Sub
+    Partial Private Sub OnfifoChanged()
+    End Sub
+    Partial Private Sub OnsourceDocChanging(value As String)
+    End Sub
+    Partial Private Sub OnsourceDocChanged()
+    End Sub
+    Partial Private Sub OnquantityChanging(value As Double)
+    End Sub
+    Partial Private Sub OnquantityChanged()
+    End Sub
+    Partial Private Sub OnstatusChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnstatusChanged()
+    End Sub
+    Partial Private Sub OnmessageChanging(value As String)
+    End Sub
+    Partial Private Sub OnmessageChanged()
+    End Sub
+    Partial Private Sub OnlaunchTimeChanging(value As Date)
+    End Sub
+    Partial Private Sub OnlaunchTimeChanged()
+    End Sub
+    #End Region
+	
+	Public Sub New()
+		MyBase.New
+		OnCreated
+	End Sub
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_backflushId", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true)>  _
+	Public Property backflushId() As Integer
+		Get
+			Return Me._backflushId
+		End Get
+		Set
+			If ((Me._backflushId = value)  _
+						= false) Then
+				Me.OnbackflushIdChanging(value)
+				Me.SendPropertyChanging
+				Me._backflushId = value
+				Me.SendPropertyChanged("backflushId")
+				Me.OnbackflushIdChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partnr", DbType:="Int NOT NULL")>  _
+	Public Property partnr() As Integer
+		Get
+			Return Me._partnr
+		End Get
+		Set
+			If ((Me._partnr = value)  _
+						= false) Then
+				Me.OnpartnrChanging(value)
+				Me.SendPropertyChanging
+				Me._partnr = value
+				Me.SendPropertyChanged("partnr")
+				Me.OnpartnrChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_fifo", DbType:="Date NOT NULL")>  _
+	Public Property fifo() As Date
+		Get
+			Return Me._fifo
+		End Get
+		Set
+			If ((Me._fifo = value)  _
+						= false) Then
+				Me.OnfifoChanging(value)
+				Me.SendPropertyChanging
+				Me._fifo = value
+				Me.SendPropertyChanged("fifo")
+				Me.OnfifoChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_sourceDoc", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
+	Public Property sourceDoc() As String
+		Get
+			Return Me._sourceDoc
+		End Get
+		Set
+			If (String.Equals(Me._sourceDoc, value) = false) Then
+				Me.OnsourceDocChanging(value)
+				Me.SendPropertyChanging
+				Me._sourceDoc = value
+				Me.SendPropertyChanged("sourceDoc")
+				Me.OnsourceDocChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_quantity", DbType:="Float NOT NULL")>  _
+	Public Property quantity() As Double
+		Get
+			Return Me._quantity
+		End Get
+		Set
+			If ((Me._quantity = value)  _
+						= false) Then
+				Me.OnquantityChanging(value)
+				Me.SendPropertyChanging
+				Me._quantity = value
+				Me.SendPropertyChanged("quantity")
+				Me.OnquantityChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_status", DbType:="Int NOT NULL")>  _
+	Public Property status() As Integer
+		Get
+			Return Me._status
+		End Get
+		Set
+			If ((Me._status = value)  _
+						= false) Then
+				Me.OnstatusChanging(value)
+				Me.SendPropertyChanging
+				Me._status = value
+				Me.SendPropertyChanged("status")
+				Me.OnstatusChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_message", DbType:="Text NOT NULL", CanBeNull:=false, UpdateCheck:=UpdateCheck.Never)>  _
+	Public Property message() As String
+		Get
+			Return Me._message
+		End Get
+		Set
+			If (String.Equals(Me._message, value) = false) Then
+				Me.OnmessageChanging(value)
+				Me.SendPropertyChanging
+				Me._message = value
+				Me.SendPropertyChanged("message")
+				Me.OnmessageChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_launchTime", DbType:="DateTime NOT NULL")>  _
+	Public Property launchTime() As Date
+		Get
+			Return Me._launchTime
+		End Get
+		Set
+			If ((Me._launchTime = value)  _
+						= false) Then
+				Me.OnlaunchTimeChanging(value)
+				Me.SendPropertyChanging
+				Me._launchTime = value
+				Me.SendPropertyChanged("launchTime")
+				Me.OnlaunchTimeChanged
+			End If
+		End Set
+	End Property
+	
+	Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
+	
+	Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
+	
+	Protected Overridable Sub SendPropertyChanging()
+		If ((Me.PropertyChangingEvent Is Nothing)  _
+					= false) Then
+			RaiseEvent PropertyChanging(Me, emptyChangingEventArgs)
+		End If
+	End Sub
+	
+	Protected Overridable Sub SendPropertyChanged(ByVal propertyName As [String])
+		If ((Me.PropertyChangedEvent Is Nothing)  _
+					= false) Then
+			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
+		End If
 	End Sub
 End Class
