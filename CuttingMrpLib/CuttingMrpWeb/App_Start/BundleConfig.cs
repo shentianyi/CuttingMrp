@@ -78,6 +78,12 @@ namespace CuttingMrpWeb
 
             bundles.Add(new StyleBundle("~/Content/dashboards").Include(
                      "~/Content/dashboards.css"));
+
+            bundles.Add(new StyleBundle("~/Content/complete_rate").Include(
+                     "~/Content/complete-rate.css"));
+
+            bundles.Add(new StyleBundle("~/Content/part_stock").Include(
+                     "~/Content/part-stock.css"));
         }
     }
 }
