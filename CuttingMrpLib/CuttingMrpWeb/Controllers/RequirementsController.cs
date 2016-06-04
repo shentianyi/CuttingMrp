@@ -15,6 +15,8 @@ namespace CuttingMrpWeb.Controllers
     public class RequirementsController : Controller
     {
         // GET: Requirements
+
+        [CustomAuthorize]
         public ActionResult Index(int? page)
         {
             int pageIndex = PagingHelper.GetPageIndex(page);

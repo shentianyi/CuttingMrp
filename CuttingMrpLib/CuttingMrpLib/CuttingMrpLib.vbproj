@@ -175,7 +175,6 @@
   <ItemGroup>
     <None Include="Data\CuttingMrp.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>CuttingMrp.designer.vb</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
     <None Include="My Project\Application.myapp">

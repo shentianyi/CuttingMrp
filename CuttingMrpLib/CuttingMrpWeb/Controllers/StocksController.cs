@@ -10,12 +10,15 @@ using System.Net;
 using CuttingMrpWeb.Helpers;
 using System.IO;
 using System.Text;
+using CuttingMrpWeb.Models;
 
 namespace CuttingMrpWeb.Controllers
 {
     public class StocksController : Controller
     {
         // GET: Stocks
+
+        [CustomAuthorize]
         public ActionResult Index(int? page)
         {
             int pageIndex = PagingHelper.GetPageIndex(page);

@@ -11,6 +11,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using CuttingMrpWeb.Models;
+using CuttingMrpWeb.Properties;
 
 namespace CuttingMrpWeb
 {
@@ -95,6 +96,17 @@ namespace CuttingMrpWeb
             : base(userManager, authenticationManager)
         {
         }
+
+        //public override Task<SignInStatus> PasswordSignInAsync(string userName, string password, bool isPersistent, bool shouldLockout)
+        //{
+        //    SignInStatus result = SignInStatus.Failure;
+        //    if (userName.Equals(Settings.Default.adminEmail) && password.Password.Equals(Settings.Default.adminPwd))
+        //    {
+        //        result = SignInStatus.Success;
+        //    }
+
+        //    return result; //base.PasswordSignInAsync(userName, password, isPersistent, shouldLockout);
+        //}
 
         public override Task<ClaimsIdentity> CreateUserIdentityAsync(ApplicationUser user)
         {

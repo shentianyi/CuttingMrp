@@ -70,7 +70,7 @@
         <classShapeMoniker Id="b9552474-5588-435f-9e7c-46872d9a935b" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(18 : 6.45358520507813); (18 : 13.0803450520833); (17.5520808333333 : 13.0803450520833 : JumpStart); (17.3854141666667 : 13.0803450520833 : JumpEnd); (10.8333333333333 : 13.0803450520833 : JumpStart); (10.6666666666667 : 13.0803450520833 : JumpEnd); (7 : 13.0803450520833)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(18 : 6.45358520507813); (18 : 13.0803450520833); (17.5520808333333 : 13.0803450520833 : JumpStart); (17.3854141666667 : 13.0803450520833 : JumpEnd); (7 : 13.0803450520833)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/CuttingMrpDataContext/Part/Part_Requirement" />
       <nodes>
         <classShapeMoniker Id="8cb65f5f-4bdf-4877-be40-cc4ebcda25ee" />
@@ -174,7 +174,7 @@
         <classShapeMoniker Id="0f3281f5-dfa7-4b29-80f6-2daa687aa9f8" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(18.5312525 : 6.45358520507813); (18.5312525 : 9.81878275553385); (17.5520808333333 : 9.81878275553385 : JumpStart); (17.3854141666667 : 9.81878275553385 : JumpEnd); (5.875 : 9.81878275553385)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(18.5312525 : 6.45358520507813); (18.5312525 : 9.81878275553385); (18.0833333333333 : 9.81878275553385 : JumpStart); (17.9166666666667 : 9.81878275553385 : JumpEnd); (17.5520808333333 : 9.81878275553385 : JumpStart); (17.3854141666667 : 9.81878275553385 : JumpEnd); (5.875 : 9.81878275553385)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/CuttingMrpDataContext/Part/Part_ProcessOrder" />
       <nodes>
         <classShapeMoniker Id="8cb65f5f-4bdf-4877-be40-cc4ebcda25ee" />
