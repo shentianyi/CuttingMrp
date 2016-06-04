@@ -105,7 +105,6 @@ namespace CuttingMrpWeb.Controllers
                 q.DateTo = q.DateTo.Value.Date.AddDays(1).AddMilliseconds(-1);
             }
 
-
             ViewBag.Query = q;
 
             IStockMovementService ss = new StockMovementService(Settings.Default.db);
@@ -113,8 +112,6 @@ namespace CuttingMrpWeb.Controllers
             IPagedList<StockMovement> moves = ss.Search(q).ToPagedList(pageIndex, Settings.Default.pageSize);
 
             return Json(moves.ToList(), JsonRequestBehavior.AllowGet);
-
-
         }
     }
 }

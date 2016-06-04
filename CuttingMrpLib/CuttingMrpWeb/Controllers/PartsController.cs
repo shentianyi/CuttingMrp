@@ -57,6 +57,24 @@ namespace CuttingMrpWeb.Controllers
             return Json(pvs, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+        public JsonResult Parents(string id) {
+            IPartService ps = new PartService(Settings.Default.db);
+            List<Part> parts = ps.GetParentParts(id);
+            List<PartViewModel> pvs = new List<PartViewModel>();
+            foreach (var part in parts)
+            {
+                pvs.Add(new PartViewModel()
+                {
+                    partNr = part.partNr,
+                    partTypeDisplay = part.partTypeDisplay,
+                    partDesc = part.partDesc,
+                    moq = part.moq,
+                    spq = part.spq
+                });
+            }
+            return Json(pvs, JsonRequestBehavior.AllowGet);
+        }
         // GET: Parts/Create
         public ActionResult Create()
         {

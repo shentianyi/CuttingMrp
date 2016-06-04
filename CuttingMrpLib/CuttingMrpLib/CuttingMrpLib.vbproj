@@ -83,6 +83,7 @@
     <Compile Include="Data\Repository\ICalculateRepository.vb" />
     <Compile Include="Data\Repository\IMrpRoundRepository.vb" />
     <Compile Include="Data\Repository\INumericBuildRepository.vb" />
+    <Compile Include="Data\Repository\IPartRepository.vb" />
     <Compile Include="Data\Repository\IStockMovementRepository.vb" />
     <Compile Include="Data\Repository\IProcessOrderRepository.vb" />
     <Compile Include="Data\Repository\IRequirementRepository.vb" />
@@ -91,6 +92,7 @@
     <Compile Include="Data\Repository\ProcessOrderRepository.vb" />
     <Compile Include="Data\Repository\RequirementRepository.vb" />
     <Compile Include="Data\Repository\MrpRoundRepository.vb" />
+    <Compile Include="Data\Repository\PartRepository.vb" />
     <Compile Include="Data\RequirementStatus.vb" />
     <Compile Include="Data\StockMoveType.vb" />
     <Compile Include="Model\BatchFinishOrderRecord.vb" />

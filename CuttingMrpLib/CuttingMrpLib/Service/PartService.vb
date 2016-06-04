@@ -20,4 +20,8 @@ Public Class PartService
         Dim context As DataContext = New DataContext(Me.DBConn)
         Return context.Context.GetTable(Of Part).Where(Function(p) p.partNr.Contains(id)).OrderBy(Function(p) p.partNr).Take(20).ToList
     End Function
+
+    Public Function GetParentParts(partNr As String) As List(Of Part) Implements IPartService.GetParentParts
+        Return New PartRepository(New DataContext(Me.DBConn)).GetParents(partNr, DateTime.Now, DateTime.Now)
+    End Function
 End Class
