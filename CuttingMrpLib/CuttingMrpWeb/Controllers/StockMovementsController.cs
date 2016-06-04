@@ -97,6 +97,14 @@ namespace CuttingMrpWeb.Controllers
             int pageIndex = 0;
             int.TryParse(Request.QueryString.Get("page"), out pageIndex);
             pageIndex = PagingHelper.GetPageIndex(pageIndex);
+            if (q.DateFrom.HasValue) {
+                q.DateFrom = q.DateFrom.Value.Date;
+            }
+            if (q.DateTo.HasValue)
+            {
+                q.DateTo = q.DateTo.Value.Date.AddDays(1).AddMilliseconds(-1);
+            }
+
 
             ViewBag.Query = q;
 
