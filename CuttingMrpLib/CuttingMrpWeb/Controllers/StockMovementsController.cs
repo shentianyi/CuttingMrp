@@ -13,6 +13,7 @@ namespace CuttingMrpWeb.Controllers
     public class StockMovementsController : Controller
     {
         // GET: StockMovements
+
         public ActionResult Index()
         {
             return View();

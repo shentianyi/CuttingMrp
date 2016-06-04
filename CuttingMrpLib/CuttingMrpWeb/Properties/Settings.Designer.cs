@@ -113,5 +113,23 @@ namespace CuttingMrpWeb.Properties {
                 return ((int)(this["pageSize"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("admin@leoni.com")]
+        public string adminEmail {
+            get {
+                return ((string)(this["adminEmail"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("admin@")]
+        public string adminPwd {
+            get {
+                return ((string)(this["adminPwd"]));
+            }
+        }
     }
 }

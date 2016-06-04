@@ -139,6 +139,12 @@ Partial Public Class CuttingMrpDataContext
     End Sub
   Partial Private Sub DeleteStockSumRecord(instance As StockSumRecord)
     End Sub
+  Partial Private Sub InsertUser(instance As User)
+    End Sub
+  Partial Private Sub UpdateUser(instance As User)
+    End Sub
+  Partial Private Sub DeleteUser(instance As User)
+    End Sub
   #End Region
 	
 	Public Sub New()
@@ -289,6 +295,12 @@ Partial Public Class CuttingMrpDataContext
 	Public ReadOnly Property AvgOfCompleteRates() As System.Data.Linq.Table(Of AvgOfCompleteRate)
 		Get
 			Return Me.GetTable(Of AvgOfCompleteRate)
+		End Get
+	End Property
+	
+	Public ReadOnly Property User() As System.Data.Linq.Table(Of User)
+		Get
+			Return Me.GetTable(Of User)
 		End Get
 	End Property
 End Class
@@ -4684,4 +4696,155 @@ Partial Public Class AvgOfCompleteRate
 			End If
 		End Set
 	End Property
+End Class
+
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.User")>  _
+Partial Public Class User
+	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+	
+	Private Shared emptyChangingEventArgs As PropertyChangingEventArgs = New PropertyChangingEventArgs(String.Empty)
+	
+	Private _id As Integer
+	
+	Private _nr As String
+	
+	Private _name As String
+	
+	Private _pwd As String
+	
+	Private _role As Integer
+	
+    #Region "可扩展性方法定义"
+    Partial Private Sub OnLoaded()
+    End Sub
+    Partial Private Sub OnValidate(action As System.Data.Linq.ChangeAction)
+    End Sub
+    Partial Private Sub OnCreated()
+    End Sub
+    Partial Private Sub OnidChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnidChanged()
+    End Sub
+    Partial Private Sub OnnrChanging(value As String)
+    End Sub
+    Partial Private Sub OnnrChanged()
+    End Sub
+    Partial Private Sub OnnameChanging(value As String)
+    End Sub
+    Partial Private Sub OnnameChanged()
+    End Sub
+    Partial Private Sub OnpwdChanging(value As String)
+    End Sub
+    Partial Private Sub OnpwdChanged()
+    End Sub
+    Partial Private Sub OnroleChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnroleChanged()
+    End Sub
+    #End Region
+	
+	Public Sub New()
+		MyBase.New
+		OnCreated
+	End Sub
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_id", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true)>  _
+	Public Property id() As Integer
+		Get
+			Return Me._id
+		End Get
+		Set
+			If ((Me._id = value)  _
+						= false) Then
+				Me.OnidChanging(value)
+				Me.SendPropertyChanging
+				Me._id = value
+				Me.SendPropertyChanged("id")
+				Me.OnidChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_nr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
+	Public Property nr() As String
+		Get
+			Return Me._nr
+		End Get
+		Set
+			If (String.Equals(Me._nr, value) = false) Then
+				Me.OnnrChanging(value)
+				Me.SendPropertyChanging
+				Me._nr = value
+				Me.SendPropertyChanged("nr")
+				Me.OnnrChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_name", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
+	Public Property name() As String
+		Get
+			Return Me._name
+		End Get
+		Set
+			If (String.Equals(Me._name, value) = false) Then
+				Me.OnnameChanging(value)
+				Me.SendPropertyChanging
+				Me._name = value
+				Me.SendPropertyChanged("name")
+				Me.OnnameChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_pwd", DbType:="VarChar(500) NOT NULL", CanBeNull:=false)>  _
+	Public Property pwd() As String
+		Get
+			Return Me._pwd
+		End Get
+		Set
+			If (String.Equals(Me._pwd, value) = false) Then
+				Me.OnpwdChanging(value)
+				Me.SendPropertyChanging
+				Me._pwd = value
+				Me.SendPropertyChanged("pwd")
+				Me.OnpwdChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_role", DbType:="INT")>  _
+	Public Property role() As Integer
+		Get
+			Return Me._role
+		End Get
+		Set
+			If ((Me._role = value)  _
+						= false) Then
+				Me.OnroleChanging(value)
+				Me.SendPropertyChanging
+				Me._role = value
+				Me.SendPropertyChanged("role")
+				Me.OnroleChanged
+			End If
+		End Set
+	End Property
+	
+	Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
+	
+	Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
+	
+	Protected Overridable Sub SendPropertyChanging()
+		If ((Me.PropertyChangingEvent Is Nothing)  _
+					= false) Then
+			RaiseEvent PropertyChanging(Me, emptyChangingEventArgs)
+		End If
+	End Sub
+	
+	Protected Overridable Sub SendPropertyChanged(ByVal propertyName As [String])
+		If ((Me.PropertyChangedEvent Is Nothing)  _
+					= false) Then
+			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
+		End If
+	End Sub
 End Class

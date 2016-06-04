@@ -1,8 +1,34 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Principal;
 
 namespace CuttingMrpWeb.Models
 {
+    public class CustomAuthorizeAttribute : System.Web.Mvc.FilterAttribute, System.Web.Mvc.IAuthorizationFilter
+    {
+        public void OnAuthorization(System.Web.Mvc.AuthorizationContext filterContext)
+        {
+            LoginViewModel user = System.Web.HttpContext.Current.Session["user"] as LoginViewModel;
+            if (user == null)
+            {
+                filterContext.Result =
+                 new System.Web.Mvc.RedirectToRouteResult(new System.Web.Routing.RouteValueDictionary {{ "controller", "Account" },
+                                              { "action", "Login" },
+                                             { "returnUrl",    filterContext.HttpContext.Request.RawUrl } });
+                return;
+            }
+            //IPrincipal user = filterContext.HttpContext.User;
+            //if (!user.Identity.IsAuthenticated || !CustomMembershipProvider.IsAdmin(user.Identity.Name))
+            //{
+            //    filterContext.Result =
+            //     new RedirectToRouteResult(new System.Web.Routing.RouteValueDictionary {{ "controller", "Account" },
+            //                                 { "action", "LogOn" },
+            //                                 { "returnUrl",    filterContext.HttpContext.Request.RawUrl } });
+            //    return;
+            //}
+        }
+    }
+
     public class ExternalLoginConfirmationViewModel
     {
         [Required]
@@ -49,16 +75,16 @@ namespace CuttingMrpWeb.Models
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "电子邮件")]
+        [Display(Name = "Email")]
         [EmailAddress]
         public string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "密码")]
+        [Display(Name = "Password")]
         public string Password { get; set; }
 
-        [Display(Name = "记住我?")]
+        [Display(Name = "Remember Me?")]
         public bool RememberMe { get; set; }
     }
 

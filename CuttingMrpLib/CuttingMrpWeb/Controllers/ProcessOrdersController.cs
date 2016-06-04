@@ -19,6 +19,7 @@ namespace CuttingMrpWeb.Controllers
     public class ProcessOrdersController : Controller
     {
         // GET: ProcessOrders
+        [CustomAuthorize]
         public ActionResult Index(int? page)
         {
             int pageIndex = PagingHelper.GetPageIndex(page);

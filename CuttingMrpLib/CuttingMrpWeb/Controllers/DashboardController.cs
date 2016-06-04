@@ -4,12 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using CuttingMrpWeb.Models;
 
 namespace CuttingMrpWeb.Controllers
 {
     public class DashboardController : Controller
     {
         // GET: Dashboard
+
+        [CustomAuthorize]
         public ActionResult Index()
         {
             return View();
