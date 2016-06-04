@@ -90,6 +90,7 @@
     <Compile Include="Data\Repository\RequirementRepository.vb" />
     <Compile Include="Data\Repository\MrpRoundRepository.vb" />
     <Compile Include="Data\RequirementStatus.vb" />
+    <Compile Include="Data\StockMoveType.vb" />
     <Compile Include="Model\BatchFinishOrderRecord.vb" />
     <Compile Include="Model\CalculateSetting.vb" />
     <Compile Include="Model\DeriveType.vb" />

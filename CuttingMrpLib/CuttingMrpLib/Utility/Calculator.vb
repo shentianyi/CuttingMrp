@@ -316,5 +316,14 @@ Public Class Calculator
         Return returnedDate
     End Function
 
+    Public Sub MakeBackflush()
+        'get backflush
+        'make backflush
+        'book stock
+        '1 - minus the forecast
+        '2 - minus the material stock
+        '3 - submit change
+
+    End Sub
 
 End Class
