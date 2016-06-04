@@ -215,6 +215,7 @@
     <Compile Include="Controllers\PartsController.cs" />
     <Compile Include="Controllers\ProcessOrdersController.cs" />
     <Compile Include="Controllers\RequirementsController.cs" />
+    <Compile Include="Controllers\StockMovementsController.cs" />
     <Compile Include="Controllers\StocksController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -348,6 +349,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Parts\" />
+    <Folder Include="Views\StockMovements\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
