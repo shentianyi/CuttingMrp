@@ -211,12 +211,13 @@
   </Table>
   <Table Name="dbo.StockMovement" Member="StockMovements">
     <Type Name="StockMovement">
-      <Column Name="id" Type="System.String" DbType="VarChar(100) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="partNr" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="quantity" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
       <Column Name="fifo" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
       <Column Name="moveType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="sourceDoc" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="createdAt" AutoSync="OnInsert" Type="System.DateTime" DbType="DateTime" IsDbGenerated="true" CanBeNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.BackflushRecord" Member="BackflushRecords">

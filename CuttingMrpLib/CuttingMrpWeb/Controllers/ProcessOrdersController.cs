@@ -247,7 +247,9 @@ namespace CuttingMrpWeb.Controllers
                 Settings.Default.stockWh,
                 Settings.Default.stockPosition,
                 Settings.Default.stockSource,
-                Settings.Default.stockSourceType);
+                Settings.Default.stockSourceType,
+                StockMoveType.ManualEntry,
+                true);
 
             return RedirectToAction("Index");
         }

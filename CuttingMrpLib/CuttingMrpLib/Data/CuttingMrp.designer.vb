@@ -4057,7 +4057,7 @@ Partial Public Class StockMovement
 	
 	Private Shared emptyChangingEventArgs As PropertyChangingEventArgs = New PropertyChangingEventArgs(String.Empty)
 	
-	Private _id As String
+	Private _id As Integer
 	
 	Private _partNr As String
 	
@@ -4069,6 +4069,8 @@ Partial Public Class StockMovement
 	
 	Private _sourceDoc As String
 	
+	Private _createdAt As System.Nullable(Of Date)
+	
     #Region "可扩展性方法定义"
     Partial Private Sub OnLoaded()
     End Sub
@@ -4076,7 +4078,7 @@ Partial Public Class StockMovement
     End Sub
     Partial Private Sub OnCreated()
     End Sub
-    Partial Private Sub OnidChanging(value As String)
+    Partial Private Sub OnidChanging(value As Integer)
     End Sub
     Partial Private Sub OnidChanged()
     End Sub
@@ -4100,6 +4102,10 @@ Partial Public Class StockMovement
     End Sub
     Partial Private Sub OnsourceDocChanged()
     End Sub
+    Partial Private Sub OncreatedAtChanging(value As System.Nullable(Of Date))
+    End Sub
+    Partial Private Sub OncreatedAtChanged()
+    End Sub
     #End Region
 	
 	Public Sub New()
@@ -4107,13 +4113,14 @@ Partial Public Class StockMovement
 		OnCreated
 	End Sub
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_id", DbType:="VarChar(100) NOT NULL", CanBeNull:=false, IsPrimaryKey:=true)>  _
-	Public Property id() As String
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_id", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true)>  _
+	Public Property id() As Integer
 		Get
 			Return Me._id
 		End Get
 		Set
-			If (String.Equals(Me._id, value) = false) Then
+			If ((Me._id = value)  _
+						= false) Then
 				Me.OnidChanging(value)
 				Me.SendPropertyChanging
 				Me._id = value
@@ -4202,6 +4209,22 @@ Partial Public Class StockMovement
 				Me._sourceDoc = value
 				Me.SendPropertyChanged("sourceDoc")
 				Me.OnsourceDocChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_createdAt", AutoSync:=AutoSync.OnInsert, DbType:="DateTime", IsDbGenerated:=true)>  _
+	Public Property createdAt() As System.Nullable(Of Date)
+		Get
+			Return Me._createdAt
+		End Get
+		Set
+			If (Me._createdAt.Equals(value) = false) Then
+				Me.OncreatedAtChanging(value)
+				Me.SendPropertyChanging
+				Me._createdAt = value
+				Me.SendPropertyChanged("createdAt")
+				Me.OncreatedAtChanged
 			End If
 		End Set
 	End Property
