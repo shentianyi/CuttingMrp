@@ -1,3 +1,8 @@
 ﻿.part-stock-search{
     width:150px;
 }
+
+#part_stock_charts{
+    border-radius:5px;
+    background:white;
+}

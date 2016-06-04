@@ -19,6 +19,7 @@
     right:0;
     padding:10px;
     overflow-y:auto;
+    overflow-x:hidden;
 }
 
 .dashboard-left-nav>li:first-child{

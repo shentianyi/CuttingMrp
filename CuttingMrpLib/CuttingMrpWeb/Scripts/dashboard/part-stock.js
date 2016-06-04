@@ -47,11 +47,38 @@ PartStock.PartStockSearch = function () {
             },
             success: function (data) {
                 PartStock.DrawCharts(PartNr, data);
+                //请求第一页
+                PartStock.StockMovements(PartNr, 1, DateFrom, DateTo);
             },
             error: function () {
                 console.log("Error");
             }
         })
+    })
+}
+
+PartStock.StockMovements = function (PartNr, Page, DateFrom, DateTo) {
+    $.ajax({
+        url: '/StockMovements/JsonSearch',
+        type: 'get',
+        data: {
+            PartNr: PartNr,
+            page: Page,
+            DateFrom: DateFrom,
+            DateTo:DateTo
+        },
+        success: function (data) {
+            $('.Movements').css({ display: "block" });
+            if (data) {
+                console.log(data);
+            } else {
+                //按钮Display
+                console.log("Over");
+            }
+        },
+        error: function () {
+            console.log("Error");
+        }
     })
 }
 
@@ -87,7 +114,8 @@ PartStock.DrawCharts = function (PartNr, data) {
     // 图表操作
     var chart_options = {
         chart: {
-            renderTo: 'part_stock_charts'
+            renderTo: 'part_stock_charts',
+            backgroundColor: "transparent"
         },
         credits: {
             enabled: false
@@ -143,5 +171,6 @@ PartStock.DrawCharts = function (PartNr, data) {
             color: 'limegreen'
         }]
     };
+
     var chart = new Highcharts.Chart(chart_options);
 }

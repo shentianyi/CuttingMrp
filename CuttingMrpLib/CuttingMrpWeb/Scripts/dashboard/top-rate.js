@@ -48,7 +48,7 @@ TopRate.InitCharts = function () {
 TopRate.DrawCharts = function (XValue, Series) {
     var ChartStyle = {
         ChartTitle: "Top Rate",
-        ChartSubTitle: "--Complete Rate"
+        ChartSubTitle: "--Top 5"
     }
 
     // 图表操作
@@ -58,7 +58,8 @@ TopRate.DrawCharts = function (XValue, Series) {
             //backgroundColor: {
             //    linearGradient: { x1: 0, y1: 0, x2: 1, y2: 1 }, stops: [[0, '#6495ED'], [1, 'rgb(48, 48, 96)']]
             //}
-            backgroundColor:"white"
+            backgroundColor: "transparent",
+            marginRight: '10'
         },
         credits: {
             enabled: false
@@ -79,7 +80,7 @@ TopRate.DrawCharts = function (XValue, Series) {
             }
         },
         yAxis: {
-            title: { text: 'Value' },
+            title: { text: 'Rate(%)' },
             plotLines: [{ value: 0, width: 1, color: '#808080' }]
         },
         tooltip: {
