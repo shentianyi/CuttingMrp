@@ -1,0 +1,99 @@
+﻿@{
+    ViewBag.Title = "Part Stock";
+}
+
+@Styles.Render("~/Content/dashboards")
+@Styles.Render("~/Content/part_stock")
+
+<div class="LeftNav">
+    @Html.Partial("_DashboardPartial")
+</div>
+
+<div class="RightContent">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="col-md-12" style="text-align:center;">
+                <div class="col-md-6" style="display:flex;display:-ms-flexbox;">
+                    <input type="text" class="form-control date-picker date-from" />
+                    <input type="text" hidden value=""  class="hidden-date-from"/>
+                    <span>&emsp; ~ &emsp;</span>
+                    <input type="text" class="form-control date-picker date-to" />
+                    <input type="text" hidden value="" class="hidden-date-to" />
+                </div>
+                <div class="col-md-4">
+                    <input type="text" value="" class="form-control part-nr" id="part_nr" placeholder="Part Nr" autofocus />
+                    <input type="text" hidden value="" class="hidden-part-nr" />
+                    <input type="hidden" value="100" class="part-type" />
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-success part-stock-search">
+                        Search
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div id="part_stock_charts" class="charts"></div>
+    </div>
+
+    <div class="PartStockEmpty">
+        Search ...
+    </div>
+
+    <div class="Details">
+        <div class="details-title row">
+            <div class="pull-left" style="margin:10px 0 -14px 30px">
+                <label style="color:#5bc0de;"><i class="glyphicon glyphicon-record"></i>&emsp;Part Details</label>
+            </div>
+        </div>
+        <hr />
+        <div class="details-body">
+            <table class="table table-borded">
+                <thead class="details-thead">
+                    <tr style="background: #5bc0de">
+                        <th>PartNr</th>
+                        <th>PartDesc</th>
+                        <th>PartTypeDisplay</th>
+                    </tr>
+                </thead>
+                <tbody class="details-tbody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="Movements">
+        <div class="move-title row">
+            <div class="pull-left" style="margin:10px 0 -15px 30px">
+                <label style="color:#337ab7;"><i class="glyphicon glyphicon-record"></i>&emsp;Movements</label>
+            </div>
+            <div class="pull-right" style="margin:10px 30px -15px 0;">
+                <label class="label label-primary view-more-movements" style="padding:5px;">Get More</label>
+            </div>
+        </div>
+        <hr />
+        <div class="move-body">
+            <table class="table table-borded">
+                <thead class="move-thead">
+                    <tr style="background: #337ab7">
+                        <th>PartNr</th>
+                        <th>Qty</th>
+                        <th>TypeDisplay</th>
+                        <th>CreatedAtDisplay</th>
+                    </tr>
+                </thead>
+                <tbody class="move-tbody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/dashboard")
+@Scripts.Render("~/bundles/part_stock")
+<script type="text/javascript">
+    PartStock.Init();
+    PartStock.InitPartNr();
+    PartStock.PartStockSearch();
+</script>
+
+

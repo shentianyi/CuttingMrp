@@ -22,13 +22,18 @@ namespace CuttingMrpWeb
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/jquery.datetimepicker.full.js",
-                      "~/Scripts/respond.js"));
+                      "~/Scripts/respond.js",
+                      "~/Scripts/bootstrap-typeahead.js"
+                      ));
 
             bundles.Add(new ScriptBundle("~/bundles/basic").Include(
                    "~/Scripts/basics.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery-plug-in").Include(
                       "~/Scripts/jquery-popModal.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/highcharts").Include(
+                      "~/Scripts/highcharts/highcharts.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/requirements").Include(
                       "~/Scripts/requirement.js"));
@@ -42,13 +47,29 @@ namespace CuttingMrpWeb
             bundles.Add(new ScriptBundle("~/bundles/process-orders").Include(
                       "~/Scripts/process-orders.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/dashboard").Include(
+                      "~/Scripts/dashboard/dashboard.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/part_stock").Include(
+                      "~/Scripts/dashboard/part-stock.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/complete_rate").Include(
+                      "~/Scripts/dashboard/complete-rate.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/top_rate").Include(
+                      "~/Scripts/dashboard/top-rate.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/jquery.datetimepicker.css",
                       "~/Content/site.css",
                       "~/Content/pagination.css",
                       "~/Content/filter.css",
+                      "~/Content/font-awesome.css",
                       "~/Content/jquery-popModal.css"));
+
+            bundles.Add(new StyleBundle("~/Content/login").Include(
+                   "~/Content/login.css"));
 
             bundles.Add(new StyleBundle("~/Content/requirement").Include(
                      "~/Content/requirement.css"));
@@ -61,6 +82,18 @@ namespace CuttingMrpWeb
 
             bundles.Add(new StyleBundle("~/Content/mrp-rounds").Include(
                      "~/Content/mrp-round.css"));
+
+            bundles.Add(new StyleBundle("~/Content/dashboards").Include(
+                     "~/Content/dashboards.css"));
+
+            bundles.Add(new StyleBundle("~/Content/complete_rate").Include(
+                     "~/Content/complete-rate.css"));
+
+            bundles.Add(new StyleBundle("~/Content/part_stock").Include(
+                     "~/Content/part-stock.css"));
+
+            bundles.Add(new StyleBundle("~/Content/top_rate").Include(
+                    "~/Content/top-rate.css"));
         }
     }
 }

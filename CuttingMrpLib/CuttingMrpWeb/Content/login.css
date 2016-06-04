@@ -1,0 +1,23 @@
+﻿.LoginMask{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:19999;
+    opacity:.8;
+    /*steelblue, #ffffbb*/
+    background: -webkit-linear-gradient(left top, #0088cc , #00688B); 
+    background: -o-linear-gradient(bottom right, #0088cc, #00688B);
+    background: -moz-linear-gradient(bottom right, #0088cc, #00688B);
+    background: linear-gradient(to bottom right,#0088cc , #00688B);
+}
+
+.LoginBlock{
+    z-index:20000;
+    width:40%;
+    height:50%; 
+    position:absolute;
+    left:30%;
+    top:25%
+}

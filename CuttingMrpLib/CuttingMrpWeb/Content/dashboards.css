@@ -1,0 +1,88 @@
+﻿body{
+    background:#eeeeee;
+    overflow-x:hidden;
+}
+
+.LeftNav{
+    width:200px;
+    position:absolute;
+    left:0;
+    top:50px;
+    bottom:0;
+}
+
+.RightContent{
+    left:200px;
+    position:absolute;
+    top:50px;
+    bottom:0;
+    right:0;
+    padding:10px;
+    overflow-y:auto;
+    overflow-x:hidden;
+}
+
+.dashboard-left-nav>li:first-child{
+    border-top:1px solid #0088cc;
+}
+.dashboard-left-nav>li{
+    padding-left:20px;
+    height:40px;
+    line-height:38px;
+    border-bottom:1px solid #0088cc;
+    cursor:pointer;
+}
+
+.dashboard-left-nav>li>i{
+    width:35px;
+}
+
+.dashboard-left-nav a{
+    outline:none;
+    padding:10px;
+}
+
+.dashboard-left-nav a:hover, .dashboard-left-nav a:active{
+    outline:none;
+    text-decoration:none;
+}
+
+.dashboard-nav-active{
+    background:steelblue;
+    color:white;
+}
+
+.dashboard-nav-active a{
+    text-decoration:none;
+    outline:none;
+    color:white;
+}
+
+.dashboard-nav-active a:hover, .dashboard-nav-active a:active{
+    text-decoration:none;
+    outline:none;
+    color:#eeeeee;
+}
+
+.date-picker{
+    width:200px;
+    text-align:center;
+}
+
+.Details, .Movements{
+    display:none;
+    width:48%;
+    margin-top:20px;
+    position:absolute;
+    height:400px;
+    background:white;
+    border-radius:5px;
+}
+
+.Details{
+    left:10px;
+}
+
+.Movements{
+    left:51%;
+}

@@ -39,7 +39,7 @@ Public Class ProcessOrderService
 
     Public Sub UpdateOrderQuantity(toUpdateId As String, quantity As Double) Implements IProcessOrderService.UpdateOrderQuantity
         Dim repo As ProcessOrderRepository = New ProcessOrderRepository(New DataContext(DBConn))
-        Dim toupdate As ProcessOrder = repo.First(Function(c) c.orderNr = toUpdateId)
+        Dim toupdate As ProcessOrder = repo.FirstOrDefault(Function(c) c.orderNr = toUpdateId)
         If toupdate Is Nothing Then
             Throw New Exception("Cannot find Order")
         Else
@@ -49,14 +49,16 @@ Public Class ProcessOrderService
     End Sub
 
     Public Function Search(conditions As ProcessOrderSearchModel) As IQueryable(Of ProcessOrder) Implements IProcessOrderService.Search
+
         Dim reqRepo As IProcessOrderRepository = New ProcessOrderRepository(New DataContext(DBConn))
+
         Return reqRepo.Search(conditions)
     End Function
 
     Public Function DeleteById(id As String) As Boolean Implements IProcessOrderService.DeleteById
         Dim result As Boolean = False
         Dim repo As ProcessOrderRepository = New ProcessOrderRepository(New DataContext(DBConn))
-        Dim order As ProcessOrder = repo.First(Function(c) c.orderNr = id)
+        Dim order As ProcessOrder = repo.FirstOrDefault(Function(c) c.orderNr = id)
         If order Is Nothing Then
             Throw New Exception("Cannot find Order")
         Else
@@ -76,7 +78,7 @@ Public Class ProcessOrderService
 
         Dim context As DataContext = New DataContext(Me.DBConn)
         Dim rep As ProcessOrderRepository = New ProcessOrderRepository(context)
-        Return rep.First(Function(o) o.orderNr.Equals(id))
+        Return rep.FirstOrDefault(Function(o) o.orderNr.Equals(id))
     End Function
 
     Public Function Update(processOrder As ProcessOrder) As Boolean Implements IProcessOrderService.Update
@@ -84,7 +86,7 @@ Public Class ProcessOrderService
 
         Dim context As DataContext = New DataContext(Me.DBConn)
         Dim rep As ProcessOrderRepository = New ProcessOrderRepository(context)
-        Dim uorder As ProcessOrder = rep.First(Function(s) s.orderNr.Equals(processOrder.orderNr))
+        Dim uorder As ProcessOrder = rep.FirstOrDefault(Function(s) s.orderNr.Equals(processOrder.orderNr))
         If (uorder IsNot Nothing) Then
             'uorder.proceeDate = processOrder.proceeDate
 
@@ -97,32 +99,54 @@ Public Class ProcessOrderService
         Return result
     End Function
 
-    Public Sub FinishOrdersByIds(ids As List(Of String), fifo As DateTime, container As String, wh As String, position As String, source As String, sourceType As String) Implements IProcessOrderService.FinishOrdersByIds
+    Public Sub FinishOrdersByIds(ids As List(Of String),
+                                 fifo As DateTime,
+                                 container As String,
+                                 wh As String, position As String,
+                                 source As String, sourceType As String, moveType As StockMoveType, Optional enterStock As Boolean = True) Implements IProcessOrderService.FinishOrdersByIds
         If ids Is Nothing Then
             Throw New ArgumentNullException
         Else
             Dim context = New DataContext(DBConn)
             Dim repo As ProcessOrderRepository = New ProcessOrderRepository(context)
 
-            Dim stockRep As StockRepository = New StockRepository(context)
 
-            Dim toFinish As IEnumerable(Of ProcessOrder) = repo.FindAll(Function(c) c.status = ProcessOrderStatus.Open And ids.Contains(c.orderNr))
-            Dim stocks As List(Of Stock) = New List(Of Stock)
-            For Each toFinishOrder As ProcessOrder In toFinish
-                stocks.Add(New Stock With {.partNr = toFinishOrder.partNr,
-                           .fifo = fifo,
-                           .quantity = toFinishOrder.actualQuantity,
-                           .container = container,
-                           .wh = wh,
-                           .position = position,
-                           .source = toFinishOrder.orderNr,
-                           .sourceType = "ProcessOrder"})
-                toFinishOrder.status = ProcessOrderStatus.Finish
-            Next
-            If stocks.Count > 0 Then
-                stockRep.Inserts(stocks)
-                stockRep.SaveAll()
-            End If
+            Dim toFinish As List(Of ProcessOrder) = repo.FindAll(Function(c) c.status = ProcessOrderStatus.Open And ids.Contains(c.orderNr)).ToList
+
+            Using scope As New TransactionScope
+                ' finish 
+                For Each toFinishOrder As ProcessOrder In toFinish
+                    toFinishOrder.status = ProcessOrderStatus.Finish
+                Next
+                If enterStock Then
+                    Dim stockRep As StockRepository = New StockRepository(context)
+                    Dim moveRep As Repository(Of StockMovement) = New Repository(Of StockMovement)(context)
+                    Dim moves As List(Of StockMovement) = New List(Of StockMovement)
+                    Dim stocks As List(Of Stock) = New List(Of Stock)
+                    For Each toFinishOrder As ProcessOrder In toFinish
+                        stocks.Add(New Stock With {.partNr = toFinishOrder.partNr,
+                               .fifo = fifo,
+                               .quantity = toFinishOrder.actualQuantity,
+                               .container = container,
+                               .wh = wh,
+                               .position = position,
+                               .source = toFinishOrder.orderNr,
+                               .sourceType = "ProcessOrder"})
+                        moves.Add(New StockMovement With {.fifo = fifo,
+                                  .moveType = moveType, .partNr = toFinishOrder.partNr,
+                                  .quantity = toFinishOrder.actualQuantity,
+                                  .sourceDoc = toFinishOrder.orderNr})
+                    Next
+                    If stocks.Count > 0 Then
+                        stockRep.GetTable.InsertAllOnSubmit(stocks)
+                        stockRep.SaveAll()
+                        moveRep.GetTable.InsertAllOnSubmit(moves)
+                        moveRep.SaveAll()
+                    End If
+                End If
+                repo.SaveAll()
+                scope.Complete()
+            End Using
         End If
     End Sub
 
@@ -159,6 +183,7 @@ Public Class ProcessOrderService
         Dim toUpdate As List(Of ProcessOrder) = New List(Of ProcessOrder)
         Dim toFinish As List(Of ProcessOrder) = New List(Of ProcessOrder)
         Dim toStock As List(Of Stock) = New List(Of Stock)
+        Dim toMove As List(Of StockMovement) = New List(Of StockMovement)
         Dim existingOrders As List(Of ProcessOrder) = Me.Search(conditions).ToList
         existingOrders = (From order In existingOrders Select order Order By order.proceeDate Ascending).ToList
         'group by order nr
@@ -185,6 +210,12 @@ Public Class ProcessOrderService
                                 .source = "BATCHUPLOAD",
                                 .quantity = rec.Amount, .wh = "ORIGINAL",
                                 .position = "ORIGINAL", .container = "ORIGINAL"})
+
+                            toMove.Add(New StockMovement With {.fifo = Now,
+                                .moveType = StockMoveType.UploadEntry, .partNr = rec.PartNr,
+                                .quantity = rec.Amount,
+                                .sourceDoc = rec.FixOrderNr})
+
                         End If
 
                     Else
@@ -193,6 +224,12 @@ Public Class ProcessOrderService
                                     .source = toCompareOrder.orderNr,
                                     .quantity = rec.Amount, .wh = "ORIGINAL",
                                     .position = "ORIGINAL", .container = "ORIGINAL"})
+
+                        toMove.Add(New StockMovement With {.fifo = Now,
+                                .moveType = StockMoveType.UploadEntry, .partNr = rec.PartNr,
+                                .quantity = rec.Amount,
+                                .sourceDoc = toCompareOrder.orderNr})
+
                         toCompareOrder.actualQuantity = toCompareOrder.actualQuantity - rec.Amount
                         toUpdate.Add(toCompareOrder)
                     End If
@@ -203,29 +240,38 @@ Public Class ProcessOrderService
                             .position = "ORIGINAL", .quantity = rec.Amount,
                             .source = "BATCHUPLOAD", .wh = "ORGINAL"})
 
+                toMove.Add(New StockMovement With {.fifo = Now,
+                              .moveType = StockMoveType.UploadEntry, .partNr = rec.PartNr,
+                              .quantity = rec.Amount,
+                              .sourceDoc = rec.FixOrderNr})
+
             End If
         Next
 
         Using scope As New TransactionScope
             ' Try
             Dim ids As List(Of String) = (From tof In toFinish Select tof.orderNr Distinct).ToList
-                FinishOrdersByIds(ids, Now, "ORIGINAL", "ORIGINAL", "ORIGINAL", "", "")
-                Dim context As DataContext = New DataContext(DBConn)
-                Dim stockrepo As Repository(Of Stock) = New Repository(Of Stock)(context)
-                stockrepo.GetTable.InsertAllOnSubmit(toStock)
-                Dim orderrepo As New ProcessOrderRepository(context)
-                For Each toup As ProcessOrder In toUpdate
-                    Dim towrite As ProcessOrder = orderrepo.Single(Function(c) c.orderNr = toup.orderNr)
-                    towrite.sourceDoc = towrite.sourceDoc & "/" & "BATCHBALANCE: from " & towrite.actualQuantity & "to " & toup.actualQuantity
-                    towrite.actualQuantity = toup.actualQuantity
-                Next
-                orderrepo.SaveAll()
-                stockrepo.SaveAll()
-                scope.Complete()
+            FinishOrdersByIds(ids, Now, "ORIGINAL", "ORIGINAL", "ORIGINAL", "", "", Nothing, False)
+            Dim context As DataContext = New DataContext(DBConn)
+            Dim stockrepo As Repository(Of Stock) = New Repository(Of Stock)(context)
+            Dim moveRep As Repository(Of StockMovement) = New Repository(Of StockMovement)(context)
+            stockrepo.GetTable.InsertAllOnSubmit(toStock)
+            moveRep.GetTable.InsertAllOnSubmit(toMove)
+            Dim orderrepo As New ProcessOrderRepository(context)
+            For Each toup As ProcessOrder In toUpdate
+                Dim towrite As ProcessOrder = orderrepo.Single(Function(c) c.orderNr = toup.orderNr)
+                towrite.sourceDoc = towrite.sourceDoc & "/" & "BATCHBALANCE: from " & towrite.actualQuantity & "to " & toup.actualQuantity
+                towrite.actualQuantity = toup.actualQuantity
+            Next
+            orderrepo.SaveAll()
+            stockrepo.SaveAll()
+            moveRep.SaveAll()
+            scope.Complete()
             ' Catch ex As Exception
             '  Throw New Exception("写入数据库时出现错误", ex)
             ' End Try
         End Using
+
 
     End Sub
 

@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using CuttingMrpLib;
 using CuttingMrpWeb.Helpers;
+using CuttingMrpWeb.Models;
 using CuttingMrpWeb.Properties;
 using MvcPaging;
 
@@ -13,6 +14,8 @@ namespace CuttingMrpWeb.Controllers
     public class MrpRoundsController : Controller
     {
         // GET: MrpRounds
+
+        [CustomAuthorize]
         public ActionResult Index(int? page)
         {
             int pageIndex = PagingHelper.GetPageIndex(page);

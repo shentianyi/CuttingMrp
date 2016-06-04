@@ -83,12 +83,16 @@
     <Compile Include="Data\Repository\ICalculateRepository.vb" />
     <Compile Include="Data\Repository\IMrpRoundRepository.vb" />
     <Compile Include="Data\Repository\INumericBuildRepository.vb" />
+    <Compile Include="Data\Repository\IPartRepository.vb" />
+    <Compile Include="Data\Repository\IStockMovementRepository.vb" />
     <Compile Include="Data\Repository\IProcessOrderRepository.vb" />
     <Compile Include="Data\Repository\IRequirementRepository.vb" />
     <Compile Include="Data\Repository\NumericDefinitionRepository.vb" />
+    <Compile Include="Data\Repository\StockMovementRepository.vb" />
     <Compile Include="Data\Repository\ProcessOrderRepository.vb" />
     <Compile Include="Data\Repository\RequirementRepository.vb" />
     <Compile Include="Data\Repository\MrpRoundRepository.vb" />
+    <Compile Include="Data\Repository\PartRepository.vb" />
     <Compile Include="Data\RequirementStatus.vb" />
     <Compile Include="Data\StockMoveType.vb" />
     <Compile Include="Model\BatchFinishOrderRecord.vb" />
@@ -102,6 +106,7 @@
     <Compile Include="Model\MrpRoundPartial.vb" />
     <Compile Include="Model\RequirementPartial.vb" />
     <Compile Include="Model\RequirementStatistics.vb" />
+    <Compile Include="Model\StockMovementPartial.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -119,13 +124,17 @@
     </Compile>
     <Compile Include="Service\CalculateService.vb" />
     <Compile Include="Service\CapacityPlanService.vb" />
+    <Compile Include="Service\DashboardService.vb" />
     <Compile Include="Service\ICalculateService.vb" />
     <Compile Include="Service\ICapacityPlanService.vb" />
+    <Compile Include="Service\IDashboardService.vb" />
     <Compile Include="Service\IPartService.vb" />
     <Compile Include="Service\INumericService.vb" />
     <Compile Include="Service\IProcessOrderService.vb" />
     <Compile Include="Service\IRequirementService.vb" />
     <Compile Include="Service\IMrpRoundService.vb" />
+    <Compile Include="Service\IStockMovementService.vb" />
+    <Compile Include="Service\IStockSumRecordService.vb" />
     <Compile Include="Service\PartService.vb" />
     <Compile Include="Service\NumericService.vb" />
     <Compile Include="Service\ProcessOrderService.vb" />
@@ -133,17 +142,22 @@
     <Compile Include="Service\ServiceBase.vb" />
     <Compile Include="Service\IStockService.vb" />
     <Compile Include="Service\MrpRoundService.vb" />
+    <Compile Include="Service\StockMovementService.vb" />
     <Compile Include="Service\StockService.vb" />
+    <Compile Include="Service\StockSumRecordService.vb" />
     <Compile Include="Utility\EnumItem.vb" />
     <Compile Include="Utility\EnumUtility.vb" />
     <Compile Include="Utility\Calculator.vb" />
     <Compile Include="Utility\CalculatorSingleton.vb" />
+    <Compile Include="ViewModel\PageViewModel\DashboardItem.vb" />
     <Compile Include="ViewModel\PageViewModel\ProcessOrderInfoModel.vb" />
+    <Compile Include="ViewModel\SearchViewModel\DashboardSearchModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\MRPSearchModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\ProcessOrderSearchModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\RequirementSearchModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\RequirementStatisticsSearchModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\SearchModelBase.vb" />
+    <Compile Include="ViewModel\SearchViewModel\StockMovementSearchModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\StockSearchModel.vb" />
   </ItemGroup>
   <ItemGroup>
@@ -161,7 +175,6 @@
   <ItemGroup>
     <None Include="Data\CuttingMrp.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>CuttingMrp.designer.vb</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
     <None Include="My Project\Application.myapp">

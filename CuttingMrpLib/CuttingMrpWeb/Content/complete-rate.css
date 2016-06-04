@@ -1,0 +1,27 @@
+﻿.complete-rate-search{
+    width:150px;
+}
+
+#complete_rate_charts{
+    background:white;
+    border-radius:5px;
+}
+
+.view-more-movements{
+    cursor:pointer;
+}
+
+.move-body,.details-body{
+    height:350px;
+    overflow:auto;
+    margin-top:-20px;
+
+}
+
+.CompleteRateEmpty {
+    position:absolute;
+    top:45%;
+    left:40%;
+    font-size:5em;
+    color:#999999;
+}

@@ -1,0 +1,26 @@
+﻿.part-stock-search{
+    width:150px;
+}
+
+#part_stock_charts{
+    border-radius:5px;
+    background:white;
+}
+
+.view-more-movements{
+    cursor:pointer;
+}
+
+.move-body,.details-body{
+    height:350px;
+    overflow:auto;
+    margin-top:-20px;
+}
+
+.PartStockEmpty {
+    position:absolute;
+    top:45%;
+    left:40%;
+    font-size:5em;
+    color:#999999;
+}

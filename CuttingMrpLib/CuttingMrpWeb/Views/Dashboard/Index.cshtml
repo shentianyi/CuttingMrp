@@ -1,0 +1,20 @@
+﻿@{
+    ViewBag.Title = "TopRate";
+}
+
+@Styles.Render("~/Content/dashboards")
+@Styles.Render("~/Content/top_rate")
+
+<div class="LeftNav">
+    @Html.Partial("_DashboardPartial")
+</div>
+
+<div class="RightContent">
+    <div id="top-rate-charts" class="charts"></div>
+</div>
+
+@Scripts.Render("~/bundles/dashboard")
+@Scripts.Render("~/bundles/top_rate")
+<script type="text/javascript">
+    TopRate.Init();
+</script>

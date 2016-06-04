@@ -19,6 +19,7 @@ namespace CuttingMrpWeb.Controllers
     public class ProcessOrdersController : Controller
     {
         // GET: ProcessOrders
+        [CustomAuthorize]
         public ActionResult Index(int? page)
         {
             int pageIndex = PagingHelper.GetPageIndex(page);
@@ -247,7 +248,9 @@ namespace CuttingMrpWeb.Controllers
                 Settings.Default.stockWh,
                 Settings.Default.stockPosition,
                 Settings.Default.stockSource,
-                Settings.Default.stockSourceType);
+                Settings.Default.stockSourceType,
+                StockMoveType.ManualEntry,
+                true);
 
             return RedirectToAction("Index");
         }
