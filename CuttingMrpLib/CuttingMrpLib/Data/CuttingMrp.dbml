@@ -245,6 +245,7 @@
       <Column Name="partNr" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
       <Column Name="proceeDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="rate" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="qty" Type="System.Double" DbType="Float" CanBeNull="true" />
     </Type>
   </Table>
 </Database>

@@ -4607,6 +4607,8 @@ Partial Public Class AvgOfCompleteRate
 	
 	Private _rate As System.Nullable(Of Double)
 	
+	Private _qty As System.Nullable(Of Double)
+	
 	Public Sub New()
 		MyBase.New
 	End Sub
@@ -4644,6 +4646,18 @@ Partial Public Class AvgOfCompleteRate
 		Set
 			If (Me._rate.Equals(value) = false) Then
 				Me._rate = value
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_qty", DbType:="Float")>  _
+	Public Property qty() As System.Nullable(Of Double)
+		Get
+			Return Me._qty
+		End Get
+		Set
+			If (Me._qty.Equals(value) = false) Then
+				Me._qty = value
 			End If
 		End Set
 	End Property

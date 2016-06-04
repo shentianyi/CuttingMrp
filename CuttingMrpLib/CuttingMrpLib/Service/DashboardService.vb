@@ -18,7 +18,7 @@ Public Class DashboardService
         Dim d As DateTime = searchModel.DateFrom
 
         For Each r In rates
-            items.Add(New DashboardItem() With {.XValue = r.proceeDate.Date.ToString, .YValue = r.rate})
+            items.Add(New DashboardItem() With {.XValue = r.proceeDate.Date.ToString, .YValue = r.qty, .YValueRate = r.rate})
         Next
 
         'While d <= searchModel.DateTo
