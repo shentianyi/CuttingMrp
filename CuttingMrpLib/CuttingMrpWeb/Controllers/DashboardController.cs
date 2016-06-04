@@ -44,8 +44,8 @@ namespace CuttingMrpWeb.Controllers
                     data = ds.GetPartCompleteRateDash(searchModel);
                     break;
                 case 300:
-                    searchModel.DateFrom = DateTime.Now.Date.AddDays(-7);
-                    searchModel.DateTo = DateTime.Now.Date;
+                    searchModel.DateFrom = DateTime.Now.Date.AddDays(-8);
+                    searchModel.DateTo = DateTime.Now.Date.AddDays(-1);
                     data = ds.GetPartTopRateDash(searchModel);
                     break;
                 default:
