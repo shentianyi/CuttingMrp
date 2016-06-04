@@ -22,6 +22,6 @@ Date.prototype.Format = function (fmt) { //author: meizz
 
 function FutureDate(day) {
     var now = new Date();
-    var FutureDate = new Date(now.getTime() - day * 24 * 60 * 60 * 1000).Format("yyyy-MM-dd");
+    var FutureDate = new Date(now.getTime() - day * 24 * 60 * 60 * 1000).Format("yyyy/MM/dd");
     return FutureDate;
 }

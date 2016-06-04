@@ -236,6 +236,7 @@
     <Compile Include="Startup.cs" />
     <Content Include="Content\complete-rate.css" />
     <Content Include="Content\dashboards.css" />
+    <Content Include="Content\login.css" />
     <Content Include="Content\part-stock.css" />
     <Content Include="Scripts\bootstrap-typeahead.js" />
     <Content Include="Scripts\dashboard\complete-rate.js" />

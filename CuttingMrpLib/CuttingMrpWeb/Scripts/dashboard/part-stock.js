@@ -1,7 +1,7 @@
 ﻿var PartStock = {};
 
 PartStock.Init = function () {
-    var now = new Date().Format("yyyy-MM-dd");
+    var now = new Date().Format("yyyy/MM/dd");
     var WeekAgo = FutureDate(7);
     $('.date-from').val(WeekAgo);
     $('.date-to').val(now);
@@ -35,6 +35,27 @@ PartStock.PartStockSearch = function () {
         var DateTo = $('.date-to').val();
         var Type = $('.part-type').val();
         var PartNr = $('.part-nr').val();
+        if (DateFrom == null || DateFrom == "") {
+            $('.date-from').css({
+                borderColor: "#ff0000"
+            });
+            $('.date-from').val(FutureDate(7));
+        }
+            
+        if (DateTo == null || DateTo == "") {
+            $('.date-to').css({
+                borderColor: "#ff0000"
+            });
+            $('.date-to').val(new Date().Format("yyyy/MM/dd"));
+        }
+
+        if (PartNr == null || PartNr == "") {
+            $('.part-nr').css({
+                borderColor: "#ff0000"
+            });
+            $('.part-nr').attr("placeholder", "Part Nr Cannot Empty.");
+            return;
+        }
 
         $.ajax({
             url: '/Dashboard/Data',
@@ -216,7 +237,8 @@ PartStock.DrawCharts = function (PartNr, data) {
     var chart_options = {
         chart: {
             renderTo: 'part_stock_charts',
-            backgroundColor: "transparent"
+            backgroundColor: "transparent",
+            marginRight:"10"
         },
         credits: {
             enabled: false
