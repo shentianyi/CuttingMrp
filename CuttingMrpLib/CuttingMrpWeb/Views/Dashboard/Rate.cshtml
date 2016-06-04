@@ -34,12 +34,49 @@
     <div id="complete_rate_charts" class="charts"></div>
 
     <div class="Details">
-
+        <div class="details-title row">
+            <div class="pull-left" style="margin:10px 0 -14px 30px">
+                <label style="color:#5bc0de;"><i class="glyphicon glyphicon-record"></i>&emsp;Part Details</label>
+            </div>
+        </div>
+        <hr />
+        <div class="details-body">
+            <table class="table table-borded">
+                <thead class="details-thead">
+                    <tr style="background: #5bc0de">
+                        <th>PartNr</th>
+                        <th>PartDesc</th>
+                        <th>PartTypeDisplay</th>
+                    </tr>
+                </thead>
+                <tbody class="details-tbody"></tbody>
+            </table>
+        </div>
     </div>
     <div class="Movements">
-
+        <div class="move-title row">
+            <div class="pull-left" style="margin:10px 0 -15px 30px">
+                <label style="color:#337ab7;"><i class="glyphicon glyphicon-record"></i>&emsp;Movements</label>
+            </div>
+            <div class="pull-right" style="margin:10px 30px -15px 0;">
+                <label class="label label-primary view-more-movements" style="padding:5px;">Get More</label>
+            </div>
+        </div>
+        <hr />
+        <div class="move-body">
+            <table class="table table-borded">
+                <thead class="move-thead">
+                    <tr style="background: #337ab7">
+                        <th>PartNr</th>
+                        <th>Qty</th>
+                        <th>TypeDisplay</th>
+                        <th>CreatedAtDisplay</th>
+                    </tr>
+                </thead>
+                <tbody class="move-tbody"></tbody>
+            </table>
+        </div>
     </div>
-
 </div>
 
 @Scripts.Render("~/bundles/dashboard")

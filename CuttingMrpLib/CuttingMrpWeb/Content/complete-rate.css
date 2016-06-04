@@ -6,3 +6,14 @@
     background:white;
     border-radius:5px;
 }
+
+.view-more-movements{
+    cursor:pointer;
+}
+
+.move-body,.details-body{
+    height:350px;
+    overflow:auto;
+    margin-top:-20px;
+
+}

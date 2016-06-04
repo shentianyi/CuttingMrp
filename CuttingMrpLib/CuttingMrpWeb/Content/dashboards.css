@@ -69,24 +69,19 @@
     text-align:center;
 }
 
-.Details{
+.Details, .Movements{
     display:none;
     width:48%;
-    position:absolute;
-    left:10px;
-    height:400px;
     margin-top:20px;
+    position:absolute;
+    height:400px;
     background:white;
     border-radius:5px;
 }
+.Details{
+    left:10px;
+}
 
 .Movements{
-    display:none;
-    width:48%;
-    position:absolute;
-    margin-top:20px;
     left:51%;
-    height:400px;
-    background:white;
-    border-radius:5px;
 }

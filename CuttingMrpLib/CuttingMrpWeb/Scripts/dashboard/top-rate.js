@@ -80,6 +80,9 @@ TopRate.DrawCharts = function (XValue, Series) {
             }
         },
         yAxis: {
+            labels: {
+                format: '{value} %'
+            },
             title: { text: 'Rate(%)' },
             plotLines: [{ value: 0, width: 1, color: '#808080' }]
         },
