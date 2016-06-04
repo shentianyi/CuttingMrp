@@ -7,18 +7,20 @@
     <h2 style="color:#999999;padding-left:30px;padding-bottom:10px;">Dashboard</h2>
 
     <ul class="list-unstyled dashboard-left-nav">
-        <li class="dashboard-nav-active dashboard-part" menuID="1">
-            <i class="glyphicon glyphicon-wrench"></i>
-            <label><a href="@Url.Action("Index", "Dashboard") ">Part Stock</a></label>
+        <li class="dashboard-top-rate">
+            <i class="fa fa-line-chart"></i>
+            <label><a href="@Url.Action("Index", "Dashboard") ">Hot Stock</a></label>
         </li>
-        <li menuID="2" class="dashboard-rate">
+
+        <li class="dashboard-nav-active dashboard-part">
+            <i class="fa fa-university"></i>
+            <label><a href="@Url.Action("PartStock", "Dashboard") ">Part Stock</a></label>
+        </li>
+        <li class="dashboard-rate">
             <i class="glyphicon glyphicon-stats"></i>
             <label><a href="@Url.Action("Rate", "Dashboard") ">Complete Rate</a></label>
         </li>
 
-        <li menuID="3" class="dashboard-top-rate">
-            <i class="glyphicon glyphicon-signal"></i>
-            <label><a href="@Url.Action("TopRate", "Dashboard") ">Top Rate</a></label>
-        </li>
+       
     </ul>
 </div>

@@ -65,6 +65,7 @@ namespace CuttingMrpWeb
                       "~/Content/site.css",
                       "~/Content/pagination.css",
                       "~/Content/filter.css",
+                      "~/Content/font-awesome.css",
                       "~/Content/jquery-popModal.css"));
 
             bundles.Add(new StyleBundle("~/Content/login").Include(

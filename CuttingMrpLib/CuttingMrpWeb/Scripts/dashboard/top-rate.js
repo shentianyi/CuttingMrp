@@ -12,13 +12,13 @@ TopRate.InitCharts = function () {
         type: 'get',
         data: {
             Type: 300,
-            Top:5
+            Top: 5
         },
         success: function (data) {
             var XValue = new Array;
             var YValueRate = new Array;
             var Series = new Array;
-            var count=0;
+            var count = 0;
             $.each(data, function (key, value) {
                 for (var i = 0; i < value.length; i++) {
                     if (count == 0) {
@@ -31,13 +31,15 @@ TopRate.InitCharts = function () {
                     name: key,
                     data: YValueRate
                 }
-
                 Series.push(TmpSeries);
                 count++;
                 YValueRate = [];
-            })
-
-            TopRate.DrawCharts(XValue, Series);
+            });
+            if (XValue.length > 0) {
+                TopRate.DrawCharts(XValue, Series);
+            } else {
+                $('#top-rate-charts').html("<div style='position:absolute;top:45%;left:30%;font-size:5em;color:#999999;'>Noting to Show ...</div>");
+            }
         },
         error: function () {
             console.log("Error");
@@ -114,7 +116,7 @@ TopRate.DrawCharts = function (XValue, Series) {
                 turboThreshold: 0 //不限制数据点个数
             }
         },
-        series:Series
+        series: Series
     };
     var chart = new Highcharts.Chart(chart_options);
 }

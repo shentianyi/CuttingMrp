@@ -37,9 +37,9 @@
     width:35px;
 }
 
-.dashboard-left-nav> a{
+.dashboard-left-nav a{
     outline:none;
-    padding-left:10px;
+    padding:10px;
 }
 
 .dashboard-left-nav a:hover, .dashboard-left-nav a:active{
@@ -78,6 +78,7 @@
     background:white;
     border-radius:5px;
 }
+
 .Details{
     left:10px;
 }

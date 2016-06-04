@@ -17,3 +17,11 @@
     margin-top:-20px;
 
 }
+
+.CompleteRateEmpty {
+    position:absolute;
+    top:45%;
+    left:40%;
+    font-size:5em;
+    color:#999999;
+}

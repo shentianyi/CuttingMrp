@@ -1,10 +1,9 @@
-﻿
-@{
-    ViewBag.Title = "Rate";
+﻿@{
+    ViewBag.Title = "Part Stock";
 }
 
 @Styles.Render("~/Content/dashboards")
-@Styles.Render("~/Content/complete_rate")
+@Styles.Render("~/Content/part_stock")
 
 <div class="LeftNav">
     @Html.Partial("_DashboardPartial")
@@ -13,10 +12,10 @@
 <div class="RightContent">
     <div class="panel panel-default">
         <div class="panel-body">
-            <div class="row">
+            <div class="col-md-12" style="text-align:center;">
                 <div class="col-md-6" style="display:flex;display:-ms-flexbox;">
                     <input type="text" class="form-control date-picker date-from" />
-                    <input type="text" hidden value="" class="hidden-date-from" />
+                    <input type="text" hidden value=""  class="hidden-date-from"/>
                     <span>&emsp; ~ &emsp;</span>
                     <input type="text" class="form-control date-picker date-to" />
                     <input type="text" hidden value="" class="hidden-date-to" />
@@ -24,19 +23,21 @@
                 <div class="col-md-4">
                     <input type="text" value="" class="form-control part-nr" id="part_nr" placeholder="Part Nr" autofocus />
                     <input type="text" hidden value="" class="hidden-part-nr" />
-                    <input type="hidden" value="200" class="part-type" />
+                    <input type="hidden" value="100" class="part-type" />
                 </div>
-
                 <div class="col-md-2">
-                    <button class="btn btn-success complete-rate-search">Search</button>
+                    <button class="btn btn-success part-stock-search">
+                        Search
+                    </button>
                 </div>
             </div>
         </div>
     </div>
+    <div>
+        <div id="part_stock_charts" class="charts"></div>
+    </div>
 
-    <div id="complete_rate_charts" class="charts"></div>
-
-    <div class="CompleteRateEmpty">
+    <div class="PartStockEmpty">
         Search ...
     </div>
 
@@ -88,14 +89,11 @@
 </div>
 
 @Scripts.Render("~/bundles/dashboard")
-@Scripts.Render("~/bundles/complete_rate")
-
+@Scripts.Render("~/bundles/part_stock")
 <script type="text/javascript">
-    CompleteRate.Init();
-    CompleteRate.InitPartNr();
-    CompleteRate.CompleteRateSearch();
+    PartStock.Init();
+    PartStock.InitPartNr();
+    PartStock.PartStockSearch();
 </script>
-
-
 
 

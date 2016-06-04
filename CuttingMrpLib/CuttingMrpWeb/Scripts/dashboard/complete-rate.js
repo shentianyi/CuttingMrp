@@ -7,7 +7,8 @@ CompleteRate.Init = function () {
     $('.date-to').val(now);
 
     $('.dashboard-left-nav li').removeClass("dashboard-nav-active");
-    $('.dashboard-rate').addClass("dashboard-nav-active dashboard-rate");
+    $('.dashboard-rate').addClass("dashboard-nav-active");
+    CompleteRate.ViewMoreMovments();
 }
 
 CompleteRate.InitPartNr = function () {
@@ -38,6 +39,45 @@ CompleteRate.CompleteRateSearch = function () {
         var DateTo = $('.date-to').val();
         var Type = $('.part-type').val();
         var PartNr = $('.part-nr').val();
+
+        if (DateFrom == null || DateFrom == "") {
+            $('.date-from').css({
+                borderColor: "#ff0000"
+            });
+            $('.date-from').val(FutureDate(7));
+        } else {
+            $('.date-from').css({
+                borderColor: "steelblue"
+            });
+        }
+
+        if (DateTo == null || DateTo == "") {
+            $('.date-to').css({
+                borderColor: "#ff0000"
+            });
+            $('.date-to').val(new Date().Format("yyyy/MM/dd"));
+        } else {
+            $('.date-to').css({
+                borderColor: "steelblue"
+            });
+        }
+
+        if (PartNr == null || PartNr == "") {
+            $('.part-nr').css({
+                borderColor: "#ff0000"
+            });
+            $('.part-nr').attr("placeholder", "Part Nr Cannot Empty.");
+            $('.CompleteRateEmpty').css({
+                left: "25%"
+            });
+            $('.CompleteRateEmpty').html("Part Nr Can't Empty");
+            return;
+        } else {
+            $('.part-nr').css({
+                borderColor: "steelblue"
+            });
+        }
+
         $.ajax({
             url: '/Dashboard/Data',
             type: 'get',
@@ -48,6 +88,14 @@ CompleteRate.CompleteRateSearch = function () {
                 DateTo: DateTo
             },
             success: function (data) {
+                $('.move-tbody').empty();
+                $('.details-tbody').empty();
+                $('.hidden-part-nr').html(PartNr);
+                $('.hidden-date-from').html(DateFrom);
+                $('.hidden-date-to').html(DateTo);
+                $('.CompleteRateEmpty').css({
+                    display: 'none'
+                });
                 CompleteRate.DrawCharts(PartNr, data);
                 //请求第一页
                 CompleteRate.StockMovements(PartNr, 1, DateFrom, DateTo);
@@ -84,20 +132,10 @@ CompleteRate.StockMovements = function (PartNr, Page, DateFrom, DateTo) {
                     display: ''
                 });
 
-                $('.move-tbody').empty();
+                if ($('.move-tbody').find("h4").length > 0) {
+                    $('.move-tbody').empty();
+                }
 
-                //Show Data
-                //{
-                //    "id":1,
-                //    "partNr":"91C52930140",
-                //    "quantity":100,
-                //    "fifo":"\/Date(1464969600000)\/",
-                //    "moveType":4,"sourceDoc":"000245",
-                //    "createdAt":"\/Date(1465032687130)\/",
-                //    "createdAtDisplay":"2016/6/4 17:31:27",
-                //    "fifoDisplay":"2016/6/4 0:00:00",
-                //    "typeDisplay":"ManualEntry"
-                //}
                 for (var i = 0 ; i < data.length; i++) {
                     var ID = data[i].id;
                     var PartNr = data[i].partNr;
@@ -266,14 +304,14 @@ CompleteRate.DrawCharts = function (PartNr, data) {
             layout: 'horizontal', align: 'center', verticalAlign: 'bottom', borderHeight: 0
         },
         plotOptions: {
-            column: {
-                borderWidth: 0,
+            line: {
                 dataLabels: {
                     enabled: true,
-                    style: {
-                        fontWeight: "bold",
+                    formatter: function () {
+                        return '<b>' + this.y + '%</b>';
                     }
-                }
+                },
+                enableMouseTracking: true
             },
             series: {
                 stickyTracking: false,
@@ -289,4 +327,15 @@ CompleteRate.DrawCharts = function (PartNr, data) {
 
     var chart = new Highcharts.Chart(chart_options);
     console.log(YValue);
+}
+
+CompleteRate.ViewMoreMovments = function () {
+    var Page = 1;
+    $('.view-more-movements').click(function () {
+        Page++;
+        var PartNr = $('.hidden-part-nr').html();
+        var DateFrom = $('.hidden-date-from').html();
+        var DateTo = $('.hidden-date-to').html();
+        CompleteRate.StockMovements(PartNr, Page, DateFrom, DateTo);
+    })
 }

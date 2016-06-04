@@ -5,6 +5,10 @@ PartStock.Init = function () {
     var WeekAgo = FutureDate(7);
     $('.date-from').val(WeekAgo);
     $('.date-to').val(now);
+    $('.dashboard-left-nav li').removeClass("dashboard-nav-active");
+    $('.dashboard-part').addClass("dashboard-nav-active");
+
+    PartStock.ViewMoreMovments();
 }
 
 PartStock.InitPartNr = function () {
@@ -54,6 +58,10 @@ PartStock.PartStockSearch = function () {
                 borderColor: "#ff0000"
             });
             $('.part-nr').attr("placeholder", "Part Nr Cannot Empty.");
+            $('.PartStockEmpty').css({
+                left:"25%"
+            });
+            $('.PartStockEmpty').html("Part Nr Can't Empty");
             return;
         }
 
@@ -67,6 +75,15 @@ PartStock.PartStockSearch = function () {
                 DateTo: DateTo
             },
             success: function (data) {
+                $('.move-tbody').empty();
+                $('.details-tbody').empty();
+                $('.hidden-part-nr').html(PartNr);
+                $('.hidden-date-from').html(DateFrom);
+                $('.hidden-date-to').html(DateTo);
+
+                $('.PartStockEmpty').css({
+                    display:'none'
+                });
                 PartStock.DrawCharts(PartNr, data);
                 //请求第一页
                 PartStock.StockMovements(PartNr, 1, DateFrom, DateTo);
@@ -103,20 +120,10 @@ PartStock.StockMovements = function (PartNr, Page, DateFrom, DateTo) {
                     display: ''
                 });
 
-                $('.move-tbody').empty();
+                if ($('.move-tbody').find("h4").length>0) {
+                    $('.move-tbody').empty();
+                }
 
-                //Show Data
-                //{
-                //    "id":1,
-                //    "partNr":"91C52930140",
-                //    "quantity":100,
-                //    "fifo":"\/Date(1464969600000)\/",
-                //    "moveType":4,"sourceDoc":"000245",
-                //    "createdAt":"\/Date(1465032687130)\/",
-                //    "createdAtDisplay":"2016/6/4 17:31:27",
-                //    "fifoDisplay":"2016/6/4 0:00:00",
-                //    "typeDisplay":"ManualEntry"
-                //}
                 for (var i = 0 ; i < data.length; i++) {
                     var ID = data[i].id;
                     var PartNr = data[i].partNr;
@@ -296,4 +303,15 @@ PartStock.DrawCharts = function (PartNr, data) {
     };
 
     var chart = new Highcharts.Chart(chart_options);
+}
+
+PartStock.ViewMoreMovments = function () {
+    var Page = 1;
+    $('.view-more-movements').click(function () {
+        Page++;
+        var PartNr = $('.hidden-part-nr').html();
+        var DateFrom = $('.hidden-date-from').html();
+        var DateTo = $('.hidden-date-to').html();
+        PartStock.StockMovements(PartNr, Page, DateFrom, DateTo);
+    })
 }

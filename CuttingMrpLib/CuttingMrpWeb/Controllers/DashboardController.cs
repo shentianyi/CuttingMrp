@@ -23,7 +23,7 @@ namespace CuttingMrpWeb.Controllers
             return View();
         }
 
-        public ActionResult TopRate()
+        public ActionResult PartStock()
         {
             return View();
         }

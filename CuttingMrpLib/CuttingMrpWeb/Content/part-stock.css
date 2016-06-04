@@ -15,5 +15,12 @@
     height:350px;
     overflow:auto;
     margin-top:-20px;
+}
 
+.PartStockEmpty {
+    position:absolute;
+    top:45%;
+    left:40%;
+    font-size:5em;
+    color:#999999;
 }
