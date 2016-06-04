@@ -12,31 +12,27 @@
 <div class="RightContent">
     <div class="panel panel-default">
         <div class="panel-body">
-            <div class="row">
-                <div class="col-md-6" style="display:flex;display:-ms-flexbox;border-right:1px solid #eeeeee;">
-                    <div class="col-md-5">
-                        <input type="text" value="" class="form-control date-picker date-from" />
-                    </div>
-                    <div class="col-md-2">
-                        <b> ~ </b>
-                    </div>
-                    <div class="col-md-5">
-                        <input type="text" value="" class="form-control date-picker date-to" />
-                    </div>
+            <div class="col-md-12" style="text-align:center;">
+                <div class="col-md-6" style="display:flex;display:-ms-flexbox;">
+                    <input type="text" class="form-control date-picker date-from" />
+                    <span>&emsp; ~ &emsp;</span>
+                    <input type="text" class="form-control date-picker date-to" />
                 </div>
-                <div class="col-md-4" style="border-right:1px solid #eeeeee;">
-                    <input type="text" value="" class="form-control part-nr" id="part_nr" />
+                <div class="col-md-4">
+                    <input type="text" value="" class="form-control part-nr" id="part_nr" placeholder="Part Nr" />
                     <input type="hidden" value="100" class="part-type" />
                 </div>
 
                 <div class="col-md-2">
-                    <button class="btn btn-primary part-stock-search">Search</button>
+                    <button class="btn btn-success part-stock-search">
+                        Search
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="part_stock_charts" class="charts" style="min-width:700px;height:400px"></div>
+    <div id="part_stock_charts" class="charts"></div>
 
     <div class="Details">
 

@@ -48,7 +48,7 @@ CompleteRate.CompleteRateSearch = function () {
                 DateTo: DateTo
             },
             success: function (data) {
-                CompleteRate.DrawCharts(data);
+                CompleteRate.DrawCharts(PartNr, data);
                 console.log("Success");
             },
             error: function () {
@@ -57,18 +57,21 @@ CompleteRate.CompleteRateSearch = function () {
         })
     })
 }
-CompleteRate.DrawCharts = function (data) {
-    var ChartStyle = {
-        ChartTitle: "Complete Rate"
-    }
-    
+
+CompleteRate.DrawCharts = function (PartNr, data) {
     var XValue = new Array;
     var YValue = new Array;
-    for (var i = 0; i < data.length; i++) {
-        XValue.push(data[i].XValue.split(" ")[0]);
-        YValue.push(data[i].YValue);
+    var PartNrData = data[PartNr];
+    for (var i = 0; i < PartNrData.length; i++) {
+        XValue.push(PartNrData[i].XValue.split(" ")[0] + "#" + CompleteRate.ChangeRate(PartNrData[i].YValueRate));
+        YValue.push(PartNrData[i].YValue);
     }
 
+    var ChartStyle = {
+        ChartTitle: PartNr,
+        ChartSubTitle:"--Complete Rate"
+    }
+    
     // 图表操作
     var chart_options = {
         chart: {
@@ -81,20 +84,27 @@ CompleteRate.DrawCharts = function (data) {
             text: ChartStyle.ChartTitle, x: -20
         },
         subtitle: {
-            //text: '——History Data', x: 20
+            text: ChartStyle.ChartSubTitle, x: 20
         },
         xAxis: {
-            categories: XValue
+            categories: XValue,
             //max: max_count
+            labels: {
+                formatter: function () {
+                    return this.value.split('#')[0];
+                }
+            }
         },
         yAxis: {
             title: { text: 'Value' },
             plotLines: [{ value: 0, width: 1, color: '#808080' }]
         },
         tooltip: {
-            //formatter: function () {
-            //    return '<span><b>' + this.point.id + '</b><br/><b>Value:</b><b>' + this.y + ' s</b><span>';
-            //}
+            formatter: function () {
+                return '<span><b>' + this.x.split('#')[0] + '</b><br/>' +
+                    '<b>Value: </b><b>' + this.y + '</b>' +
+                    "<br /><b>Rate: </b><b>" + this.x.split('#')[1] + '</b><span>';
+            }
         },
         scrollbar: {
             enabled: true

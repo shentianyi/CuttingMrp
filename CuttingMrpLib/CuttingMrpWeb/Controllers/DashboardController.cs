@@ -20,6 +20,12 @@ namespace CuttingMrpWeb.Controllers
             return View();
         }
 
+        public ActionResult TopRate()
+        {
+            return View();
+        }
+
+
         [HttpGet]
         public JsonResult Data([Bind(Include ="PartNr,DateFrom,DateTo,Type,Top")] DashboardSearchModel searchModel) {
             IDashboardService ds = new DashboardService(Properties.Settings.Default.db);
