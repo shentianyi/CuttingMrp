@@ -56,6 +56,9 @@ namespace CuttingMrpWeb
             bundles.Add(new ScriptBundle("~/bundles/complete_rate").Include(
                       "~/Scripts/dashboard/complete-rate.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/top_rate").Include(
+                      "~/Scripts/dashboard/top-rate.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/jquery.datetimepicker.css",
@@ -84,6 +87,9 @@ namespace CuttingMrpWeb
 
             bundles.Add(new StyleBundle("~/Content/part_stock").Include(
                      "~/Content/part-stock.css"));
+
+            bundles.Add(new StyleBundle("~/Content/top_rate").Include(
+                    "~/Content/top-rate.css"));
         }
     }
 }

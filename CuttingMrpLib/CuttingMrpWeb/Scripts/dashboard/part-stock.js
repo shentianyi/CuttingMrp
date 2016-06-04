@@ -5,9 +5,6 @@ PartStock.Init = function () {
     var WeekAgo = FutureDate(7);
     $('.date-from').val(WeekAgo);
     $('.date-to').val(now);
-
-    //$('.dashboard-left-nav li').removeClass("dashboard-nav-active");
-    //$('.dashboard-rate').addClass("dashboard-nav-active dashboard-part");
 }
 
 PartStock.InitPartNr = function () {
@@ -49,8 +46,7 @@ PartStock.PartStockSearch = function () {
                 DateTo: DateTo
             },
             success: function (data) {
-                PartStock.DrawCharts(data);
-                console.log("Success");
+                PartStock.DrawCharts(PartNr, data);
             },
             error: function () {
                 console.log("Error");
@@ -59,23 +55,33 @@ PartStock.PartStockSearch = function () {
     })
 }
 
-PartStock.DrawCharts = function (data) {
-    var ChartStyle = {
-        ChartTitle:"Part Stock"
+PartStock.ChangeRate = function (rate) {
+    if (rate == 0) {
+        return "0%";
+    } else if ((rate+"").indexOf(".") == -1) {
+        return rate + "%";
+    } else {
+        var TmpRate = rate * 100 + "";
+        var TmpRateDec = TmpRate.indexOf(".");
+        var Rate = TmpRate.substring(0, TmpRateDec + 3);
+        return Rate + "%";
+    }
+    return null;
+}
+
+
+PartStock.DrawCharts = function (PartNr, data) {
+    var XValue=new Array;
+    var YValue = new Array;
+    var PartNrData = data[PartNr];
+    for (var i = 0; i < PartNrData.length; i++) {
+        XValue.push(PartNrData[i].XValue.split(" ")[0] + "#" + PartStock.ChangeRate(PartNrData[i].YValueRate));
+        YValue.push(PartNrData[i].YValue);
     }
 
-    //[Object { XValue="2016/6/1 0:00:00",  YValue=0}, 
-    //Object { XValue="2016/6/2 0:00:00",  YValue=0}, 
-    //Object { XValue="2016/6/3 0:00:00",  YValue=600}, 
-    //Object { XValue="2016/6/4 0:00:00",  YValue=0}, 
-    //Object { XValue="2016/6/5 0:00:00",  YValue=0}, 
-    //Object { XValue="2016/6/6 0:00:00",  YValue=0}, 
-    //Object { XValue="2016/6/7 0:00:00",  YValue=0}]
-    var XValue=new Array;
-    var YValue=new Array;
-    for(var i =0; i<data.length;i++){
-        XValue.push(data[i].XValue.split(" ")[0]);
-        YValue.push(data[i].YValue);
+    var ChartStyle = {
+        ChartTitle: PartNr,
+        ChartSubTitle: "--Part Stock"
     }
 
     // 图表操作
@@ -90,20 +96,27 @@ PartStock.DrawCharts = function (data) {
             text:ChartStyle.ChartTitle, x: -20
         },
         subtitle: {
-            //text: '——History Data', x: 20
+            text: ChartStyle.ChartSubTitle, x: 20
         },
         xAxis: {
-            categories: XValue
+            categories: XValue,
             //max: max_count
+            labels: {
+                formatter: function () {
+                    return this.value.split('#')[0];
+                }
+            }
         },
         yAxis: {
             title: { text: 'Value' },
             plotLines: [{ value: 0, width: 1, color: '#808080' }]
         },
         tooltip: {
-            //formatter: function () {
-            //    return '<span><b>' + this.point.id + '</b><br/><b>Value:</b><b>' + this.y + ' s</b><span>';
-            //}
+            formatter: function () {
+                return '<span><b>' + this.x.split('#')[0] + '</b><br/>' +
+                    '<b>Value: </b><b>' + this.y + '</b>' +
+                    "<br /><b>Rate: </b><b>"+this.x.split('#')[1]+'</b><span>';
+            }
         },
         scrollbar: {
             enabled: true
@@ -116,9 +129,6 @@ PartStock.DrawCharts = function (data) {
                 borderWidth: 0,
                 dataLabels: {
                     enabled: true,
-                    style: {
-                        fontWeight: "bold",
-                    }
                 }
             },
             series: {

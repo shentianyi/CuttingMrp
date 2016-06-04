@@ -1,5 +1,6 @@
 ﻿body{
     background:#eeeeee;
+    overflow-x:hidden;
 }
 
 .LeftNav{
@@ -10,10 +11,6 @@
     bottom:0;
 }
 
-.date-picker{
-    width:150px;
-}
-
 .RightContent{
     left:200px;
     position:absolute;
@@ -21,7 +18,7 @@
     bottom:0;
     right:0;
     padding:10px;
-    overflow:auto;
+    overflow-y:auto;
 }
 
 .dashboard-left-nav>li:first-child{
@@ -69,6 +66,11 @@
 .charts{
     background:white;
     border-radius:5px;
+}
+
+.date-picker{
+    width:200px;
+    text-align:center;
 }
 
 .Details{

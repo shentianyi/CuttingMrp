@@ -236,10 +236,12 @@
     <Compile Include="Startup.cs" />
     <Content Include="Content\complete-rate.css" />
     <Content Include="Content\dashboards.css" />
+    <Content Include="Content\top-rate.css" />
     <Content Include="Content\part-stock.css" />
     <Content Include="Scripts\bootstrap-typeahead.js" />
     <Content Include="Scripts\dashboard\complete-rate.js" />
     <Content Include="Scripts\dashboard\dashboard.js" />
+    <Content Include="Scripts\dashboard\top-rate.js" />
     <Content Include="Scripts\dashboard\part-stock.js" />
     <Content Include="Scripts\highcharts\highcharts.js" />
     <Content Include="TmpFile\read.txt">
@@ -345,6 +347,7 @@
     <Content Include="Views\Dashboard\Index.cshtml" />
     <Content Include="Views\Dashboard\_DashboardPartial.cshtml" />
     <Content Include="Views\Dashboard\Rate.cshtml" />
+    <Content Include="Views\Dashboard\TopRate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
