@@ -4,6 +4,7 @@
 }
 
 @Styles.Render("~/Content/dashboards")
+@Styles.Render("~/Content/complete_rate")
 
 <div class="LeftNav">
     @Html.Partial("_DashboardPartial")
@@ -36,15 +37,23 @@
         </div>
     </div>
 
-    <div id="container" style="min-width:700px;height:400px"></div>
+    <div id="complete_rate_charts" class="charts"  style="min-width:700px;height:400px"></div>
+
+    <div class="Details">
+
+    </div>
+    <div class="Movements">
+
+    </div>
+
 </div>
 
-@Scripts.Render("~/bundles/complete_rate")
 @Scripts.Render("~/bundles/dashboard")
+@Scripts.Render("~/bundles/complete_rate")
 
 <script type="text/javascript">
+    CompleteRate.Init();
     CompleteRate.InitPartNr();
-    CompleteRate.DrawCharts();
     CompleteRate.CompleteRateSearch();
 </script>
 

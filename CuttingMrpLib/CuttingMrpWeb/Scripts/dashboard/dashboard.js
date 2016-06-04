@@ -3,8 +3,6 @@
 window.onload = function () {
     $('.navbar-nav li').removeClass("nav-choosed");
     $('.nav-dashboard').addClass("nav-choosed");
-    //$('.dashboard-left-nav li').removeClass();
-    //$('.dashboard-part').addClass('dashboard-nav-active');
 }
 
 $('.date-picker').datetimepicker({

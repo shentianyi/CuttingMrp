@@ -1,6 +1,9 @@
-﻿.LeftNav{
+﻿body{
+    background:#eeeeee;
+}
+
+.LeftNav{
     width:200px;
-    background:#f5f5f5;
     position:absolute;
     left:0;
     top:50px;
@@ -17,8 +20,8 @@
     top:50px;
     bottom:0;
     right:0;
-    background:#eeeeee;
     padding:10px;
+    overflow:auto;
 }
 
 .dashboard-left-nav>li:first-child{
@@ -61,4 +64,29 @@
     text-decoration:none;
     outline:none;
     color:#eeeeee;
+}
+
+.charts{
+    background:white;
+    border-radius:5px;
+}
+
+.Details{
+    width:48%;
+    position:absolute;
+    left:10px;
+    height:400px;
+    margin-top:20px;
+    background:white;
+    border-radius:5px;
+}
+
+.Movements{
+    width:48%;
+    position:absolute;
+    margin-top:20px;
+    left:51%;
+    height:400px;
+    background:white;
+    border-radius:5px;
 }

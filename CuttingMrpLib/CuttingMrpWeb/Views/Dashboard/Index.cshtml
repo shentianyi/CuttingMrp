@@ -3,6 +3,7 @@
 }
 
 @Styles.Render("~/Content/dashboards")
+@Styles.Render("~/Content/part_stock")
 
 <div class="LeftNav">
     @Html.Partial("_DashboardPartial")
@@ -25,7 +26,7 @@
                 </div>
                 <div class="col-md-4" style="border-right:1px solid #eeeeee;">
                     <input type="text" value="" class="form-control part-nr" id="part_nr" />
-                    <input type="hidden" value="100" class="part-type"/>
+                    <input type="hidden" value="100" class="part-type" />
                 </div>
 
                 <div class="col-md-2">
@@ -35,14 +36,22 @@
         </div>
     </div>
 
-    <div id="container" style="min-width:700px;height:400px"></div>
+    <div id="part_stock_charts" class="charts" style="min-width:700px;height:400px"></div>
+
+    <div class="Details">
+
+    </div>
+    <div class="Movements">
+
+    </div>
+
 </div>
 
 @Scripts.Render("~/bundles/dashboard")
 @Scripts.Render("~/bundles/part_stock")
 <script type="text/javascript">
+    PartStock.Init();
     PartStock.InitPartNr();
-    PartStock.DrawCharts();
     PartStock.PartStockSearch();
 </script>
 
