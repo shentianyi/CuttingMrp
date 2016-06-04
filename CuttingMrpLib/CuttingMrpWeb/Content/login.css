@@ -7,10 +7,10 @@
     z-index:19999;
     opacity:.8;
     /*steelblue, #ffffbb*/
-    background: -webkit-linear-gradient(left top, steelblue , #ffffbb); 
-    background: -o-linear-gradient(bottom right, steelblue, #ffffbb);
-    background: -moz-linear-gradient(bottom right, steelblue,#ffffbb);
-    background: linear-gradient(to bottom right,steelblue , #ffffbb);
+    background: -webkit-linear-gradient(left top, #0088cc , #00688B); 
+    background: -o-linear-gradient(bottom right, #0088cc, #00688B);
+    background: -moz-linear-gradient(bottom right, #0088cc, #00688B);
+    background: linear-gradient(to bottom right,#0088cc , #00688B);
 }
 
 .LoginBlock{
