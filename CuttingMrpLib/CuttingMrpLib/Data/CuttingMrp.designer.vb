@@ -4460,6 +4460,8 @@ Partial Public Class StockSumRecord
 	
 	Private _date As Date
 	
+	Private _rate As System.Nullable(Of Double)
+	
     #Region "可扩展性方法定义"
     Partial Private Sub OnLoaded()
     End Sub
@@ -4482,6 +4484,10 @@ Partial Public Class StockSumRecord
     Partial Private Sub OndateChanging(value As Date)
     End Sub
     Partial Private Sub OndateChanged()
+    End Sub
+    Partial Private Sub OnrateChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnrateChanged()
     End Sub
     #End Region
 	
@@ -4553,6 +4559,22 @@ Partial Public Class StockSumRecord
 				Me._date = value
 				Me.SendPropertyChanged("[date]")
 				Me.OndateChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_rate", DbType:="float")>  _
+	Public Property rate() As System.Nullable(Of Double)
+		Get
+			Return Me._rate
+		End Get
+		Set
+			If (Me._rate.Equals(value) = false) Then
+				Me.OnrateChanging(value)
+				Me.SendPropertyChanging
+				Me._rate = value
+				Me.SendPropertyChanged("rate")
+				Me.OnrateChanged
 			End If
 		End Set
 	End Property

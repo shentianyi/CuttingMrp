@@ -21,22 +21,28 @@ namespace CuttingMrpWeb.Controllers
         }
 
         [HttpGet]
-        public JsonResult Data([Bind(Include ="PartNr,DateFrom,DateTo,Type")] DashboardSearchModel searchModel) {
+        public JsonResult Data([Bind(Include ="PartNr,DateFrom,DateTo,Type,Top")] DashboardSearchModel searchModel) {
             IDashboardService ds = new DashboardService(Properties.Settings.Default.db);
 
-            List<DashboardItem> items = new List<DashboardItem>();
+            Dictionary<string, List<DashboardItem>> data = new Dictionary<string, List<DashboardItem>>();
+           // List<DashboardItem> items = new List<DashboardItem>();
             switch (searchModel.Type)
             {
                 case 100:
-                    items = ds.GetPartStockDash(searchModel);
+                    data = ds.GetPartStockDash(searchModel);
                     break;
                 case 200:
-                    items = ds.GetPartCompleteRateDash(searchModel);
+                    data = ds.GetPartCompleteRateDash(searchModel);
+                    break;
+                case 300:
+                    searchModel.DateFrom = DateTime.Now.Date.AddDays(-7);
+                    searchModel.DateTo = DateTime.Now.Date;
+                    data = ds.GetPartTopRateDash(searchModel);
                     break;
                 default:
                     break;
             }
-            return Json(items, JsonRequestBehavior.AllowGet);
+            return Json(data, JsonRequestBehavior.AllowGet);
 
         }
     }

@@ -22,6 +22,7 @@ namespace CuttingMrpDashSvc
         public DashService()
         {
             InitializeComponent();
+           // Common.Logging.LogManager.Adapter = new Common.Logging.Simple.ConsoleOutLoggerFactoryAdapter { Level = Common.Logging.LogLevel.Info };
         }
 
         protected override void OnStart(string[] args)

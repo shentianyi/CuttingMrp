@@ -24,7 +24,7 @@ namespace CuttingMrpDashSvc.Job
                 .WithIdentity("StockSumRecordGroupJob-1", groupId)
                 .Build();
 
-            job.JobDataMap.Add("Date", DateTime.Now.Date);
+          //  job.JobDataMap.Add("Date", DateTime.Now.Date);
 
             DashService.Scheduler.ScheduleJob(job, trigger);
 
