@@ -19,6 +19,7 @@
     right:0;
     padding:10px;
     overflow-y:auto;
+    overflow-x:hidden;
 }
 
 .dashboard-left-nav>li:first-child{
@@ -63,17 +64,13 @@
     color:#eeeeee;
 }
 
-.charts{
-    background:white;
-    border-radius:5px;
-}
-
 .date-picker{
     width:200px;
     text-align:center;
 }
 
 .Details{
+    display:none;
     width:48%;
     position:absolute;
     left:10px;
@@ -84,6 +81,7 @@
 }
 
 .Movements{
+    display:none;
     width:48%;
     position:absolute;
     margin-top:20px;

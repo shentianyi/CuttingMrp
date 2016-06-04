@@ -49,7 +49,6 @@ CompleteRate.CompleteRateSearch = function () {
             },
             success: function (data) {
                 CompleteRate.DrawCharts(PartNr, data);
-                console.log("Success");
             },
             error: function () {
                 console.log("Error");
@@ -58,13 +57,34 @@ CompleteRate.CompleteRateSearch = function () {
     })
 }
 
+CompleteRate.ChangeRate = function (rate) {
+    if (rate == 0) {
+        return 0;
+    } else if ((rate + "").indexOf(".") == -1) {
+        return rate;
+    } else {
+        var TmpRate = rate * 100 + "";
+        var TmpRateDec = TmpRate.indexOf(".");
+        var Rate = TmpRate.substring(0, TmpRateDec + 3);
+        return Rate;
+    }
+    return 0;
+}
+
 CompleteRate.DrawCharts = function (PartNr, data) {
+    //{"91C511601925":
+    //    [{"XValue":"2016/6/2 0:00:00",
+    //        "YValue":100,
+    //        "YValueRate":0.5
+    //    }]
+    //}
+
     var XValue = new Array;
     var YValue = new Array;
     var PartNrData = data[PartNr];
     for (var i = 0; i < PartNrData.length; i++) {
-        XValue.push(PartNrData[i].XValue.split(" ")[0] + "#" + CompleteRate.ChangeRate(PartNrData[i].YValueRate));
-        YValue.push(PartNrData[i].YValue);
+        XValue.push(PartNrData[i].XValue.split(" ")[0] + "#" +PartNrData[i].YValue);
+        YValue.push(PartNrData[i].YValueRate);
     }
 
     var ChartStyle = {
@@ -75,7 +95,8 @@ CompleteRate.DrawCharts = function (PartNr, data) {
     // 图表操作
     var chart_options = {
         chart: {
-            renderTo: 'complete_rate_charts'
+            renderTo: 'complete_rate_charts',
+            backgroundColor: "transparent"
         },
         credits: {
             enabled: false
@@ -96,14 +117,14 @@ CompleteRate.DrawCharts = function (PartNr, data) {
             }
         },
         yAxis: {
-            title: { text: 'Value' },
+            title: { text: 'Rate(%)' },
             plotLines: [{ value: 0, width: 1, color: '#808080' }]
         },
         tooltip: {
             formatter: function () {
                 return '<span><b>' + this.x.split('#')[0] + '</b><br/>' +
-                    '<b>Value: </b><b>' + this.y + '</b>' +
-                    "<br /><b>Rate: </b><b>" + this.x.split('#')[1] + '</b><span>';
+                    '<b>Rate: </b><b>' + this.y + '</b>' +
+                    "<br /><b>Stock: </b><b>" + this.x.split('#')[1] + '</b><span>';
             }
         },
         scrollbar: {
@@ -128,10 +149,12 @@ CompleteRate.DrawCharts = function (PartNr, data) {
             }
         },
         series: [{
-            name: 'Value',
-            data: YValue,
-            color: 'limegreen'
+            type:'line',
+            name: 'Rate',
+            data: YValue
         }]
     };
+
     var chart = new Highcharts.Chart(chart_options);
+    console.log(YValue);
 }
