@@ -150,7 +150,6 @@
                         <td>@Html.DisplayFor(modelItem => item.Part.routeNr)</td>
                         <td>@Html.DisplayFor(modelItem => item.completeRateDisplay)</td>
                         <td>@Html.DisplayFor(modelItem => item.derivedFrom)</td>
-
                         <td>
                             <a href="@Url.Action("Search", "Requirements" , new { orderNr=item.orderNr })" style="white-space:nowrap;">
                                 @(item.requirementCount.ToString() + " Requirements")
