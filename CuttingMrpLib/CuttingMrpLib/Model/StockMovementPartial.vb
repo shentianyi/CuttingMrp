@@ -16,5 +16,4 @@
             Return EnumUtility.GetDescription(DirectCast(Me.moveType, StockMoveType))
         End Get
     End Property
-
 End Class

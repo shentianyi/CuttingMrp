@@ -246,6 +246,7 @@
     <Content Include="Scripts\dashboard\part-stock.js" />
     <Content Include="Scripts\dashboard\top-rate.js" />
     <Content Include="Scripts\highcharts\highcharts.js" />
+    <Content Include="Scripts\stock-movement.js" />
     <Content Include="TmpFile\read.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -355,11 +356,11 @@
     <Content Include="Views\Dashboard\_DashboardPartial.cshtml" />
     <Content Include="Views\Dashboard\Rate.cshtml" />
     <Content Include="Views\Dashboard\PartStock.cshtml" />
+    <Content Include="Views\StockMovements\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Parts\" />
-    <Folder Include="Views\StockMovements\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
