@@ -6,13 +6,15 @@
 
 @Styles.Render("~/Content/login")
 
-<div class="LoginMask"></div>
+<div class="LoginMask">
+    Cutting Mrp
+</div>
 
 <div class="col-sm-12 LoginBlock">
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="panel-title" style="text-align:center;">
-                <h3>Cutting Mrp </h3>
+                <h3>LOGIN</h3>
             </div>
         </div>
         <div class="panel-body">
@@ -23,16 +25,19 @@
 
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
+                    <br />
                     <div class="form-group">
-                        @Html.LabelFor(m => m.Email, new { @class = "col-md-3 control-label" })
+                        @Html.LabelFor(m => m.Email, new { @class = "col-md-4 control-label" })
                         <div class="col-md-8">
-                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @Placeholder="Email"})
+                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @Placeholder = "Email" })
                             @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
                         </div>
                     </div>
-                        
+
+                    <br />
+
                     <div class="form-group">
-                        @Html.LabelFor(m => m.Password, new { @class = "col-md-3 control-label" })
+                        @Html.LabelFor(m => m.Password, new { @class = "col-md-4 control-label" })
                         <div class="col-md-8">
                             @Html.PasswordFor(m => m.Password, new { @class = "form-control", @Placeholder = "Password" })
                             @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
@@ -48,7 +53,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-md-12" style="text-align:center;">
-                            <input type="submit" value="Submit" class="btn btn-success" style="width:150px;"/>
+                            <input type="submit" value="Sign In" class="btn btn-success" style="width:150px;" />
                         </div>
                     </div>
 
@@ -59,13 +64,15 @@
                 }
             </section>
 
+
+
         </div>
     </div>
-   
+
     <div class="col-md-4">
         @*<section id="socialLoginForm">
-            @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
-        </section>*@
+                @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+            </section>*@
     </div>
 </div>
 @section Scripts {

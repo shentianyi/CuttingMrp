@@ -23,7 +23,8 @@ CompleteRate.InitPartNr = function () {
             success: function (data) {
                 $('#part_nr').typeahead({
                     source: data,
-                    display: 'partNr'
+                    display: 'partNr',
+                    items: 20
                 });
             },
             error: function () {
@@ -47,7 +48,7 @@ CompleteRate.CompleteRateSearch = function () {
             $('.date-from').val(FutureDate(7));
         } else {
             $('.date-from').css({
-                borderColor: "steelblue"
+                borderColor: ""
             });
         }
 
@@ -58,7 +59,7 @@ CompleteRate.CompleteRateSearch = function () {
             $('.date-to').val(new Date().Format("yyyy/MM/dd"));
         } else {
             $('.date-to').css({
-                borderColor: "steelblue"
+                borderColor: ""
             });
         }
 
@@ -74,7 +75,7 @@ CompleteRate.CompleteRateSearch = function () {
             return;
         } else {
             $('.part-nr').css({
-                borderColor: "steelblue"
+                borderColor: ""
             });
         }
 
