@@ -129,12 +129,14 @@ Public Class Calculator
                 Dim moq As Double = 0
                 If settings.OrderType = OrderType.Fix Then
                     Dim kanbanrepo As Repository(Of BatchOrderTemplate) = New Repository(Of BatchOrderTemplate)(New DataContext(DBConn))
-                    Dim kanban As BatchOrderTemplate = kanbanrepo.First(Function(c) c.partNr = CType(dic.Key, String))
-
+                    Dim kanban As BatchOrderTemplate = kanbanrepo.FirstOrDefault(Function(c) c.partNr = CType(dic.Key, String))
+                    If kanban Is Nothing Then
+                        Throw New Exception("找不到" & CType(dic.Key, String) & "的看板号")
+                    End If
                     spq = kanban.bundle
-                        moq = kanban.batchQuantity
+                    moq = kanban.batchQuantity
 
-                ElseIf settings.OrderType = OrderType.Fix Then
+                ElseIf settings.OrderType = OrderType.Actual Then
                     Dim currPart As Part = partRepo.First(Function(c) c.partNr = CType(dic.Key, String))
                     spq = currPart.spq
                     moq = currPart.moq
@@ -180,7 +182,6 @@ Public Class Calculator
                 result.Add(toinsert)
             Next
         Next
-
         Return result
     End Function
 
@@ -323,13 +324,13 @@ Public Class Calculator
         Dim mprrepo As Repository(Of MP) = New Repository(Of MP)(dc)
         Dim mpses As List(Of MP) = mprrepo.FindAll(Function(c) c.status = MPSStatus.Backflush).ToList
         Dim backFlushRepo As Repository(Of BackflushRecord) = New Repository(Of BackflushRecord)(dc)
-        Dim stockToBook As Hashtable = New Hashtable
+
         Dim bomRepo As Repository(Of BOM) = New Repository(Of BOM)(dc)
         Dim stockRepo As Repository(Of Stock) = New Repository(Of Stock)(dc)
         Dim moveRepo As Repository(Of StockMovement) = New Repository(Of StockMovement)(dc)
         If mpses IsNot Nothing Then
-
             For Each m As MP In mpses
+                Dim stockToBook As Hashtable = New Hashtable
                 Try
                     If tempBoms.ContainsKey(m.partnr) = False Then
 
@@ -358,14 +359,16 @@ Public Class Calculator
                         If stockToBook.ContainsKey(item.componentId) Then
                             stockToBook(item.componentId) = stockToBook(item.componentId) + item.quantity * m.quantity
                         Else
-                            stockToBook(item.componentId) = item.quantity * m.quantity
+                            stockToBook.Add(item.componentId, item.quantity * m.quantity)
                         End If
                     Next
                     Dim stockStrings As List(Of String) = New List(Of String)
-                    For Each ke As Object In stockToBook
-                        stockStrings.Add(CType(ke, String))
+                    For Each ke As Object In stockToBook.Keys
+                        If Not stockStrings.Contains(CType(ke, String)) Then
+                            stockStrings.Add(CType(ke, String))
+                        End If
                     Next
-                    Dim actualStock As List(Of Stock) = stockRepo.FindAll(Function(c) stockStrings.Contains(c.partNr)).ToList
+                    Dim actualStock As List(Of Stock) = stockRepo.FindAll(Function(c) stockStrings.Contains(c.partNr) And c.quantity > 0).ToList
                     actualStock = (From c In actualStock Order By c.fifo Ascending).ToList
                     Dim allocatedStock As Hashtable = New Hashtable
                     For Each st As Stock In actualStock
@@ -381,24 +384,47 @@ Public Class Calculator
                         If allocatedStock.ContainsKey(CType(dic.Key, String)) Then
                             For Each stockto As Stock In allocatedStock(CType(dic.Key, String))
                                 If CType(dic.Value, Double) = stockto.quantity Then
-                                    stockRepo.MarkForDeletion(stockto)
                                     moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = stockto.fifo, .moveType = StockMoveType.Backflush, .partNr = CType(stockto.partNr, String), .quantity = stockto.quantity, .sourceDoc = m.sourceDoc})
+                                    stockRepo.MarkForDeletion(stockto)
+                                    dic.Value = 0
+
                                     Exit For
                                 ElseIf CType(dic.Value, Double) < stockto.quantity Then
-                                    stockto.quantity = stockto.quantity - CType(dic.Value, Double)
                                     moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = stockto.fifo, .moveType = StockMoveType.Backflush, .partNr = CType(stockto.partNr, String), .quantity = CType(dic.Value, Double), .sourceDoc = m.sourceDoc})
+                                    stockto.quantity = stockto.quantity - CType(dic.Value, Double)
+                                    dic.Value = 0
                                     Exit For
                                 Else
+                                    moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = stockto.fifo, .moveType = StockMoveType.Backflush, .partNr = CType(dic.Key, String), .quantity = stockto.quantity, .sourceDoc = m.sourceDoc})
                                     stockRepo.MarkForDeletion(stockto)
                                     dic.Value = CType(dic.Value, Double) - stockto.quantity
                                 End If
                             Next
+                            If CType(dic.Value, Double) > 0 Then
+                                stockRepo.MarkForAdd(New Stock With {.container = "ORIGINAL",
+                                                     .fifo = Now, .partNr = CType(dic.Key, String),
+                                                     .position = "ORIGINAL",
+                                                     .quantity = -CType(dic.Value, Double),
+                                                     .source = m.sourceDoc, .sourceType = "BACKFLUSH",
+                                                     .wh = "ORIGINAL"})
+                                moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now,
+                                                    .fifo = Now, .moveType = StockMoveType.Backflush,
+                                                    .partNr = CType(dic.Key, String),
+                                                    .quantity = CType(dic.Value, Double),
+                                                    .sourceDoc = m.sourceDoc})
+                            End If
                         Else
                             stockRepo.MarkForAdd(New Stock With {.container = "ORIGINAL", .fifo = Now, .partNr = CType(dic.Key, String), .position = "ORIGINAL", .quantity = -CType(dic.Value, Double), .source = m.sourceDoc, .sourceType = "BACKFLUSH", .wh = "ORIGINAL"})
                             moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = Now, .moveType = StockMoveType.Backflush, .partNr = CType(dic.Key, String), .quantity = CType(dic.Value, Double), .sourceDoc = m.sourceDoc})
                         End If
                     Next
                     m.status = MPSStatus.BackflushFinish
+                    backFlushRepo.MarkForAdd(New BackflushRecord With
+                                              {.fifo = Now, .launchTime = Now,
+                                              .message = "扣减物料成功",
+                                              .partnr = m.partnr, .quantity = m.quantity,
+                                              .sourceDoc = m.sourceDoc,
+                                              .status = BackflushStatus.Normal})
                     dc.SaveAll()
                 Catch ex As Exception
                     backFlushRepo.MarkForAdd(New BackflushRecord With
@@ -411,6 +437,7 @@ Public Class Calculator
                 End Try
             Next
         End If
+
     End Sub
 
 End Class
