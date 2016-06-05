@@ -28,7 +28,6 @@ namespace CuttingMrpWeb.Controllers
 
             SetMoveTypeDisplayList(null);
 
-            //ViewBag.info = info;
             return View(stockMovements);
         }
 

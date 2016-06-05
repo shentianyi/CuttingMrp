@@ -17,16 +17,4 @@ Public Class StockMovementService
         Return rep.Search(searchModel)
     End Function
 
-    'Public Function GetStockMovementInfo(conditions As StockMovementSearchModel) As StockMovementInfoModel Implements IStockMovementService.GetStockMovementInfo
-
-    '    Dim info As StockMovementInfoModel = New StockMovementInfoModel
-    '    Dim context = New DataContext(DBConn)
-    '    Dim repo As StockMovementRepository = New StockMovementRepository(context)
-    '    Dim q As IQueryable(Of StockMovement) = repo.Search(conditions)
-
-    '    info.movementsCount = context.Context.GetTable(Of StockMovement).Where(Function(o) q.Select(Function(c) c.partNr).Contains(o.partNr)).Count
-
-    '    Return info
-    'End Function
-
 End Class
