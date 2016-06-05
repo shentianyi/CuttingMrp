@@ -12,10 +12,17 @@ Public Class Calculator
     Public Sub ProcessMrp(settings As CalculateSetting)
         Dim mrprepo As Repository(Of MrpRound) = New Repository(Of MrpRound)(New DataContext(DBConn))
         Dim mrpRoundStr As String = Now.ToString("yyyyMMddhhmmss")
-        mrprepo.GetTable.InsertOnSubmit(New MrpRound With {.launcher = My.Application.Info.AssemblyName, .mrpRound = mrpRoundStr, .runningStatus = CalculatorStatus.Running, .time = Now, .text = " "})
+        mrprepo.GetTable.InsertOnSubmit(New MrpRound With {.launcher = settings.TaskType, .mrpRound = mrpRoundStr, .runningStatus = CalculatorStatus.Running, .time = Now, .text = " "})
         mrprepo.SaveAll()
         Try
-            GenerateProcessOrderByRequirement(mrpRoundStr, settings)
+            If settings.TaskType = "BF" Then
+                MakeBackflush()
+            ElseIf settings.TaskType = "MRP" Then
+                MakeBackflush()
+                GenerateProcessOrderByRequirement(mrpRoundStr, settings)
+            Else
+                Throw New Exception("Unsupported Type")
+            End If
             Dim round As MrpRound = mrprepo.First(Function(c) c.mrpRound = mrpRoundStr)
             round.runningStatus = CalculatorStatus.Finish
             mrprepo.SaveAll()
@@ -328,38 +335,50 @@ Public Class Calculator
         Dim bomRepo As Repository(Of BOM) = New Repository(Of BOM)(dc)
         Dim stockRepo As Repository(Of Stock) = New Repository(Of Stock)(dc)
         Dim moveRepo As Repository(Of StockMovement) = New Repository(Of StockMovement)(dc)
+        Dim mpsgroup As Hashtable = New Hashtable
         If mpses IsNot Nothing Then
-            For Each m As MP In mpses
-                Dim stockToBook As Hashtable = New Hashtable
-                Try
-                    If tempBoms.ContainsKey(m.partnr) = False Then
+            For Each mo As MP In mpses
+                If mpsgroup.ContainsKey(mo.partnr) Then
+                    mpsgroup(mo.partnr) = mpsgroup(mo.partnr) + mo.quantity
+                Else
+                    mpsgroup(mo.partnr) = mo.quantity
 
-                        Dim counter As Integer = bomRepo.Count(Function(c) c.validFrom <= m.requiredDate And c.validTo >= m.requiredDate And c.partNr = m.partnr)
+                End If
+            Next
+            For Each mt As DictionaryEntry In mpsgroup
+                Dim stockToBook As Hashtable = New Hashtable
+                Dim partnr As String = CType(mt.Key, String)
+                Dim quantity As String = CType(mt.Value, Double)
+                Dim sd As String = "BACKFLUSH"
+                Try
+                    If tempBoms.ContainsKey(CType(mt.Key, String)) = False Then
+
+                        Dim counter As Integer = bomRepo.Count(Function(c) c.validFrom <= Now And c.validTo >= Now And c.partNr = partnr)
                         If counter < 1 Then
                             backFlushRepo.MarkForAdd(New BackflushRecord With
                                               {.fifo = Now, .launchTime = Now,
                                               .message = "没有找到BOM",
-                                              .partnr = m.partnr,
-                                              .quantity = m.quantity,
-                                              .sourceDoc = m.sourceDoc,
+                                              .partnr = partnr,
+                                              .quantity = quantity,
+                                              .sourceDoc = "BACKFLUSH",
                                               .status = BackflushStatus.Failed})
                         End If
                         If counter > 1 Then
                             backFlushRepo.MarkForAdd(New BackflushRecord With
                                               {.fifo = Now, .launchTime = Now,
                                               .message = "找到" & counter & "个生效的BOM,一个时间内只允许一个生效的BOM",
-                                              .partnr = m.partnr, .quantity = m.quantity,
-                                              .sourceDoc = m.sourceDoc,
+                                              .partnr = partnr, .quantity = quantity,
+                                              .sourceDoc = sd,
                                               .status = BackflushStatus.Failed})
                         End If
-                        Dim bom As BOM = bomRepo.Single(Function(c) c.validFrom <= Now And c.validTo >= Now And c.partNr = m.partnr)
-                        tempBoms.Add(m.partnr, bom.BomItems.Where(Function(c) c.validFrom <= Now And c.validTo >= Now).ToList)
+                        Dim bom As BOM = bomRepo.Single(Function(c) c.validFrom <= Now And c.validTo >= Now And c.partNr = partnr)
+                        tempBoms.Add(partnr, bom.BomItems.Where(Function(c) c.validFrom <= Now And c.validTo >= Now).ToList)
                     End If
-                    For Each item As BomItem In tempBoms(m.partnr)
+                    For Each item As BomItem In tempBoms(partnr)
                         If stockToBook.ContainsKey(item.componentId) Then
-                            stockToBook(item.componentId) = stockToBook(item.componentId) + item.quantity * m.quantity
+                            stockToBook(item.componentId) = stockToBook(item.componentId) + item.quantity * quantity
                         Else
-                            stockToBook.Add(item.componentId, item.quantity * m.quantity)
+                            stockToBook.Add(item.componentId, item.quantity * quantity)
                         End If
                     Next
                     Dim stockStrings As List(Of String) = New List(Of String)
@@ -384,18 +403,18 @@ Public Class Calculator
                         If allocatedStock.ContainsKey(CType(dic.Key, String)) Then
                             For Each stockto As Stock In allocatedStock(CType(dic.Key, String))
                                 If CType(dic.Value, Double) = stockto.quantity Then
-                                    moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = stockto.fifo, .moveType = StockMoveType.Backflush, .partNr = CType(stockto.partNr, String), .quantity = stockto.quantity, .sourceDoc = m.sourceDoc})
+                                    moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = stockto.fifo, .moveType = StockMoveType.Backflush, .partNr = CType(stockto.partNr, String), .quantity = stockto.quantity, .sourceDoc = sd})
                                     stockRepo.MarkForDeletion(stockto)
                                     dic.Value = 0
 
                                     Exit For
                                 ElseIf CType(dic.Value, Double) < stockto.quantity Then
-                                    moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = stockto.fifo, .moveType = StockMoveType.Backflush, .partNr = CType(stockto.partNr, String), .quantity = CType(dic.Value, Double), .sourceDoc = m.sourceDoc})
+                                    moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = stockto.fifo, .moveType = StockMoveType.Backflush, .partNr = CType(stockto.partNr, String), .quantity = CType(dic.Value, Double), .sourceDoc = sd})
                                     stockto.quantity = stockto.quantity - CType(dic.Value, Double)
                                     dic.Value = 0
                                     Exit For
                                 Else
-                                    moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = stockto.fifo, .moveType = StockMoveType.Backflush, .partNr = CType(dic.Key, String), .quantity = stockto.quantity, .sourceDoc = m.sourceDoc})
+                                    moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = stockto.fifo, .moveType = StockMoveType.Backflush, .partNr = CType(dic.Key, String), .quantity = stockto.quantity, .sourceDoc = sd})
                                     stockRepo.MarkForDeletion(stockto)
                                     dic.Value = CType(dic.Value, Double) - stockto.quantity
                                 End If
@@ -405,38 +424,46 @@ Public Class Calculator
                                                      .fifo = Now, .partNr = CType(dic.Key, String),
                                                      .position = "ORIGINAL",
                                                      .quantity = -CType(dic.Value, Double),
-                                                     .source = m.sourceDoc, .sourceType = "BACKFLUSH",
+                                                     .source = sd, .sourceType = "BACKFLUSH",
                                                      .wh = "ORIGINAL"})
                                 moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now,
                                                     .fifo = Now, .moveType = StockMoveType.Backflush,
                                                     .partNr = CType(dic.Key, String),
                                                     .quantity = CType(dic.Value, Double),
-                                                    .sourceDoc = m.sourceDoc})
+                                                    .sourceDoc = sd})
                             End If
                         Else
-                            stockRepo.MarkForAdd(New Stock With {.container = "ORIGINAL", .fifo = Now, .partNr = CType(dic.Key, String), .position = "ORIGINAL", .quantity = -CType(dic.Value, Double), .source = m.sourceDoc, .sourceType = "BACKFLUSH", .wh = "ORIGINAL"})
-                            moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = Now, .moveType = StockMoveType.Backflush, .partNr = CType(dic.Key, String), .quantity = CType(dic.Value, Double), .sourceDoc = m.sourceDoc})
+                            stockRepo.MarkForAdd(New Stock With {.container = "ORIGINAL", .fifo = Now, .partNr = CType(dic.Key, String), .position = "ORIGINAL", .quantity = -CType(dic.Value, Double), .source = sd, .sourceType = "BACKFLUSH", .wh = "ORIGINAL"})
+                            moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = Now, .moveType = StockMoveType.Backflush, .partNr = CType(dic.Key, String), .quantity = CType(dic.Value, Double), .sourceDoc = sd})
                         End If
                     Next
-                    m.status = MPSStatus.BackflushFinish
+                    For Each mp As MP In mpses
+                        If mp.partnr = partnr Then
+                            mp.status = MPSStatus.BackflushFinish
+                        End If
+                    Next
                     backFlushRepo.MarkForAdd(New BackflushRecord With
                                               {.fifo = Now, .launchTime = Now,
                                               .message = "扣减物料成功",
-                                              .partnr = m.partnr, .quantity = m.quantity,
-                                              .sourceDoc = m.sourceDoc,
+                                              .partnr = partnr, .quantity = quantity,
+                                              .sourceDoc = sd,
                                               .status = BackflushStatus.Normal})
                     dc.SaveAll()
                 Catch ex As Exception
-                    backFlushRepo.MarkForAdd(New BackflushRecord With
+                    Dim failedFlushRepo As New Repository(Of BackflushRecord)(New DataContext(DBConn))
+
+                    failedFlushRepo.MarkForAdd(New BackflushRecord With
                                                 {.fifo = Now, .launchTime = Now,
                                                 .message = ex.Message,
-                                                .partnr = m.partnr, .quantity = m.quantity,
-                                                .sourceDoc = m.sourceDoc,
+                                                .partnr = partnr, .quantity = quantity,
+                                                .sourceDoc = sd,
                                                 .status = BackflushStatus.Failed})
-                    dc.SaveAll()
+                    failedFlushRepo.SaveAll()
                 End Try
             Next
+
         End If
+
 
     End Sub
 
