@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?><Database Name="CuttingMrp" Class="CuttingMrpDataContext" Serialization="Unidirectional" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="CuttingMrp" Class="CuttingMrpDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Connection Mode="AppSettings" ConnectionString="Data Source=vm08;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=sa" SettingsObjectName="CuttingMrpLib.My.MySettings" SettingsPropertyName="CuttingMrpConnectionString2" Provider="System.Data.SqlClient" />
   <Table Name="dbo.BackflushRecord" Member="BackflushRecords">
     <Type Name="BackflushRecord">
@@ -10,6 +10,15 @@
       <Column Name="status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="message" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
       <Column Name="launchTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.StockSumRecord" Member="StockSumRecords">
+    <Type Name="StockSumRecord">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="partNr" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="quantity" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="date" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="rate" Type="System.Double" DbType="Float" CanBeNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.BatchOrderTemplate" Member="BatchOrderTemplates">
@@ -75,13 +84,15 @@
     <Type Name="MP">
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="partnr" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
-      <Column Name="orderedDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
-      <Column Name="requiredDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="orderedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="requiredDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="quantity" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
       <Column Name="source" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
       <Column Name="sourceDoc" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
       <Column Name="status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="unitId" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Association Name="MP_MP" Member="MP1" ThisKey="id" OtherKey="id" Type="MP" Cardinality="One" />
+      <Association Name="MP_MP" Member="MP" ThisKey="id" OtherKey="id" Type="MP" IsForeignKey="true" />
       <Association Name="Part_MP" Member="Part" ThisKey="partnr" OtherKey="partNr" Type="Part" IsForeignKey="true" />
       <Association Name="ProductionUnit_MP" Member="ProductionUnit" ThisKey="unitId" OtherKey="unitId" Type="ProductionUnit" IsForeignKey="true" />
     </Type>
@@ -147,7 +158,7 @@
       <Column Name="status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="requirementId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="batchQuantity" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="orderType" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="OrderType" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
       <Association Name="ProcessOrder_OrderDerivation" Member="OrderDerivations" ThisKey="orderNr" OtherKey="orderId" Type="OrderDerivation" />
       <Association Name="Part_ProcessOrder" Member="Part" ThisKey="partNr" OtherKey="partNr" Type="Part" IsForeignKey="true" />
     </Type>
@@ -214,8 +225,19 @@
       <Column Name="rate" Type="System.Double" DbType="Float" CanBeNull="true" />
     </Type>
   </Table>
+  <Table Name="dbo.SumOfStock" Member="SumOfStocks">
+    <Type Name="SumOfStock">
+      <Column Name="partNr" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="SumOfStock" Type="System.Double" DbType="Float" CanBeNull="true" />
+    </Type>
+  </Table>
   <Table Name="dbo.ProcessOrderView" Member="ProcessOrderViews">
     <Type Name="ProcessOrderView">
+      <Column Name="partType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="partDesc" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="partStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="moq" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="spq" Type="System.Double" DbType="Float" CanBeNull="true" />
       <Column Name="orderNr" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="sourceDoc" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
       <Column Name="derivedFrom" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
@@ -227,26 +249,7 @@
       <Column Name="status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="requirementId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="batchQuantity" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="spq" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="moq" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="partStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="partDesc" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
-      <Column Name="partType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-    </Type>
-  </Table>
-  <Table Name="dbo.StockSumRecord" Member="StockSumRecords">
-    <Type Name="StockSumRecord">
-      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="partNr" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
-      <Column Name="quantity" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Column Name="date" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="rate" Type="System.Double" DbType="Float" CanBeNull="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.SumOfStock" Member="SumOfStocks">
-    <Type Name="SumOfStock">
-      <Column Name="partNr" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
-      <Column Name="SumOfStock" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="OrderType" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
     </Type>
   </Table>
 </Database>

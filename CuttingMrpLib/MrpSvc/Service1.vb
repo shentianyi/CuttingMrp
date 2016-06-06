@@ -36,7 +36,6 @@ Public Class Service1
             If msg IsNot Nothing Then
                 Dim settings As CalculateSetting = msg.Body
                 If settings.TaskType = "MRP" Then
-                    mrpExe.MakeBackflush()
                     mrpExe.ProcessMrp(settings)
                 ElseIf settings.TaskType = "BF" Then
                     mrpExe.MakeBackflush()

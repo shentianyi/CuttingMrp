@@ -20,7 +20,6 @@ Imports System.Data.Linq.Mapping
 Imports System.Linq
 Imports System.Linq.Expressions
 Imports System.Reflection
-Imports System.Runtime.Serialization
 
 
 <Global.System.Data.Linq.Mapping.DatabaseAttribute(Name:="CuttingMrp")>  _
@@ -37,6 +36,12 @@ Partial Public Class CuttingMrpDataContext
   Partial Private Sub UpdateBackflushRecord(instance As BackflushRecord)
     End Sub
   Partial Private Sub DeleteBackflushRecord(instance As BackflushRecord)
+    End Sub
+  Partial Private Sub InsertStockSumRecord(instance As StockSumRecord)
+    End Sub
+  Partial Private Sub UpdateStockSumRecord(instance As StockSumRecord)
+    End Sub
+  Partial Private Sub DeleteStockSumRecord(instance As StockSumRecord)
     End Sub
   Partial Private Sub InsertBatchOrderTemplate(instance As BatchOrderTemplate)
     End Sub
@@ -134,12 +139,6 @@ Partial Public Class CuttingMrpDataContext
     End Sub
   Partial Private Sub DeleteStockMovement(instance As StockMovement)
     End Sub
-  Partial Private Sub InsertStockSumRecord(instance As StockSumRecord)
-    End Sub
-  Partial Private Sub UpdateStockSumRecord(instance As StockSumRecord)
-    End Sub
-  Partial Private Sub DeleteStockSumRecord(instance As StockSumRecord)
-    End Sub
   #End Region
 	
 	Public Sub New()
@@ -170,6 +169,12 @@ Partial Public Class CuttingMrpDataContext
 	Public ReadOnly Property BackflushRecords() As System.Data.Linq.Table(Of BackflushRecord)
 		Get
 			Return Me.GetTable(Of BackflushRecord)
+		End Get
+	End Property
+	
+	Public ReadOnly Property StockSumRecords() As System.Data.Linq.Table(Of StockSumRecord)
+		Get
+			Return Me.GetTable(Of StockSumRecord)
 		End Get
 	End Property
 	
@@ -275,27 +280,20 @@ Partial Public Class CuttingMrpDataContext
 		End Get
 	End Property
 	
-	Public ReadOnly Property ProcessOrderViews() As System.Data.Linq.Table(Of ProcessOrderView)
-		Get
-			Return Me.GetTable(Of ProcessOrderView)
-		End Get
-	End Property
-	
-	Public ReadOnly Property StockSumRecords() As System.Data.Linq.Table(Of StockSumRecord)
-		Get
-			Return Me.GetTable(Of StockSumRecord)
-		End Get
-	End Property
-	
 	Public ReadOnly Property SumOfStocks() As System.Data.Linq.Table(Of SumOfStock)
 		Get
 			Return Me.GetTable(Of SumOfStock)
 		End Get
 	End Property
+	
+	Public ReadOnly Property ProcessOrderViews() As System.Data.Linq.Table(Of ProcessOrderView)
+		Get
+			Return Me.GetTable(Of ProcessOrderView)
+		End Get
+	End Property
 End Class
 
-<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.BackflushRecord"),  _
- Global.System.Runtime.Serialization.DataContractAttribute()>  _
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.BackflushRecord")>  _
 Partial Public Class BackflushRecord
 	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
 	
@@ -360,11 +358,10 @@ Partial Public Class BackflushRecord
 	
 	Public Sub New()
 		MyBase.New
-		Me.Initialize
+		OnCreated
 	End Sub
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_backflushId", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=1)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_backflushId", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true)>  _
 	Public Property backflushId() As Integer
 		Get
 			Return Me._backflushId
@@ -381,8 +378,7 @@ Partial Public Class BackflushRecord
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partnr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=2)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partnr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
 	Public Property partnr() As String
 		Get
 			Return Me._partnr
@@ -398,8 +394,7 @@ Partial Public Class BackflushRecord
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_fifo", DbType:="Date NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=3)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_fifo", DbType:="Date NOT NULL")>  _
 	Public Property fifo() As Date
 		Get
 			Return Me._fifo
@@ -416,8 +411,7 @@ Partial Public Class BackflushRecord
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_sourceDoc", DbType:="VarChar(50) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=4)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_sourceDoc", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
 	Public Property sourceDoc() As String
 		Get
 			Return Me._sourceDoc
@@ -433,8 +427,7 @@ Partial Public Class BackflushRecord
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_quantity", DbType:="Float NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=5)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_quantity", DbType:="Float NOT NULL")>  _
 	Public Property quantity() As Double
 		Get
 			Return Me._quantity
@@ -451,8 +444,7 @@ Partial Public Class BackflushRecord
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_status", DbType:="Int NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=6)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_status", DbType:="Int NOT NULL")>  _
 	Public Property status() As Integer
 		Get
 			Return Me._status
@@ -469,8 +461,7 @@ Partial Public Class BackflushRecord
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_message", DbType:="NVarChar(MAX) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=7)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_message", DbType:="NVarChar(MAX) NOT NULL", CanBeNull:=false)>  _
 	Public Property message() As String
 		Get
 			Return Me._message
@@ -486,8 +477,7 @@ Partial Public Class BackflushRecord
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_launchTime", DbType:="DateTime NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=8)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_launchTime", DbType:="DateTime NOT NULL")>  _
 	Public Property launchTime() As Date
 		Get
 			Return Me._launchTime
@@ -521,20 +511,161 @@ Partial Public Class BackflushRecord
 			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
 		End If
 	End Sub
+End Class
+
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.StockSumRecord")>  _
+Partial Public Class StockSumRecord
+	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
 	
-	Private Sub Initialize()
+	Private Shared emptyChangingEventArgs As PropertyChangingEventArgs = New PropertyChangingEventArgs(String.Empty)
+	
+	Private _id As Integer
+	
+	Private _partNr As String
+	
+	Private _quantity As Double
+	
+	Private _date As Date
+	
+	Private _rate As System.Nullable(Of Double)
+	
+    #Region "可扩展性方法定义"
+    Partial Private Sub OnLoaded()
+    End Sub
+    Partial Private Sub OnValidate(action As System.Data.Linq.ChangeAction)
+    End Sub
+    Partial Private Sub OnCreated()
+    End Sub
+    Partial Private Sub OnidChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnidChanged()
+    End Sub
+    Partial Private Sub OnpartNrChanging(value As String)
+    End Sub
+    Partial Private Sub OnpartNrChanged()
+    End Sub
+    Partial Private Sub OnquantityChanging(value As Double)
+    End Sub
+    Partial Private Sub OnquantityChanged()
+    End Sub
+    Partial Private Sub OndateChanging(value As Date)
+    End Sub
+    Partial Private Sub OndateChanged()
+    End Sub
+    Partial Private Sub OnrateChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnrateChanged()
+    End Sub
+    #End Region
+	
+	Public Sub New()
+		MyBase.New
 		OnCreated
 	End Sub
 	
-	<Global.System.Runtime.Serialization.OnDeserializingAttribute(),  _
-	 Global.System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)>  _
-	Public Sub OnDeserializing(ByVal context As StreamingContext)
-		Me.Initialize
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_id", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true)>  _
+	Public Property id() As Integer
+		Get
+			Return Me._id
+		End Get
+		Set
+			If ((Me._id = value)  _
+						= false) Then
+				Me.OnidChanging(value)
+				Me.SendPropertyChanging
+				Me._id = value
+				Me.SendPropertyChanged("id")
+				Me.OnidChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partNr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
+	Public Property partNr() As String
+		Get
+			Return Me._partNr
+		End Get
+		Set
+			If (String.Equals(Me._partNr, value) = false) Then
+				Me.OnpartNrChanging(value)
+				Me.SendPropertyChanging
+				Me._partNr = value
+				Me.SendPropertyChanged("partNr")
+				Me.OnpartNrChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_quantity", DbType:="Float NOT NULL")>  _
+	Public Property quantity() As Double
+		Get
+			Return Me._quantity
+		End Get
+		Set
+			If ((Me._quantity = value)  _
+						= false) Then
+				Me.OnquantityChanging(value)
+				Me.SendPropertyChanging
+				Me._quantity = value
+				Me.SendPropertyChanged("quantity")
+				Me.OnquantityChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Name:="date", Storage:="_date", DbType:="DateTime NOT NULL")>  _
+	Public Property [date]() As Date
+		Get
+			Return Me._date
+		End Get
+		Set
+			If ((Me._date = value)  _
+						= false) Then
+				Me.OndateChanging(value)
+				Me.SendPropertyChanging
+				Me._date = value
+				Me.SendPropertyChanged("[date]")
+				Me.OndateChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_rate", DbType:="Float")>  _
+	Public Property rate() As System.Nullable(Of Double)
+		Get
+			Return Me._rate
+		End Get
+		Set
+			If (Me._rate.Equals(value) = false) Then
+				Me.OnrateChanging(value)
+				Me.SendPropertyChanging
+				Me._rate = value
+				Me.SendPropertyChanged("rate")
+				Me.OnrateChanged
+			End If
+		End Set
+	End Property
+	
+	Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
+	
+	Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
+	
+	Protected Overridable Sub SendPropertyChanging()
+		If ((Me.PropertyChangingEvent Is Nothing)  _
+					= false) Then
+			RaiseEvent PropertyChanging(Me, emptyChangingEventArgs)
+		End If
+	End Sub
+	
+	Protected Overridable Sub SendPropertyChanged(ByVal propertyName As [String])
+		If ((Me.PropertyChangedEvent Is Nothing)  _
+					= false) Then
+			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
+		End If
 	End Sub
 End Class
 
-<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.BatchOrderTemplate"),  _
- Global.System.Runtime.Serialization.DataContractAttribute()>  _
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.BatchOrderTemplate")>  _
 Partial Public Class BatchOrderTemplate
 	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
 	
@@ -613,11 +744,11 @@ Partial Public Class BatchOrderTemplate
 	
 	Public Sub New()
 		MyBase.New
-		Me.Initialize
+		Me._Part = CType(Nothing, EntityRef(Of Part))
+		OnCreated
 	End Sub
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_orderNr", DbType:="VarChar(50) NOT NULL", CanBeNull:=false, IsPrimaryKey:=true),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=1)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_orderNr", DbType:="VarChar(50) NOT NULL", CanBeNull:=false, IsPrimaryKey:=true)>  _
 	Public Property orderNr() As String
 		Get
 			Return Me._orderNr
@@ -633,8 +764,7 @@ Partial Public Class BatchOrderTemplate
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partNr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=2)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partNr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
 	Public Property partNr() As String
 		Get
 			Return Me._partNr
@@ -653,8 +783,7 @@ Partial Public Class BatchOrderTemplate
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_batchQuantity", DbType:="Float NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=3)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_batchQuantity", DbType:="Float NOT NULL")>  _
 	Public Property batchQuantity() As Double
 		Get
 			Return Me._batchQuantity
@@ -671,8 +800,7 @@ Partial Public Class BatchOrderTemplate
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_type", DbType:="Int NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=4)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_type", DbType:="Int NOT NULL")>  _
 	Public Property type() As Integer
 		Get
 			Return Me._type
@@ -689,8 +817,7 @@ Partial Public Class BatchOrderTemplate
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_bundle", DbType:="Float NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=5)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_bundle", DbType:="Float NOT NULL")>  _
 	Public Property bundle() As Double
 		Get
 			Return Me._bundle
@@ -707,8 +834,7 @@ Partial Public Class BatchOrderTemplate
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_createdAt", DbType:="DateTime NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=6)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_createdAt", DbType:="DateTime NOT NULL")>  _
 	Public Property createdAt() As Date
 		Get
 			Return Me._createdAt
@@ -725,8 +851,7 @@ Partial Public Class BatchOrderTemplate
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_updatedAt", DbType:="DateTime NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=7)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_updatedAt", DbType:="DateTime NOT NULL")>  _
 	Public Property updatedAt() As Date
 		Get
 			Return Me._updatedAt
@@ -743,8 +868,7 @@ Partial Public Class BatchOrderTemplate
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Name:="operator", Storage:="_operator", DbType:="VarChar(50) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=8)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Name:="operator", Storage:="_operator", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
 	Public Property [operator]() As String
 		Get
 			Return Me._operator
@@ -760,8 +884,7 @@ Partial Public Class BatchOrderTemplate
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_remark1", DbType:="Text", UpdateCheck:=UpdateCheck.Never),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=9)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_remark1", DbType:="Text", UpdateCheck:=UpdateCheck.Never)>  _
 	Public Property remark1() As String
 		Get
 			Return Me._remark1
@@ -777,8 +900,7 @@ Partial Public Class BatchOrderTemplate
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_remark2", DbType:="Text", UpdateCheck:=UpdateCheck.Never),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=10)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_remark2", DbType:="Text", UpdateCheck:=UpdateCheck.Never)>  _
 	Public Property remark2() As String
 		Get
 			Return Me._remark2
@@ -839,21 +961,9 @@ Partial Public Class BatchOrderTemplate
 			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
 		End If
 	End Sub
-	
-	Private Sub Initialize()
-		Me._Part = CType(Nothing, EntityRef(Of Part))
-		OnCreated
-	End Sub
-	
-	<Global.System.Runtime.Serialization.OnDeserializingAttribute(),  _
-	 Global.System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)>  _
-	Public Sub OnDeserializing(ByVal context As StreamingContext)
-		Me.Initialize
-	End Sub
 End Class
 
-<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.BOM"),  _
- Global.System.Runtime.Serialization.DataContractAttribute()>  _
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.BOM")>  _
 Partial Public Class BOM
 	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
 	
@@ -874,8 +984,6 @@ Partial Public Class BOM
 	Private _BomItems As EntitySet(Of BomItem)
 	
 	Private _Part As EntityRef(Of Part)
-	
-	Private serializing As Boolean
 	
     #Region "可扩展性方法定义"
     Partial Private Sub OnLoaded()
@@ -912,11 +1020,12 @@ Partial Public Class BOM
 	
 	Public Sub New()
 		MyBase.New
-		Me.Initialize
+		Me._BomItems = New EntitySet(Of BomItem)(AddressOf Me.attach_BomItems, AddressOf Me.detach_BomItems)
+		Me._Part = CType(Nothing, EntityRef(Of Part))
+		OnCreated
 	End Sub
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_id", DbType:="VarChar(50) NOT NULL", CanBeNull:=false, IsPrimaryKey:=true),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=1)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_id", DbType:="VarChar(50) NOT NULL", CanBeNull:=false, IsPrimaryKey:=true)>  _
 	Public Property id() As String
 		Get
 			Return Me._id
@@ -932,8 +1041,7 @@ Partial Public Class BOM
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partNr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=2)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partNr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
 	Public Property partNr() As String
 		Get
 			Return Me._partNr
@@ -952,8 +1060,7 @@ Partial Public Class BOM
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_validFrom", DbType:="DateTime NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=3)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_validFrom", DbType:="DateTime NOT NULL")>  _
 	Public Property validFrom() As Date
 		Get
 			Return Me._validFrom
@@ -970,8 +1077,7 @@ Partial Public Class BOM
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_validTo", DbType:="DateTime NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=4)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_validTo", DbType:="DateTime NOT NULL")>  _
 	Public Property validTo() As Date
 		Get
 			Return Me._validTo
@@ -988,8 +1094,7 @@ Partial Public Class BOM
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_versionId", DbType:="VarChar(50) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=5)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_versionId", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
 	Public Property versionId() As String
 		Get
 			Return Me._versionId
@@ -1005,8 +1110,7 @@ Partial Public Class BOM
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_bomDesc", DbType:="Text NOT NULL", CanBeNull:=false, UpdateCheck:=UpdateCheck.Never),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=6)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_bomDesc", DbType:="Text NOT NULL", CanBeNull:=false, UpdateCheck:=UpdateCheck.Never)>  _
 	Public Property bomDesc() As String
 		Get
 			Return Me._bomDesc
@@ -1022,14 +1126,9 @@ Partial Public Class BOM
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="BOM_BomItem", Storage:="_BomItems", ThisKey:="id", OtherKey:="bomId"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=7, EmitDefaultValue:=false)>  _
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="BOM_BomItem", Storage:="_BomItems", ThisKey:="id", OtherKey:="bomId")>  _
 	Public Property BomItems() As EntitySet(Of BomItem)
 		Get
-			If (Me.serializing  _
-						AndAlso (Me._BomItems.HasLoadedOrAssignedValues = false)) Then
-				Return Nothing
-			End If
 			Return Me._BomItems
 		End Get
 		Set
@@ -1092,34 +1191,9 @@ Partial Public Class BOM
 		Me.SendPropertyChanging
 		entity.BOM = Nothing
 	End Sub
-	
-	Private Sub Initialize()
-		Me._BomItems = New EntitySet(Of BomItem)(AddressOf Me.attach_BomItems, AddressOf Me.detach_BomItems)
-		Me._Part = CType(Nothing, EntityRef(Of Part))
-		OnCreated
-	End Sub
-	
-	<Global.System.Runtime.Serialization.OnDeserializingAttribute(),  _
-	 Global.System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)>  _
-	Public Sub OnDeserializing(ByVal context As StreamingContext)
-		Me.Initialize
-	End Sub
-	
-	<Global.System.Runtime.Serialization.OnSerializingAttribute(),  _
-	 Global.System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)>  _
-	Public Sub OnSerializing(ByVal context As StreamingContext)
-		Me.serializing = true
-	End Sub
-	
-	<Global.System.Runtime.Serialization.OnSerializedAttribute(),  _
-	 Global.System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)>  _
-	Public Sub OnSerialized(ByVal context As StreamingContext)
-		Me.serializing = false
-	End Sub
 End Class
 
-<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.BomItem"),  _
- Global.System.Runtime.Serialization.DataContractAttribute()>  _
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.BomItem")>  _
 Partial Public Class BomItem
 	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
 	
@@ -1186,11 +1260,11 @@ Partial Public Class BomItem
 	
 	Public Sub New()
 		MyBase.New
-		Me.Initialize
+		Me._BOM = CType(Nothing, EntityRef(Of BOM))
+		OnCreated
 	End Sub
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_id", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=1)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_id", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true)>  _
 	Public Property id() As Integer
 		Get
 			Return Me._id
@@ -1207,8 +1281,7 @@ Partial Public Class BomItem
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_componentId", DbType:="VarChar(200) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=2)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_componentId", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
 	Public Property componentId() As String
 		Get
 			Return Me._componentId
@@ -1224,8 +1297,7 @@ Partial Public Class BomItem
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_validFrom", DbType:="DateTime NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=3)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_validFrom", DbType:="DateTime NOT NULL")>  _
 	Public Property validFrom() As Date
 		Get
 			Return Me._validFrom
@@ -1242,8 +1314,7 @@ Partial Public Class BomItem
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_validTo", DbType:="DateTime NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=4)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_validTo", DbType:="DateTime NOT NULL")>  _
 	Public Property validTo() As Date
 		Get
 			Return Me._validTo
@@ -1260,8 +1331,7 @@ Partial Public Class BomItem
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_hasChind", DbType:="TinyInt NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=5)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_hasChind", DbType:="TinyInt NOT NULL")>  _
 	Public Property hasChind() As Byte
 		Get
 			Return Me._hasChind
@@ -1278,8 +1348,7 @@ Partial Public Class BomItem
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_uom", DbType:="Int NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=6)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_uom", DbType:="Int NOT NULL")>  _
 	Public Property uom() As Integer
 		Get
 			Return Me._uom
@@ -1296,8 +1365,7 @@ Partial Public Class BomItem
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_quantity", DbType:="Float NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=7)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_quantity", DbType:="Float NOT NULL")>  _
 	Public Property quantity() As Double
 		Get
 			Return Me._quantity
@@ -1314,8 +1382,7 @@ Partial Public Class BomItem
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_bomId", DbType:="VarChar(50) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=8)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_bomId", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
 	Public Property bomId() As String
 		Get
 			Return Me._bomId
@@ -1379,21 +1446,9 @@ Partial Public Class BomItem
 			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
 		End If
 	End Sub
-	
-	Private Sub Initialize()
-		Me._BOM = CType(Nothing, EntityRef(Of BOM))
-		OnCreated
-	End Sub
-	
-	<Global.System.Runtime.Serialization.OnDeserializingAttribute(),  _
-	 Global.System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)>  _
-	Public Sub OnDeserializing(ByVal context As StreamingContext)
-		Me.Initialize
-	End Sub
 End Class
 
-<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.CapacityPlan"),  _
- Global.System.Runtime.Serialization.DataContractAttribute()>  _
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.CapacityPlan")>  _
 Partial Public Class CapacityPlan
 	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
 	
@@ -1442,11 +1497,11 @@ Partial Public Class CapacityPlan
 	
 	Public Sub New()
 		MyBase.New
-		Me.Initialize
+		Me._ProductionUnit = CType(Nothing, EntityRef(Of ProductionUnit))
+		OnCreated
 	End Sub
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_planId", DbType:="VarChar(100) NOT NULL", CanBeNull:=false, IsPrimaryKey:=true),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=1)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_planId", DbType:="VarChar(100) NOT NULL", CanBeNull:=false, IsPrimaryKey:=true)>  _
 	Public Property planId() As String
 		Get
 			Return Me._planId
@@ -1462,8 +1517,7 @@ Partial Public Class CapacityPlan
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_planDay", DbType:="Date NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=2)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_planDay", DbType:="Date NOT NULL")>  _
 	Public Property planDay() As Date
 		Get
 			Return Me._planDay
@@ -1480,8 +1534,7 @@ Partial Public Class CapacityPlan
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_workinghour", DbType:="Int NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=3)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_workinghour", DbType:="Int NOT NULL")>  _
 	Public Property workinghour() As Integer
 		Get
 			Return Me._workinghour
@@ -1498,8 +1551,7 @@ Partial Public Class CapacityPlan
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_yieldPerHour", DbType:="Int NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=4)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_yieldPerHour", DbType:="Int NOT NULL")>  _
 	Public Property yieldPerHour() As Integer
 		Get
 			Return Me._yieldPerHour
@@ -1516,8 +1568,7 @@ Partial Public Class CapacityPlan
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_unitId", DbType:="VarChar(50) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=5)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_unitId", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
 	Public Property unitId() As String
 		Get
 			Return Me._unitId
@@ -1581,21 +1632,9 @@ Partial Public Class CapacityPlan
 			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
 		End If
 	End Sub
-	
-	Private Sub Initialize()
-		Me._ProductionUnit = CType(Nothing, EntityRef(Of ProductionUnit))
-		OnCreated
-	End Sub
-	
-	<Global.System.Runtime.Serialization.OnDeserializingAttribute(),  _
-	 Global.System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)>  _
-	Public Sub OnDeserializing(ByVal context As StreamingContext)
-		Me.Initialize
-	End Sub
 End Class
 
-<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.EnumType"),  _
- Global.System.Runtime.Serialization.DataContractAttribute()>  _
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.EnumType")>  _
 Partial Public Class EnumType
 	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
 	
@@ -1642,11 +1681,10 @@ Partial Public Class EnumType
 	
 	Public Sub New()
 		MyBase.New
-		Me.Initialize
+		OnCreated
 	End Sub
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_id", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=1)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_id", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true)>  _
 	Public Property id() As Integer
 		Get
 			Return Me._id
@@ -1663,8 +1701,7 @@ Partial Public Class EnumType
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_enumType", DbType:="VarChar(100) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=2)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_enumType", DbType:="VarChar(100) NOT NULL", CanBeNull:=false)>  _
 	Public Property enumType() As String
 		Get
 			Return Me._enumType
@@ -1680,8 +1717,7 @@ Partial Public Class EnumType
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_enumKey", DbType:="VarChar(100) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=3)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_enumKey", DbType:="VarChar(100) NOT NULL", CanBeNull:=false)>  _
 	Public Property enumKey() As String
 		Get
 			Return Me._enumKey
@@ -1697,8 +1733,7 @@ Partial Public Class EnumType
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_enumValue", DbType:="Int NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=4)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_enumValue", DbType:="Int NOT NULL")>  _
 	Public Property enumValue() As Integer
 		Get
 			Return Me._enumValue
@@ -1715,8 +1750,7 @@ Partial Public Class EnumType
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_enumDesc", DbType:="Text NOT NULL", CanBeNull:=false, UpdateCheck:=UpdateCheck.Never),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=5)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_enumDesc", DbType:="Text NOT NULL", CanBeNull:=false, UpdateCheck:=UpdateCheck.Never)>  _
 	Public Property enumDesc() As String
 		Get
 			Return Me._enumDesc
@@ -1749,20 +1783,9 @@ Partial Public Class EnumType
 			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
 		End If
 	End Sub
-	
-	Private Sub Initialize()
-		OnCreated
-	End Sub
-	
-	<Global.System.Runtime.Serialization.OnDeserializingAttribute(),  _
-	 Global.System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)>  _
-	Public Sub OnDeserializing(ByVal context As StreamingContext)
-		Me.Initialize
-	End Sub
 End Class
 
-<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.MPS"),  _
- Global.System.Runtime.Serialization.DataContractAttribute()>  _
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.MPS")>  _
 Partial Public Class MP
 	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
 	
@@ -1785,6 +1808,10 @@ Partial Public Class MP
 	Private _status As Integer
 	
 	Private _unitId As String
+	
+	Private _MP1 As EntityRef(Of MP)
+	
+	Private _MP As EntityRef(Of MP)
 	
 	Private _Part As EntityRef(Of Part)
 	
@@ -1837,11 +1864,14 @@ Partial Public Class MP
 	
 	Public Sub New()
 		MyBase.New
-		Me.Initialize
+		Me._MP1 = CType(Nothing, EntityRef(Of MP))
+		Me._MP = CType(Nothing, EntityRef(Of MP))
+		Me._Part = CType(Nothing, EntityRef(Of Part))
+		Me._ProductionUnit = CType(Nothing, EntityRef(Of ProductionUnit))
+		OnCreated
 	End Sub
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_id", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=1)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_id", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true)>  _
 	Public Property id() As Integer
 		Get
 			Return Me._id
@@ -1849,6 +1879,9 @@ Partial Public Class MP
 		Set
 			If ((Me._id = value)  _
 						= false) Then
+				If Me._MP.HasLoadedOrAssignedValue Then
+					Throw New System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException()
+				End If
 				Me.OnidChanging(value)
 				Me.SendPropertyChanging
 				Me._id = value
@@ -1858,8 +1891,7 @@ Partial Public Class MP
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partnr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=2)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partnr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
 	Public Property partnr() As String
 		Get
 			Return Me._partnr
@@ -1878,8 +1910,7 @@ Partial Public Class MP
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_orderedDate", DbType:="Date NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=3)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_orderedDate", DbType:="DateTime NOT NULL")>  _
 	Public Property orderedDate() As Date
 		Get
 			Return Me._orderedDate
@@ -1896,8 +1927,7 @@ Partial Public Class MP
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_requiredDate", DbType:="Date NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=4)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_requiredDate", DbType:="DateTime NOT NULL")>  _
 	Public Property requiredDate() As Date
 		Get
 			Return Me._requiredDate
@@ -1914,8 +1944,7 @@ Partial Public Class MP
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_quantity", DbType:="Float NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=5)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_quantity", DbType:="Float NOT NULL")>  _
 	Public Property quantity() As Double
 		Get
 			Return Me._quantity
@@ -1932,8 +1961,7 @@ Partial Public Class MP
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_source", DbType:="VarChar(200) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=6)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_source", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
 	Public Property source() As String
 		Get
 			Return Me._source
@@ -1949,8 +1977,7 @@ Partial Public Class MP
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_sourceDoc", DbType:="VarChar(200)"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=7)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_sourceDoc", DbType:="VarChar(200)")>  _
 	Public Property sourceDoc() As String
 		Get
 			Return Me._sourceDoc
@@ -1966,8 +1993,7 @@ Partial Public Class MP
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_status", DbType:="Int NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=8)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_status", DbType:="Int NOT NULL")>  _
 	Public Property status() As Integer
 		Get
 			Return Me._status
@@ -1984,8 +2010,7 @@ Partial Public Class MP
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_unitId", DbType:="VarChar(50)"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=9)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_unitId", DbType:="VarChar(50)")>  _
 	Public Property unitId() As String
 		Get
 			Return Me._unitId
@@ -2000,6 +2025,58 @@ Partial Public Class MP
 				Me._unitId = value
 				Me.SendPropertyChanged("unitId")
 				Me.OnunitIdChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="MP_MP", Storage:="_MP1", ThisKey:="id", OtherKey:="id", IsUnique:=true, IsForeignKey:=false)>  _
+	Public Property MP1() As MP
+		Get
+			Return Me._MP1.Entity
+		End Get
+		Set
+			Dim previousValue As MP = Me._MP1.Entity
+			If ((Object.Equals(previousValue, value) = false)  _
+						OrElse (Me._MP1.HasLoadedOrAssignedValue = false)) Then
+				Me.SendPropertyChanging
+				If ((previousValue Is Nothing)  _
+							= false) Then
+					Me._MP1.Entity = Nothing
+					previousValue.MP = Nothing
+				End If
+				Me._MP1.Entity = value
+				If (Object.Equals(value, Nothing) = false) Then
+					value.MP = Me
+				End If
+				Me.SendPropertyChanged("MP1")
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="MP_MP", Storage:="_MP", ThisKey:="id", OtherKey:="id", IsForeignKey:=true)>  _
+	Public Property MP() As MP
+		Get
+			Return Me._MP.Entity
+		End Get
+		Set
+			Dim previousValue As MP = Me._MP.Entity
+			If ((Object.Equals(previousValue, value) = false)  _
+						OrElse (Me._MP.HasLoadedOrAssignedValue = false)) Then
+				Me.SendPropertyChanging
+				If ((previousValue Is Nothing)  _
+							= false) Then
+					Me._MP.Entity = Nothing
+					previousValue.MP1 = Nothing
+				End If
+				Me._MP.Entity = value
+				If ((value Is Nothing)  _
+							= false) Then
+					value.MP1 = Me
+					Me._id = value.id
+				Else
+					Me._id = CType(Nothing, Integer)
+				End If
+				Me.SendPropertyChanged("MP")
 			End If
 		End Set
 	End Property
@@ -2077,22 +2154,9 @@ Partial Public Class MP
 			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
 		End If
 	End Sub
-	
-	Private Sub Initialize()
-		Me._Part = CType(Nothing, EntityRef(Of Part))
-		Me._ProductionUnit = CType(Nothing, EntityRef(Of ProductionUnit))
-		OnCreated
-	End Sub
-	
-	<Global.System.Runtime.Serialization.OnDeserializingAttribute(),  _
-	 Global.System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)>  _
-	Public Sub OnDeserializing(ByVal context As StreamingContext)
-		Me.Initialize
-	End Sub
 End Class
 
-<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.MrpRound"),  _
- Global.System.Runtime.Serialization.DataContractAttribute()>  _
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.MrpRound")>  _
 Partial Public Class MrpRound
 	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
 	
@@ -2139,11 +2203,10 @@ Partial Public Class MrpRound
 	
 	Public Sub New()
 		MyBase.New
-		Me.Initialize
+		OnCreated
 	End Sub
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_mrpRound", DbType:="VarChar(200) NOT NULL", CanBeNull:=false, IsPrimaryKey:=true),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=1)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_mrpRound", DbType:="VarChar(200) NOT NULL", CanBeNull:=false, IsPrimaryKey:=true)>  _
 	Public Property mrpRound() As String
 		Get
 			Return Me._mrpRound
@@ -2159,8 +2222,7 @@ Partial Public Class MrpRound
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_runningStatus", DbType:="Int NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=2)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_runningStatus", DbType:="Int NOT NULL")>  _
 	Public Property runningStatus() As Integer
 		Get
 			Return Me._runningStatus
@@ -2177,8 +2239,7 @@ Partial Public Class MrpRound
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_time", DbType:="DateTime NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=3)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_time", DbType:="DateTime NOT NULL")>  _
 	Public Property time() As Date
 		Get
 			Return Me._time
@@ -2195,8 +2256,7 @@ Partial Public Class MrpRound
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_launcher", DbType:="VarChar(200) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=4)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_launcher", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
 	Public Property launcher() As String
 		Get
 			Return Me._launcher
@@ -2212,8 +2272,7 @@ Partial Public Class MrpRound
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_text", DbType:="NVarChar(MAX) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=5)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_text", DbType:="NVarChar(MAX) NOT NULL", CanBeNull:=false)>  _
 	Public Property text() As String
 		Get
 			Return Me._text
@@ -2246,20 +2305,9 @@ Partial Public Class MrpRound
 			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
 		End If
 	End Sub
-	
-	Private Sub Initialize()
-		OnCreated
-	End Sub
-	
-	<Global.System.Runtime.Serialization.OnDeserializingAttribute(),  _
-	 Global.System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)>  _
-	Public Sub OnDeserializing(ByVal context As StreamingContext)
-		Me.Initialize
-	End Sub
 End Class
 
-<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.NumericBuild"),  _
- Global.System.Runtime.Serialization.DataContractAttribute()>  _
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.NumericBuild")>  _
 Partial Public Class NumericBuild
 	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
 	
@@ -2324,11 +2372,10 @@ Partial Public Class NumericBuild
 	
 	Public Sub New()
 		MyBase.New
-		Me.Initialize
+		OnCreated
 	End Sub
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_idUniq", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=1)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_idUniq", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true)>  _
 	Public Property idUniq() As Integer
 		Get
 			Return Me._idUniq
@@ -2345,8 +2392,7 @@ Partial Public Class NumericBuild
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_idType", DbType:="VarChar(100) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=2)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_idType", DbType:="VarChar(100) NOT NULL", CanBeNull:=false)>  _
 	Public Property idType() As String
 		Get
 			Return Me._idType
@@ -2362,8 +2408,7 @@ Partial Public Class NumericBuild
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_prefix", DbType:="VarChar(10)"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=3)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_prefix", DbType:="VarChar(10)")>  _
 	Public Property prefix() As String
 		Get
 			Return Me._prefix
@@ -2379,8 +2424,7 @@ Partial Public Class NumericBuild
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_suffix", DbType:="VarChar(10)"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=4)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_suffix", DbType:="VarChar(10)")>  _
 	Public Property suffix() As String
 		Get
 			Return Me._suffix
@@ -2396,8 +2440,7 @@ Partial Public Class NumericBuild
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_max", DbType:="BigInt NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=5)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_max", DbType:="BigInt NOT NULL")>  _
 	Public Property max() As Long
 		Get
 			Return Me._max
@@ -2414,8 +2457,7 @@ Partial Public Class NumericBuild
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_min", DbType:="Int NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=6)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_min", DbType:="Int NOT NULL")>  _
 	Public Property min() As Integer
 		Get
 			Return Me._min
@@ -2432,8 +2474,7 @@ Partial Public Class NumericBuild
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_currentNumber", DbType:="BigInt NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=7)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_currentNumber", DbType:="BigInt NOT NULL")>  _
 	Public Property currentNumber() As Long
 		Get
 			Return Me._currentNumber
@@ -2450,8 +2491,7 @@ Partial Public Class NumericBuild
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_description", DbType:="VarChar(200) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=8)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_description", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
 	Public Property description() As String
 		Get
 			Return Me._description
@@ -2484,20 +2524,9 @@ Partial Public Class NumericBuild
 			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
 		End If
 	End Sub
-	
-	Private Sub Initialize()
-		OnCreated
-	End Sub
-	
-	<Global.System.Runtime.Serialization.OnDeserializingAttribute(),  _
-	 Global.System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)>  _
-	Public Sub OnDeserializing(ByVal context As StreamingContext)
-		Me.Initialize
-	End Sub
 End Class
 
-<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.OrderDerivation"),  _
- Global.System.Runtime.Serialization.DataContractAttribute()>  _
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.OrderDerivation")>  _
 Partial Public Class OrderDerivation
 	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
 	
@@ -2548,11 +2577,12 @@ Partial Public Class OrderDerivation
 	
 	Public Sub New()
 		MyBase.New
-		Me.Initialize
+		Me._ProcessOrder = CType(Nothing, EntityRef(Of ProcessOrder))
+		Me._Requirement = CType(Nothing, EntityRef(Of Requirement))
+		OnCreated
 	End Sub
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_id", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=1)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_id", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true)>  _
 	Public Property id() As Integer
 		Get
 			Return Me._id
@@ -2569,8 +2599,7 @@ Partial Public Class OrderDerivation
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_orderId", DbType:="VarChar(50) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=2)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_orderId", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
 	Public Property orderId() As String
 		Get
 			Return Me._orderId
@@ -2589,8 +2618,7 @@ Partial Public Class OrderDerivation
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_requirementId", DbType:="Int NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=3)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_requirementId", DbType:="Int NOT NULL")>  _
 	Public Property requirementId() As Integer
 		Get
 			Return Me._requirementId
@@ -2610,8 +2638,7 @@ Partial Public Class OrderDerivation
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_mrpRound", DbType:="VarChar(50) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=4)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_mrpRound", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
 	Public Property mrpRound() As String
 		Get
 			Return Me._mrpRound
@@ -2627,8 +2654,7 @@ Partial Public Class OrderDerivation
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_deriveQty", DbType:="Float NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=5)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_deriveQty", DbType:="Float NOT NULL")>  _
 	Public Property deriveQty() As Double
 		Get
 			Return Me._deriveQty
@@ -2718,22 +2744,9 @@ Partial Public Class OrderDerivation
 			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
 		End If
 	End Sub
-	
-	Private Sub Initialize()
-		Me._ProcessOrder = CType(Nothing, EntityRef(Of ProcessOrder))
-		Me._Requirement = CType(Nothing, EntityRef(Of Requirement))
-		OnCreated
-	End Sub
-	
-	<Global.System.Runtime.Serialization.OnDeserializingAttribute(),  _
-	 Global.System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)>  _
-	Public Sub OnDeserializing(ByVal context As StreamingContext)
-		Me.Initialize
-	End Sub
 End Class
 
-<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.Part"),  _
- Global.System.Runtime.Serialization.DataContractAttribute()>  _
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.Part")>  _
 Partial Public Class Part
 	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
 	
@@ -2762,8 +2775,6 @@ Partial Public Class Part
 	Private _Requirements As EntitySet(Of Requirement)
 	
 	Private _Stocks As EntitySet(Of Stock)
-	
-	Private serializing As Boolean
 	
     #Region "可扩展性方法定义"
     Partial Private Sub OnLoaded()
@@ -2800,11 +2811,16 @@ Partial Public Class Part
 	
 	Public Sub New()
 		MyBase.New
-		Me.Initialize
+		Me._BatchOrderTemplates = New EntitySet(Of BatchOrderTemplate)(AddressOf Me.attach_BatchOrderTemplates, AddressOf Me.detach_BatchOrderTemplates)
+		Me._BOMs = New EntitySet(Of BOM)(AddressOf Me.attach_BOMs, AddressOf Me.detach_BOMs)
+		Me._MPs = New EntitySet(Of MP)(AddressOf Me.attach_MPs, AddressOf Me.detach_MPs)
+		Me._ProcessOrders = New EntitySet(Of ProcessOrder)(AddressOf Me.attach_ProcessOrders, AddressOf Me.detach_ProcessOrders)
+		Me._Requirements = New EntitySet(Of Requirement)(AddressOf Me.attach_Requirements, AddressOf Me.detach_Requirements)
+		Me._Stocks = New EntitySet(Of Stock)(AddressOf Me.attach_Stocks, AddressOf Me.detach_Stocks)
+		OnCreated
 	End Sub
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partNr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false, IsPrimaryKey:=true),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=1)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partNr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false, IsPrimaryKey:=true)>  _
 	Public Property partNr() As String
 		Get
 			Return Me._partNr
@@ -2820,8 +2836,7 @@ Partial Public Class Part
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partType", DbType:="Int NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=2)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partType", DbType:="Int NOT NULL")>  _
 	Public Property partType() As Integer
 		Get
 			Return Me._partType
@@ -2838,8 +2853,7 @@ Partial Public Class Part
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partDesc", DbType:="Text NOT NULL", CanBeNull:=false, UpdateCheck:=UpdateCheck.Never),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=3)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partDesc", DbType:="Text NOT NULL", CanBeNull:=false, UpdateCheck:=UpdateCheck.Never)>  _
 	Public Property partDesc() As String
 		Get
 			Return Me._partDesc
@@ -2855,8 +2869,7 @@ Partial Public Class Part
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partStatus", DbType:="Int NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=4)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partStatus", DbType:="Int NOT NULL")>  _
 	Public Property partStatus() As Integer
 		Get
 			Return Me._partStatus
@@ -2873,8 +2886,7 @@ Partial Public Class Part
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_moq", DbType:="Float"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=5)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_moq", DbType:="Float")>  _
 	Public Property moq() As System.Nullable(Of Double)
 		Get
 			Return Me._moq
@@ -2890,8 +2902,7 @@ Partial Public Class Part
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_spq", DbType:="Float"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=6)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_spq", DbType:="Float")>  _
 	Public Property spq() As System.Nullable(Of Double)
 		Get
 			Return Me._spq
@@ -2907,14 +2918,9 @@ Partial Public Class Part
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_BatchOrderTemplate", Storage:="_BatchOrderTemplates", ThisKey:="partNr", OtherKey:="partNr"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=7, EmitDefaultValue:=false)>  _
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_BatchOrderTemplate", Storage:="_BatchOrderTemplates", ThisKey:="partNr", OtherKey:="partNr")>  _
 	Public Property BatchOrderTemplates() As EntitySet(Of BatchOrderTemplate)
 		Get
-			If (Me.serializing  _
-						AndAlso (Me._BatchOrderTemplates.HasLoadedOrAssignedValues = false)) Then
-				Return Nothing
-			End If
 			Return Me._BatchOrderTemplates
 		End Get
 		Set
@@ -2922,14 +2928,9 @@ Partial Public Class Part
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_BOM", Storage:="_BOMs", ThisKey:="partNr", OtherKey:="partNr"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=8, EmitDefaultValue:=false)>  _
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_BOM", Storage:="_BOMs", ThisKey:="partNr", OtherKey:="partNr")>  _
 	Public Property BOMs() As EntitySet(Of BOM)
 		Get
-			If (Me.serializing  _
-						AndAlso (Me._BOMs.HasLoadedOrAssignedValues = false)) Then
-				Return Nothing
-			End If
 			Return Me._BOMs
 		End Get
 		Set
@@ -2937,14 +2938,9 @@ Partial Public Class Part
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_MP", Storage:="_MPs", ThisKey:="partNr", OtherKey:="partnr"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=9, EmitDefaultValue:=false)>  _
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_MP", Storage:="_MPs", ThisKey:="partNr", OtherKey:="partnr")>  _
 	Public Property MPs() As EntitySet(Of MP)
 		Get
-			If (Me.serializing  _
-						AndAlso (Me._MPs.HasLoadedOrAssignedValues = false)) Then
-				Return Nothing
-			End If
 			Return Me._MPs
 		End Get
 		Set
@@ -2952,14 +2948,9 @@ Partial Public Class Part
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_ProcessOrder", Storage:="_ProcessOrders", ThisKey:="partNr", OtherKey:="partNr"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=10, EmitDefaultValue:=false)>  _
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_ProcessOrder", Storage:="_ProcessOrders", ThisKey:="partNr", OtherKey:="partNr")>  _
 	Public Property ProcessOrders() As EntitySet(Of ProcessOrder)
 		Get
-			If (Me.serializing  _
-						AndAlso (Me._ProcessOrders.HasLoadedOrAssignedValues = false)) Then
-				Return Nothing
-			End If
 			Return Me._ProcessOrders
 		End Get
 		Set
@@ -2967,14 +2958,9 @@ Partial Public Class Part
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_Requirement", Storage:="_Requirements", ThisKey:="partNr", OtherKey:="partNr"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=11, EmitDefaultValue:=false)>  _
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_Requirement", Storage:="_Requirements", ThisKey:="partNr", OtherKey:="partNr")>  _
 	Public Property Requirements() As EntitySet(Of Requirement)
 		Get
-			If (Me.serializing  _
-						AndAlso (Me._Requirements.HasLoadedOrAssignedValues = false)) Then
-				Return Nothing
-			End If
 			Return Me._Requirements
 		End Get
 		Set
@@ -2982,14 +2968,9 @@ Partial Public Class Part
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_Stock", Storage:="_Stocks", ThisKey:="partNr", OtherKey:="partNr"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=12, EmitDefaultValue:=false)>  _
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_Stock", Storage:="_Stocks", ThisKey:="partNr", OtherKey:="partNr")>  _
 	Public Property Stocks() As EntitySet(Of Stock)
 		Get
-			If (Me.serializing  _
-						AndAlso (Me._Stocks.HasLoadedOrAssignedValues = false)) Then
-				Return Nothing
-			End If
 			Return Me._Stocks
 		End Get
 		Set
@@ -3074,38 +3055,9 @@ Partial Public Class Part
 		Me.SendPropertyChanging
 		entity.Part = Nothing
 	End Sub
-	
-	Private Sub Initialize()
-		Me._BatchOrderTemplates = New EntitySet(Of BatchOrderTemplate)(AddressOf Me.attach_BatchOrderTemplates, AddressOf Me.detach_BatchOrderTemplates)
-		Me._BOMs = New EntitySet(Of BOM)(AddressOf Me.attach_BOMs, AddressOf Me.detach_BOMs)
-		Me._MPs = New EntitySet(Of MP)(AddressOf Me.attach_MPs, AddressOf Me.detach_MPs)
-		Me._ProcessOrders = New EntitySet(Of ProcessOrder)(AddressOf Me.attach_ProcessOrders, AddressOf Me.detach_ProcessOrders)
-		Me._Requirements = New EntitySet(Of Requirement)(AddressOf Me.attach_Requirements, AddressOf Me.detach_Requirements)
-		Me._Stocks = New EntitySet(Of Stock)(AddressOf Me.attach_Stocks, AddressOf Me.detach_Stocks)
-		OnCreated
-	End Sub
-	
-	<Global.System.Runtime.Serialization.OnDeserializingAttribute(),  _
-	 Global.System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)>  _
-	Public Sub OnDeserializing(ByVal context As StreamingContext)
-		Me.Initialize
-	End Sub
-	
-	<Global.System.Runtime.Serialization.OnSerializingAttribute(),  _
-	 Global.System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)>  _
-	Public Sub OnSerializing(ByVal context As StreamingContext)
-		Me.serializing = true
-	End Sub
-	
-	<Global.System.Runtime.Serialization.OnSerializedAttribute(),  _
-	 Global.System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)>  _
-	Public Sub OnSerialized(ByVal context As StreamingContext)
-		Me.serializing = false
-	End Sub
 End Class
 
-<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.ProcessOrder"),  _
- Global.System.Runtime.Serialization.DataContractAttribute()>  _
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.ProcessOrder")>  _
 Partial Public Class ProcessOrder
 	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
 	
@@ -3133,13 +3085,11 @@ Partial Public Class ProcessOrder
 	
 	Private _batchQuantity As System.Nullable(Of Double)
 	
-	Private _orderType As String
+	Private _OrderType As String
 	
 	Private _OrderDerivations As EntitySet(Of OrderDerivation)
 	
 	Private _Part As EntityRef(Of Part)
-	
-	Private serializing As Boolean
 	
     #Region "可扩展性方法定义"
     Partial Private Sub OnLoaded()
@@ -3192,19 +3142,20 @@ Partial Public Class ProcessOrder
     End Sub
     Partial Private Sub OnbatchQuantityChanged()
     End Sub
-    Partial Private Sub OnorderTypeChanging(value As String)
+    Partial Private Sub OnOrderTypeChanging(value As String)
     End Sub
-    Partial Private Sub OnorderTypeChanged()
+    Partial Private Sub OnOrderTypeChanged()
     End Sub
     #End Region
 	
 	Public Sub New()
 		MyBase.New
-		Me.Initialize
+		Me._OrderDerivations = New EntitySet(Of OrderDerivation)(AddressOf Me.attach_OrderDerivations, AddressOf Me.detach_OrderDerivations)
+		Me._Part = CType(Nothing, EntityRef(Of Part))
+		OnCreated
 	End Sub
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_orderNr", DbType:="VarChar(50) NOT NULL", CanBeNull:=false, IsPrimaryKey:=true),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=1)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_orderNr", DbType:="VarChar(50) NOT NULL", CanBeNull:=false, IsPrimaryKey:=true)>  _
 	Public Property orderNr() As String
 		Get
 			Return Me._orderNr
@@ -3220,8 +3171,7 @@ Partial Public Class ProcessOrder
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_sourceDoc", DbType:="VarChar(50)"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=2)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_sourceDoc", DbType:="VarChar(50)")>  _
 	Public Property sourceDoc() As String
 		Get
 			Return Me._sourceDoc
@@ -3237,8 +3187,7 @@ Partial Public Class ProcessOrder
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_derivedFrom", DbType:="VarChar(50) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=3)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_derivedFrom", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
 	Public Property derivedFrom() As String
 		Get
 			Return Me._derivedFrom
@@ -3254,8 +3203,7 @@ Partial Public Class ProcessOrder
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_proceeDate", DbType:="DateTime NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=4)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_proceeDate", DbType:="DateTime NOT NULL")>  _
 	Public Property proceeDate() As Date
 		Get
 			Return Me._proceeDate
@@ -3272,8 +3220,7 @@ Partial Public Class ProcessOrder
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partNr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=5)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partNr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
 	Public Property partNr() As String
 		Get
 			Return Me._partNr
@@ -3292,8 +3239,7 @@ Partial Public Class ProcessOrder
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_sourceQuantity", DbType:="Float NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=6)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_sourceQuantity", DbType:="Float NOT NULL")>  _
 	Public Property sourceQuantity() As Double
 		Get
 			Return Me._sourceQuantity
@@ -3310,8 +3256,7 @@ Partial Public Class ProcessOrder
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_actualQuantity", DbType:="Float NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=7)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_actualQuantity", DbType:="Float NOT NULL")>  _
 	Public Property actualQuantity() As Double
 		Get
 			Return Me._actualQuantity
@@ -3328,8 +3273,7 @@ Partial Public Class ProcessOrder
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_completeRate", DbType:="Float NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=8)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_completeRate", DbType:="Float NOT NULL")>  _
 	Public Property completeRate() As Double
 		Get
 			Return Me._completeRate
@@ -3346,8 +3290,7 @@ Partial Public Class ProcessOrder
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_status", DbType:="Int NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=9)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_status", DbType:="Int NOT NULL")>  _
 	Public Property status() As Integer
 		Get
 			Return Me._status
@@ -3364,8 +3307,7 @@ Partial Public Class ProcessOrder
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_requirementId", DbType:="Int"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=10)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_requirementId", DbType:="Int")>  _
 	Public Property requirementId() As System.Nullable(Of Integer)
 		Get
 			Return Me._requirementId
@@ -3381,8 +3323,7 @@ Partial Public Class ProcessOrder
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_batchQuantity", DbType:="Float"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=11)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_batchQuantity", DbType:="Float")>  _
 	Public Property batchQuantity() As System.Nullable(Of Double)
 		Get
 			Return Me._batchQuantity
@@ -3398,31 +3339,25 @@ Partial Public Class ProcessOrder
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_orderType", DbType:="VarChar(100)"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=12)>  _
-	Public Property orderType() As String
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_OrderType", DbType:="VarChar(100)")>  _
+	Public Property OrderType() As String
 		Get
-			Return Me._orderType
+			Return Me._OrderType
 		End Get
 		Set
-			If (String.Equals(Me._orderType, value) = false) Then
-				Me.OnorderTypeChanging(value)
+			If (String.Equals(Me._OrderType, value) = false) Then
+				Me.OnOrderTypeChanging(value)
 				Me.SendPropertyChanging
-				Me._orderType = value
-				Me.SendPropertyChanged("orderType")
-				Me.OnorderTypeChanged
+				Me._OrderType = value
+				Me.SendPropertyChanged("OrderType")
+				Me.OnOrderTypeChanged
 			End If
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="ProcessOrder_OrderDerivation", Storage:="_OrderDerivations", ThisKey:="orderNr", OtherKey:="orderId"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=13, EmitDefaultValue:=false)>  _
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="ProcessOrder_OrderDerivation", Storage:="_OrderDerivations", ThisKey:="orderNr", OtherKey:="orderId")>  _
 	Public Property OrderDerivations() As EntitySet(Of OrderDerivation)
 		Get
-			If (Me.serializing  _
-						AndAlso (Me._OrderDerivations.HasLoadedOrAssignedValues = false)) Then
-				Return Nothing
-			End If
 			Return Me._OrderDerivations
 		End Get
 		Set
@@ -3485,34 +3420,9 @@ Partial Public Class ProcessOrder
 		Me.SendPropertyChanging
 		entity.ProcessOrder = Nothing
 	End Sub
-	
-	Private Sub Initialize()
-		Me._OrderDerivations = New EntitySet(Of OrderDerivation)(AddressOf Me.attach_OrderDerivations, AddressOf Me.detach_OrderDerivations)
-		Me._Part = CType(Nothing, EntityRef(Of Part))
-		OnCreated
-	End Sub
-	
-	<Global.System.Runtime.Serialization.OnDeserializingAttribute(),  _
-	 Global.System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)>  _
-	Public Sub OnDeserializing(ByVal context As StreamingContext)
-		Me.Initialize
-	End Sub
-	
-	<Global.System.Runtime.Serialization.OnSerializingAttribute(),  _
-	 Global.System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)>  _
-	Public Sub OnSerializing(ByVal context As StreamingContext)
-		Me.serializing = true
-	End Sub
-	
-	<Global.System.Runtime.Serialization.OnSerializedAttribute(),  _
-	 Global.System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)>  _
-	Public Sub OnSerialized(ByVal context As StreamingContext)
-		Me.serializing = false
-	End Sub
 End Class
 
-<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.ProductionUnit"),  _
- Global.System.Runtime.Serialization.DataContractAttribute()>  _
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.ProductionUnit")>  _
 Partial Public Class ProductionUnit
 	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
 	
@@ -3525,8 +3435,6 @@ Partial Public Class ProductionUnit
 	Private _CapacityPlans As EntitySet(Of CapacityPlan)
 	
 	Private _MPs As EntitySet(Of MP)
-	
-	Private serializing As Boolean
 	
     #Region "可扩展性方法定义"
     Partial Private Sub OnLoaded()
@@ -3547,11 +3455,12 @@ Partial Public Class ProductionUnit
 	
 	Public Sub New()
 		MyBase.New
-		Me.Initialize
+		Me._CapacityPlans = New EntitySet(Of CapacityPlan)(AddressOf Me.attach_CapacityPlans, AddressOf Me.detach_CapacityPlans)
+		Me._MPs = New EntitySet(Of MP)(AddressOf Me.attach_MPs, AddressOf Me.detach_MPs)
+		OnCreated
 	End Sub
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_unitId", DbType:="VarChar(50) NOT NULL", CanBeNull:=false, IsPrimaryKey:=true),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=1)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_unitId", DbType:="VarChar(50) NOT NULL", CanBeNull:=false, IsPrimaryKey:=true)>  _
 	Public Property unitId() As String
 		Get
 			Return Me._unitId
@@ -3567,8 +3476,7 @@ Partial Public Class ProductionUnit
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_name", DbType:="VarChar(200) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=2)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_name", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
 	Public Property name() As String
 		Get
 			Return Me._name
@@ -3584,14 +3492,9 @@ Partial Public Class ProductionUnit
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="ProductionUnit_CapacityPlan", Storage:="_CapacityPlans", ThisKey:="unitId", OtherKey:="unitId"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=3, EmitDefaultValue:=false)>  _
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="ProductionUnit_CapacityPlan", Storage:="_CapacityPlans", ThisKey:="unitId", OtherKey:="unitId")>  _
 	Public Property CapacityPlans() As EntitySet(Of CapacityPlan)
 		Get
-			If (Me.serializing  _
-						AndAlso (Me._CapacityPlans.HasLoadedOrAssignedValues = false)) Then
-				Return Nothing
-			End If
 			Return Me._CapacityPlans
 		End Get
 		Set
@@ -3599,14 +3502,9 @@ Partial Public Class ProductionUnit
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="ProductionUnit_MP", Storage:="_MPs", ThisKey:="unitId", OtherKey:="unitId"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=4, EmitDefaultValue:=false)>  _
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="ProductionUnit_MP", Storage:="_MPs", ThisKey:="unitId", OtherKey:="unitId")>  _
 	Public Property MPs() As EntitySet(Of MP)
 		Get
-			If (Me.serializing  _
-						AndAlso (Me._MPs.HasLoadedOrAssignedValues = false)) Then
-				Return Nothing
-			End If
 			Return Me._MPs
 		End Get
 		Set
@@ -3651,34 +3549,9 @@ Partial Public Class ProductionUnit
 		Me.SendPropertyChanging
 		entity.ProductionUnit = Nothing
 	End Sub
-	
-	Private Sub Initialize()
-		Me._CapacityPlans = New EntitySet(Of CapacityPlan)(AddressOf Me.attach_CapacityPlans, AddressOf Me.detach_CapacityPlans)
-		Me._MPs = New EntitySet(Of MP)(AddressOf Me.attach_MPs, AddressOf Me.detach_MPs)
-		OnCreated
-	End Sub
-	
-	<Global.System.Runtime.Serialization.OnDeserializingAttribute(),  _
-	 Global.System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)>  _
-	Public Sub OnDeserializing(ByVal context As StreamingContext)
-		Me.Initialize
-	End Sub
-	
-	<Global.System.Runtime.Serialization.OnSerializingAttribute(),  _
-	 Global.System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)>  _
-	Public Sub OnSerializing(ByVal context As StreamingContext)
-		Me.serializing = true
-	End Sub
-	
-	<Global.System.Runtime.Serialization.OnSerializedAttribute(),  _
-	 Global.System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)>  _
-	Public Sub OnSerialized(ByVal context As StreamingContext)
-		Me.serializing = false
-	End Sub
 End Class
 
-<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.Requirement"),  _
- Global.System.Runtime.Serialization.DataContractAttribute()>  _
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.Requirement")>  _
 Partial Public Class Requirement
 	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
 	
@@ -3703,8 +3576,6 @@ Partial Public Class Requirement
 	Private _OrderDerivations As EntitySet(Of OrderDerivation)
 	
 	Private _Part As EntityRef(Of Part)
-	
-	Private serializing As Boolean
 	
     #Region "可扩展性方法定义"
     Partial Private Sub OnLoaded()
@@ -3749,11 +3620,12 @@ Partial Public Class Requirement
 	
 	Public Sub New()
 		MyBase.New
-		Me.Initialize
+		Me._OrderDerivations = New EntitySet(Of OrderDerivation)(AddressOf Me.attach_OrderDerivations, AddressOf Me.detach_OrderDerivations)
+		Me._Part = CType(Nothing, EntityRef(Of Part))
+		OnCreated
 	End Sub
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_id", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=1)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_id", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true)>  _
 	Public Property id() As Integer
 		Get
 			Return Me._id
@@ -3770,8 +3642,7 @@ Partial Public Class Requirement
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partNr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=2)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partNr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
 	Public Property partNr() As String
 		Get
 			Return Me._partNr
@@ -3790,8 +3661,7 @@ Partial Public Class Requirement
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_orderedDate", DbType:="DateTime NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=3)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_orderedDate", DbType:="DateTime NOT NULL")>  _
 	Public Property orderedDate() As Date
 		Get
 			Return Me._orderedDate
@@ -3808,8 +3678,7 @@ Partial Public Class Requirement
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_requiredDate", DbType:="DateTime NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=4)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_requiredDate", DbType:="DateTime NOT NULL")>  _
 	Public Property requiredDate() As Date
 		Get
 			Return Me._requiredDate
@@ -3826,8 +3695,7 @@ Partial Public Class Requirement
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_quantity", DbType:="Float NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=5)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_quantity", DbType:="Float NOT NULL")>  _
 	Public Property quantity() As Double
 		Get
 			Return Me._quantity
@@ -3844,8 +3712,7 @@ Partial Public Class Requirement
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_status", DbType:="Int NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=6)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_status", DbType:="Int NOT NULL")>  _
 	Public Property status() As Integer
 		Get
 			Return Me._status
@@ -3862,8 +3729,7 @@ Partial Public Class Requirement
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_derivedFrom", DbType:="VarChar(200) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=7)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_derivedFrom", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
 	Public Property derivedFrom() As String
 		Get
 			Return Me._derivedFrom
@@ -3879,8 +3745,7 @@ Partial Public Class Requirement
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_derivedType", DbType:="VarChar(50) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=8)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_derivedType", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
 	Public Property derivedType() As String
 		Get
 			Return Me._derivedType
@@ -3896,14 +3761,9 @@ Partial Public Class Requirement
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Requirement_OrderDerivation", Storage:="_OrderDerivations", ThisKey:="id", OtherKey:="requirementId"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=9, EmitDefaultValue:=false)>  _
+	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Requirement_OrderDerivation", Storage:="_OrderDerivations", ThisKey:="id", OtherKey:="requirementId")>  _
 	Public Property OrderDerivations() As EntitySet(Of OrderDerivation)
 		Get
-			If (Me.serializing  _
-						AndAlso (Me._OrderDerivations.HasLoadedOrAssignedValues = false)) Then
-				Return Nothing
-			End If
 			Return Me._OrderDerivations
 		End Get
 		Set
@@ -3966,34 +3826,9 @@ Partial Public Class Requirement
 		Me.SendPropertyChanging
 		entity.Requirement = Nothing
 	End Sub
-	
-	Private Sub Initialize()
-		Me._OrderDerivations = New EntitySet(Of OrderDerivation)(AddressOf Me.attach_OrderDerivations, AddressOf Me.detach_OrderDerivations)
-		Me._Part = CType(Nothing, EntityRef(Of Part))
-		OnCreated
-	End Sub
-	
-	<Global.System.Runtime.Serialization.OnDeserializingAttribute(),  _
-	 Global.System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)>  _
-	Public Sub OnDeserializing(ByVal context As StreamingContext)
-		Me.Initialize
-	End Sub
-	
-	<Global.System.Runtime.Serialization.OnSerializingAttribute(),  _
-	 Global.System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)>  _
-	Public Sub OnSerializing(ByVal context As StreamingContext)
-		Me.serializing = true
-	End Sub
-	
-	<Global.System.Runtime.Serialization.OnSerializedAttribute(),  _
-	 Global.System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)>  _
-	Public Sub OnSerialized(ByVal context As StreamingContext)
-		Me.serializing = false
-	End Sub
 End Class
 
-<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.StatusControl"),  _
- Global.System.Runtime.Serialization.DataContractAttribute()>  _
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.StatusControl")>  _
 Partial Public Class StatusControl
 	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
 	
@@ -4028,11 +3863,10 @@ Partial Public Class StatusControl
 	
 	Public Sub New()
 		MyBase.New
-		Me.Initialize
+		OnCreated
 	End Sub
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_id", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=1)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_id", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true)>  _
 	Public Property id() As Integer
 		Get
 			Return Me._id
@@ -4049,8 +3883,7 @@ Partial Public Class StatusControl
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_type", DbType:="VarChar(50) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=2)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_type", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
 	Public Property type() As String
 		Get
 			Return Me._type
@@ -4066,8 +3899,7 @@ Partial Public Class StatusControl
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_value", DbType:="Int NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=3)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_value", DbType:="Int NOT NULL")>  _
 	Public Property value() As Integer
 		Get
 			Return Me._value
@@ -4101,20 +3933,9 @@ Partial Public Class StatusControl
 			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
 		End If
 	End Sub
-	
-	Private Sub Initialize()
-		OnCreated
-	End Sub
-	
-	<Global.System.Runtime.Serialization.OnDeserializingAttribute(),  _
-	 Global.System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)>  _
-	Public Sub OnDeserializing(ByVal context As StreamingContext)
-		Me.Initialize
-	End Sub
 End Class
 
-<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.Stock"),  _
- Global.System.Runtime.Serialization.DataContractAttribute()>  _
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.Stock")>  _
 Partial Public Class Stock
 	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
 	
@@ -4187,11 +4008,11 @@ Partial Public Class Stock
 	
 	Public Sub New()
 		MyBase.New
-		Me.Initialize
+		Me._Part = CType(Nothing, EntityRef(Of Part))
+		OnCreated
 	End Sub
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_id", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=1)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_id", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true)>  _
 	Public Property id() As Integer
 		Get
 			Return Me._id
@@ -4208,8 +4029,7 @@ Partial Public Class Stock
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partNr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=2)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partNr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
 	Public Property partNr() As String
 		Get
 			Return Me._partNr
@@ -4228,8 +4048,7 @@ Partial Public Class Stock
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_fifo", DbType:="DateTime NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=3)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_fifo", DbType:="DateTime NOT NULL")>  _
 	Public Property fifo() As Date
 		Get
 			Return Me._fifo
@@ -4246,8 +4065,7 @@ Partial Public Class Stock
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_quantity", DbType:="Float NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=4)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_quantity", DbType:="Float NOT NULL")>  _
 	Public Property quantity() As Double
 		Get
 			Return Me._quantity
@@ -4264,8 +4082,7 @@ Partial Public Class Stock
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_container", DbType:="VarChar(200) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=5)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_container", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
 	Public Property container() As String
 		Get
 			Return Me._container
@@ -4281,8 +4098,7 @@ Partial Public Class Stock
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_wh", DbType:="VarChar(50) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=6)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_wh", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
 	Public Property wh() As String
 		Get
 			Return Me._wh
@@ -4298,8 +4114,7 @@ Partial Public Class Stock
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_position", DbType:="VarChar(50) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=7)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_position", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
 	Public Property position() As String
 		Get
 			Return Me._position
@@ -4315,8 +4130,7 @@ Partial Public Class Stock
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_source", DbType:="VarChar(200)"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=8)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_source", DbType:="VarChar(200)")>  _
 	Public Property source() As String
 		Get
 			Return Me._source
@@ -4332,8 +4146,7 @@ Partial Public Class Stock
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_sourceType", DbType:="VarChar(200)"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=9)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_sourceType", DbType:="VarChar(200)")>  _
 	Public Property sourceType() As String
 		Get
 			Return Me._sourceType
@@ -4394,21 +4207,9 @@ Partial Public Class Stock
 			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
 		End If
 	End Sub
-	
-	Private Sub Initialize()
-		Me._Part = CType(Nothing, EntityRef(Of Part))
-		OnCreated
-	End Sub
-	
-	<Global.System.Runtime.Serialization.OnDeserializingAttribute(),  _
-	 Global.System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)>  _
-	Public Sub OnDeserializing(ByVal context As StreamingContext)
-		Me.Initialize
-	End Sub
 End Class
 
-<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.StockMovement"),  _
- Global.System.Runtime.Serialization.DataContractAttribute()>  _
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.StockMovement")>  _
 Partial Public Class StockMovement
 	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
 	
@@ -4467,11 +4268,10 @@ Partial Public Class StockMovement
 	
 	Public Sub New()
 		MyBase.New
-		Me.Initialize
+		OnCreated
 	End Sub
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_id", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=1)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_id", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true)>  _
 	Public Property id() As Integer
 		Get
 			Return Me._id
@@ -4488,8 +4288,7 @@ Partial Public Class StockMovement
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partNr", DbType:="VarChar(50) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=2)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partNr", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
 	Public Property partNr() As String
 		Get
 			Return Me._partNr
@@ -4505,8 +4304,7 @@ Partial Public Class StockMovement
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_quantity", DbType:="Float NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=3)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_quantity", DbType:="Float NOT NULL")>  _
 	Public Property quantity() As Double
 		Get
 			Return Me._quantity
@@ -4523,8 +4321,7 @@ Partial Public Class StockMovement
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_fifo", DbType:="Date NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=4)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_fifo", DbType:="Date NOT NULL")>  _
 	Public Property fifo() As Date
 		Get
 			Return Me._fifo
@@ -4541,8 +4338,7 @@ Partial Public Class StockMovement
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_moveType", DbType:="Int NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=5)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_moveType", DbType:="Int NOT NULL")>  _
 	Public Property moveType() As Integer
 		Get
 			Return Me._moveType
@@ -4559,8 +4355,7 @@ Partial Public Class StockMovement
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_sourceDoc", DbType:="Text", UpdateCheck:=UpdateCheck.Never),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=6)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_sourceDoc", DbType:="Text", UpdateCheck:=UpdateCheck.Never)>  _
 	Public Property sourceDoc() As String
 		Get
 			Return Me._sourceDoc
@@ -4576,8 +4371,7 @@ Partial Public Class StockMovement
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_createdAt", DbType:="DateTime"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=7)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_createdAt", DbType:="DateTime")>  _
 	Public Property createdAt() As System.Nullable(Of Date)
 		Get
 			Return Me._createdAt
@@ -4610,20 +4404,9 @@ Partial Public Class StockMovement
 			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
 		End If
 	End Sub
-	
-	Private Sub Initialize()
-		OnCreated
-	End Sub
-	
-	<Global.System.Runtime.Serialization.OnDeserializingAttribute(),  _
-	 Global.System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)>  _
-	Public Sub OnDeserializing(ByVal context As StreamingContext)
-		Me.Initialize
-	End Sub
 End Class
 
-<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.AvgOfCompleteRate"),  _
- Global.System.Runtime.Serialization.DataContractAttribute()>  _
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.AvgOfCompleteRate")>  _
 Partial Public Class AvgOfCompleteRate
 	
 	Private _partNr As String
@@ -4638,8 +4421,7 @@ Partial Public Class AvgOfCompleteRate
 		MyBase.New
 	End Sub
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partNr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=1)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partNr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
 	Public Property partNr() As String
 		Get
 			Return Me._partNr
@@ -4651,8 +4433,7 @@ Partial Public Class AvgOfCompleteRate
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_proceeDate", DbType:="DateTime NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=2)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_proceeDate", DbType:="DateTime NOT NULL")>  _
 	Public Property proceeDate() As Date
 		Get
 			Return Me._proceeDate
@@ -4665,8 +4446,7 @@ Partial Public Class AvgOfCompleteRate
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_qty", DbType:="Float"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=3)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_qty", DbType:="Float")>  _
 	Public Property qty() As System.Nullable(Of Double)
 		Get
 			Return Me._qty
@@ -4678,8 +4458,7 @@ Partial Public Class AvgOfCompleteRate
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_rate", DbType:="Float"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=4)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_rate", DbType:="Float")>  _
 	Public Property rate() As System.Nullable(Of Double)
 		Get
 			Return Me._rate
@@ -4692,9 +4471,54 @@ Partial Public Class AvgOfCompleteRate
 	End Property
 End Class
 
-<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.ProcessOrderView"),  _
- Global.System.Runtime.Serialization.DataContractAttribute()>  _
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.SumOfStock")>  _
+Partial Public Class SumOfStock
+	
+	Private _partNr As String
+	
+	Private _SumOfStock As System.Nullable(Of Double)
+	
+	Public Sub New()
+		MyBase.New
+	End Sub
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partNr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
+	Public Property partNr() As String
+		Get
+			Return Me._partNr
+		End Get
+		Set
+			If (String.Equals(Me._partNr, value) = false) Then
+				Me._partNr = value
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SumOfStock", DbType:="Float")>  _
+	Public Property SumOfStock() As System.Nullable(Of Double)
+		Get
+			Return Me._SumOfStock
+		End Get
+		Set
+			If (Me._SumOfStock.Equals(value) = false) Then
+				Me._SumOfStock = value
+			End If
+		End Set
+	End Property
+End Class
+
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.ProcessOrderView")>  _
 Partial Public Class ProcessOrderView
+	
+	Private _partType As Integer
+	
+	Private _partDesc As String
+	
+	Private _partStatus As Integer
+	
+	Private _moq As System.Nullable(Of Double)
+	
+	Private _spq As System.Nullable(Of Double)
 	
 	Private _orderNr As String
 	
@@ -4718,196 +4542,38 @@ Partial Public Class ProcessOrderView
 	
 	Private _batchQuantity As System.Nullable(Of Double)
 	
-	Private _spq As System.Nullable(Of Double)
-	
-	Private _moq As System.Nullable(Of Double)
-	
-	Private _partStatus As Integer
-	
-	Private _partDesc As String
-	
-	Private _partType As Integer
+	Private _OrderType As String
 	
 	Public Sub New()
 		MyBase.New
 	End Sub
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_orderNr", DbType:="VarChar(50) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=1)>  _
-	Public Property orderNr() As String
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partType", DbType:="Int NOT NULL")>  _
+	Public Property partType() As Integer
 		Get
-			Return Me._orderNr
+			Return Me._partType
 		End Get
 		Set
-			If (String.Equals(Me._orderNr, value) = false) Then
-				Me._orderNr = value
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_sourceDoc", DbType:="VarChar(50)"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=2)>  _
-	Public Property sourceDoc() As String
-		Get
-			Return Me._sourceDoc
-		End Get
-		Set
-			If (String.Equals(Me._sourceDoc, value) = false) Then
-				Me._sourceDoc = value
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_derivedFrom", DbType:="VarChar(50) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=3)>  _
-	Public Property derivedFrom() As String
-		Get
-			Return Me._derivedFrom
-		End Get
-		Set
-			If (String.Equals(Me._derivedFrom, value) = false) Then
-				Me._derivedFrom = value
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_proceeDate", DbType:="DateTime NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=4)>  _
-	Public Property proceeDate() As Date
-		Get
-			Return Me._proceeDate
-		End Get
-		Set
-			If ((Me._proceeDate = value)  _
+			If ((Me._partType = value)  _
 						= false) Then
-				Me._proceeDate = value
+				Me._partType = value
 			End If
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partNr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=5)>  _
-	Public Property partNr() As String
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partDesc", DbType:="Text NOT NULL", CanBeNull:=false, UpdateCheck:=UpdateCheck.Never)>  _
+	Public Property partDesc() As String
 		Get
-			Return Me._partNr
+			Return Me._partDesc
 		End Get
 		Set
-			If (String.Equals(Me._partNr, value) = false) Then
-				Me._partNr = value
+			If (String.Equals(Me._partDesc, value) = false) Then
+				Me._partDesc = value
 			End If
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_sourceQuantity", DbType:="Float NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=6)>  _
-	Public Property sourceQuantity() As Double
-		Get
-			Return Me._sourceQuantity
-		End Get
-		Set
-			If ((Me._sourceQuantity = value)  _
-						= false) Then
-				Me._sourceQuantity = value
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_actualQuantity", DbType:="Float NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=7)>  _
-	Public Property actualQuantity() As Double
-		Get
-			Return Me._actualQuantity
-		End Get
-		Set
-			If ((Me._actualQuantity = value)  _
-						= false) Then
-				Me._actualQuantity = value
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_completeRate", DbType:="Float NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=8)>  _
-	Public Property completeRate() As Double
-		Get
-			Return Me._completeRate
-		End Get
-		Set
-			If ((Me._completeRate = value)  _
-						= false) Then
-				Me._completeRate = value
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_status", DbType:="Int NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=9)>  _
-	Public Property status() As Integer
-		Get
-			Return Me._status
-		End Get
-		Set
-			If ((Me._status = value)  _
-						= false) Then
-				Me._status = value
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_requirementId", DbType:="Int"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=10)>  _
-	Public Property requirementId() As System.Nullable(Of Integer)
-		Get
-			Return Me._requirementId
-		End Get
-		Set
-			If (Me._requirementId.Equals(value) = false) Then
-				Me._requirementId = value
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_batchQuantity", DbType:="Float"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=11)>  _
-	Public Property batchQuantity() As System.Nullable(Of Double)
-		Get
-			Return Me._batchQuantity
-		End Get
-		Set
-			If (Me._batchQuantity.Equals(value) = false) Then
-				Me._batchQuantity = value
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_spq", DbType:="Float"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=12)>  _
-	Public Property spq() As System.Nullable(Of Double)
-		Get
-			Return Me._spq
-		End Get
-		Set
-			If (Me._spq.Equals(value) = false) Then
-				Me._spq = value
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_moq", DbType:="Float"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=13)>  _
-	Public Property moq() As System.Nullable(Of Double)
-		Get
-			Return Me._moq
-		End Get
-		Set
-			If (Me._moq.Equals(value) = false) Then
-				Me._moq = value
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partStatus", DbType:="Int NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=14)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partStatus", DbType:="Int NOT NULL")>  _
 	Public Property partStatus() As Integer
 		Get
 			Return Me._partStatus
@@ -4920,216 +4586,80 @@ Partial Public Class ProcessOrderView
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partDesc", DbType:="Text NOT NULL", CanBeNull:=false, UpdateCheck:=UpdateCheck.Never),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=15)>  _
-	Public Property partDesc() As String
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_moq", DbType:="Float")>  _
+	Public Property moq() As System.Nullable(Of Double)
 		Get
-			Return Me._partDesc
+			Return Me._moq
 		End Get
 		Set
-			If (String.Equals(Me._partDesc, value) = false) Then
-				Me._partDesc = value
+			If (Me._moq.Equals(value) = false) Then
+				Me._moq = value
 			End If
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partType", DbType:="Int NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=16)>  _
-	Public Property partType() As Integer
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_spq", DbType:="Float")>  _
+	Public Property spq() As System.Nullable(Of Double)
 		Get
-			Return Me._partType
+			Return Me._spq
 		End Get
 		Set
-			If ((Me._partType = value)  _
+			If (Me._spq.Equals(value) = false) Then
+				Me._spq = value
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_orderNr", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
+	Public Property orderNr() As String
+		Get
+			Return Me._orderNr
+		End Get
+		Set
+			If (String.Equals(Me._orderNr, value) = false) Then
+				Me._orderNr = value
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_sourceDoc", DbType:="VarChar(50)")>  _
+	Public Property sourceDoc() As String
+		Get
+			Return Me._sourceDoc
+		End Get
+		Set
+			If (String.Equals(Me._sourceDoc, value) = false) Then
+				Me._sourceDoc = value
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_derivedFrom", DbType:="VarChar(50) NOT NULL", CanBeNull:=false)>  _
+	Public Property derivedFrom() As String
+		Get
+			Return Me._derivedFrom
+		End Get
+		Set
+			If (String.Equals(Me._derivedFrom, value) = false) Then
+				Me._derivedFrom = value
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_proceeDate", DbType:="DateTime NOT NULL")>  _
+	Public Property proceeDate() As Date
+		Get
+			Return Me._proceeDate
+		End Get
+		Set
+			If ((Me._proceeDate = value)  _
 						= false) Then
-				Me._partType = value
-			End If
-		End Set
-	End Property
-End Class
-
-<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.StockSumRecord"),  _
- Global.System.Runtime.Serialization.DataContractAttribute()>  _
-Partial Public Class StockSumRecord
-	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
-	
-	Private Shared emptyChangingEventArgs As PropertyChangingEventArgs = New PropertyChangingEventArgs(String.Empty)
-	
-	Private _id As Integer
-	
-	Private _partNr As String
-	
-	Private _quantity As Double
-	
-	Private _date As Date
-	
-	Private _rate As System.Nullable(Of Double)
-	
-    #Region "可扩展性方法定义"
-    Partial Private Sub OnLoaded()
-    End Sub
-    Partial Private Sub OnValidate(action As System.Data.Linq.ChangeAction)
-    End Sub
-    Partial Private Sub OnCreated()
-    End Sub
-    Partial Private Sub OnidChanging(value As Integer)
-    End Sub
-    Partial Private Sub OnidChanged()
-    End Sub
-    Partial Private Sub OnpartNrChanging(value As String)
-    End Sub
-    Partial Private Sub OnpartNrChanged()
-    End Sub
-    Partial Private Sub OnquantityChanging(value As Double)
-    End Sub
-    Partial Private Sub OnquantityChanged()
-    End Sub
-    Partial Private Sub OndateChanging(value As Date)
-    End Sub
-    Partial Private Sub OndateChanged()
-    End Sub
-    Partial Private Sub OnrateChanging(value As System.Nullable(Of Double))
-    End Sub
-    Partial Private Sub OnrateChanged()
-    End Sub
-    #End Region
-	
-	Public Sub New()
-		MyBase.New
-		Me.Initialize
-	End Sub
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_id", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=1)>  _
-	Public Property id() As Integer
-		Get
-			Return Me._id
-		End Get
-		Set
-			If ((Me._id = value)  _
-						= false) Then
-				Me.OnidChanging(value)
-				Me.SendPropertyChanging
-				Me._id = value
-				Me.SendPropertyChanged("id")
-				Me.OnidChanged
+				Me._proceeDate = value
 			End If
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partNr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=2)>  _
-	Public Property partNr() As String
-		Get
-			Return Me._partNr
-		End Get
-		Set
-			If (String.Equals(Me._partNr, value) = false) Then
-				Me.OnpartNrChanging(value)
-				Me.SendPropertyChanging
-				Me._partNr = value
-				Me.SendPropertyChanged("partNr")
-				Me.OnpartNrChanged
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_quantity", DbType:="Float NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=3)>  _
-	Public Property quantity() As Double
-		Get
-			Return Me._quantity
-		End Get
-		Set
-			If ((Me._quantity = value)  _
-						= false) Then
-				Me.OnquantityChanging(value)
-				Me.SendPropertyChanging
-				Me._quantity = value
-				Me.SendPropertyChanged("quantity")
-				Me.OnquantityChanged
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Name:="date", Storage:="_date", DbType:="DateTime NOT NULL"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=4)>  _
-	Public Property [date]() As Date
-		Get
-			Return Me._date
-		End Get
-		Set
-			If ((Me._date = value)  _
-						= false) Then
-				Me.OndateChanging(value)
-				Me.SendPropertyChanging
-				Me._date = value
-				Me.SendPropertyChanged("[date]")
-				Me.OndateChanged
-			End If
-		End Set
-	End Property
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_rate", DbType:="Float"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=5)>  _
-	Public Property rate() As System.Nullable(Of Double)
-		Get
-			Return Me._rate
-		End Get
-		Set
-			If (Me._rate.Equals(value) = false) Then
-				Me.OnrateChanging(value)
-				Me.SendPropertyChanging
-				Me._rate = value
-				Me.SendPropertyChanged("rate")
-				Me.OnrateChanged
-			End If
-		End Set
-	End Property
-	
-	Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
-	
-	Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
-	
-	Protected Overridable Sub SendPropertyChanging()
-		If ((Me.PropertyChangingEvent Is Nothing)  _
-					= false) Then
-			RaiseEvent PropertyChanging(Me, emptyChangingEventArgs)
-		End If
-	End Sub
-	
-	Protected Overridable Sub SendPropertyChanged(ByVal propertyName As [String])
-		If ((Me.PropertyChangedEvent Is Nothing)  _
-					= false) Then
-			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
-		End If
-	End Sub
-	
-	Private Sub Initialize()
-		OnCreated
-	End Sub
-	
-	<Global.System.Runtime.Serialization.OnDeserializingAttribute(),  _
-	 Global.System.ComponentModel.EditorBrowsableAttribute(EditorBrowsableState.Never)>  _
-	Public Sub OnDeserializing(ByVal context As StreamingContext)
-		Me.Initialize
-	End Sub
-End Class
-
-<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.SumOfStock"),  _
- Global.System.Runtime.Serialization.DataContractAttribute()>  _
-Partial Public Class SumOfStock
-	
-	Private _partNr As String
-	
-	Private _SumOfStock As System.Nullable(Of Double)
-	
-	Public Sub New()
-		MyBase.New
-	End Sub
-	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partNr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=1)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partNr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
 	Public Property partNr() As String
 		Get
 			Return Me._partNr
@@ -5141,15 +4671,90 @@ Partial Public Class SumOfStock
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_SumOfStock", DbType:="Float"),  _
-	 Global.System.Runtime.Serialization.DataMemberAttribute(Order:=2)>  _
-	Public Property SumOfStock() As System.Nullable(Of Double)
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_sourceQuantity", DbType:="Float NOT NULL")>  _
+	Public Property sourceQuantity() As Double
 		Get
-			Return Me._SumOfStock
+			Return Me._sourceQuantity
 		End Get
 		Set
-			If (Me._SumOfStock.Equals(value) = false) Then
-				Me._SumOfStock = value
+			If ((Me._sourceQuantity = value)  _
+						= false) Then
+				Me._sourceQuantity = value
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_actualQuantity", DbType:="Float NOT NULL")>  _
+	Public Property actualQuantity() As Double
+		Get
+			Return Me._actualQuantity
+		End Get
+		Set
+			If ((Me._actualQuantity = value)  _
+						= false) Then
+				Me._actualQuantity = value
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_completeRate", DbType:="Float NOT NULL")>  _
+	Public Property completeRate() As Double
+		Get
+			Return Me._completeRate
+		End Get
+		Set
+			If ((Me._completeRate = value)  _
+						= false) Then
+				Me._completeRate = value
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_status", DbType:="Int NOT NULL")>  _
+	Public Property status() As Integer
+		Get
+			Return Me._status
+		End Get
+		Set
+			If ((Me._status = value)  _
+						= false) Then
+				Me._status = value
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_requirementId", DbType:="Int")>  _
+	Public Property requirementId() As System.Nullable(Of Integer)
+		Get
+			Return Me._requirementId
+		End Get
+		Set
+			If (Me._requirementId.Equals(value) = false) Then
+				Me._requirementId = value
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_batchQuantity", DbType:="Float")>  _
+	Public Property batchQuantity() As System.Nullable(Of Double)
+		Get
+			Return Me._batchQuantity
+		End Get
+		Set
+			If (Me._batchQuantity.Equals(value) = false) Then
+				Me._batchQuantity = value
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_OrderType", DbType:="VarChar(100)")>  _
+	Public Property OrderType() As String
+		Get
+			Return Me._OrderType
+		End Get
+		Set
+			If (String.Equals(Me._OrderType, value) = false) Then
+				Me._OrderType = value
 			End If
 		End Set
 	End Property
