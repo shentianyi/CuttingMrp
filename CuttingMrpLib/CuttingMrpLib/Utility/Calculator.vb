@@ -318,45 +318,38 @@ Public Class Calculator
     End Function
 
     Public Sub MakeBackflush()
-        'get backflush
-        'make backflush
-        'book stock
-        '
-        '1 - minus the forecast
-        '2 - minus the material stock
-        '3 - submit change
         Dim tempBoms As Hashtable = New Hashtable
         Dim dc As DataContext = New DataContext(DBConn)
         Dim mprrepo As Repository(Of MP) = New Repository(Of MP)(dc)
         Dim mpses As List(Of MP) = mprrepo.FindAll(Function(c) c.status = MPSStatus.Backflush).ToList
         Dim backFlushRepo As Repository(Of BackflushRecord) = New Repository(Of BackflushRecord)(dc)
-        Dim backflushSucc As List(Of BackflushRecord) = New List(Of BackflushRecord)
-        Dim backflushFail As List(Of BackflushRecord) = New List(Of BackflushRecord)
         Dim stockToBook As Hashtable = New Hashtable
         Dim bomRepo As Repository(Of BOM) = New Repository(Of BOM)(dc)
         Dim stockRepo As Repository(Of Stock) = New Repository(Of Stock)(dc)
+        Dim moveRepo As Repository(Of StockMovement) = New Repository(Of StockMovement)(dc)
         If mpses IsNot Nothing Then
-            Try
-                For Each m As MP In mpses
+
+            For Each m As MP In mpses
+                Try
                     If tempBoms.ContainsKey(m.partnr) = False Then
 
                         Dim counter As Integer = bomRepo.Count(Function(c) c.validFrom <= m.requiredDate And c.validTo >= m.requiredDate And c.partNr = m.partnr)
                         If counter < 1 Then
-                            backflushFail.Add(New BackflushRecord With
+                            backFlushRepo.MarkForAdd(New BackflushRecord With
                                               {.fifo = Now, .launchTime = Now,
                                               .message = "没有找到BOM",
                                               .partnr = m.partnr,
                                               .quantity = m.quantity,
                                               .sourceDoc = m.sourceDoc,
-                                              .status = BackflushStatus.Normal})
+                                              .status = BackflushStatus.Failed})
                         End If
                         If counter > 1 Then
-                            backflushFail.Add(New BackflushRecord With
+                            backFlushRepo.MarkForAdd(New BackflushRecord With
                                               {.fifo = Now, .launchTime = Now,
-                                              .message = "找到" & counter & "个生效的BOM",
+                                              .message = "找到" & counter & "个生效的BOM,一个时间内只允许一个生效的BOM",
                                               .partnr = m.partnr, .quantity = m.quantity,
                                               .sourceDoc = m.sourceDoc,
-                                              .status = BackflushStatus.Normal})
+                                              .status = BackflushStatus.Failed})
                         End If
                         Dim bom As BOM = bomRepo.Single(Function(c) c.validFrom <= Now And c.validTo >= Now And c.partNr = m.partnr)
                         tempBoms.Add(m.partnr, bom.BomItems.Where(Function(c) c.validFrom <= Now And c.validTo >= Now).ToList)
@@ -368,12 +361,6 @@ Public Class Calculator
                             stockToBook(item.componentId) = item.quantity * m.quantity
                         End If
                     Next
-
-                    'book stock
-                    '1.find the related stocks
-                    '2.book one by one until the stocktobook = 0
-                    '3.reset the status of mp
-                    '4.save all
                     Dim stockStrings As List(Of String) = New List(Of String)
                     For Each ke As Object In stockToBook
                         stockStrings.Add(CType(ke, String))
@@ -395,9 +382,11 @@ Public Class Calculator
                             For Each stockto As Stock In allocatedStock(CType(dic.Key, String))
                                 If CType(dic.Value, Double) = stockto.quantity Then
                                     stockRepo.MarkForDeletion(stockto)
+                                    moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = stockto.fifo, .moveType = StockMoveType.Backflush, .partNr = CType(stockto.partNr, String), .quantity = stockto.quantity, .sourceDoc = m.sourceDoc})
                                     Exit For
                                 ElseIf CType(dic.Value, Double) < stockto.quantity Then
                                     stockto.quantity = stockto.quantity - CType(dic.Value, Double)
+                                    moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = stockto.fifo, .moveType = StockMoveType.Backflush, .partNr = CType(stockto.partNr, String), .quantity = CType(dic.Value, Double), .sourceDoc = m.sourceDoc})
                                     Exit For
                                 Else
                                     stockRepo.MarkForDeletion(stockto)
@@ -405,19 +394,23 @@ Public Class Calculator
                                 End If
                             Next
                         Else
-                            '副库存
-
+                            stockRepo.MarkForAdd(New Stock With {.container = "ORIGINAL", .fifo = Now, .partNr = CType(dic.Key, String), .position = "ORIGINAL", .quantity = -CType(dic.Value, Double), .source = m.sourceDoc, .sourceType = "BACKFLUSH", .wh = "ORIGINAL"})
+                            moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = Now, .moveType = StockMoveType.Backflush, .partNr = CType(dic.Key, String), .quantity = CType(dic.Value, Double), .sourceDoc = m.sourceDoc})
                         End If
                     Next
-
-                Next
-                dc.SaveAll()
-            Catch ex As Exception
-
-            End Try
-
+                    m.status = MPSStatus.BackflushFinish
+                    dc.SaveAll()
+                Catch ex As Exception
+                    backFlushRepo.MarkForAdd(New BackflushRecord With
+                                                {.fifo = Now, .launchTime = Now,
+                                                .message = ex.Message,
+                                                .partnr = m.partnr, .quantity = m.quantity,
+                                                .sourceDoc = m.sourceDoc,
+                                                .status = BackflushStatus.Failed})
+                    dc.SaveAll()
+                End Try
+            Next
         End If
-
     End Sub
 
 End Class
