@@ -4,6 +4,16 @@ Imports CuttingMrpLib
 Imports System.Messaging
 <TestClass()> Public Class UnitTest1
 
+    <TestMethod()> Public Sub TestBackflush()
+        Dim processor As Calculator = New Calculator("Data Source=vm08;Initial Catalog=CuttingMrp;User ID=sa;Password=brilliantech123@")
+        Try
+            processor.MakeBackflush()
+        Catch ex As Exception
+            Assert.Fail()
+        End Try
+    End Sub
+
+
     <TestMethod()> Public Sub TestListGroupBy()
         Dim li As List(Of Requirement) = New List(Of Requirement)
         li.Add(New Requirement With {.partNr = "P1", .requiredDate = New DateTime(2016, 1, 1, 12, 30, 50), .quantity = 10})

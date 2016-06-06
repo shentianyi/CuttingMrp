@@ -33,7 +33,7 @@ Public Class CalculatorSingleton
                         Throw New Exception("队列中已经有待运行的任务，请稍后再试")
                     End If
                     Dim mrpRepo As Repository(Of MrpRound) = New Repository(Of MrpRound)(New DataContext(db))
-                    Dim mrp As MrpRound = mrpRepo.First(Function(c) c.runningStatus = CalculatorStatus.Running)
+                    Dim mrp As MrpRound = mrpRepo.FirstOrDefault(Function(c) c.runningStatus = CalculatorStatus.Running)
                     If mrp IsNot Nothing Then
                         Throw New Exception("MRP is running")
                     End If
