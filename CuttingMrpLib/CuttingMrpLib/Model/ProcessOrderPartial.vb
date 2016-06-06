@@ -34,7 +34,7 @@
         Get
             Dim kb As BatchOrderTemplate = Me.Part.BatchOrderTemplates.FirstOrDefault
             If kb IsNot Nothing Then
-                Return Me.actualQuantity > kb.batchQuantity Or Me.actualQuantity * 1.5 < kb.batchQuantity
+                Return Me.actualQuantity > kb.batchQuantity ' Or Me.actualQuantity * 1.5 < kb.batchQuantity
             End If
             Return False
         End Get

@@ -129,8 +129,10 @@ Public Class Calculator
                 Dim moq As Double = 0
                 If settings.OrderType = OrderType.Fix Then
                     Dim kanbanrepo As Repository(Of BatchOrderTemplate) = New Repository(Of BatchOrderTemplate)(New DataContext(DBConn))
-                    Dim kanban As BatchOrderTemplate = kanbanrepo.First(Function(c) c.partNr = CType(dic.Key, String))
-
+                    Dim kanban As BatchOrderTemplate = kanbanrepo.FirstOrDefault(Function(c) c.partNr = CType(dic.Key, String))
+                    If kanban Is Nothing Then
+                        Throw New Exception(CType(dic.Key, String))
+                    End If
                     spq = kanban.bundle
                         moq = kanban.batchQuantity
 
