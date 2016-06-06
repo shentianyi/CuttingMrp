@@ -39,7 +39,9 @@ namespace CuttingMrpWeb
                       "~/Scripts/requirement.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/stocks").Include(
-                      "~/Scripts/stock.js"));
+                      "~/Scripts/stock.js",
+                      "~/Scripts/stock-movement.js"
+                      ));
 
             bundles.Add(new ScriptBundle("~/bundles/mrp-rounds").Include(
                      "~/Scripts/mrp-round.js"));

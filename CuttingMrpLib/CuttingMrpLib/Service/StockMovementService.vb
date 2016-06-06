@@ -16,4 +16,5 @@ Public Class StockMovementService
 
         Return rep.Search(searchModel)
     End Function
+
 End Class

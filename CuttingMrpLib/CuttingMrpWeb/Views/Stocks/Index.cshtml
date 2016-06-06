@@ -48,6 +48,7 @@
             <th>KanBanPosition</th>
             <th>Source</th>
             <th>SourceType</th>
+            <th>Movements</th>
             <th>Options</th>
         </tr>
     </thead>
@@ -69,6 +70,12 @@
                     <td>@Html.DisplayFor(modelItem => item.Part.kanbanPosition)</td>
                     <td>@Html.DisplayFor(modelItem => item.source)</td>
                     <td>@Html.DisplayFor(modelItem => item.sourceType)</td>
+                    <td>
+                        <a href="@Url.Action("Search", "StockMovements", new { PartNr = item.partNr })" style="white-space:nowrap;">
+                            @*@(item.movementsCount.ToString() + " Movements")*@
+                            Movements
+                        </a>
+                    </td>
                     <td class="IconA">
                         <a href="@Url.Action("Edit", "Stocks" , new { id=item.id }) "> <i class="glyphicon glyphicon-pencil"></i></a>
                         @*@Html.ActionLink("Details", "Details", new { id = item.id }) |*@

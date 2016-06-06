@@ -1,0 +1,77 @@
+﻿@using MvcPaging;
+
+@model IPagedList<CuttingMrpLib.StockMovement>
+@{ 
+    ViewBag.Title = "StockMovements";
+}
+
+<ol class="breadcrumb" style="padding:20px 15px;font-size:1.5em;">
+    <li>
+        @*<a href="#" onclick="history.back()">Stocks</a>*@
+        <a href="javascript:void(0)" onclick="history.go(-1)">Stocks</a>
+    </li>
+    <li>
+        Movements
+    </li>
+</ol>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th> No. </th>
+            <th>PartNr</th>
+            <th>Quantity</th>
+            <th>FIFO</th>
+            <th>MoveTypeDisplay</th>
+            <th>SourceDoc</th>
+            <th>CreatedAtDisplay</th>
+            @*<th>Options</th>*@
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            int i = 0;
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@(i += 1)</td>
+                    <td>@Html.DisplayFor(modelItem => item.partNr)</td>
+                    <td>@Html.DisplayFor(modelItem => item.quantity)</td>
+                    <td>@Html.DisplayFor(modelItem => item.fifoDisplay)</td>
+                    <td>@Html.DisplayFor(modelItem => item.typeDisplay)</td>
+                    <td>@Html.DisplayFor(modelItem => item.sourceDoc)</td>
+                    <td>@Html.DisplayFor(modelItem => item.createdAtDisplay)</td>
+                    @*<td class="IconA">
+                        <a href="@Url.Action("Edit", "StockMovements" , new { id=item.id }) "> <i class="glyphicon glyphicon-pencil"></i></a>
+                        <a href="@Url.Action("Delete", "StockMovements" , new { id=item.id })"> <i class="glyphicon glyphicon-trash" style="color:#ff0000;"></i></a>
+                    </td>*@
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<div class="col-sm-12" style="text-align:center;">
+    <div class="clearfix pagination">
+        <div class="pagination-inner">
+            @if (Model != null)
+            {
+                if (ViewBag.Query != null)
+                {
+                    var html = Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
+                        .Options(o => o.AddRouteValue("PartNr", ViewBag.Query.PartNr))
+                        .Options(o => o.AddRouteValue("OrderedDateFrom", ViewBag.Query.DateFrom))
+                        .Options(o => o.AddRouteValue("OrderedDateTo", ViewBag.Query.DateTo));
+                    @html
+                }
+                else
+                {
+                    @Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
+                }
+            }
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/stocks")

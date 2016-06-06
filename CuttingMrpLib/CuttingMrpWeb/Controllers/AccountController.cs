@@ -87,7 +87,7 @@ namespace CuttingMrpWeb.Controllers
             {
                 case SignInStatus.Success:
                     if (string.IsNullOrWhiteSpace(returnUrl) || returnUrl.Contains("LogOff")) {
-                        return RedirectToAction("Index", "ProcessOrders");
+                        return RedirectToAction("Index", "Dashboard");
                     }
                     else
                     {
@@ -407,7 +407,7 @@ namespace CuttingMrpWeb.Controllers
         {
             Session["user"]=null;
             //AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Index", "ProcessOrders");
+            return RedirectToAction("Index", "Dashboard");
         }
 
         //
