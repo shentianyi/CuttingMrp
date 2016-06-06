@@ -129,8 +129,10 @@ Public Class Calculator
                 Dim moq As Double = 0
                 If settings.OrderType = OrderType.Fix Then
                     Dim kanbanrepo As Repository(Of BatchOrderTemplate) = New Repository(Of BatchOrderTemplate)(New DataContext(DBConn))
-                    Dim kanban As BatchOrderTemplate = kanbanrepo.First(Function(c) c.partNr = CType(dic.Key, String))
-
+                    Dim kanban As BatchOrderTemplate = kanbanrepo.FirstOrDefault(Function(c) c.partNr = CType(dic.Key, String))
+                    If kanban Is Nothing Then
+                        Throw New Exception("找不到" & CType(dic.Key, String) & "的看板号")
+                    End If
                     spq = kanban.bundle
                         moq = kanban.batchQuantity
 
@@ -362,8 +364,10 @@ Public Class Calculator
                         End If
                     Next
                     Dim stockStrings As List(Of String) = New List(Of String)
-                    For Each ke As Object In stockToBook
-                        stockStrings.Add(CType(ke, String))
+                    For Each ke As Object In stockToBook.Keys
+                        If Not stockStrings.Contains(CType(ke, String)) Then
+                            stockStrings.Add(CType(ke, String))
+                        End If
                     Next
                     Dim actualStock As List(Of Stock) = stockRepo.FindAll(Function(c) stockStrings.Contains(c.partNr)).ToList
                     actualStock = (From c In actualStock Order By c.fifo Ascending).ToList
@@ -382,10 +386,12 @@ Public Class Calculator
                             For Each stockto As Stock In allocatedStock(CType(dic.Key, String))
                                 If CType(dic.Value, Double) = stockto.quantity Then
                                     stockRepo.MarkForDeletion(stockto)
+                                    dic.Value = 0
                                     moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = stockto.fifo, .moveType = StockMoveType.Backflush, .partNr = CType(stockto.partNr, String), .quantity = stockto.quantity, .sourceDoc = m.sourceDoc})
                                     Exit For
                                 ElseIf CType(dic.Value, Double) < stockto.quantity Then
                                     stockto.quantity = stockto.quantity - CType(dic.Value, Double)
+                                    dic.Value = 0
                                     moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = stockto.fifo, .moveType = StockMoveType.Backflush, .partNr = CType(stockto.partNr, String), .quantity = CType(dic.Value, Double), .sourceDoc = m.sourceDoc})
                                     Exit For
                                 Else
@@ -393,6 +399,10 @@ Public Class Calculator
                                     dic.Value = CType(dic.Value, Double) - stockto.quantity
                                 End If
                             Next
+                            If CType(dic.Value, Double) > 0 Then
+                                stockRepo.MarkForAdd(New Stock With {.container = "ORIGINAL", .fifo = Now, .partNr = CType(dic.Key, String), .position = "ORIGINAL", .quantity = -CType(dic.Value, Double), .source = m.sourceDoc, .sourceType = "BACKFLUSH", .wh = "ORIGINAL"})
+                                moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = Now, .moveType = StockMoveType.Backflush, .partNr = CType(dic.Key, String), .quantity = CType(dic.Value, Double), .sourceDoc = m.sourceDoc})
+                            End If
                         Else
                             stockRepo.MarkForAdd(New Stock With {.container = "ORIGINAL", .fifo = Now, .partNr = CType(dic.Key, String), .position = "ORIGINAL", .quantity = -CType(dic.Value, Double), .source = m.sourceDoc, .sourceType = "BACKFLUSH", .wh = "ORIGINAL"})
                             moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = Now, .moveType = StockMoveType.Backflush, .partNr = CType(dic.Key, String), .quantity = CType(dic.Value, Double), .sourceDoc = m.sourceDoc})

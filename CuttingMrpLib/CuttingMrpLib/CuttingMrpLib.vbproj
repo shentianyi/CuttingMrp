@@ -49,6 +49,7 @@
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Messaging" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -67,17 +68,14 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\BackflushStatus.vb" />
-    <Compile Include="Data\CalculatorStatus.vb" />
-    <Compile Include="Data\CuttingMrp.vb">
-      <DependentUpon>CuttingMrp.dbml</DependentUpon>
-    </Compile>
-    <Compile Include="Data\DataContext.vb" />
-    <Compile Include="Data\CuttingMrp.designer.vb">
+    <Compile Include="CuttingMrp.designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CuttingMrp.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Data\BackflushStatus.vb" />
+    <Compile Include="Data\CalculatorStatus.vb" />
+    <Compile Include="Data\DataContext.vb" />
     <Compile Include="Data\MPSStatus.vb" />
     <Compile Include="Data\OrderType.vb" />
     <Compile Include="Data\ProcessOrderStatus.vb" />
@@ -164,7 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Data\CuttingMrp.dbml.layout">
+    <None Include="CuttingMrp.dbml.layout">
       <DependentUpon>CuttingMrp.dbml</DependentUpon>
     </None>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -175,7 +173,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Data\CuttingMrp.dbml">
+    <None Include="CuttingMrp.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <SubType>Designer</SubType>
     </None>
