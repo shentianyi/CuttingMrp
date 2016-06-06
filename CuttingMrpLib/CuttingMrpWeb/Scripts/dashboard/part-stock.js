@@ -12,8 +12,10 @@ PartStock.Init = function () {
 }
 
 PartStock.InitPartNr = function () {
-    $('#part_nr').keydown(function () {
-        var part_nr_value = $('#part_nr').val();
+    //TODO: fixed search
+
+    $('.part-nr').keyup(function () {
+        var part_nr_value = $('#part_nr').val().trim();
         $.ajax({
             url: '/Parts/Fuzzies',
             type: 'get',
@@ -23,7 +25,8 @@ PartStock.InitPartNr = function () {
             success: function (data) {
                 $('#part_nr').typeahead({
                     source:data,
-                    display: 'partNr'
+                    display: 'partNr',
+                    items: 20
                 });
             },
             error: function () {
@@ -31,6 +34,34 @@ PartStock.InitPartNr = function () {
             }
         })
     })
+   
+    //$('#part_nr').typeahead({
+    //    source: function (query, process) {
+    //        $.ajax({
+    //            url: 'Parts/Fuzzies',
+    //            type: 'get',
+    //            data: {
+    //                id: query
+    //            },
+    //            dataTypa:'JSON',
+    //            success: function (data) {
+    //                if (data.length == 0) {
+    //                    return;
+    //                }
+    //                var PartNr = new Array;
+    //                for (var i = 0; i < data.length; i++) {
+    //                    PartNr.push(data[i].partNr);
+    //                }
+    //                process(PartNr);
+    //            },
+    //            error: function () {
+    //                console.log("Error");
+    //            }
+    //        })
+    //    },
+    //    items: 20,
+    //    delay: 500
+    //});
 }
 
 PartStock.PartStockSearch = function () {
@@ -44,6 +75,10 @@ PartStock.PartStockSearch = function () {
                 borderColor: "#ff0000"
             });
             $('.date-from').val(FutureDate(7));
+        } else {
+            $('.date-from').css({
+                borderColor: ""
+            });
         }
             
         if (DateTo == null || DateTo == "") {
@@ -51,6 +86,10 @@ PartStock.PartStockSearch = function () {
                 borderColor: "#ff0000"
             });
             $('.date-to').val(new Date().Format("yyyy/MM/dd"));
+        } else {
+            $('.date-to').css({
+                borderColor: ""
+            });
         }
 
         if (PartNr == null || PartNr == "") {
@@ -63,6 +102,10 @@ PartStock.PartStockSearch = function () {
             });
             $('.PartStockEmpty').html("Part Nr Can't Empty");
             return;
+        } else {
+            $('.part-nr').css({
+                borderColor: ""
+            });
         }
 
         $.ajax({
