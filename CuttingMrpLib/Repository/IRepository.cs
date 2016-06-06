@@ -38,6 +38,7 @@ namespace Repository
         /// </summary>
         /// <param name="entity"></param>
         void MarkForDeletion(T entity);
+        void MarkForAdd(T entity);
 
         /// <summary>
         /// Create a new instance of type T.

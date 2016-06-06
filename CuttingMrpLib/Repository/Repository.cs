@@ -9,8 +9,6 @@ namespace Repository
 {
     public class Repository<T> : IRepository<T>
 
-
-
         where T : class
     {
        
@@ -96,6 +94,11 @@ namespace Repository
         public T SingleOrDefault(Func<T, bool> exp)
         {
             return GetTable.SingleOrDefault(exp);
+        }
+
+        public void MarkForAdd(T entity)
+        {
+            GetTable.InsertOnSubmit(entity);
         }
 
         public Repository(IDataContextFactory dataContextFactory)

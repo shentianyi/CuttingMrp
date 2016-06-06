@@ -50,7 +50,8 @@ Public Class Calculator
         Dim repo As Repository(Of MP) = New Repository(Of MP)(dc)
         Dim tempBoms As Hashtable = New Hashtable
         Dim requires As List(Of Requirement) = New List(Of Requirement)
-        For Each m As MP In repo.GetTable
+        Dim mpses As List(Of MP) = repo.FindAll(Function(c) c.status = MPSStatus.plan And c.requiredDate >= Now.Date).ToList
+        For Each m As MP In mpses
             If tempBoms.ContainsKey(m.partnr) = False Then
                 Dim bomRepo As Repository(Of BOM) = New Repository(Of BOM)(dc)
                 Dim counter As Integer = bomRepo.Count(Function(c) c.validFrom <= m.requiredDate And c.validTo >= m.requiredDate And c.partNr = m.partnr)
@@ -320,9 +321,102 @@ Public Class Calculator
         'get backflush
         'make backflush
         'book stock
+        '
         '1 - minus the forecast
         '2 - minus the material stock
         '3 - submit change
+        Dim tempBoms As Hashtable = New Hashtable
+        Dim dc As DataContext = New DataContext(DBConn)
+        Dim mprrepo As Repository(Of MP) = New Repository(Of MP)(dc)
+        Dim mpses As List(Of MP) = mprrepo.FindAll(Function(c) c.status = MPSStatus.Backflush).ToList
+        Dim backFlushRepo As Repository(Of BackflushRecord) = New Repository(Of BackflushRecord)(dc)
+        Dim backflushSucc As List(Of BackflushRecord) = New List(Of BackflushRecord)
+        Dim backflushFail As List(Of BackflushRecord) = New List(Of BackflushRecord)
+        Dim stockToBook As Hashtable = New Hashtable
+        Dim bomRepo As Repository(Of BOM) = New Repository(Of BOM)(dc)
+        Dim stockRepo As Repository(Of Stock) = New Repository(Of Stock)(dc)
+        If mpses IsNot Nothing Then
+            Try
+                For Each m As MP In mpses
+                    If tempBoms.ContainsKey(m.partnr) = False Then
+
+                        Dim counter As Integer = bomRepo.Count(Function(c) c.validFrom <= m.requiredDate And c.validTo >= m.requiredDate And c.partNr = m.partnr)
+                        If counter < 1 Then
+                            backflushFail.Add(New BackflushRecord With
+                                              {.fifo = Now, .launchTime = Now,
+                                              .message = "没有找到BOM",
+                                              .partnr = m.partnr,
+                                              .quantity = m.quantity,
+                                              .sourceDoc = m.sourceDoc,
+                                              .status = BackflushStatus.Normal})
+                        End If
+                        If counter > 1 Then
+                            backflushFail.Add(New BackflushRecord With
+                                              {.fifo = Now, .launchTime = Now,
+                                              .message = "找到" & counter & "个生效的BOM",
+                                              .partnr = m.partnr, .quantity = m.quantity,
+                                              .sourceDoc = m.sourceDoc,
+                                              .status = BackflushStatus.Normal})
+                        End If
+                        Dim bom As BOM = bomRepo.Single(Function(c) c.validFrom <= Now And c.validTo >= Now And c.partNr = m.partnr)
+                        tempBoms.Add(m.partnr, bom.BomItems.Where(Function(c) c.validFrom <= Now And c.validTo >= Now).ToList)
+                    End If
+                    For Each item As BomItem In tempBoms(m.partnr)
+                        If stockToBook.ContainsKey(item.componentId) Then
+                            stockToBook(item.componentId) = stockToBook(item.componentId) + item.quantity * m.quantity
+                        Else
+                            stockToBook(item.componentId) = item.quantity * m.quantity
+                        End If
+                    Next
+
+                    'book stock
+                    '1.find the related stocks
+                    '2.book one by one until the stocktobook = 0
+                    '3.reset the status of mp
+                    '4.save all
+                    Dim stockStrings As List(Of String) = New List(Of String)
+                    For Each ke As Object In stockToBook
+                        stockStrings.Add(CType(ke, String))
+                    Next
+                    Dim actualStock As List(Of Stock) = stockRepo.FindAll(Function(c) stockStrings.Contains(c.partNr)).ToList
+                    actualStock = (From c In actualStock Order By c.fifo Ascending).ToList
+                    Dim allocatedStock As Hashtable = New Hashtable
+                    For Each st As Stock In actualStock
+                        If allocatedStock.ContainsKey(st.partNr) Then
+                            allocatedStock(st.partNr).add(st)
+                        Else
+                            Dim li As List(Of Stock) = New List(Of Stock)
+                            li.Add(st)
+                            allocatedStock.Add(st.partNr, li)
+                        End If
+                    Next
+                    For Each dic As DictionaryEntry In stockToBook
+                        If allocatedStock.ContainsKey(CType(dic.Key, String)) Then
+                            For Each stockto As Stock In allocatedStock(CType(dic.Key, String))
+                                If CType(dic.Value, Double) = stockto.quantity Then
+                                    stockRepo.MarkForDeletion(stockto)
+                                    Exit For
+                                ElseIf CType(dic.Value, Double) < stockto.quantity Then
+                                    stockto.quantity = stockto.quantity - CType(dic.Value, Double)
+                                    Exit For
+                                Else
+                                    stockRepo.MarkForDeletion(stockto)
+                                    dic.Value = CType(dic.Value, Double) - stockto.quantity
+                                End If
+                            Next
+                        Else
+                            '副库存
+
+                        End If
+                    Next
+
+                Next
+                dc.SaveAll()
+            Catch ex As Exception
+
+            End Try
+
+        End If
 
     End Sub
 
