@@ -83,8 +83,6 @@
       <appender-ref ref="serviceLog" />
       <appender-ref ref="SvcMail"/>
     </logger>
-
-
   </log4net>
 
 </configuration>
