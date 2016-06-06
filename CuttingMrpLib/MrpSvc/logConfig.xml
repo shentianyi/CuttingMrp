@@ -1,6 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<?xml version="1.0" encoding="utf-8" ?>
-
 <configuration>
   <configSections>
     <section name="log4net" type="log4net.Config.Log4NetConfigurationSectionHandler, log4net" />
@@ -9,12 +7,14 @@
   <log4net>
     <!--EMAIL Notification-->
     <appender name="SvcMail" type="log4net.Appender.SmtpAppender">
-      <to value="info@cz-tek.com,info1@cz-tek.com" />
+      <authentication value="Basic" />
+      <to value="song.wang@cz-tek.com,jiemin.guan@leoni.com,lin.xu@leoni.com,fox.yang@leoni.com" />
       <!--添加需要发送的邮箱地址，用逗号隔开-->
-      <from value="kskservice@leoni.com" />
-      <subject value="MRP系统服务通知" />
-      <smtpHost value="tianyi-v-win03" />
-      <!--SMTP服务器地址-->
+      <from value="ksk.service@leoni.com" />
+      <username value = "func3532" />
+      <password value = "func,3532" />
+      <subject value="Cutting MRP通知" />
+      <smtpHost value="10.163.130.35" />
       <bufferSize value="0" />
       <lossy value="true" />
       <evaluator type="log4net.Core.LevelEvaluator">
@@ -27,10 +27,13 @@
 
 
     <appender name="ProcessMail" type="log4net.Appender.SmtpAppender">
-      <to value="info@cz-tek.com,info1@cz-tek.com" />
-      <from value="kskservice@leoni.com" />
-      <subject value="KSK系统报文处理错误警报" />
-      <smtpHost value="tianyi-v-win03" />
+      <authentication value="Basic" />
+      <to value="tianyi.shen@cz-tek.com,song.wang@cz-tek.com,jiemin.guan@leoni.com,lin.xu@leoni.com,fox.yang@leoni.com" />
+      <from value="ksk.service@leoni.com" />
+      <username value = "func3532" />
+      <password value = "func,3532" />
+      <subject value="Cutting MRP通知" />
+      <smtpHost value="10.163.130.35" />
       <bufferSize value="0" />
       <lossy value="true" />
       <evaluator type="log4net.Core.LevelEvaluator">
@@ -40,14 +43,7 @@
         <conversionPattern value="%newline%date [%thread] %-5level %logger [%property{NDC}] - %message%newline%newline%newline" />
       </layout>
     </appender>
-
-
-
-
-
-
-
-
+    
     <!--text notification-->
     <appender type="log4net.Appender.RollingFileAppender" name="serviceLog">
       <file value="svc.txt" />

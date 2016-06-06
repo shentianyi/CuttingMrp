@@ -1,23 +1,27 @@
 ﻿.LoginMask{
-    position:absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    z-index:19999;
-    opacity:.8;
+    color: #eeeeee;
+    font-size: 5em;
+    height: 100%;
+    left: 0;
+    opacity: 0.8;
+    padding-top: 10%;
+    position: absolute;
+    text-align: center;
+    text-shadow: 2px 10px 5px black;
+    top: 0;
+    width: 100%;
+    z-index: 19999;
     /*steelblue, #ffffbb*/
-    background: -webkit-linear-gradient(left top, #0088cc , #00688B); 
-    background: -o-linear-gradient(bottom right, #0088cc, #00688B);
-    background: -moz-linear-gradient(bottom right, #0088cc, #00688B);
-    background: linear-gradient(to bottom right,#0088cc , #00688B);
+    background: -webkit-linear-gradient(#0088cc, skyblue, #0088cc);
+    background: -o-linear-gradient(#0088cc, skyblue, #0088cc);
+    background: -moz-linear-gradient(#0088cc, skyblue, #0088cc);
+    background: linear-gradient(#0088cc, skyblue, #0088cc);
 }
 
 .LoginBlock{
     z-index:20000;
     width:40%;
-    height:50%; 
     position:absolute;
     left:30%;
-    top:25%
+    top:35%;
 }

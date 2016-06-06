@@ -1,11 +1,24 @@
 ﻿<Serializable>
 Public Class CalculateSetting
+    Private _taskType As String = "MRP"
     Private _roundId As String
     Private _reserveTypes As List(Of String)
     Private _mergeMethod As MergeMethod
     Public MergeMethodType() As String = {"DAY", "WEEK", "MONTH", "YEAR"}
     Public OrderTypes() As String = {"FIX", "ACTUAL"}
 
+    ''' <summary>
+    ''' MRP,BF
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property TaskType As String
+        Get
+            Return _taskType
+        End Get
+        Set(value As String)
+            _taskType = value
+        End Set
+    End Property
     Public Property ReservedType As List(Of String)
         Get
             If _reserveTypes Is Nothing Then

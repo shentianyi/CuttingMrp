@@ -6,6 +6,20 @@ TopRate.Init = function () {
     TopRate.InitCharts();
 }
 
+TopRate.ChangeRate = function (rate) {
+    if (rate == 0) {
+        return 0;
+    } else if ((rate + "").indexOf(".") == -1) {
+        return parseFloat(rate);
+    } else {
+        var TmpRate = rate * 100 + "";
+        var TmpRateDec = TmpRate.indexOf(".");
+        var Rate = TmpRate.substring(0, TmpRateDec + 3);
+        return parseFloat(Rate);
+    }
+    return 0;
+}
+
 TopRate.InitCharts = function () {
     $.ajax({
         url: '/Dashboard/Data',
@@ -24,7 +38,7 @@ TopRate.InitCharts = function () {
                     if (count == 0) {
                         XValue.push(value[i].XValue.split(" ")[0]);
                     }
-                    YValueRate.push(value[i].YValueRate);
+                    YValueRate.push({ id: value[i].YValue, y: TopRate.ChangeRate(value[i].YValueRate) });
                 }
 
                 var TmpSeries = {
@@ -89,11 +103,11 @@ TopRate.DrawCharts = function (XValue, Series) {
             plotLines: [{ value: 0, width: 1, color: '#808080' }]
         },
         tooltip: {
-            //formatter: function () {
-            //    return '<span><b>' + this.x.split('#')[0] + '</b><br/>' +
-            //        '<b>Value: </b><b>' + this.y + '</b>' +
-            //        "<br /><b>Rate: </b><b>" + this.x.split('#')[1] + '</b><span>';
-            //}
+            formatter: function () {
+                return '<span><b>' + this.x + '</b><br/>' +
+                    '<b>Stock: </b><b>' + this.point.id + '</b>' +
+                    "<br /><b>Rate: </b><b>" + this.y + '%</b><span>';
+            }
         },
         scrollbar: {
             enabled: true
@@ -102,14 +116,14 @@ TopRate.DrawCharts = function (XValue, Series) {
             layout: 'horizontal', align: 'center', verticalAlign: 'bottom', borderHeight: 0
         },
         plotOptions: {
-            column: {
-                borderWidth: 0,
+            line: {
                 dataLabels: {
                     enabled: true,
-                    style: {
-                        fontWeight: "bold",
+                    formatter: function () {
+                        return '<b>' + this.y + '%</b>';
                     }
-                }
+                },
+                enableMouseTracking: true
             },
             series: {
                 stickyTracking: false,
