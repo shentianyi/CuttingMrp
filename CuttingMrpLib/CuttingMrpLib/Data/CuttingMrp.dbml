@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?><Database Name="CuttingMrp" Class="CuttingMrpDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="cuttingmrp" Class="CuttingMrpDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Connection Mode="AppSettings" ConnectionString="Data Source=vm08;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=sa" SettingsObjectName="CuttingMrpLib.My.MySettings" SettingsPropertyName="CuttingMrpConnectionString2" Provider="System.Data.SqlClient" />
   <Table Name="dbo.BackflushRecord" Member="BackflushRecords">
     <Type Name="BackflushRecord">
@@ -148,7 +148,7 @@
   <Table Name="dbo.ProcessOrder" Member="ProcessOrders">
     <Type Name="ProcessOrder">
       <Column Name="orderNr" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="sourceDoc" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="sourceDoc" Type="System.String" DbType="VarChar(2000)" CanBeNull="true" />
       <Column Name="derivedFrom" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="proceeDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="partNr" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
@@ -250,6 +250,17 @@
       <Column Name="requirementId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="batchQuantity" Type="System.Double" DbType="Float" CanBeNull="true" />
       <Column Name="OrderType" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.StockBatchMoveRecord" Member="StockBatchMoveRecord">
+    <Type Name="StockBatchMoveRecord">
+      <Column Name="id" Type="System.String" DbType="VarChar(200) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="sourceDoc" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="souceDocTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="partNr" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="quantity" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="moveType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="createdAt" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
     </Type>
   </Table>
 </Database>

@@ -22,7 +22,7 @@ Imports System.Linq.Expressions
 Imports System.Reflection
 
 
-<Global.System.Data.Linq.Mapping.DatabaseAttribute(Name:="CuttingMrp")>  _
+<Global.System.Data.Linq.Mapping.DatabaseAttribute(Name:="cuttingmrp")>  _
 Partial Public Class CuttingMrpDataContext
 	Inherits System.Data.Linq.DataContext
 	
@@ -138,6 +138,12 @@ Partial Public Class CuttingMrpDataContext
   Partial Private Sub UpdateStockMovement(instance As StockMovement)
     End Sub
   Partial Private Sub DeleteStockMovement(instance As StockMovement)
+    End Sub
+  Partial Private Sub InsertStockBatchMoveRecord(instance As StockBatchMoveRecord)
+    End Sub
+  Partial Private Sub UpdateStockBatchMoveRecord(instance As StockBatchMoveRecord)
+    End Sub
+  Partial Private Sub DeleteStockBatchMoveRecord(instance As StockBatchMoveRecord)
     End Sub
   #End Region
 	
@@ -289,6 +295,12 @@ Partial Public Class CuttingMrpDataContext
 	Public ReadOnly Property ProcessOrderViews() As System.Data.Linq.Table(Of ProcessOrderView)
 		Get
 			Return Me.GetTable(Of ProcessOrderView)
+		End Get
+	End Property
+	
+	Public ReadOnly Property StockBatchMoveRecord() As System.Data.Linq.Table(Of StockBatchMoveRecord)
+		Get
+			Return Me.GetTable(Of StockBatchMoveRecord)
 		End Get
 	End Property
 End Class
@@ -3171,7 +3183,7 @@ Partial Public Class ProcessOrder
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_sourceDoc", DbType:="VarChar(50)")>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_sourceDoc", DbType:="VarChar(2000)")>  _
 	Public Property sourceDoc() As String
 		Get
 			Return Me._sourceDoc
@@ -4758,4 +4770,199 @@ Partial Public Class ProcessOrderView
 			End If
 		End Set
 	End Property
+End Class
+
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.StockBatchMoveRecord")>  _
+Partial Public Class StockBatchMoveRecord
+	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+	
+	Private Shared emptyChangingEventArgs As PropertyChangingEventArgs = New PropertyChangingEventArgs(String.Empty)
+	
+	Private _id As String
+	
+	Private _sourceDoc As String
+	
+	Private _souceDocTime As System.Nullable(Of Date)
+	
+	Private _partNr As String
+	
+	Private _quantity As Double
+	
+	Private _moveType As Integer
+	
+	Private _createdAt As System.Nullable(Of Date)
+	
+    #Region "可扩展性方法定义"
+    Partial Private Sub OnLoaded()
+    End Sub
+    Partial Private Sub OnValidate(action As System.Data.Linq.ChangeAction)
+    End Sub
+    Partial Private Sub OnCreated()
+    End Sub
+    Partial Private Sub OnidChanging(value As String)
+    End Sub
+    Partial Private Sub OnidChanged()
+    End Sub
+    Partial Private Sub OnsourceDocChanging(value As String)
+    End Sub
+    Partial Private Sub OnsourceDocChanged()
+    End Sub
+    Partial Private Sub OnsouceDocTimeChanging(value As System.Nullable(Of Date))
+    End Sub
+    Partial Private Sub OnsouceDocTimeChanged()
+    End Sub
+    Partial Private Sub OnpartNrChanging(value As String)
+    End Sub
+    Partial Private Sub OnpartNrChanged()
+    End Sub
+    Partial Private Sub OnquantityChanging(value As Double)
+    End Sub
+    Partial Private Sub OnquantityChanged()
+    End Sub
+    Partial Private Sub OnmoveTypeChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnmoveTypeChanged()
+    End Sub
+    Partial Private Sub OncreatedAtChanging(value As System.Nullable(Of Date))
+    End Sub
+    Partial Private Sub OncreatedAtChanged()
+    End Sub
+    #End Region
+	
+	Public Sub New()
+		MyBase.New
+		OnCreated
+	End Sub
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_id", DbType:="VarChar(200) NOT NULL", CanBeNull:=false, IsPrimaryKey:=true)>  _
+	Public Property id() As String
+		Get
+			Return Me._id
+		End Get
+		Set
+			If (String.Equals(Me._id, value) = false) Then
+				Me.OnidChanging(value)
+				Me.SendPropertyChanging
+				Me._id = value
+				Me.SendPropertyChanged("id")
+				Me.OnidChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_sourceDoc", DbType:="VarChar(200)")>  _
+	Public Property sourceDoc() As String
+		Get
+			Return Me._sourceDoc
+		End Get
+		Set
+			If (String.Equals(Me._sourceDoc, value) = false) Then
+				Me.OnsourceDocChanging(value)
+				Me.SendPropertyChanging
+				Me._sourceDoc = value
+				Me.SendPropertyChanged("sourceDoc")
+				Me.OnsourceDocChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_souceDocTime", DbType:="DateTime")>  _
+	Public Property souceDocTime() As System.Nullable(Of Date)
+		Get
+			Return Me._souceDocTime
+		End Get
+		Set
+			If (Me._souceDocTime.Equals(value) = false) Then
+				Me.OnsouceDocTimeChanging(value)
+				Me.SendPropertyChanging
+				Me._souceDocTime = value
+				Me.SendPropertyChanged("souceDocTime")
+				Me.OnsouceDocTimeChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partNr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
+	Public Property partNr() As String
+		Get
+			Return Me._partNr
+		End Get
+		Set
+			If (String.Equals(Me._partNr, value) = false) Then
+				Me.OnpartNrChanging(value)
+				Me.SendPropertyChanging
+				Me._partNr = value
+				Me.SendPropertyChanged("partNr")
+				Me.OnpartNrChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_quantity", DbType:="Float NOT NULL")>  _
+	Public Property quantity() As Double
+		Get
+			Return Me._quantity
+		End Get
+		Set
+			If ((Me._quantity = value)  _
+						= false) Then
+				Me.OnquantityChanging(value)
+				Me.SendPropertyChanging
+				Me._quantity = value
+				Me.SendPropertyChanged("quantity")
+				Me.OnquantityChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_moveType", DbType:="Int NOT NULL")>  _
+	Public Property moveType() As Integer
+		Get
+			Return Me._moveType
+		End Get
+		Set
+			If ((Me._moveType = value)  _
+						= false) Then
+				Me.OnmoveTypeChanging(value)
+				Me.SendPropertyChanging
+				Me._moveType = value
+				Me.SendPropertyChanged("moveType")
+				Me.OnmoveTypeChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_createdAt", DbType:="DateTime")>  _
+	Public Property createdAt() As System.Nullable(Of Date)
+		Get
+			Return Me._createdAt
+		End Get
+		Set
+			If (Me._createdAt.Equals(value) = false) Then
+				Me.OncreatedAtChanging(value)
+				Me.SendPropertyChanging
+				Me._createdAt = value
+				Me.SendPropertyChanged("createdAt")
+				Me.OncreatedAtChanged
+			End If
+		End Set
+	End Property
+	
+	Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
+	
+	Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
+	
+	Protected Overridable Sub SendPropertyChanging()
+		If ((Me.PropertyChangingEvent Is Nothing)  _
+					= false) Then
+			RaiseEvent PropertyChanging(Me, emptyChangingEventArgs)
+		End If
+	End Sub
+	
+	Protected Overridable Sub SendPropertyChanged(ByVal propertyName As [String])
+		If ((Me.PropertyChangedEvent Is Nothing)  _
+					= false) Then
+			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
+		End If
+	End Sub
 End Class

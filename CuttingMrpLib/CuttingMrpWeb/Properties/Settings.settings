@@ -2,9 +2,6 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="CuttingMrpWeb.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="mrpQueue" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">.\Private$\cuttingMrp</Value>
-    </Setting>
     <Setting Name="stockContainer" Type="System.String" Scope="Application">
       <Value Profile="(Default)">MRPContainer</Value>
     </Setting>
@@ -23,9 +20,6 @@
     <Setting Name="mrpRoundSelectLimit" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">20</Value>
     </Setting>
-    <Setting Name="db" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">Data Source=BV001;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=sa;Password=1</Value>
-    </Setting>
     <Setting Name="csvDelimiter" Type="System.String" Scope="Application">
       <Value Profile="(Default)">;</Value>
     </Setting>
@@ -37,6 +31,15 @@
     </Setting>
     <Setting Name="adminPwd" Type="System.String" Scope="Application">
       <Value Profile="(Default)">admin@</Value>
+    </Setting>
+    <Setting Name="mrpQueue" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">.\Private$\cuttingMrp1</Value>
+    </Setting>
+    <Setting Name="db" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Data Source=Charlot-PC\MSSQLSERVER20082;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=sa;Password=123456@</Value>
+    </Setting>
+    <Setting Name="ignoreImportKBOrderError" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

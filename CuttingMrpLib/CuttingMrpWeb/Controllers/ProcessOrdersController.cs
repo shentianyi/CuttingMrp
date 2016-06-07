@@ -13,6 +13,7 @@ using CuttingMrpWeb.Helpers;
 using CuttingMrpWeb.Models;
 using CuttingMrpWeb.Properties;
 using MvcPaging;
+using OfficeOpenXml;
 
 namespace CuttingMrpWeb.Controllers
 {
@@ -28,7 +29,7 @@ namespace CuttingMrpWeb.Controllers
 
             IProcessOrderService ps = new ProcessOrderService(Settings.Default.db);
 
-            IPagedList<ProcessOrder> processOrders = ps.Search(q).ToPagedList(pageIndex, Settings.Default.pageSize);
+            IPagedList<ProcessOrder> processOrders = ps.Search(q).ToPagedList(10000, Settings.Default.pageSize);
 
             ViewBag.Query = q;
 
@@ -175,7 +176,7 @@ namespace CuttingMrpWeb.Controllers
                     ii.Add(processOrders[i].Part.kanbanBundleQty.ToString());
                     ii.Add(processOrders[i].Part.kanbanPosition.ToString());
                     ii.Add(processOrders[i].Part.routeNr.ToString());
-                    ii.Add(processOrders[i].completeRate.ToString());
+                    ii.Add(Math.Round(processOrders[i].completeRate,2).ToString());
                     ii.Add(processOrders[i].derivedFrom);
                     sw.WriteLine(string.Join(Settings.Default.csvDelimiter, ii.ToArray()));
                 }
@@ -268,17 +269,24 @@ namespace CuttingMrpWeb.Controllers
         [HttpPost]
         public ActionResult ImportForceRecord(HttpPostedFileBase forceFile)
         {
-            int startFromLine = 16;
+            int csvStartFromLine = 16;
+            int excelStartFromLine = 9;
             //try
             //{
-                if (forceFile == null){
-                    throw new Exception("No file is uploaded to system");
-                } 
-                var appData = Server.MapPath("~/TmpFile/");
-                var filename = Path.Combine(appData,
-                    DateTime.Now.ToString("yyyyMMddHHmmss") + "_" + Path.GetFileName(forceFile.FileName));
-                forceFile.SaveAs(filename);
+            if (forceFile == null)
+            {
+                throw new Exception("No file is uploaded to system");
+            }
+            var appData = Server.MapPath("~/TmpFile/");
+            var filename = Path.Combine(appData,
+                DateTime.Now.ToString("yyyyMMddHHmmss") + "_" + Path.GetFileName(forceFile.FileName));
+            forceFile.SaveAs(filename);
+            string ex = Path.GetExtension(filename);
 
+            List<CuttingOrderImportModel> records = new List<CuttingOrderImportModel>();
+
+            if (ex.Equals(".csv"))
+            {
                 CsvConfiguration configuration = new CsvConfiguration();
                 configuration.Delimiter = Settings.Default.csvDelimiter;
                 configuration.HasHeaderRecord = true;
@@ -286,81 +294,139 @@ namespace CuttingMrpWeb.Controllers
                 configuration.RegisterClassMap<ProcessOrderCsvModelMap>();
                 configuration.TrimHeaders = true;
                 configuration.TrimFields = true;
-             
 
-                List<ProcessOrderCsvModel> records = new List<ProcessOrderCsvModel>();
+
                 using (TextReader treader = System.IO.File.OpenText(filename))
                 {
-                    for (int i=0;true; i++) {
-                       string s= treader.ReadLine();
-                        if (string.IsNullOrWhiteSpace(s)) {
-                            break;
-                        }
-                        if (i >= startFromLine) {
-                            string[] fields = s.Split(char.Parse(Settings.Default.csvDelimiter));
-                            records.Add(new ProcessOrderCsvModel()
+                    for (int i = 0; true; i++)
+                    {
+                        string s = treader.ReadLine();
+
+                        if (i >= csvStartFromLine)
+                        {
+                            if (string.IsNullOrWhiteSpace(s))
                             {
-                                Date=fields[0],
-                                Time= fields[1],
-                                CuttingOrder=fields[2],
-                                CuttingPosition= fields[3],
-                                SingleResource= fields[4],
-                                ResourceGroup= fields[5],
-                                StaffNumber= fields[6],
-                                WireNumber=fields[7],
-                                PartNumber= fields[8],
-                                KanbanNumber=fields[9],
-                                CutQtyDisplay= fields[10]
+                                break;
+                            }
+                            string[] fields = s.Split(char.Parse(Settings.Default.csvDelimiter));
+                            records.Add(new CuttingOrderImportModel()
+                            {
+                                type = CuttingOrderImportModelType.White,
+                                Date = fields[0],
+                                Time = fields[1],
+                                CuttingOrder = fields[2],
+                                CuttingPosition = fields[3],
+                                SingleResource = fields[4],
+                                ResourceGroup = fields[5],
+                                StaffNumber = fields[6],
+                                WireNumber = fields[7],
+                                PartNumber = fields[8],
+                                KanbanNumber = fields[9],
+                                CutQtyDisplay = fields[10]
                             });
                         }
                     }
-                    //reader.Read();
-                    //var header=  reader.FieldHeaders;
-                    //using (var reader = new CsvReader(treader, configuration))
-                    //{
-                    //    var ss = reader.FieldHeaders() ;
-                    //    var sss = "";
-                    //   // records = reader.GetRecords<ProcessOrderCsvModel>().ToList();
-                    //}
 
                 }
-                bool success = true;
-                if (records.Count > 0)
+            }
+            else if (Path.GetExtension(filename).Equals(".xlsx")) {
+                FileInfo file = new FileInfo(filename);
+                using (ExcelPackage ep = new ExcelPackage(file))
                 {
-                    List<BatchFinishOrderRecord> vr = new List<BatchFinishOrderRecord>();
-                    foreach (ProcessOrderCsvModel r in records)
+                    ExcelWorksheet ws = ep.Workbook.Worksheets.First();
+                    //string s = ws.Cells[1, 1].Value.ToString();
+                    //s = ws.Cells[1, 2].ToString();
+                    //int i = ws.Dimension.End.Row;
+                    //  int ii = ws.Dimension.End.Row;
+                    for (int i = excelStartFromLine; i <= ws.Dimension.End.Row; i++)
                     {
-                        vr.Add(new BatchFinishOrderRecord()
-                        {
-                            FixOrderNr = r.KanbanNumber,
-                            PartNr = r.PartNumber,
-                            Amount =r.CutQty,
-                            ProdTime = r.CutDateTime
-                        });
-                    }
-                    IProcessOrderService ps = new ProcessOrderService(Settings.Default.db);
-                    Hashtable results = ps.ValidateFinishOrder(vr);
-                    success = !results.ContainsKey("WARN");
-                    ViewBag.Success = success;
-                    if (success)
-                    {
-                        ps.BatchFinishOrder(vr, true);
-                        ViewBag.Msg = "Finish Success!";
-
-                        return View();
-                    }
-                    else
-                    {
-                        ViewBag.Msg = "Validate Warning!";
-                        return View(results["WARN"] as List<BatchFinishOrderRecord>);
+                        string f = ws.Cells[i, 17].Value.ToString();
+                        int feedback = int.Parse(ws.Cells[i, 17].Value.ToString());
+                            if (feedback > 0) {
+                                records.Add(new CuttingOrderImportModel()
+                                {
+                                    type = CuttingOrderImportModelType.Blue,
+                                    Date = ws.Cells[i, 1].Value.ToString(),
+                                    Time = ws.Cells[i, 2].Value.ToString(),
+                                   // CuttingOrder = fields[2],
+                                   // CuttingPosition = fields[3],
+                                  //  SingleResource = fields[4],
+                                    ResourceGroup = ws.Cells[i, 10].Value.ToString(),
+                                  //  StaffNumber = fields[6],
+                                 //   WireNumber = fields[7],
+                                    PartNumber = ws.Cells[i,11].Value.ToString(),
+                                    KanbanNumber = ws.Cells[i, 13].Value.ToString(),
+                                    CutQtyDisplay = ws.Cells[i, 17].Value.ToString()
+                                });
+                            }
+                        }
                     }
                 }
-                else
+
+
+                //using (FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read))
+                //{ 
+                //    HSSFWorkbook wk = new HSSFWorkbook(fs);
+                //    ISheet sheet = wk.GetSheetAt(0);
+                //    for (int j = 0; j <= sheet.LastRowNum; j++)
+                //    {
+                //        IRow row = sheet.GetRow(j);
+                //        if (row != null)
+                //        {
+                //            for (int k = 0; k <= row.LastCellNum; k++)
+                //            {
+                //                ICell cell = row.GetCell(k);
+                //                if (cell != null)
+                //                {
+                //                    string s = cell.ToString();
+                //                    string ss = cell.ToString();
+                //                }
+                //            }
+                //        }
+                //    }
+
+                //}
+            
+            bool success = true;
+            List<BatchFinishOrderRecord> vr = new List<BatchFinishOrderRecord>();
+            foreach (CuttingOrderImportModel r in records)
+            {
+                vr.Add(new BatchFinishOrderRecord()
                 {
-                    ViewBag.Msg = "No Record";
+                    Id=r.Id,
+                    FixOrderNr = r.KanbanNumber,
+                    PartNr = r.PartNumber,
+                    Amount = r.CutQty,
+                    ProdTime = r.CutDateTime
+                });
+            }
+
+            if (vr.Count > 0)
+            {
+
+                IProcessOrderService ps = new ProcessOrderService(Settings.Default.db);
+                Hashtable results = ps.ValidateFinishOrder(vr);
+                success = Settings.Default.ignoreImportKBOrderError ? true : !results.ContainsKey("WARN");
+                ViewBag.Success = success;
+                if (success)
+                {
+                    ps.BatchFinishOrder(results["SUCCESS"] as List<BatchFinishOrderRecord>, true, false);
+                    ViewBag.Msg = "Finish Success!";
 
                     return View();
                 }
+                else
+                {
+                    ViewBag.Msg = "Validate Warning!";
+                    return View(results["WARN"] as List<BatchFinishOrderRecord>);
+                }
+            }
+            else
+            {
+                ViewBag.Msg = "No Record";
+
+                return View();
+            }
             //}
             //catch (Exception ex) {
             //    throw ex;

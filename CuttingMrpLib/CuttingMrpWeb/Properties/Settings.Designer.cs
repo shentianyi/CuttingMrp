@@ -25,15 +25,6 @@ namespace CuttingMrpWeb.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute(".\\Private$\\cuttingMrp")]
-        public string mrpQueue {
-            get {
-                return ((string)(this["mrpQueue"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("MRPContainer")]
         public string stockContainer {
             get {
@@ -88,16 +79,6 @@ namespace CuttingMrpWeb.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=BV001;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=s" +
-            "a;Password=1")]
-        public string db {
-            get {
-                return ((string)(this["db"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute(";")]
         public string csvDelimiter {
             get {
@@ -129,6 +110,34 @@ namespace CuttingMrpWeb.Properties {
         public string adminPwd {
             get {
                 return ((string)(this["adminPwd"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(".\\Private$\\cuttingMrp1")]
+        public string mrpQueue {
+            get {
+                return ((string)(this["mrpQueue"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=Charlot-PC\\MSSQLSERVER20082;Initial Catalog=CuttingMrp;Persist Securi" +
+            "ty Info=True;User ID=sa;Password=123456@")]
+        public string db {
+            get {
+                return ((string)(this["db"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ignoreImportKBOrderError {
+            get {
+                return ((bool)(this["ignoreImportKBOrderError"]));
             }
         }
     }

@@ -49,6 +49,9 @@
       <HintPath>..\ThridPart\CsvHelper.2.14.2\lib\net45\CsvHelper.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EPPlus">
+      <HintPath>..\ThridPart\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\ThridPart\log4net.dll</HintPath>
     </Reference>
@@ -220,13 +223,14 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\BatchOrderImportHelper.cs" />
     <Compile Include="Helpers\PagingHelper.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\PartViewModel.cs" />
-    <Compile Include="Models\ProcessOrderCsvModel.cs" />
+    <Compile Include="Models\CuttingOrderImportModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>

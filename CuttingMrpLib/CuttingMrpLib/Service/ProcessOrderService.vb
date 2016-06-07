@@ -135,7 +135,8 @@ Public Class ProcessOrderService
                         moves.Add(New StockMovement With {.fifo = fifo,
                                   .moveType = moveType, .partNr = toFinishOrder.partNr,
                                   .quantity = toFinishOrder.actualQuantity,
-                                  .sourceDoc = toFinishOrder.orderNr})
+                                  .sourceDoc = toFinishOrder.orderNr,
+                                  .createdAt = DateTime.Now})
                     Next
                     If stocks.Count > 0 Then
                         stockRep.GetTable.InsertAllOnSubmit(stocks)
@@ -171,21 +172,29 @@ Public Class ProcessOrderService
 
 
 
-    Public Sub BatchFinishOrder(records As List(Of BatchFinishOrderRecord), ignoreError As Boolean) Implements IProcessOrderService.BatchFinishOrder
-        Dim validated As Hashtable = ValidateFinishOrder(records)
-        If validated.ContainsKey("WARN") Then
-            If ignoreError = False Then
-                Throw New Exception("文件验证失败")
+    Public Sub BatchFinishOrder(records As List(Of BatchFinishOrderRecord), ignoreError As Boolean, Optional reVali As Boolean = True) Implements IProcessOrderService.BatchFinishOrder
+        Dim recs As List(Of BatchFinishOrderRecord) = records
+        If reVali Then
+            Dim validated As Hashtable = ValidateFinishOrder(records)
+            recs = validated("SUCCESS")
+            If validated.ContainsKey("WARN") Then
+                If ignoreError = False Then
+                    Throw New Exception("文件验证失败")
+                End If
             End If
         End If
+
         Dim conditions As ProcessOrderSearchModel = New ProcessOrderSearchModel With {.Status = ProcessOrderStatus.Open, .PageSize = Integer.MaxValue}
         Dim sortedOrders As Hashtable = New Hashtable
         Dim toUpdate As List(Of ProcessOrder) = New List(Of ProcessOrder)
         Dim toFinish As List(Of ProcessOrder) = New List(Of ProcessOrder)
         Dim toStock As List(Of Stock) = New List(Of Stock)
         Dim toMove As List(Of StockMovement) = New List(Of StockMovement)
+        Dim toCreateStockBatchMoveRecord As List(Of StockBatchMoveRecord) = New List(Of StockBatchMoveRecord)
         Dim existingOrders As List(Of ProcessOrder) = Me.Search(conditions).ToList
         existingOrders = (From order In existingOrders Select order Order By order.proceeDate Ascending).ToList
+        ' stock batch move record rep
+        Dim findStockBatchMR As Repository(Of StockBatchMoveRecord) = New Repository(Of StockBatchMoveRecord)(New DataContext(DBConn))
         'group by order nr
         For Each ord As ProcessOrder In existingOrders
             If sortedOrders.ContainsKey(ord.partNr) Then
@@ -198,53 +207,88 @@ Public Class ProcessOrderService
         Next
 
 
-        For Each rec As BatchFinishOrderRecord In validated("SUCCESS")
-            If sortedOrders.ContainsKey(rec.PartNr) Then
-                For Each toCompareOrder As ProcessOrder In sortedOrders(rec.PartNr)
-                    If rec.Amount >= toCompareOrder.actualQuantity Then
-                        rec.Amount = rec.Amount - toCompareOrder.actualQuantity
-                        toFinish.Add(toCompareOrder)
-                        If rec.Amount > 0 Then
-                            toStock.Add(New Stock With {.partNr = rec.PartNr,
-                                .fifo = Now, .sourceType = "BATCHUPLOAD",
-                                .source = "BATCHUPLOAD",
-                                .quantity = rec.Amount, .wh = "ORIGINAL",
-                                .position = "ORIGINAL", .container = "ORIGINAL"})
+        For Each rec As BatchFinishOrderRecord In recs
+            If findStockBatchMR.FirstOrDefault(Function(s) s.id.Equals(rec.Id)) Is Nothing Then
+                If sortedOrders.ContainsKey(rec.PartNr) Then
+                    Dim amount As Double = rec.Amount
+                    For Each toCompareOrder As ProcessOrder In sortedOrders(rec.PartNr)
 
-                            toMove.Add(New StockMovement With {.fifo = Now,
-                                .moveType = StockMoveType.UploadEntry, .partNr = rec.PartNr,
-                                .quantity = rec.Amount,
-                                .sourceDoc = rec.FixOrderNr})
+                        If amount >= toCompareOrder.actualQuantity Then
+                            amount = amount - toCompareOrder.actualQuantity
+                            toFinish.Add(toCompareOrder)
+                            'If rec.Amount > 0 Then
+                            '    toStock.Add(New Stock With {.partNr = rec.PartNr,
+                            '        .fifo = Now, .sourceType = "BATCHUPLOAD",
+                            '        .source = "BATCHUPLOAD",
+                            '        .quantity = rec.Amount, .wh = "ORIGINAL",
+                            '        .position = "ORIGINAL", .container = "ORIGINAL"})
 
+                            '    toMove.Add(New StockMovement With {.fifo = Now,
+                            '        .moveType = StockMoveType.UploadEntry, .partNr = rec.PartNr,
+                            '        .quantity = rec.Amount,
+                            '        .sourceDoc = rec.FixOrderNr})
+
+                            'End If
+
+                        Else
+                            'toStock.Add(New Stock With {.partNr = rec.PartNr,
+                            '            .fifo = Now, .sourceType = "PROCESSORDER",
+                            '            .source = toCompareOrder.orderNr,
+                            '            .quantity = rec.Amount, .wh = "ORIGINAL",
+                            '            .position = "ORIGINAL", .container = "ORIGINAL"})
+
+                            'toMove.Add(New StockMovement With {.fifo = Now,
+                            '        .moveType = StockMoveType.UploadEntry, .partNr = rec.PartNr,
+                            '        .quantity = rec.Amount,
+                            '        .sourceDoc = toCompareOrder.orderNr})
+
+                            toCompareOrder.actualQuantity = toCompareOrder.actualQuantity - amount
+                            toUpdate.Add(toCompareOrder)
                         End If
+                    Next
 
-                    Else
-                        toStock.Add(New Stock With {.partNr = rec.PartNr,
-                                    .fifo = Now, .sourceType = "PROCESSORDER",
-                                    .source = toCompareOrder.orderNr,
-                                    .quantity = rec.Amount, .wh = "ORIGINAL",
-                                    .position = "ORIGINAL", .container = "ORIGINAL"})
+                    'toStock.Add(New Stock With {.partNr = rec.PartNr,
+                    '    .fifo = Now, .sourceType = "BATCHUPLOAD",
+                    '    .source = "BATCHUPLOAD",
+                    '    .quantity = rec.Amount, .wh = "ORIGINAL",
+                    '    .position = "ORIGINAL", .container = "ORIGINAL"})
 
-                        toMove.Add(New StockMovement With {.fifo = Now,
-                                .moveType = StockMoveType.UploadEntry, .partNr = rec.PartNr,
-                                .quantity = rec.Amount,
-                                .sourceDoc = toCompareOrder.orderNr})
+                    'toMove.Add(New StockMovement With {.fifo = Now,
+                    '    .moveType = StockMoveType.UploadEntry, .partNr = rec.PartNr,
+                    '    .quantity = rec.Amount,
+                    '    .sourceDoc = rec.FixOrderNr})
 
-                        toCompareOrder.actualQuantity = toCompareOrder.actualQuantity - rec.Amount
-                        toUpdate.Add(toCompareOrder)
-                    End If
-                Next
-            Else
-                toStock.Add(New Stock With {.partNr = rec.PartNr, .fifo = Now,
-                            .sourceType = "BATCHUPLOAD", .container = "ORIGINAL",
-                            .position = "ORIGINAL", .quantity = rec.Amount,
-                            .source = "BATCHUPLOAD", .wh = "ORGINAL"})
+                Else
+                    'toStock.Add(New Stock With {.partNr = rec.PartNr, .fifo = Now,
+                    '            .sourceType = "BATCHUPLOAD", .container = "ORIGINAL",
+                    '            .position = "ORIGINAL", .quantity = rec.Amount,
+                    '            .source = "BATCHUPLOAD", .wh = "ORGINAL"})
+
+                    'toMove.Add(New StockMovement With {.fifo = Now,
+                    '              .moveType = StockMoveType.UploadEntry, .partNr = rec.PartNr,
+                    '              .quantity = rec.Amount,
+                    '              .sourceDoc = rec.FixOrderNr})
+
+                End If
+
+                toStock.Add(New Stock With {.partNr = rec.PartNr, .fifo = rec.ProdTime,
+                                .sourceType = "BATCHUPLOAD", .container = "ORIGINAL",
+                                .position = "ORIGINAL", .quantity = rec.Amount,
+                                .source = "BATCHUPLOAD", .wh = "ORGINAL"})
 
                 toMove.Add(New StockMovement With {.fifo = Now,
-                              .moveType = StockMoveType.UploadEntry, .partNr = rec.PartNr,
-                              .quantity = rec.Amount,
-                              .sourceDoc = rec.FixOrderNr})
+                                  .moveType = StockMoveType.UploadEntry, .partNr = rec.PartNr,
+                                  .quantity = rec.Amount,
+                                  .sourceDoc = rec.FixOrderNr,
+                                  .createdAt = DateTime.Now})
 
+                toCreateStockBatchMoveRecord.Add(New StockBatchMoveRecord With {.id = rec.Id,
+                                                 .moveType = StockMoveType.UploadEntry,
+                                                 .partNr = rec.PartNr,
+                                                 .quantity = rec.Amount,
+                                                 .sourceDoc = rec.FixOrderNr,
+                                                 .souceDocTime = rec.ProdTime,
+                                                 .createdAt = DateTime.Now})
             End If
         Next
 
@@ -255,8 +299,12 @@ Public Class ProcessOrderService
             Dim context As DataContext = New DataContext(DBConn)
             Dim stockrepo As Repository(Of Stock) = New Repository(Of Stock)(context)
             Dim moveRep As Repository(Of StockMovement) = New Repository(Of StockMovement)(context)
+            Dim batchRecordRep As Repository(Of StockBatchMoveRecord) = New Repository(Of StockBatchMoveRecord)(context)
+
             stockrepo.GetTable.InsertAllOnSubmit(toStock)
             moveRep.GetTable.InsertAllOnSubmit(toMove)
+            batchRecordRep.GetTable.InsertAllOnSubmit(toCreateStockBatchMoveRecord)
+
             Dim orderrepo As New ProcessOrderRepository(context)
             For Each toup As ProcessOrder In toUpdate
                 Dim towrite As ProcessOrder = orderrepo.Single(Function(c) c.orderNr = toup.orderNr)
@@ -266,6 +314,7 @@ Public Class ProcessOrderService
             orderrepo.SaveAll()
             stockrepo.SaveAll()
             moveRep.SaveAll()
+            batchRecordRep.SaveAll()
             scope.Complete()
             ' Catch ex As Exception
             '  Throw New Exception("写入数据库时出现错误", ex)

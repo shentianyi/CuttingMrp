@@ -75,6 +75,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CuttingMrp.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Data\CuttingMrp.vb">
+      <DependentUpon>CuttingMrp.dbml</DependentUpon>
+    </Compile>
     <Compile Include="Data\DataContext.vb" />
     <Compile Include="Data\MPSStatus.vb" />
     <Compile Include="Data\OrderType.vb" />

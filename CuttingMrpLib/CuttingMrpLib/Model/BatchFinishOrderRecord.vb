@@ -5,6 +5,8 @@
     Private _prodtime As DateTime
     Private _line As Integer
 
+    Public Property Id As String
+
     Public Property LineNr As Integer
         Get
             Return _line
