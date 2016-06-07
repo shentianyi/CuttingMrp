@@ -25,8 +25,8 @@ namespace CuttingMrpDashSvc.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=WANGSONG-PC;Initial Catalog=CuttingMrp;Persist Security Info=True;Use" +
-            "r ID=sa;Password=wangsong")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=Charlot-PC\\SQLEXPRESS;Initial Catalog=CuttingMrp;Persist Security Inf" +
+            "o=True;User ID=sa;Password=123456@")]
         public string db {
             get {
                 return ((string)(this["db"]));
@@ -38,13 +38,37 @@ namespace CuttingMrpDashSvc.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("*/3 * * * * ? *")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0 50 23 * * ? *")]
         public string stockSumDashCron {
             get {
                 return ((string)(this["stockSumDashCron"]));
             }
             set {
                 this["stockSumDashCron"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0 */5 * * * ? *")]
+        public string backFlashCron {
+            get {
+                return ((string)(this["backFlashCron"]));
+            }
+            set {
+                this["backFlashCron"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(".\\Private$\\cuttingMrp1")]
+        public string mrpQueue {
+            get {
+                return ((string)(this["mrpQueue"]));
+            }
+            set {
+                this["mrpQueue"] = value;
             }
         }
     }

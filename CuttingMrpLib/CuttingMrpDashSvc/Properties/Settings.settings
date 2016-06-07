@@ -3,10 +3,16 @@
   <Profiles />
   <Settings>
     <Setting Name="db" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Data Source=WANGSONG-PC;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=sa;Password=wangsong</Value>
+      <Value Profile="(Default)">Data Source=Charlot-PC\SQLEXPRESS;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=sa;Password=123456@</Value>
     </Setting>
     <Setting Name="stockSumDashCron" Type="System.String" Scope="User">
-      <Value Profile="(Default)">*/3 * * * * ? *</Value>
+      <Value Profile="(Default)">0 50 23 * * ? *</Value>
+    </Setting>
+    <Setting Name="backFlashCron" Type="System.String" Scope="User">
+      <Value Profile="(Default)">0 */5 * * * ? *</Value>
+    </Setting>
+    <Setting Name="mrpQueue" Type="System.String" Scope="User">
+      <Value Profile="(Default)">.\Private$\cuttingMrp1</Value>
     </Setting>
   </Settings>
 </SettingsFile>

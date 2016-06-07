@@ -34,6 +34,7 @@ namespace CuttingMrpDashSvc
                 Scheduler = sf.GetScheduler();
 
                 new StockSumRecordTigger();
+                new KskBackFlashTigger();
 
                 Scheduler.Start();
 

@@ -155,6 +155,7 @@ namespace CuttingMrpWeb.Controllers
             // [Bind(Include = "OrderType,MergeMethod")]
             CalculateSetting setting = new CalculateSetting()
             {
+                TaskType="MRP",
                 OrderType = Request.Form.Get("OrderType"),
                 MergeMethod = new MergeMethod()
                 {
