@@ -53,11 +53,15 @@ namespace CuttingMrpWeb.Controllers
                     searchModel.DateTo = DateTime.Now.Date.AddDays(-1);
                     data = ds.GetPartTopRateDash(searchModel);
                     break;
+                case 400:
+                    searchModel.DateFrom = DateTime.Now.Date.AddDays(-8);
+                    searchModel.DateTo = DateTime.Now.Date.AddDays(-1);
+                    data = ds.GetStockReportDash(searchModel);
+                    break;
                 default:
                     break;
             }
             return Json(data, JsonRequestBehavior.AllowGet);
-
         }
     }
 }
