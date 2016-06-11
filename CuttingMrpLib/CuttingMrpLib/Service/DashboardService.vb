@@ -70,7 +70,7 @@ Public Class DashboardService
         Dim context As DataContext = New DataContext(Me.DBConn)
         Dim rep As Repository(Of StockSumRecord) = New Repository(Of StockSumRecord)(context)
 
-        Dim stockReports = rep.GetTable.Where(Function(r) r.date.Equals(searchModel.DataTo)).Select(Function(r) r.partNr).ToList
+        Dim stockReports = rep.GetTable.Where(Function(r) r.date.Equals(searchModel.DateTo)).Select(Function(r) r.partNr).ToList
         For Each partNr In stockReports
             Dim pdic As Dictionary(Of String, List(Of DashboardItem)) = GetPartStockDash(New DashboardSearchModel() With {.PartNr = partNr, .DateFrom = searchModel.DateFrom, .DateTo = searchModel.DateTo})
             dic.Add(partNr, pdic.Values.First)

@@ -123,7 +123,7 @@ namespace CuttingMrpWeb.Controllers
         }
 
 
-        public ActionResult Search([Bind(Include = "OrderNr,SourceDoc,DerivedFrom,ProceeDateFrom,ProceeDateTo,PartNr,ActualQuantityFrom,ActualQuantityTo,CompleteRateFrom,CompleteRateTo,Status,MrpRound,KanbanNr,PartType")] ProcessOrderSearchModel q)
+        public ActionResult Search([Bind(Include = "OrderNr,SourceDoc,DerivedFrom,ProceeDateFrom,ProceeDateTo,PartNr,ActualQuantityFrom,ActualQuantityTo,CompleteRateFrom,CompleteRateTo,Status,MrpRound,KanbanNr,PartType,CreateAtFrom,CreateAtTo")] ProcessOrderSearchModel q)
         {
             int pageIndex = 0;
             int.TryParse(Request.QueryString.Get("page"), out pageIndex);
@@ -145,7 +145,7 @@ namespace CuttingMrpWeb.Controllers
             return View("Index", processOrders);
         }
 
-        public void Export([Bind(Include = "OrderNr,SourceDoc,DerivedFrom,ProceeDateFrom,ProceeDateTo,PartNr,ActualQuantityFrom,ActualQuantityTo,CompleteRateFrom,CompleteRateTo,Status,MrpRound,KanbanNr,PartType")] ProcessOrderSearchModel q)
+        public void Export([Bind(Include = "OrderNr,SourceDoc,DerivedFrom,ProceeDateFrom,ProceeDateTo,PartNr,ActualQuantityFrom,ActualQuantityTo,CompleteRateFrom,CompleteRateTo,Status,MrpRound,KanbanNr,PartType,CreateAt")] ProcessOrderSearchModel q)
         {
             IProcessOrderService ps = new ProcessOrderService(Settings.Default.db);
 
@@ -157,7 +157,7 @@ namespace CuttingMrpWeb.Controllers
             using (StreamWriter sw = new StreamWriter(ms, Encoding.UTF8))
             {
                 List<string> head = new List<string> { " No.", "OrderNr", "PartNr", "Kanban","PartType(KB Type)","Status",
-                    "ProceeDate","SourceQuantity","ActualQuantity","BatchQuantity","BundleQuantity","KanBanPosition","RouteNr","CompleteRate", "DerivedFrom" };
+                    "ProceeDate","SourceQuantity","ActualQuantity","BatchQuantity","BundleQuantity","KanBanPosition","RouteNr","CompleteRate", "DerivedFrom", "CreateAt" };
                 sw.WriteLine(string.Join(Settings.Default.csvDelimiter, head));
                 for(var i=0; i<processOrders.Count; i++)
                 {
@@ -177,6 +177,7 @@ namespace CuttingMrpWeb.Controllers
                     ii.Add(processOrders[i].Part.routeNr.ToString());
                     ii.Add(Math.Round(processOrders[i].completeRate,2).ToString());
                     ii.Add(processOrders[i].derivedFrom);
+                    ii.Add(processOrders[i].createAt.ToString());
                     sw.WriteLine(string.Join(Settings.Default.csvDelimiter, ii.ToArray()));
                 }
                 //sw.WriteLine(max);
@@ -193,7 +194,7 @@ namespace CuttingMrpWeb.Controllers
 
         }
 
-        public void ExportKB([Bind(Include = "OrderNr,SourceDoc,DerivedFrom,ProceeDateFrom,ProceeDateTo,PartNr,ActualQuantityFrom,ActualQuantityTo,CompleteRateFrom,CompleteRateTo,Status,MrpRound,PartType")] ProcessOrderSearchModel q)
+        public void ExportKB([Bind(Include = "OrderNr,SourceDoc,DerivedFrom,ProceeDateFrom,ProceeDateTo,PartNr,ActualQuantityFrom,ActualQuantityTo,CompleteRateFrom,CompleteRateTo,Status,MrpRound,PartType,CreateAt")] ProcessOrderSearchModel q)
         {
             IProcessOrderService ps = new ProcessOrderService(Settings.Default.db);
 
@@ -204,7 +205,7 @@ namespace CuttingMrpWeb.Controllers
             MemoryStream ms = new MemoryStream();
             using (StreamWriter sw = new StreamWriter(ms, Encoding.UTF8))
             {
-                List<string> head = new List<string> { " No.","Product", "PartNr", "Kanban", "PartType(KB Type)","Position", "ActualQuantity", "BundleQuantity", "BatchQuantity","KanBanPosition","RouteNr","ChangeQty" };
+                List<string> head = new List<string> { " No.","Product", "PartNr", "Kanban", "PartType(KB Type)","Position", "ActualQuantity", "BundleQuantity", "BatchQuantity","KanBanPosition","RouteNr","ChangeQty", "CreateAt" };
                 sw.WriteLine(string.Join(Settings.Default.csvDelimiter, head));
                 for (var i = 0; i < processOrders.Count; i++)
                 {
@@ -221,6 +222,7 @@ namespace CuttingMrpWeb.Controllers
                     ii.Add(processOrders[i].Part.kanbanPosition.ToString());
                     ii.Add(processOrders[i].Part.routeNr.ToString());
                     ii.Add(processOrders[i].needChangeKbQtyDisplay);
+                    ii.Add(processOrders[i].createAt.ToString());
                     sw.WriteLine(string.Join(Settings.Default.csvDelimiter, ii.ToArray()));
                 }
                 //sw.WriteLine(max);
@@ -442,8 +444,6 @@ namespace CuttingMrpWeb.Controllers
             }
             return View(processOrder);
         }
-
-        
 
         private ProcessOrder GetProcessOrderById(string id)
         {

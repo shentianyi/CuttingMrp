@@ -116,6 +116,7 @@
                 <th>RouteNr</th>
                 <th>CompleteRate</th>
                 <th>DerivedFrom</th>
+                <th>CreateAt</th>
                 <th>Requirements</th>
                 <th>Options</th>
             </tr>
@@ -149,6 +150,7 @@
                         <td>@Html.DisplayFor(modelItem => item.Part.routeNr)</td>
                         <td>@Html.DisplayFor(modelItem => item.completeRateDisplay)</td>
                         <td>@Html.DisplayFor(modelItem => item.derivedFrom)</td>
+                        <td>@Html.DisplayFor(modelItem => item.createAt)</td>
                         <td>
                             <a href="@Url.Action("Search", "Requirements" , new { orderNr=item.orderNr })" style="white-space:nowrap;">
                                 @(item.requirementCount.ToString() + " Requirements")
@@ -189,6 +191,8 @@
                         .Options(o => o.AddRouteValue("Status", ViewBag.Query.Status))
                         .Options(o => o.AddRouteValue("MrpRound", ViewBag.Query.MrpRound))
                         .Options(o => o.AddRouteValue("KanbanNr", ViewBag.Query.KanbanNr))
+                        .Options(o => o.AddRouteValue("CreateAtFrom", ViewBag.Query.CreateAtFrom))
+                        .Options(o => o.AddRouteValue("CreateAtTo", ViewBag.Query.CreateAtTo))
                         .Options(o => o.AddRouteValue("PartType", ViewBag.Query.PartType));
                     @html
                 }
@@ -271,6 +275,18 @@
                 <input type="text" class="form-control" autocomplete="off" name="CompleteRateTo" id="CompleteRateTo" value="@ViewBag.Query.CompleteRateTo" placeholder="CompleteRate To" />
             </div>
         </div>
+
+        <hr style="margin:5px;" />
+
+        <div class="col-sm-12">
+            <div class="input-group filter-detail">
+                <span class="input-group-addon" id="basic-addon-create-at">CreateAt</span>
+                <input type="text" style="width:188px;" class="form-control datetime-picker-from" autocomplete="off" name="CreateAtFrom" id="CreateAtFrom" value="@ViewBag.Query.CreateAtFrom" placeholder="CreateAt From" aria-describedby="basic-addon-create-at">
+                <span class="space-mark">~</span>
+                <input type="text" style="width:170px;" class="form-control datetime-picker-to" autocomplete="off" name="CreateAtTo" id="CreateAtTo" value="@ViewBag.Query.CreateAtTo" placeholder="CreateAt To" />
+            </div>
+        </div>
+
         <div class="popModal_footer">
             <input type="submit" value="Search" class="btn btn-success FilterSearchBtn" data-dialogModalBut="ok" />
         </div>

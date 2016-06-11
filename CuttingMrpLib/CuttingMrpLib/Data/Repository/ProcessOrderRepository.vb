@@ -84,6 +84,15 @@ Public Class ProcessOrderRepository
                 processOrders = processOrders.Where(Function(c) c.Part.partType.Equals(conditions.PartType))
             End If
 
+            If conditions.CreateAtFrom.HasValue Then
+                processOrders = processOrders.Where(Function(c) c.createAt >= conditions.CreateAtFrom)
+            End If
+
+
+            If conditions.CreateAtTo.HasValue Then
+                processOrders = processOrders.Where(Function(c) c.createAt <= conditions.CreateAtTo)
+            End If
+
             Return processOrders.OrderBy(Function(c) c.sourceDoc).OrderByDescending(Function(c) c.proceeDate)
         Else
             Throw New ArgumentNullException
@@ -157,6 +166,15 @@ Public Class ProcessOrderRepository
 
             If conditions.PartType.HasValue Then
                 processOrders = processOrders.Where(Function(c) c.partType.Equals(conditions.PartType))
+            End If
+
+            If conditions.CreateAtFrom.HasValue Then
+                processOrders = processOrders.Where(Function(c) c.createAt >= conditions.CreateAtFrom)
+            End If
+
+
+            If conditions.CreateAtTo.HasValue Then
+                processOrders = processOrders.Where(Function(c) c.createAt <= conditions.CreateAtTo)
             End If
 
             Return processOrders.OrderByDescending(Function(c) c.proceeDate)

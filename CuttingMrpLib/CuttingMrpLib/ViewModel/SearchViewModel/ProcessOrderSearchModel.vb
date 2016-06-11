@@ -32,6 +32,9 @@ Public Class ProcessOrderSearchModel
 
     Public Property KanbanNr As String
 
+    Public Property CreateAtFrom As DateTime?
+
+    Public Property CreateAtTo As DateTime?
     ''' <summary>
     ''' part type equals to kanban type
     ''' </summary>
