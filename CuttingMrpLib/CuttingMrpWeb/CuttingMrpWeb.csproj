@@ -214,6 +214,7 @@
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\MpsController.cs" />
     <Compile Include="Controllers\MrpRoundsController.cs" />
     <Compile Include="Controllers\PartsController.cs" />
     <Compile Include="Controllers\ProcessOrdersController.cs" />
@@ -366,6 +367,7 @@
     <Content Include="Views\StockMovements\Index.cshtml" />
     <Content Include="Views\Stocks\SumOfStock.cshtml" />
     <Content Include="Views\Dashboard\StockReport.cshtml" />
+    <Content Include="Views\Mps\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
