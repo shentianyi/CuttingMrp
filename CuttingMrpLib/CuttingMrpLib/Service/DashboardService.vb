@@ -65,16 +65,4 @@ Public Class DashboardService
         Return dic
     End Function
 
-    Public Function GetStockReportDash(searchModel As DashboardSearchModel) As Dictionary(Of String, List(Of DashboardItem)) Implements IDashboardService.GetStockReportDash
-        Dim dic As Dictionary(Of String, List(Of DashboardItem)) = New Dictionary(Of String, List(Of DashboardItem))
-        Dim context As DataContext = New DataContext(Me.DBConn)
-        Dim rep As Repository(Of StockSumRecord) = New Repository(Of StockSumRecord)(context)
-
-        Dim stockReports = rep.GetTable.Where(Function(r) r.date.Equals(searchModel.DateTo)).Select(Function(r) r.partNr).ToList
-        For Each partNr In stockReports
-            Dim pdic As Dictionary(Of String, List(Of DashboardItem)) = GetPartStockDash(New DashboardSearchModel() With {.PartNr = partNr, .DateFrom = searchModel.DateFrom, .DateTo = searchModel.DateTo})
-            dic.Add(partNr, pdic.Values.First)
-        Next
-
-    End Function
 End Class

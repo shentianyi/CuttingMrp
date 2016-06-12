@@ -90,12 +90,14 @@
     <Compile Include="Data\Repository\IStockMovementRepository.vb" />
     <Compile Include="Data\Repository\IProcessOrderRepository.vb" />
     <Compile Include="Data\Repository\IRequirementRepository.vb" />
+    <Compile Include="Data\Repository\IStockSumRecordRepository.vb" />
     <Compile Include="Data\Repository\NumericDefinitionRepository.vb" />
     <Compile Include="Data\Repository\StockMovementRepository.vb" />
     <Compile Include="Data\Repository\ProcessOrderRepository.vb" />
     <Compile Include="Data\Repository\RequirementRepository.vb" />
     <Compile Include="Data\Repository\MrpRoundRepository.vb" />
     <Compile Include="Data\Repository\PartRepository.vb" />
+    <Compile Include="Data\Repository\StockSumRecordRepository.vb" />
     <Compile Include="Data\RequirementStatus.vb" />
     <Compile Include="Data\StockMoveType.vb" />
     <Compile Include="Model\BatchFinishOrderRecord.vb" />
@@ -154,6 +156,7 @@
     <Compile Include="Utility\EnumUtility.vb" />
     <Compile Include="Utility\Calculator.vb" />
     <Compile Include="Utility\CalculatorSingleton.vb" />
+    <Compile Include="ViewModel\PageViewModel\DashboardForStockReportItem.vb" />
     <Compile Include="ViewModel\PageViewModel\DashboardItem.vb" />
     <Compile Include="ViewModel\PageViewModel\ProcessOrderInfoModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\DashboardSearchModel.vb" />

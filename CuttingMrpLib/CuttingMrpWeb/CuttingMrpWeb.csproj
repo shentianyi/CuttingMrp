@@ -243,6 +243,7 @@
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\login.css" />
     <Content Include="Content\part-stock.css" />
+    <Content Include="Content\stock-report.css" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="Scripts\bootstrap-typeahead.js" />
     <Content Include="Scripts\dashboard\complete-rate.js" />

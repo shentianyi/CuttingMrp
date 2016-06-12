@@ -20,8 +20,6 @@
                 <div class="col-sm-5" style="padding-top:10px; text-align:center;">
                     <button class="btn btn-primary" type="submit" title="Reset All Search" data-toggle="tooltip" data-placement="bottom">Search All</button>
 
-                    <a href="/Stocks/SumOfStock" title="Sum Of Stock" data-toggle="tooltip" data-placement="bottom" style="width:100px;margin-left:20px;" class="btn btn-info">SumOfStock</a>
-
                     @Html.ActionLink("Export Full", "Export", new
                {
                    PartNr = ViewBag.Query.PartNr,
@@ -33,7 +31,10 @@
                    Position = ViewBag.Query.Position,
                }, new { @style = "width:100px;margin-left:20px;", @class = "btn btn-success", @title = "Export All Results", data_toggle = "tooltip", data_placement = "bottom" })
 
-                    <button class="btn btn-warning import-stock" title="Import Stock" data-toggle="tooltip" data-placement="bottom" type="button" style="width:100px;margin-left:20px;">Import Stock</button>
+                    <a href="/Stocks/SumOfStock" title="Sum Of Stock" data-toggle="tooltip" data-placement="bottom" style="width:100px;margin-left:20px;" class="btn btn-info">SumOfStock</a>
+
+                    @* 暂时先去掉import *@
+                    @*<button class="btn btn-warning import-stock" title="Import Stock" data-toggle="tooltip" data-placement="bottom" type="button" style="width:100px;margin-left:20px;">Import Stock</button>*@
                 </div>
             </div>
         </div>

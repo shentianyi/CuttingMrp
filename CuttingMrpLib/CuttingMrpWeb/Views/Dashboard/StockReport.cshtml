@@ -1,47 +1,107 @@
-﻿
+﻿@using MvcPaging;
+@model IPagedList<CuttingMrpLib.StockSumRecord>
 @{
     ViewBag.Title = "StockReport";
 }
 
 @Styles.Render("~/Content/dashboards")
+@Styles.Render("~/Content/stock_report")
 
 <div class="LeftNav">
     @Html.Partial("_DashboardPartial")
 </div>
 
 <div class="RightContent">
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="col-md-12" style="text-align:center;">
-                <div class="col-md-6" style="display:flex;display:-ms-flexbox;">
-                    <input type="text" class="form-control date-picker date-from" />
-                    <input type="text" hidden value="" class="hidden-date-from" />
-                    <span>&emsp; ~ &emsp;</span>
-                    <input type="text" class="form-control date-picker date-to" />
-                    <input type="text" hidden value="" class="hidden-date-to" />
-                </div>
-                <div class="col-md-2">
-                    <input type="text" value="" class="form-control part-nr" id="part_nr" placeholder="Part Nr" autofocus />
-                    <input type="text" hidden value="" class="hidden-part-nr" />
-                    <input type="hidden" value="200" class="part-type" />
-                </div>
+    <form action="/Dashboard/SearchStockReports" method="get">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-md-12" style="text-align:center;">
+                    <div class="col-md-6" style="display:flex;display:-ms-flexbox;">
+                        <input type="text" class="form-control date-picker date-from" name="DateFrom" value="@ViewBag.Query.DateFrom" />
+                        <span>&emsp; ~ &emsp;</span>
+                        <input type="text" class="form-control date-picker date-to" name="DateTo" value="@ViewBag.Query.DateTo"/>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text" class="form-control part-nr" id="part_nr" name="PartNr" placeholder="Part Nr" value="@ViewBag.Query.PartNr" />
+                        <input type="hidden" value="200" class="part-type" />
+                    </div>
 
-                <div class="col-md-2">
-                    <button class="btn btn-primary" style="width:150px;">Search</button>
-                </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-primary" type="submit" style="width:150px;" title="Search" data-toggle="tooltip", data-placement="bottom">Search</button>
+                    </div>
 
-                <div class="col-md-2">
-                    <button class="btn btn-success" style="width:150px;">Export</button>
+                    <div class="col-md-2">
+                        @Html.ActionLink("ExportSR", "ExportStockReport", new
+                    {
+                        PartNr = ViewBag.Query.PartNr,
+                        DateFrom = ViewBag.Query.DateFrom,
+                        DateTo = ViewBag.Query.DateTo
+                    }, new { @style = "width:100px;", @class = "btn btn-success", @title = "Export Stock Reports", data_toggle = "tooltip", data_placement = "bottom" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="col-md-12" style="padding:0; margin-top:-10px;">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th class="fixed-width"> No. </th>
+                    <th class="fixed-width">PartNr</th>
+                    <th class="fixed-width">Quantity</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+    <div class="ShowTable">
+        <div class="col-md-12" style="padding:0;">
+            <table class="table table-bordered">
+                <tbody>
+                    @if (Model != null)
+                    {
+                        int i = 0;
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="fixed-width">@(i += 1)</td>
+                                <td class="fixed-width">@Html.DisplayFor(modelItem => item.partNr)</td>
+                                <td class="fixed-width">@Html.DisplayFor(modelItem => item.quantity)</td>
+                                <td>@Html.DisplayFor(modelItem => item.date)</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="ShowPage">
+        <div class="col-md-12" style="text-align:center;">
+            <div class="clearfix pagination">
+                <div class="pagination-inner">
+                    @if (Model != null)
+            {
+                if (ViewBag.Query != null)
+                {
+                    var html = Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
+                        .Options(o => o.AddRouteValue("PartNr", ViewBag.Query.PartNr))
+                        .Options(o => o.AddRouteValue("DateFrom", ViewBag.Query.DateFrom))
+                        .Options(o => o.AddRouteValue("DateTo", ViewBag.Query.DateTo));
+                            @html
+                        }
+                        else
+                        {
+                            @Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
+                        }
+                    }
                 </div>
             </div>
         </div>
     </div>
-
-    <div class="CompleteRateEmpty">
-        Search ...
-    </div>
 </div>
-
 @Scripts.Render("~/bundles/dashboard")
 @Scripts.Render("~/bundles/stock_report")
 

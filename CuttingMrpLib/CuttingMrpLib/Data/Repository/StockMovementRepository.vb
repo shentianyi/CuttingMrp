@@ -14,7 +14,7 @@ Public Class StockMovementRepository
     Public Function Search(conditions As StockMovementSearchModel) As IQueryable(Of StockMovement) Implements IStockMovementRepository.Search
         Dim moves As IQueryable(Of StockMovement) = _context.StockMovements
         If Not String.IsNullOrWhiteSpace(conditions.PartNr) Then
-            moves = moves.Where(Function(m) m.partNr.Equals(conditions.PartNr))
+            moves = moves.Where(Function(m) m.partNr.Contains(conditions.PartNr.Trim()))
         End If
 
         If conditions.MoveType.HasValue Then

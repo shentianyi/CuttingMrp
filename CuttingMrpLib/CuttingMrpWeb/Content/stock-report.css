@@ -1,0 +1,21 @@
+﻿.ShowTable{
+    position:absolute;
+    top:120px;
+    left:10px;
+    bottom:80px;
+    right:10px;
+    background:white;
+    overflow-y:auto;
+    overflow-x:hidden;
+}
+
+.ShowPage{
+    position:absolute;
+    left:10px;
+    bottom:10px;
+    right:10px;
+    padding-top:10px;
+    padding-bottom:10px;
+    background:white;
+    border-radius:10px;
+}

@@ -11,7 +11,7 @@ StockMovements.init = function () {
     var dateto = $('#DateTo').val();
 
     StockMovements.add_string_label_to_div(partnr, 'PartNr like ', '.filter-p');
-    StockMovements.add_range_label_to_div(datefrom + "~" + dateto, 'Date ', '.filter-p');
+    StockMovements.add_range_label_to_div(datefrom + "~" + dateto, 'CreatedAt ', '.filter-p');
 }
 
 StockMovements.add_string_label_to_div = function (content, name, cls) {

@@ -118,15 +118,15 @@ Requirement.run_mrp = function () {
                 },
                 success: function (data) {
                     if (data.Result) {
-                        ShowMsg("Success--", "glyphicon glyphicon-ok-circle", "green", data.Msg);
+                        ShowMsg("Success", "glyphicon glyphicon-ok-circle", "green", data.Msg);
                     } else if (!data.Result) {
-                        ShowMsg("Failure--", "glyphicon glyphicon-exclamation-sign", "orange", data.Msg);
+                        ShowMsg("Failure", "glyphicon glyphicon-exclamation-sign", "orange", data.Msg);
                     } else {
-                        ShowMsg("Error--", "glyphicon glyphicon-remove-circle", "#ff0000", data.Msg);
+                        ShowMsg("Error", "glyphicon glyphicon-remove-circle", "#ff0000", data.Msg);
                     }
                 },
                 error: function (data) {
-                    ShowMsg("Error--", "glyphicon glyphicon-remove-circle", "#ff0000", "Unable to request to the service, please check before operation.");
+                    ShowMsg("Error", "glyphicon glyphicon-remove-circle", "#ff0000", "Unable to request to the service, please check before operation.");
                 }
             });
         });
@@ -135,7 +135,7 @@ Requirement.run_mrp = function () {
 
     //Change Icon
     function ShowMsg(titleMsg, iconClass , fontColor,contentMsg) {
-        $('#ProcessOrder').children('h3').html(titleMsg + new Date().toLocaleString()).css({ color: fontColor });
+        $('#ProcessOrder').children('h3').html(titleMsg + " -- " + new Date().Format("yyyy-MM-dd hh:mm:ss")).css({ color: fontColor });
         $('hr').remove();
         var PanelDiv = $('#ProcessOrder').children('div');
         $('#ProcessOrder').find(PanelDiv).remove();

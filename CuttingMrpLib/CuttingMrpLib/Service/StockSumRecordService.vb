@@ -44,4 +44,10 @@ Public Class StockSumRecordService
         rep.Inserts(records)
         rep.SaveAll()
     End Sub
+
+    Public Function SearchStockReport(conditions As DashboardSearchModel) As IQueryable(Of StockSumRecord) Implements IStockSumRecordService.SearchStockReport
+        Dim reqRepo As IStockSumRecordRepository = New StockSumRecordRepository(New DataContext(DBConn))
+
+        Return reqRepo.SearchSR(conditions)
+    End Function
 End Class

@@ -106,6 +106,9 @@ namespace CuttingMrpWeb
 
             bundles.Add(new StyleBundle("~/Content/top_rate").Include(
                     "~/Content/top-rate.css"));
+
+            bundles.Add(new StyleBundle("~/Content/stock_report").Include(
+                   "~/Content/stock-report.css"));
         }
     }
 }
