@@ -100,8 +100,7 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                @*<th> # </th>*@
-                <th><input type="button" value="All" onclick="check_all_cb()" current-state="0" /></th>
+                <th><input type="button" style="border-radius: 5px;border: 1px solid;background:transparent; color: white; font-weight: bold;" value="All" onclick="check_all_cb()" current-state="0" /></th>
                 <th> No. </th>
                 <th>OrderNr</th>
                 <th>PartNr</th>
@@ -277,7 +276,6 @@
         </div>
     </div>
 </div>
-
 
 <div id="dialog_content" class="import_content" style="display:none;">
     @using (Html.BeginForm("ImportForceRecord", "ProcessOrders", FormMethod.Post, new { enctype = "multipart/form-data" }))

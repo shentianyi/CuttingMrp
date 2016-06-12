@@ -62,13 +62,34 @@ Requirement.add_range_label_to_div = function (content, name, cls) {
 
 $('.date-picker').datetimepicker({
     lang: 'ch',
-    timepicker: false,
-    format: 'Y/m/d',
-    formatDate: 'Y/m/d'
+    timepicker:false,
+    format: 'Y/m/d H:i:s',
+    formatDate: 'Y/m/d',
+    formatTime: 'H:i:s',
+    defaultTime:'00:00:00:00'
 })
 
-$('.datetime-picker').datetimepicker({
-    lang: 'ch'
+$('.datetime-picker-from').datetimepicker({
+    lang: 'zh',
+    timepicker: false,
+    showSecond: true, //显示秒
+    format: 'Y/m/d H:i:s',
+    formatDate: 'Y/m/d H:i',
+    formatTime: 'H:i:s',
+    roundTime: 'floor',
+    defaultTime: '00:00:00'
+})
+
+$('.datetime-picker-to').datetimepicker({
+    lang: 'ch',
+    timepicker: false,
+    showSecond: true, //显示秒
+    format: 'Y/m/d H:i:s',
+    formatDate: 'Y/m/d',
+    formatTime: 'H:i:s',
+    roundTime: 'round',
+    step:1,
+    defaultTime: '23:59:59'
 })
 
 //{
@@ -111,15 +132,15 @@ Requirement.run_mrp = function () {
                 },
                 success: function (data) {
                     if (data.Result) {
-                        ShowMsg("生成成功--", "glyphicon glyphicon-ok-circle", "green", data.Msg);
+                        ShowMsg("Success--", "glyphicon glyphicon-ok-circle", "green", data.Msg);
                     } else if (!data.Result) {
-                        ShowMsg("生成失败--", "glyphicon glyphicon-exclamation-sign", "orange", data.Msg);
+                        ShowMsg("Failure--", "glyphicon glyphicon-exclamation-sign", "orange", data.Msg);
                     } else {
-                        ShowMsg("错误--", "glyphicon glyphicon-remove-circle", "#ff0000", data.Msg);
+                        ShowMsg("Error--", "glyphicon glyphicon-remove-circle", "#ff0000", data.Msg);
                     }
                 },
                 error: function (data) {
-                    ShowMsg("错误--", "glyphicon glyphicon-remove-circle", "#ff0000", "无法请求到服务，请检查确认之后再运行。");
+                    ShowMsg("Error--", "glyphicon glyphicon-remove-circle", "#ff0000", "Unable to request to the service, please check before operation.");
                 }
             });
         });

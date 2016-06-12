@@ -52,7 +52,7 @@ TopRate.InitCharts = function () {
             if (XValue.length > 0) {
                 TopRate.DrawCharts(XValue, Series);
             } else {
-                $('#top-rate-charts').html("<div style='position:absolute;top:45%;left:30%;font-size:5em;color:#999999;'>Noting to Show ...</div>");
+                $('#top-rate-charts').html("<div style='position:absolute;top:40%;left:30%;font-size:5em;color:#999999;'>Noting to Show ...</div>");
             }
         },
         error: function () {
