@@ -1,11 +1,12 @@
 ﻿.popModal {
     max-width: 900px;
+    width:900px;
 }
 
 .filter-content{
     height:70px;
     text-align:left;
-}
+}   
 
 #basic-addon-filter{
     line-height:60px;

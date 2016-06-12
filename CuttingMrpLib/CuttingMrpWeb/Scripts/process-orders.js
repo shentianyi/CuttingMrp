@@ -1,13 +1,6 @@
 ﻿var ProcessOrders = {};
 
 ProcessOrders.init = function () {
-    var PopModalWidth = $(window).width() / 4 * 3 > 900 ? $(window).width() / 4 * 3 : 900;
-    
-    console.log(PopModalWidth);
-    $('.popModal').css({
-        width: PopModalWidth+'px'
-    });
-
     var ordernr= $('#OrderNr').val();
     var kanbans = $('#KanbanNr').val();
     var derivedfrom = $('#DerivedFrom').val();
