@@ -185,7 +185,7 @@ Public Class Calculator
                 Dim toinsert As ProcessOrder = New ProcessOrder With {.orderNr = ordernr,
                     .partNr = dic.Key, .derivedFrom = "MRP", .proceeDate = dateresult, .sourceDoc = sourceDoc,
                     .status = ProcessOrderStatus.Open, .sourceQuantity = sum, .actualQuantity = actualQty,
-                    .completeRate = completeRate, .batchQuantity = moq, .OrderDerivations = en, .orderType = settings.OrderType}
+                    .completeRate = completeRate, .batchQuantity = moq, .OrderDerivations = en, .OrderType = settings.OrderType, .createAt = Now}
                 result.Add(toinsert)
             Next
         Next
@@ -352,7 +352,6 @@ Public Class Calculator
                 Dim sd As String = "BACKFLUSH"
                 Try
                     If tempBoms.ContainsKey(CType(mt.Key, String)) = False Then
-
                         Dim counter As Integer = bomRepo.Count(Function(c) c.validFrom <= Now And c.validTo >= Now And c.partNr = partnr)
                         If counter < 1 Then
                             backFlushRepo.MarkForAdd(New BackflushRecord With
