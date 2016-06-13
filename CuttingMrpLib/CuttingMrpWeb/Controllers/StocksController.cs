@@ -138,6 +138,11 @@ namespace CuttingMrpWeb.Controllers
             return View(stock);
         }
 
+        public ActionResult SumOfStock()
+        {
+            return View();
+        }
+
         public void Export([Bind(Include = "PartNr,FIFOFrom,FIFOTo,QuantityFrom,QuantityTo,Wh,Position")] StockSearchModel q)
         {
             IStockService ss = new StockService(Settings.Default.db);

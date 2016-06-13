@@ -361,6 +361,7 @@
     <Content Include="Views\Dashboard\Rate.cshtml" />
     <Content Include="Views\Dashboard\PartStock.cshtml" />
     <Content Include="Views\StockMovements\Index.cshtml" />
+    <Content Include="Views\Stocks\SumOfStock.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
