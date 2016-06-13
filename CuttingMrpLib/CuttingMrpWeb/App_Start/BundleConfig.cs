@@ -68,6 +68,9 @@ namespace CuttingMrpWeb
             bundles.Add(new ScriptBundle("~/bundles/top_rate").Include(
                       "~/Scripts/dashboard/top-rate.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/stock_report").Include(
+                      "~/Scripts/dashboard/stock-report.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/jquery.datetimepicker.css",

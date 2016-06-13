@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewBag.Title = "StockReport";
+}
+
+@Styles.Render("~/Content/dashboards")
+
+<div class="LeftNav">
+    @Html.Partial("_DashboardPartial")
+</div>
+
+<div class="RightContent">
+
+</div>
+
+@Scripts.Render("~/bundles/dashboard")
+@Scripts.Render("~/bundles/stock_report")
+
+<script>
+    StockReport.Init();
+</script>

@@ -28,6 +28,11 @@ namespace CuttingMrpWeb.Controllers
             return View();
         }
 
+        public ActionResult StockReport()
+        {
+            return View();
+        }
+
 
         [HttpGet]
         public JsonResult Data([Bind(Include ="PartNr,DateFrom,DateTo,Type,Top")] DashboardSearchModel searchModel) {
