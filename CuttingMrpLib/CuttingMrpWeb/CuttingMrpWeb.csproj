@@ -248,6 +248,7 @@
     <Content Include="Scripts\dashboard\complete-rate.js" />
     <Content Include="Scripts\dashboard\dashboard.js" />
     <Content Include="Scripts\dashboard\part-stock.js" />
+    <Content Include="Scripts\dashboard\stock-report.js" />
     <Content Include="Scripts\dashboard\top-rate.js" />
     <Content Include="Scripts\highcharts\highcharts.js" />
     <Content Include="Scripts\stock-movement.js" />
@@ -363,6 +364,7 @@
     <Content Include="Views\Dashboard\PartStock.cshtml" />
     <Content Include="Views\StockMovements\Index.cshtml" />
     <Content Include="Views\Stocks\SumOfStock.cshtml" />
+    <Content Include="Views\Dashboard\StockReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
