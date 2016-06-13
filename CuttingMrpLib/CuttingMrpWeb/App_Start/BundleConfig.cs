@@ -42,6 +42,10 @@ namespace CuttingMrpWeb
                       "~/Scripts/stock.js"
                       ));
 
+            bundles.Add(new ScriptBundle("~/bundles/sum-of-stock").Include(
+                     "~/Scripts/sum-of-stock.js"
+                     ));
+
             bundles.Add(new ScriptBundle("~/bundles/stock-movements").Include(
                      "~/Scripts/stock-movement.js"
                      ));

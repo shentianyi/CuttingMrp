@@ -138,9 +138,53 @@ namespace CuttingMrpWeb.Controllers
             return View(stock);
         }
 
-        public ActionResult SumOfStock()
+        public ActionResult SumOfStock([Bind(Include ="PartNr")] SumOfStockSearchModel q)
         {
-            return View();
+            int pageIndex = 0;
+            int.TryParse(Request.QueryString.Get("page"), out pageIndex);
+            pageIndex = PagingHelper.GetPageIndex(pageIndex);
+
+            ISumOfStockService sos = new SumOfStockService(Settings.Default.db);
+            IPagedList<SumOfStock> sumOfStock = sos.SearchSumOfStock(q).ToPagedList(pageIndex, Settings.Default.pageSize);
+
+            ViewBag.Query = q;
+
+            return View(sumOfStock);
+        }
+
+        public void ExportSumOfStock([Bind(Include = "PartNr")] SumOfStockSearchModel q)
+        {
+            ISumOfStockService sos = new SumOfStockService(Settings.Default.db);
+
+            List<SumOfStock> processOrders = sos.SearchSumOfStock(q).ToList();
+
+            ViewBag.Query = q;
+
+            MemoryStream ms = new MemoryStream();
+            using (StreamWriter sw = new StreamWriter(ms, Encoding.UTF8))
+            {
+                List<string> head = new List<string> { " No.", "PartNr", "SumOfStock" };
+                sw.WriteLine(string.Join(Settings.Default.csvDelimiter, head));
+                for (var i = 0; i < processOrders.Count; i++)
+                {
+                    List<string> ii = new List<string>();
+                    ii.Add((i + 1).ToString());
+                    ii.Add(processOrders[i].partNr);
+                    ii.Add(processOrders[i].SumOfStock.ToString());
+                    sw.WriteLine(string.Join(Settings.Default.csvDelimiter, ii.ToArray()));
+                }
+                //sw.WriteLine(max);
+            }
+            var filename = "SumOfStocks" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".csv";
+            var contenttype = "text/csv";
+            Response.Clear();
+            Response.ContentEncoding = Encoding.UTF8;
+            Response.ContentType = contenttype;
+            Response.AddHeader("content-disposition", "attachment;filename=" + filename);
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.BinaryWrite(ms.ToArray());
+            Response.End();
+
         }
 
         public void Export([Bind(Include = "PartNr,FIFOFrom,FIFOTo,QuantityFrom,QuantityTo,Wh,Position")] StockSearchModel q)

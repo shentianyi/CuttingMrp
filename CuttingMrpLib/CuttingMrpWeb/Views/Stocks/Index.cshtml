@@ -12,13 +12,15 @@
     <div class="panel panel-default navbar-fixed-top" style="box-shadow: -2px 2px 4px #34313a;top:60px;">
         <div class="panel-body">
             <div class="col-sm-12" style="text-align:center;">
-                <div class="col-sm-8 filter-content">
+                <div class="col-sm-7 filter-content">
                     <span class="pull-right" id="basic-addon-filter"> <i class="glyphicon glyphicon-filter"></i> </span>
                     <div class="filter-p"></div>
                 </div>
 
-                <div class="col-sm-4" style="padding-top:10px; text-align:center;">
-                    <button class="btn btn-primary" type="submit">Search All</button>
+                <div class="col-sm-5" style="padding-top:10px; text-align:center;">
+                    <button class="btn btn-primary" type="submit" title="Reset All Search" data-toggle="tooltip" data-placement="bottom">Search All</button>
+
+                    <a href="/Stocks/SumOfStock" title="Sum Of Stock" data-toggle="tooltip" data-placement="bottom" style="width:100px;margin-left:20px;" class="btn btn-info">SumOfStock</a>
 
                     @Html.ActionLink("Export Full", "Export", new
                {
@@ -30,7 +32,8 @@
                    Wh = ViewBag.Query.Wh,
                    Position = ViewBag.Query.Position,
                }, new { @style = "width:100px;margin-left:20px;", @class = "btn btn-success", @title = "Export All Results", data_toggle = "tooltip", data_placement = "bottom" })
-                    <a href="/Stocks/SumOfStock" style="width:100px;margin-left:20px;" class="btn btn-info">SumOfStock</a>
+
+                    <button class="btn btn-warning import-stock" title="Import Stock" data-toggle="tooltip" data-placement="bottom" type="button" style="width:100px;margin-left:20px;">Import Stock</button>
                 </div>
             </div>
         </div>
@@ -162,10 +165,28 @@
     </div>
 </div>
 
+<div id="dialog_content" class="import_content" style="display:none;">
+  @*  @using (Html.BeginForm("ImportForceRecord", "ProcessOrders", FormMethod.Post, new { enctype = "multipart/form-data" }))*@
+    @* { *@
+        <div class="dialogModal_header" style="background:steelblue;color:white;">
+            Import Stock
+        </div>
+        <div class="dialogModal_content">
+            <strong>Select Stock File:</strong>
+            <hr />
+            <input type="file" value="file" name="stockFile" />
+        </div>
+        <div class="dialogModal_footer">
+            <button type="submit" class="btn btn-primary" style="width:200px;" data-dialogModalBut="ok">OK</button>
+        </div>
+    @*}*@
+</div>
+
 @Scripts.Render("~/bundles/stocks")
 
 <script type="text/javascript">
     Stock.init();
     Stock.click_filter();
+    Stock.import_stock();
 </script>
 

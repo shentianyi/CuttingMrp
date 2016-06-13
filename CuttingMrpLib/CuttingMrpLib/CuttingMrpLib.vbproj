@@ -138,6 +138,7 @@
     <Compile Include="Service\IMrpRoundService.vb" />
     <Compile Include="Service\IStockMovementService.vb" />
     <Compile Include="Service\IStockSumRecordService.vb" />
+    <Compile Include="Service\ISumOfStockService.vb" />
     <Compile Include="Service\PartService.vb" />
     <Compile Include="Service\NumericService.vb" />
     <Compile Include="Service\ProcessOrderService.vb" />
@@ -148,6 +149,7 @@
     <Compile Include="Service\StockMovementService.vb" />
     <Compile Include="Service\StockService.vb" />
     <Compile Include="Service\StockSumRecordService.vb" />
+    <Compile Include="Service\SumOfStockService.vb" />
     <Compile Include="Utility\EnumItem.vb" />
     <Compile Include="Utility\EnumUtility.vb" />
     <Compile Include="Utility\Calculator.vb" />

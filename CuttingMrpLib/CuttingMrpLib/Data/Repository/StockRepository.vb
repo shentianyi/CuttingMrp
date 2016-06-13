@@ -48,4 +48,17 @@ Public Class StockRepository
         End If
         Return Nothing
     End Function
+
+    Public Function SearchSumOfStock(searchModel As SumOfStockSearchModel) As IQueryable(Of SumOfStock) Implements IStockRepository.SearchSumOfStock
+        If searchModel IsNot Nothing Then
+            Dim sumOfStock As IQueryable(Of SumOfStock) = _context.SumOfStocks
+
+            If Not String.IsNullOrWhiteSpace(searchModel.PartNr) Then
+                sumOfStock = sumOfStock.Where(Function(s) s.partNr.Contains(searchModel.PartNr))
+            End If
+
+            Return sumOfStock
+        End If
+        Return Nothing
+    End Function
 End Class
