@@ -29,7 +29,7 @@ namespace CuttingMrpWeb.Controllers
             return View(mps);
         }
 
-        public ActionResult Search([Bind(Include = "PartNr, OrderedFrom, OrderedTo,RequiredDateFrom, RequiredDateTo, Status")] MpsSeachModel q)
+        public ActionResult Search([Bind(Include = "PartNr, OrderedDateFrom, OrderedDateTo,RequiredDateFrom, RequiredDateTo, Status")] MpsSeachModel q)
         {
             int pageIndex = 0;
             int.TryParse(Request.QueryString.Get("page"), out pageIndex);

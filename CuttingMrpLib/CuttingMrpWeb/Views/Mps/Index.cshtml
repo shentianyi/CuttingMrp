@@ -30,7 +30,7 @@
             <th> No. </th>
             <th>PartNr</th>
             <th>OrderedDate</th>
-            <th>ReqiredDate</th>
+            <th>RequiredDate</th>
             <th>Quantity</th>
             <th>Source</th>
             <th>SourceDoc</th>
@@ -108,7 +108,7 @@
             </div>
         </div>
 
-        <hr />
+        <hr style="margin:10px;"/>
 
         <div class="col-sm-12">
             <div class="input-group filter-detail">
@@ -119,10 +119,12 @@
             </div>
         </div>
 
+        <hr style="margin:10px;" />
+
         <div class="col-sm-12">
             <div class="input-group filter-detail">
-                <span class="input-group-addon" id="basic-addon-ordered-date">RequiredDate</span>
-                <input type="text" class="form-control datetime-picker-from" autocomplete="off" name="RequiredDateFrom" id="RequiredDateFrom" value="@ViewBag.Query.RequiredDateFrom" placeholder="RequiredDate From" aria-describedby="basic-addon-ordered-date">
+                <span class="input-group-addon" id="basic-addon-required-date">RequiredDate</span>
+                <input type="text" class="form-control datetime-picker-from" autocomplete="off" name="RequiredDateFrom" id="RequiredDateFrom" value="@ViewBag.Query.RequiredDateFrom" placeholder="RequiredDate From" aria-describedby="basic-addon-required-date">
                 <span class="space-mark">~</span>
                 <input type="text" class="form-control datetime-picker-to" autocomplete="off" name="RequiredDateTo" id="RequiredDateTo" value="@ViewBag.Query.RequiredDateTo" placeholder="RequiredDate To" />
             </div>

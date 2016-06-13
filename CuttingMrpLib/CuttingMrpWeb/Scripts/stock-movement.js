@@ -7,7 +7,7 @@ window.onload = function () {
 
 StockMovements.init = function () {
     var partnr = $('#PartNr').val();
-    var movetype = $('#MoveType').val();
+    var datefrom = $('#DateFrom').val();
     var dateto = $('#DateTo').val();
     var movetype = $("#MoveType").children("option:selected").html();
     StockMovements.add_string_label_to_div(partnr, 'PartNr like ', '.filter-p');

@@ -253,6 +253,7 @@
     <Content Include="Scripts\dashboard\stock-report.js" />
     <Content Include="Scripts\dashboard\top-rate.js" />
     <Content Include="Scripts\highcharts\highcharts.js" />
+    <Content Include="Scripts\mps.js" />
     <Content Include="Scripts\stock-movement.js" />
     <Content Include="Scripts\sum-of-stock.js" />
     <Content Include="TmpFile\read.txt">

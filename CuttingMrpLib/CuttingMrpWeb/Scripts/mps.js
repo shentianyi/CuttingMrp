@@ -1,27 +1,38 @@
-﻿var MrpRounds = {};
+﻿var MPS = {};
 
-MrpRounds.init = function () {
-    var mrproundid = $('#MrpRoundId').val();
-    var timefrom = $('#TimeFrom').val();
-    var timeto = $('#TimeTo').val();
-    var runningstatus = $("#RunningStatus").children("option:selected").html();
-    //var runningstatus = $('#RunningStatus').val();
-    var launcher = $('#Launcher').val();
-
-    MrpRounds.add_string_label_to_div(mrproundid, 'MrpRoundID Like ', '.filter-p');
-    MrpRounds.add_range_label_to_div(timefrom + "~" + timeto, 'Time ', '.filter-p');
-    MrpRounds.add_string_label_to_div(runningstatus, 'Status =', '.filter-p');
-    MrpRounds.add_string_label_to_div(launcher, 'Launcher Like', '.filter-p');
+window.onload = function () {
+    $('.navbar-nav li').removeClass("nav-choosed");
+    $('.nav-mps').addClass("nav-choosed");
 }
 
-MrpRounds.add_string_label_to_div = function (content, name, cls) {
+MPS.init = function () {
+    var partnr = $('#PartNr').val();
+
+    var ordereddatefrom = $('#OrderedDateFrom').val();
+    var ordereddateto = $('#OrderedDateTo').val();
+
+    var requireddatefrom = $('#RequiredDateFrom').val();
+    var requireddateto = $('#RequiredDateTo').val();
+
+    var status = $("#Status").children("option:selected").html();
+
+    MPS.add_string_label_to_div(partnr, 'PartNr like ', '.filter-p');
+
+    MPS.add_string_label_to_div(status, 'Status = ', '.filter-p');
+
+    MPS.add_range_label_to_div(ordereddatefrom + "~" + ordereddateto, 'OrderedDate ', '.filter-p');
+
+    MPS.add_range_label_to_div(requireddatefrom + "~" + requireddateto, 'RequiredDate ', '.filter-p');
+}
+
+MPS.add_string_label_to_div = function (content, name, cls) {
     if (content != null && content != "") {
         $("<p class='label label-primary' style='margin-left:5px;font-size:.8em;white-space:normal;'>" + name + " " + content + "</p>").appendTo(cls).ready(function () {
         });
     }
 }
 
-MrpRounds.add_range_label_to_div = function (content, name, cls) {
+MPS.add_range_label_to_div = function (content, name, cls) {
     var from = content.split("~")[0];
     var to = content.split("~")[1];
     if ((from != "" && from != null) && (to != null && to != "")) {
@@ -36,7 +47,7 @@ MrpRounds.add_range_label_to_div = function (content, name, cls) {
     }
 }
 
-MrpRounds.click_filter = function () {
+MPS.click_filter = function () {
     $('#basic-addon-filter').click(function () {
         $('#basic-addon-filter').popModal({
             html: $('#extra-filter-content'),
@@ -73,8 +84,3 @@ $('.datetime-picker-to').datetimepicker({
     defaultTime: '23:59'
 })
 
-window.onload = function () {
-    $('.navbar-nav li').removeClass("nav-choosed");
-    $('.nav-settings').addClass("nav-choosed");
-    $('.nav-mrp-round').addClass("nav-choosed");
-}

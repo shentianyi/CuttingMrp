@@ -54,7 +54,7 @@ Public Class StockRepository
             Dim sumOfStock As IQueryable(Of SumOfStock) = _context.SumOfStocks
 
             If Not String.IsNullOrWhiteSpace(searchModel.PartNr) Then
-                sumOfStock = sumOfStock.Where(Function(s) s.partNr.Contains(searchModel.PartNr))
+                sumOfStock = sumOfStock.Where(Function(s) s.partNr.Contains(searchModel.PartNr.Trim()))
             End If
 
             Return sumOfStock

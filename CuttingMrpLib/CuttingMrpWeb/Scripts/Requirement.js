@@ -150,5 +150,6 @@ Requirement.run_mrp = function () {
 
 window.onload = function () {
     $('.navbar-nav li').removeClass("nav-choosed");
+    $('.nav-settings').addClass("nav-choosed");
     $('.nav-requirements').addClass("nav-choosed");
 }

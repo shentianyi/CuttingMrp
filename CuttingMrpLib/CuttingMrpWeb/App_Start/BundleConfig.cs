@@ -56,6 +56,9 @@ namespace CuttingMrpWeb
             bundles.Add(new ScriptBundle("~/bundles/process-orders").Include(
                       "~/Scripts/process-orders.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/mps").Include(
+                      "~/Scripts/mps.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/dashboard").Include(
                       "~/Scripts/dashboard/dashboard.js"));
 

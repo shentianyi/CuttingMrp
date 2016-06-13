@@ -17,7 +17,7 @@ Public Class MpsRepository
             Dim mps As IQueryable(Of MP) = _context.MPs
 
             If Not String.IsNullOrWhiteSpace(conditons.PartNr) Then
-                mps = mps.Where(Function(c) c.partnr.Contains(conditons.PartNr))
+                mps = mps.Where(Function(c) c.partnr.Contains(conditons.PartNr.Trim()))
             End If
 
             If conditons.OrderedDateFrom.HasValue Then
