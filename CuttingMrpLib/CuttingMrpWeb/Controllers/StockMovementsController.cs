@@ -9,6 +9,8 @@ using CuttingMrpWeb.Helpers;
 using CuttingMrpWeb.Models;
 using CuttingMrpWeb.Properties;
 using MvcPaging;
+using System.IO;
+using System.Text;
 
 namespace CuttingMrpWeb.Controllers
 {
@@ -140,6 +142,47 @@ namespace CuttingMrpWeb.Controllers
             SetMoveTypeDisplayList(null);
             return View("Index", stockMovements);
         }
+
+        public void Export([Bind(Include = "PartNr, Quantity, FIFO, MoveTypeDisplay, SourceDoc, CreatedDisplay")] StockMovementSearchModel q)
+        {
+            IStockMovementService sms = new StockMovementService(Settings.Default.db);
+            List<StockMovement> stockMovements = sms.Search(q).ToList();
+            ViewBag.Query = q;
+            MemoryStream ms = new MemoryStream();
+            using (StreamWriter sw = new StreamWriter(ms, Encoding.UTF8))
+            {
+                List<string> head = new List<string>
+                {
+                    "N0.", "PartNr", "Quantity", "FIFO", "MoveTypeDisplay", "SouceDoc", "CreatedAtDisplay"
+                };
+
+                sw.WriteLine(string.Join(Settings.Default.csvDelimiter, head));
+
+                for(var i =0; i< stockMovements.Count; i++)
+                {
+                    List<string> ii = new List<string>();
+                    ii.Add((i + 1).ToString());
+                    ii.Add(stockMovements[i].partNr);
+                    ii.Add(stockMovements[i].quantity.ToString());
+                    ii.Add(stockMovements[i].fifoDisplay.ToString());
+                    ii.Add(stockMovements[i].typeDisplay.ToString());
+                    ii.Add(stockMovements[i].sourceDoc.ToString());
+                    ii.Add(stockMovements[i].createdAtDisplay.ToString());
+                    sw.WriteLine(string.Join(Settings.Default.csvDelimiter, ii.ToArray()));
+                }
+            }
+
+            var filename = "StockMovements" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".csv";
+            var contenttype = "text/csv";
+            Response.Clear();
+            Response.ContentEncoding = Encoding.UTF8;
+            Response.ContentType = contenttype;
+            Response.AddHeader("content-disposition", "attachment;filename=" + filename);
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.BinaryWrite(ms.ToArray());
+            Response.End();
+        }
+
 
         private void SetMoveTypeDisplayList(int? type, bool allowBlank = true)
         {

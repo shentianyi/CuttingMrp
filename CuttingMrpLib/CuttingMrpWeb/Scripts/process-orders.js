@@ -68,8 +68,22 @@ ProcessOrders.add_range_label_to_div = function (content, name, cls) {
     }
 }
 
-$('.datetime-picker').datetimepicker({
-    lang: 'ch'
+$('.datetime-picker-from').datetimepicker({
+    lang: 'ch',
+    timepicker: false,
+    format: 'Y/m/d H:i',
+    formatDate: 'Y/m/d',
+    formatTime: 'H:i',
+    defaultTime: '00:00'
+})
+
+$('.datetime-picker-to').datetimepicker({
+    lang: 'ch',
+    timepicker: false,
+    format: 'Y/m/d H:i',
+    formatDate: 'Y/m/d',
+    formatTime: 'H:i',
+    defaultTime: '23:59'
 })
 
 ProcessOrders.finish_porcess_order = function () {

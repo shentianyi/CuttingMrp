@@ -1,7 +1,7 @@
 ﻿var CompleteRate = {};
 
 CompleteRate.Init = function () {
-    var now = new Date().Format("yyyy-MM-dd");
+    var now = new Date().Format("yyyy/MM/dd");
     var WeekAgo = FutureDate(14);
     $('.date-from').val(WeekAgo);
     $('.date-to').val(now);

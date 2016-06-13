@@ -60,36 +60,22 @@ Requirement.add_range_label_to_div = function (content, name, cls) {
     }
 }
 
-$('.date-picker').datetimepicker({
-    lang: 'ch',
-    timepicker:false,
-    format: 'Y/m/d H:i:s',
-    formatDate: 'Y/m/d',
-    formatTime: 'H:i:s',
-    defaultTime:'00:00:00:00'
-})
-
 $('.datetime-picker-from').datetimepicker({
-    lang: 'zh',
+    lang: 'ch',
     timepicker: false,
-    showSecond: true, //显示秒
-    format: 'Y/m/d H:i:s',
-    formatDate: 'Y/m/d H:i',
-    formatTime: 'H:i:s',
-    roundTime: 'floor',
-    defaultTime: '00:00:00'
+    format: 'Y/m/d H:i',
+    formatDate: 'Y/m/d',
+    formatTime: 'H:i',
+    defaultTime: '00:00'
 })
 
 $('.datetime-picker-to').datetimepicker({
     lang: 'ch',
     timepicker: false,
-    showSecond: true, //显示秒
-    format: 'Y/m/d H:i:s',
+    format: 'Y/m/d H:i',
     formatDate: 'Y/m/d',
-    formatTime: 'H:i:s',
-    roundTime: 'round',
-    step:1,
-    defaultTime: '23:59:59'
+    formatTime: 'H:i',
+    defaultTime: '23:59'
 })
 
 //{

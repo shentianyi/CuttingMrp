@@ -55,8 +55,22 @@ MrpRounds.click_filter = function () {
     });
 }
 
-$('.datetime-picker').datetimepicker({
-    lang: 'ch'
+$('.datetime-picker-from').datetimepicker({
+    lang: 'ch',
+    timepicker: false,
+    format: 'Y/m/d H:i',
+    formatDate: 'Y/m/d',
+    formatTime: 'H:i',
+    defaultTime: '00:00'
+})
+
+$('.datetime-picker-to').datetimepicker({
+    lang: 'ch',
+    timepicker: false,
+    format: 'Y/m/d H:i',
+    formatDate: 'Y/m/d',
+    formatTime: 'H:i',
+    defaultTime: '23:59'
 })
 
 window.onload = function () {
