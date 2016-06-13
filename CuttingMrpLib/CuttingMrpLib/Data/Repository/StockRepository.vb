@@ -11,8 +11,6 @@ Public Class StockRepository
         _context = Me._dataContextFactory.Context
     End Sub
 
-
-
     Public Function Search(searchModel As StockSearchModel) As IQueryable(Of Stock) Implements IStockRepository.Search
         If searchModel IsNot Nothing Then
 

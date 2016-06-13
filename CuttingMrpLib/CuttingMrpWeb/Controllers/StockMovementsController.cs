@@ -107,7 +107,7 @@ namespace CuttingMrpWeb.Controllers
 
 
         [HttpGet]
-        public ActionResult JsonSearch([Bind(Include = "PartNr,DateFrom,DateTo")] StockMovementSearchModel q)
+        public ActionResult JsonSearch([Bind(Include = "PartNr, DateFrom, DateTo, MoveType")] StockMovementSearchModel q)
         {
             int pageIndex = 0;
             int.TryParse(Request.QueryString.Get("page"), out pageIndex);
@@ -129,7 +129,7 @@ namespace CuttingMrpWeb.Controllers
             return Json(moves.ToList(), JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Search([Bind(Include = "PartNr, DateFrom, DateTo")] StockMovementSearchModel q) {
+        public ActionResult Search([Bind(Include = "PartNr, DateFrom, DateTo, MoveType")] StockMovementSearchModel q) {
             int pageIndex = 0;
             int.TryParse(Request.QueryString.Get("page"), out pageIndex);
             pageIndex = PagingHelper.GetPageIndex(pageIndex);
@@ -139,7 +139,7 @@ namespace CuttingMrpWeb.Controllers
             
             ViewBag.Query = q;
 
-            SetMoveTypeDisplayList(null);
+            SetMoveTypeDisplayList(q.MoveType);
             return View("Index", stockMovements);
         }
 

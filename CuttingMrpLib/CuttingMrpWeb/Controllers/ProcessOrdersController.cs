@@ -142,7 +142,6 @@ namespace CuttingMrpWeb.Controllers
             ProcessOrderInfoModel info = ps.GetProcessOrderInfo(q);
             ViewBag.Info = info;
 
-
             return View("Index", processOrders);
         }
 

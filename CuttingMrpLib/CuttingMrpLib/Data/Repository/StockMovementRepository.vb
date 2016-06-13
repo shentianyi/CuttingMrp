@@ -17,6 +17,10 @@ Public Class StockMovementRepository
             moves = moves.Where(Function(m) m.partNr.Equals(conditions.PartNr))
         End If
 
+        If conditions.MoveType.HasValue Then
+            moves = moves.Where(Function(c) c.moveType = conditions.MoveType)
+        End If
+
         If conditions.DateFrom.HasValue Then
             moves = moves.Where(Function(m) m.createdAt >= conditions.DateFrom)
         End If

@@ -162,6 +162,7 @@
     <Compile Include="ViewModel\SearchViewModel\SearchModelBase.vb" />
     <Compile Include="ViewModel\SearchViewModel\StockMovementSearchModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\StockSearchModel.vb" />
+    <Compile Include="ViewModel\SearchViewModel\SumOfStockSearchModel.vb" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

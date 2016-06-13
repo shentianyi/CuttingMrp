@@ -79,6 +79,7 @@
                 {
                     var html = Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
                         .Options(o => o.AddRouteValue("PartNr", ViewBag.Query.PartNr))
+                        .Options(o => o.AddRouteValue("MoveType", ViewBag.Query.MoveType))
                         .Options(o => o.AddRouteValue("OrderedDateFrom", ViewBag.Query.DateFrom))
                         .Options(o => o.AddRouteValue("OrderedDateTo", ViewBag.Query.DateTo));
                     @html
@@ -105,10 +106,19 @@
 
         <div class="col-sm-12">
             <div class="input-group filter-detail">
+                <span class="input-group-addon" id="basic-addon-stat" style="width:80px;">MoveType</span>
+                @Html.DropDownList("MoveType", ViewData["moveTypeList"] as IEnumerable<SelectListItem>, new { @class = "from-control" , @style="width:160px;" })
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="col-sm-12">
+            <div class="input-group filter-detail">
                 <span class="input-group-addon" id="basic-addon-date">Date</span>
-                <input type="text" style="width:188px;" class="form-control datetime-picker-from" autocomplete="off" name="DateFrom" id="DateFrom" value="@ViewBag.Query.DateFrom" placeholder="Date From" aria-describedby="basic-addon-date">
+                <input type="text" class="form-control datetime-picker-from" autocomplete="off" name="DateFrom" id="DateFrom" value="@ViewBag.Query.DateFrom" placeholder="Date From" aria-describedby="basic-addon-date">
                 <span class="space-mark">~</span>
-                <input type="text" style="width:170px;" class="form-control datetime-picker-to" autocomplete="off" name="DateTo" id="DateTo" value="@ViewBag.Query.DateTo" placeholder="Date To" />
+                <input type="text" class="form-control datetime-picker-to" autocomplete="off" name="DateTo" id="DateTo" value="@ViewBag.Query.DateTo" placeholder="Date To" />
             </div>
         </div>
 
