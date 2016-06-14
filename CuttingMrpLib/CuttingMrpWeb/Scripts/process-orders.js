@@ -1,6 +1,13 @@
 ﻿var ProcessOrders = {};
 
 ProcessOrders.init = function () {
+    var PopModalWidth = $(window).width() / 4 * 3 > 900 ? $(window).width() / 4 * 3 : 900;
+    
+    console.log(PopModalWidth);
+    $('.popModal').css({
+        width: PopModalWidth+'px'
+    });
+
     var ordernr= $('#OrderNr').val();
     var kanbans = $('#KanbanNr').val();
     var derivedfrom = $('#DerivedFrom').val();
@@ -14,6 +21,9 @@ ProcessOrders.init = function () {
     var status = $("#Status").children("option:selected").html();
     var mrpround = $("#MrpRound").children("option:selected").html();
     var kanbanstype = $("#PartType").children("option:selected").html();
+    var createatfrom = $('#CreateAtFrom').val();
+    var createatto = $('#CreateAtTo').val();
+
 
     ProcessOrders.add_string_label_to_div(ordernr, 'OrderNr like ', '.filter-p');
     ProcessOrders.add_string_label_to_div(kanbans, 'Kanbans like ', '.filter-p');
@@ -23,6 +33,7 @@ ProcessOrders.init = function () {
     ProcessOrders.add_string_label_to_div(mrpround, 'MrpRound =', '.filter-p');
     ProcessOrders.add_string_label_to_div(kanbanstype, 'PartType(KB Type) =', '.filter-p');
     ProcessOrders.add_range_label_to_div(proceedatefrom + "~" + proceedateto, 'ProceeDate ', '.filter-p');
+    ProcessOrders.add_range_label_to_div(createatfrom + "~" + createatto, 'Create At ', '.filter-p');
     ProcessOrders.add_range_label_to_div(actualquantityfrom + "~" + actualquantityto, 'ActualQuantity ', '.filter-p');
     ProcessOrders.add_range_label_to_div(completeratefrom + "~" + completerateto, 'CompleteRate ', '.filter-p');
 }

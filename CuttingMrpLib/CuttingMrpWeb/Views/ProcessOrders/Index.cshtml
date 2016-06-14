@@ -39,7 +39,7 @@
                    MrpRound = ViewBag.Query.MrpRound,
                    KanbanNr = ViewBag.Query.KanbanNr,
                    PartType = ViewBag.Query.PartType
-               }, new { @style = "width:100px;", @class = "btn btn-primary export-kanbans", @title = "export searched results", data_toggle = "tooltip", data_placement = "bottom"})
+               }, new { @style = "width:100px;", @class = "btn btn-primary export-kanbans", @title = "export searched results", data_toggle = "tooltip", data_placement = "bottom" })
                     <hr style="margin:5px;" />
                     @Html.ActionLink("Export Full", "Export", new
                {
@@ -57,7 +57,7 @@
                    MrpRound = ViewBag.Query.MrpRound,
                    KanbanNr = ViewBag.Query.KanbanNr,
                    PartType = ViewBag.Query.PartType
-               }, new { @style = "width:100px;", @class = "btn btn-success", @title = "export all searched results", data_toggle = "tooltip", data_placement = "bottom"})
+               }, new { @style = "width:100px;", @class = "btn btn-success", @title = "export all searched results", data_toggle = "tooltip", data_placement = "bottom" })
                 </div>
                 <div class="col-md-5">
                     <form action="/ProcessOrders/Finish" method="post" id="finishForm">
@@ -218,31 +218,14 @@
 
         <div class="col-sm-12">
             <div class="input-group filter-detail">
-                <span class="input-group-addon" id="basic-addon-sourcedoc-date">Kanban</span>
-                <input type="text" class="form-control" autocomplete="off" name="KanbanNr" id="KanbanNr" value="@ViewBag.Query.KanbanNr" placeholder="Kanban" aria-describedby="basic-addon-sourcedoc-date">
-                <span class="input-group-addon">KanbansType</span>
-                @Html.DropDownList("PartType", ViewData["partTypeList"] as IEnumerable<SelectListItem>, new { @class = "form-control", @style = "width: 170px", @name = "PartType", @id = "PartType" })
-            </div>
-        </div>
-        <hr style="margin:5px;" />
-
-        <div class="col-sm-12">
-            <div class="input-group filter-detail">
-                <span class="input-group-addon">DerivedFrom</span>
-                <input type="text" style="width: 155px;" class="form-control" autocomplete="off" name="DerivedFrom" id="DerivedFrom" value="@ViewBag.Query.DerivedFrom" placeholder="DerivedFrom" />
-
-                <span class="input-group-addon">MrpRound</span>
-                @Html.DropDownList("MrpRound", ViewData["mrpRoundSelect"] as IEnumerable<SelectListItem>, new { @class = "form-control", @style = "width: 170px" })
-            </div>
-        </div>
-        <hr style="margin:5px;" />
-
-        <div class="col-sm-12">
-            <div class="input-group filter-detail">
                 <span class="input-group-addon" id="basic-addon-partnr-date">PartNr</span>
                 <input type="text" class="form-control" autocomplete="off" name="PartNr" id="PartNr" value="@ViewBag.Query.PartNr" placeholder="PartNr" aria-describedby="basic-addon-partnr-date">
-                <span class="input-group-addon">Status</span>
-                @Html.DropDownList("Status", ViewData["statusList"] as IEnumerable<SelectListItem>, new { @class = "form-control", @style = "width:175px;" })
+
+                <span class="input-group-addon" id="basic-addon-sourcedoc-date">Kanban</span>
+                <input type="text" class="form-control" autocomplete="off" name="KanbanNr" id="KanbanNr" value="@ViewBag.Query.KanbanNr" placeholder="Kanban" aria-describedby="basic-addon-sourcedoc-date">
+
+                <span class="input-group-addon">KanbansType</span>
+                @Html.DropDownList("PartType", ViewData["partTypeList"] as IEnumerable<SelectListItem>, new { @class = "form-control", @style = "width: 170px", @name = "PartType", @id = "PartType" })
             </div>
         </div>
         <hr style="margin:5px;" />
@@ -253,6 +236,8 @@
                 <input type="text" style="width:188px;" class="form-control datetime-picker-from" autocomplete="off" name="ProceeDateFrom" id="ProceeDateFrom" value="@ViewBag.Query.ProceeDateFrom" placeholder="ProceeDate From" aria-describedby="basic-addon-procee-date">
                 <span class="space-mark">~</span>
                 <input type="text" style="width:170px;" class="form-control datetime-picker-to" autocomplete="off" name="ProceeDateTo" id="ProceeDateTo" value="@ViewBag.Query.ProceeDateTo" placeholder="ProceeDate To" />
+                <span class="input-group-addon">DerivedFrom</span>
+                <input type="text" style="width: 155px;" class="form-control" autocomplete="off" name="DerivedFrom" id="DerivedFrom" value="@ViewBag.Query.DerivedFrom" placeholder="DerivedFrom" />
             </div>
         </div>
         <hr style="margin:5px;" />
@@ -263,6 +248,8 @@
                 <input type="text" style="width:165px;" class="form-control" autocomplete="off" name="ActualQuantityFrom" id="ActualQuantityFrom" value="@ViewBag.Query.ActualQuantityFrom" placeholder="ActualQuantity From" aria-describedby="basic-addon-actual-quantity">
                 <span class="space-mark">~</span>
                 <input type="text" style="width:170px;" class="form-control" autocomplete="off" name="ActualQuantityTo" id="ActualQuantityTo" value="@ViewBag.Query.ActualQuantityTo" placeholder="ActualQuantity To" />
+                <span class="input-group-addon">Status</span>
+                @Html.DropDownList("Status", ViewData["statusList"] as IEnumerable<SelectListItem>, new { @class = "form-control", @style = "width:175px;" })
             </div>
         </div>
         <hr style="margin:5px;" />
@@ -273,6 +260,9 @@
                 <input type="text" class="form-control" autocomplete="off" name="CompleteRateFrom" id="CompleteRateFrom" value="@ViewBag.Query.CompleteRateFrom" placeholder="CompleteRate From" aria-describedby="basic-addon-complete-rate">
                 <span class="space-mark">~</span>
                 <input type="text" class="form-control" autocomplete="off" name="CompleteRateTo" id="CompleteRateTo" value="@ViewBag.Query.CompleteRateTo" placeholder="CompleteRate To" />
+
+                <span class="input-group-addon">MrpRound</span>
+                @Html.DropDownList("MrpRound", ViewData["mrpRoundSelect"] as IEnumerable<SelectListItem>, new { @class = "form-control", @style = "width: 170px" })
             </div>
         </div>
 
