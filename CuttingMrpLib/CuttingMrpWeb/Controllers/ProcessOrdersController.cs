@@ -29,7 +29,7 @@ namespace CuttingMrpWeb.Controllers
 
             IProcessOrderService ps = new ProcessOrderService(Settings.Default.db);
 
-            IPagedList<ProcessOrder> processOrders = ps.Search(q).ToPagedList(10000, Settings.Default.pageSize);
+            IPagedList<ProcessOrder> processOrders = ps.Search(q).ToPagedList(pageIndex, Settings.Default.pageSize);
 
             ViewBag.Query = q;
 
