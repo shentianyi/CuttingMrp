@@ -261,7 +261,7 @@ Public Class Calculator
                     Else
                         '有需求日期小于基准日的订单
                         If coll.requiredDate < dateType.FirstDay Then
-
+                            key = FindBasicDate(dateType.FirstDay, coll.requiredDate, dateType.Count).ToString("yyyy-MM-dd")
                         Else
                             If coll.requiredDate < dateType.FirstDay.AddDays(dateType.Count) Then
                                 key = dateType.FirstDay.ToString("yyyy-MM-dd")
