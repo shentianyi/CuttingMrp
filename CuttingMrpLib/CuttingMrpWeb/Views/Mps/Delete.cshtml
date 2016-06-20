@@ -1,0 +1,159 @@
+﻿@model CuttingMrpLib.MP
+@{
+    ViewBag.Title = "Delete";
+}
+
+<div>
+    <ol class="breadcrumb" style="padding:20px 15px;font-size:1.5em;">
+        <li>
+            @Html.ActionLink("Mps", "Index")
+        </li>
+        <li>
+            <label style="color:#ff0000;">
+                Delete
+            </label>
+            <label class="label label-danger">
+                @Html.DisplayFor(model => model.id)
+            </label>
+        </li>
+    </ol>
+    <hr />
+
+    <div class="panel panel-danger">
+        <div class="panel-heading">
+            <div class="col-md-12" style="height:35px;">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-actions no-color">
+                        <div class="col-md-10">
+                            <h4>
+                                Are you sure you want to delete
+                                <label class="label label-danger">
+                                    @Html.DisplayFor(model => model.id)
+                                </label>
+                                ?
+                            </h4>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="submit" value="Delete" class="btn btn-danger" style="width:150px;" />
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="col-md-12">
+                <div class="col-md-4">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.id)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.id)
+                        </dd>
+                    </dl>
+                </div>
+                <div class="col-md-4">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.partnr)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.partnr)
+                        </dd>
+                    </dl>
+                </div>
+                <div class="col-md-4">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.orderedDate)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.orderedDate)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+
+            <div class="col-md-12">
+                <div class="col-md-4">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.requiredDate)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.requiredDate)
+                        </dd>
+                    </dl>
+                </div>
+                <div class="col-md-4">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.quantity)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.quantity)
+                        </dd>
+                    </dl>
+                </div>
+                <div class="col-md-4">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.source)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.source)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+
+            <div class="col-md-12">
+                <div class="col-md-4">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.sourceDoc)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.sourceDoc)
+                        </dd>
+                    </dl>
+                </div>
+                <div class="col-md-4">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.status)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.status)
+                        </dd>
+                    </dl>
+                </div>
+                <div class="col-md-4">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.unitId)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.unitId)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/mps")

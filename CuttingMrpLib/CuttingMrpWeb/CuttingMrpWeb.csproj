@@ -369,6 +369,9 @@
     <Content Include="Views\Stocks\SumOfStock.cshtml" />
     <Content Include="Views\Dashboard\StockReport.cshtml" />
     <Content Include="Views\Mps\Index.cshtml" />
+    <Content Include="Views\Mps\Delete.cshtml" />
+    <Content Include="Views\Mps\Edit.cshtml" />
+    <Content Include="Views\Mps\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

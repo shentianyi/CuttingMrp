@@ -1,0 +1,119 @@
+﻿@model CuttingMrpLib.MP
+@{
+    ViewBag.Title = "Edit";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <ol class="breadcrumb" style="padding:20px 15px;font-size:1.5em;">
+        <li>
+            @Html.ActionLink("Mps", "Index")
+        </li>
+        <li>
+            Edit
+            <label class="label label-primary">
+                @Html.DisplayFor(model => model.partnr)
+            </label>
+        </li>
+    </ol>
+    <hr />
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.id)
+
+        <div class="panel panel-default">
+            <div class="panel-heading col-md-12" style="height:55px;">
+                <div class="col-md-10" style="font-size:2em;">
+                    <label>
+                        @Html.DisplayFor(model => model.partnr, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.HiddenFor(model => model.partnr)
+                    </label>
+                </div>
+                <div class="col-md-2">
+                    <input type="submit" value="Save" class="btn btn-primary" style="width:150px;" />
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="col-md-12">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.partnr, "PartNr", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-6" style="margin-top:7px;">
+                                @Html.DisplayFor(model => model.partnr, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(model => model.partnr)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.orderedDate, "OrderedDate", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-6" style="margin-top:7px;">
+                                @Html.DisplayFor(model => model.orderedDate, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(model => model.orderedDate)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.status, "Status", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-6" style="margin-top:7px;">
+                                @Html.DisplayFor(model => model.status, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.HiddenFor(model => model.status)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.requiredDate, "RequiredDate", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-6" style="margin-top:7px;">
+                                @Html.EditorFor(model => model.requiredDate, new { htmlAttributes = new { @class = "form-control datetime-picker-from" } })
+                                @Html.ValidationMessageFor(model => model.requiredDate, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.quantity, "Quantity", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-6" style="margin-top:7px;">
+                                @Html.EditorFor(model => model.quantity, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.quantity, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.source, "Source", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-6" style="margin-top:7px;">
+                                @Html.EditorFor(model => model.source, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.source, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.sourceDoc, "SourceDoc", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-6" style="margin-top:7px;">
+                                @Html.EditorFor(model => model.sourceDoc, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.sourceDoc, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@Scripts.Render("~/bundles/mps")

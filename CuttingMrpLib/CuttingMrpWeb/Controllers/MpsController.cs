@@ -45,6 +45,115 @@ namespace CuttingMrpWeb.Controllers
             return View("Index", mps);
         }
 
+        // GET: Mps/Create
+        public ActionResult Create()
+        {
+            SetMpStatusDisplayList(null);
+            return View();
+        }
+
+        // POST: Mps/Create
+        [HttpPost]
+        public ActionResult Create([Bind(Include = "id, partnr, orderedDate, requiredDate, quantity, source, sourceDoc,status,unitId")] MP mp)
+        {
+            try
+            {
+                // TODO: Add insert logic here
+                IMpsService mps = new MpsService(Settings.Default.db);
+                
+                mps.Create(mp);
+
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                if (String.IsNullOrWhiteSpace(mp.source))
+                {
+                    ViewBag.SourceError = "Source 字段是必需的。";
+                }
+
+                if (String.IsNullOrWhiteSpace(mp.partnr))
+                {
+                    ViewBag.Error = "PartNr 字段是必需的。";
+                }
+                else
+                {
+                    ViewBag.Error = "PartNr 不存在。";
+                }
+
+                SetMpStatusDisplayList(null);
+                return View();
+            }
+        }
+
+        // GET: Mps/Edit/5
+        public ActionResult Edit(string id)
+        {
+            MP mps = GetMpById(id);
+
+            if (mps != null)
+            {
+                SetMpStatusDisplayList(mps.status);
+            }
+
+            return ValidateMps(mps);
+        }
+
+        // POST: ProcessOrders/Edit/5
+        [HttpPost]
+        public ActionResult Edit([Bind(Include = "id, requiredDate, quantity, source, sourceDoc")] MP mp)
+        {
+            IMpsService mps = new MpsService(Settings.Default.db);
+            mps.Update(mp);
+            return RedirectToAction("Index");
+        }
+
+        // GET: Mps/Delete/5
+        public ActionResult Delete(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return ValidateMps(GetMpById(id));
+            }
+        }
+
+        // POST: Mps/Delete/5
+        [HttpPost]
+        public ActionResult Delete(string id, FormCollection collection)
+        {
+            //try
+            //{
+            // TODO: Add delete logic here
+            IMpsService mps = new MpsService(Settings.Default.db);
+            mps.DeleteById(id);
+            return RedirectToAction("Index");
+            //}
+            //catch
+            //{
+            //    return View();
+            //}
+        }
+
+        private ActionResult ValidateMps(MP mps)
+        {
+            if (mps == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(mps);
+        }
+
+        private MP GetMpById(string id)
+        {
+            IMpsService ps = new MpsService(Settings.Default.db);
+            MP mp = ps.FindById(id);
+            return mp;
+        }
 
         private void SetMpStatusDisplayList(int? type, bool allowBlank = true)
         {
