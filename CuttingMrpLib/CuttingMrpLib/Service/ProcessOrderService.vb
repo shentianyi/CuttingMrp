@@ -185,26 +185,26 @@ Public Class ProcessOrderService
         End If
 
         Dim conditions As ProcessOrderSearchModel = New ProcessOrderSearchModel With {.Status = ProcessOrderStatus.Open, .PageSize = Integer.MaxValue}
-        Dim sortedOrders As Hashtable = New Hashtable
-        Dim toUpdate As List(Of ProcessOrder) = New List(Of ProcessOrder)
-        Dim toFinish As List(Of ProcessOrder) = New List(Of ProcessOrder)
+        '  Dim sortedOrders As Hashtable = New Hashtable
+        '  Dim toUpdate As List(Of ProcessOrder) = New List(Of ProcessOrder)
+        ' Dim toFinish As List(Of ProcessOrder) = New List(Of ProcessOrder)
         Dim toStock As List(Of Stock) = New List(Of Stock)
         Dim toMove As List(Of StockMovement) = New List(Of StockMovement)
         Dim toCreateStockBatchMoveRecord As List(Of StockBatchMoveRecord) = New List(Of StockBatchMoveRecord)
-        Dim existingOrders As List(Of ProcessOrder) = Me.Search(conditions).ToList
-        existingOrders = (From order In existingOrders Select order Order By order.proceeDate Ascending).ToList
+        'Dim existingOrders As List(Of ProcessOrder) = Me.Search(conditions).ToList
+        ' existingOrders = (From order In existingOrders Select order Order By order.proceeDate Ascending).ToList
         ' stock batch move record rep
         Dim findStockBatchMR As Repository(Of StockBatchMoveRecord) = New Repository(Of StockBatchMoveRecord)(New DataContext(DBConn))
         'group by order nr
-        For Each ord As ProcessOrder In existingOrders
-            If sortedOrders.ContainsKey(ord.partNr) Then
-                sortedOrders(ord.partNr).add(ord)
-            Else
-                Dim li As New List(Of ProcessOrder)
-                li.Add(ord)
-                sortedOrders(ord.partNr) = li
-            End If
-        Next
+        'For Each ord As ProcessOrder In existingOrders
+        '    If sortedOrders.ContainsKey(ord.partNr) Then
+        '        sortedOrders(ord.partNr).add(ord)
+        '    Else
+        '        Dim li As New List(Of ProcessOrder)
+        '        li.Add(ord)
+        '        sortedOrders(ord.partNr) = li
+        '    End If
+        'Next
 
 
         For Each rec As BatchFinishOrderRecord In recs
@@ -293,6 +293,8 @@ Public Class ProcessOrderService
         Next
 
         Using scope As New TransactionScope
+
+
             ' Try
             'Dim ids As List(Of String) = (From tof In toFinish Select tof.orderNr Distinct).ToList
             ' FinishOrdersByIds(ids, Now, "ORIGINAL", "ORIGINAL", "ORIGINAL", "", "", Nothing, False)
