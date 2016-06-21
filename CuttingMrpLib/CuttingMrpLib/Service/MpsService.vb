@@ -64,12 +64,10 @@ Public Class MpsService
         Dim uId As MP = rep.FirstOrDefault(Function(s) s.id.Equals(mps.id))
 
         If (uId IsNot Nothing) Then
-            uId.orderedDate = mps.orderedDate
             uId.requiredDate = mps.requiredDate
             uId.quantity = mps.quantity
             uId.source = mps.source
             uId.sourceDoc = mps.sourceDoc
-            uId.status = mps.status
             rep.SaveAll()
             result = True
         End If
