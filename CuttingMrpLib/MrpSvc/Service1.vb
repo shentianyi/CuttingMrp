@@ -35,7 +35,9 @@ Public Class Service1
             Dim msg As Message = qu.Receive
             If msg IsNot Nothing Then
                 Dim settings As CalculateSetting = msg.Body
-                If settings.TaskType = "MRP" Then
+                If settings.TaskType = "AutoStock" Then
+
+                ElseIf settings.TaskType = "MRP" Then
                     mrpExe.ProcessMrp(settings)
                 ElseIf settings.TaskType = "BF" Then
                     mrpExe.MakeBackflush()
