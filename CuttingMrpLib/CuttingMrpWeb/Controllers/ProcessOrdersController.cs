@@ -157,7 +157,7 @@ namespace CuttingMrpWeb.Controllers
             using (StreamWriter sw = new StreamWriter(ms, Encoding.UTF8))
             {
                 List<string> head = new List<string> { " No.", "OrderNr", "PartNr", "Kanban","PartType(KB Type)","Status",
-                    "ProceeDate","SourceQuantity","ActualQuantity","BatchQuantity","BundleQuantity","KanBanPosition","RouteNr","CompleteRate", "DerivedFrom", "CreateAt" };
+                    "ProceeDate","ReqQuantity","SourceQuantity","ActualQuantity","BatchQuantity","BundleQuantity","KanBanPosition","RouteNr","CompleteRate", "DerivedFrom", "CreateAt" };
                 sw.WriteLine(string.Join(Settings.Default.csvDelimiter, head));
                 for(var i=0; i<processOrders.Count; i++)
                 {
@@ -169,6 +169,7 @@ namespace CuttingMrpWeb.Controllers
                     ii.Add(processOrders[i].Part.partTypeDisplay);
                     ii.Add(processOrders[i].statusDisplay);
                     ii.Add(processOrders[i].proceeDate.ToString());
+                    ii.Add(processOrders[i].requirementQuantity.ToString());
                     ii.Add(processOrders[i].sourceQuantity.ToString());
                     ii.Add(processOrders[i].actualQuantity.ToString());
                     ii.Add(processOrders[i].Part.kanbanBatchQty.ToString());

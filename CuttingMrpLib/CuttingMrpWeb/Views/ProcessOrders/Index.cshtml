@@ -108,6 +108,7 @@
                 <th style="white-space:nowrap;">PartType(KB Type)</th>
                 <th>Status</th>
                 <th>ProceeDate</th>
+                <th>ReqQuantity</th>
                 <th>SourceQuantity</th>
                 <th>ActualQuantity</th>
                 <th>BatchQuantity</th>
@@ -142,6 +143,7 @@
                         <td>@Html.DisplayFor(modelItem => item.Part.partTypeDisplay)</td>
                         <td>@Html.DisplayFor(modelItem => item.statusDisplay)</td>
                         <td style="white-space:nowrap;">@Html.DisplayFor(modelItem => item.proceeDate)</td>
+                        <td>@Html.DisplayFor(modelItem => item.requirementQuantity)</td>
                         <td>@Html.DisplayFor(modelItem => item.sourceQuantity)</td>
                         <td>@Html.DisplayFor(modelItem => item.actualQuantity)</td>
                         <td>@Html.DisplayFor(modelItem => item.Part.kanbanBatchQty)</td>

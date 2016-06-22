@@ -122,10 +122,12 @@ Public Class Calculator
             For Each piece As DictionaryEntry In orderPieces
                 ordernr = NumericService.GenerateID(DBConn, "PROCESSORDER")
                 Dim sum As Double = 0
+                Dim requirementSum As Double = 0
                 Dim toInsertRefer As List(Of OrderDerivation) = New List(Of OrderDerivation)
                 For Each req As Requirement In piece.Value
-                    sum = sum + req.quantity
-                    toInsertRefer.Add(New OrderDerivation With {.mrpRound = mrpround, .deriveQty = req.quantity, .requirementId = req.id})
+                    sum = sum + req.reduceQuantity
+                    requirementSum += req.quantity
+                    toInsertRefer.Add(New OrderDerivation With {.mrpRound = mrpround, .deriveQty = req.reduceQuantity, .requirementId = req.id})
                 Next
                 Dim dateresult As DateTime
                 DateTime.TryParse(piece.Key, dateresult)
@@ -149,7 +151,7 @@ Public Class Calculator
                     moq = currPart.moq
                 End If
 
-                Dim actualQty As Double
+                Dim actualQty As Double = 0
                 If sum > 0 Then
                     If sum < spq Then
                         actualQty = spq
@@ -184,7 +186,7 @@ Public Class Calculator
                 End If
                 Dim toinsert As ProcessOrder = New ProcessOrder With {.orderNr = ordernr,
                     .partNr = dic.Key, .derivedFrom = "MRP", .proceeDate = dateresult, .sourceDoc = sourceDoc,
-                    .status = ProcessOrderStatus.Open, .sourceQuantity = sum, .actualQuantity = actualQty,
+                    .status = ProcessOrderStatus.Open, .sourceQuantity = sum, .actualQuantity = actualQty, .requirementQuantity = requirementSum,
                     .completeRate = completeRate, .batchQuantity = moq, .OrderDerivations = en, .OrderType = settings.OrderType, .createAt = Now}
                 result.Add(toinsert)
             Next
@@ -212,25 +214,27 @@ Public Class Calculator
             End If
         Next
         For Each requires In toUse
+            requires.reduceQuantity = requires.quantity
+
             If stockRecords.ContainsKey(requires.partNr) Then
-                If stockRecords(requires.partNr) >= requires.quantity Then
-                    stockRecords(requires.partNr) = stockRecords(requires.partNr) - requires.quantity
-                    requires = Nothing
+                If stockRecords(requires.partNr) >= requires.reduceQuantity Then
+                    stockRecords(requires.partNr) = stockRecords(requires.partNr) - requires.reduceQuantity
+                    requires.reduceQuantity = 0
                 Else
-                    requires.quantity = requires.quantity - stockRecords(requires.partNr)
+                    requires.reduceQuantity = requires.reduceQuantity - stockRecords(requires.partNr)
                     stockRecords.Remove(requires.partNr)
                 End If
             End If
 
-            If requires IsNot Nothing Then
-                If orders.ContainsKey(requires.partNr) Then
-                    orders(requires.partNr).add(requires)
-                Else
-                    Dim newValue As List(Of Requirement) = New List(Of Requirement)
-                    newValue.Add(requires)
-                    orders.Add(requires.partNr, newValue)
-                End If
+            'If requires IsNot Nothing Then
+            If orders.ContainsKey(requires.partNr) Then
+                orders(requires.partNr).add(requires)
+            Else
+                Dim newValue As List(Of Requirement) = New List(Of Requirement)
+                newValue.Add(requires)
+                orders.Add(requires.partNr, newValue)
             End If
+            'End If
         Next
         Return orders
     End Function
