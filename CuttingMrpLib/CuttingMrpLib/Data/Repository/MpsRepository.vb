@@ -39,7 +39,7 @@ Public Class MpsRepository
             If conditons.Status.HasValue Then
                 mps = mps.Where(Function(c) c.status.Equals(conditons.Status))
             End If
-            Return mps.OrderByDescending(Function(c) c.partnr)
+            Return mps.OrderBy(Function(c) c.requiredDate)
         End If
         Return Nothing
     End Function
