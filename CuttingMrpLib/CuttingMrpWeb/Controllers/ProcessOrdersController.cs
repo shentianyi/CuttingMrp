@@ -198,7 +198,9 @@ namespace CuttingMrpWeb.Controllers
         public void ExportKB([Bind(Include = "OrderNr,SourceDoc,DerivedFrom,ProceeDateFrom,ProceeDateTo,PartNr,ActualQuantityFrom,ActualQuantityTo,CompleteRateFrom,CompleteRateTo,Status,MrpRound,PartType,CreateAt")] ProcessOrderSearchModel q)
         {
             IProcessOrderService ps = new ProcessOrderService(Settings.Default.db);
-
+            if (!q.ActualQuantityFrom.HasValue) {
+                q.ActualQuantityFrom = 0.0000009;
+            }
             List<ProcessOrder> processOrders = ps.Search(q).ToList();
 
             ViewBag.Query = q;

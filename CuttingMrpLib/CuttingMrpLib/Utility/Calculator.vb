@@ -41,7 +41,7 @@ Public Class Calculator
         '3 get net requirement
         '4 generate the order
         '5.find the related KANBAN card
-        ConvertMpsToRequirement()
+        ConvertMpsToRequirement(settings)
         ResetOrders({ProcessOrderStatus.Open}, settings.ReservedType, ProcessOrderStatus.SystemCancel)
         Dim toInsertOrders As List(Of ProcessOrder) = New List(Of ProcessOrder)
         Dim procOrderRepo As Repository(Of ProcessOrder) = New Repository(Of ProcessOrder)(New DataContext(DBConn))
@@ -52,12 +52,12 @@ Public Class Calculator
         procOrderRepo.SaveAll()
     End Sub
 
-    Public Sub ConvertMpsToRequirement()
+    Public Sub ConvertMpsToRequirement(settings As CalculateSetting)
         Dim dc As DataContext = New DataContext(DBConn)
         Dim repo As Repository(Of MP) = New Repository(Of MP)(dc)
         Dim tempBoms As Hashtable = New Hashtable
         Dim requires As List(Of Requirement) = New List(Of Requirement)
-        Dim mpses As List(Of MP) = repo.FindAll(Function(c) c.status = MPSStatus.plan And c.requiredDate >= Now.Date).ToList
+        Dim mpses As List(Of MP) = repo.FindAll(Function(c) c.status = MPSStatus.Plan And c.requiredDate >= Now.Date).ToList
         For Each m As MP In mpses
             If tempBoms.ContainsKey(m.partnr) = False Then
                 Dim bomRepo As Repository(Of BOM) = New Repository(Of BOM)(dc)
@@ -69,6 +69,11 @@ Public Class Calculator
                     Throw New Exception("找到" & counter & "个生效的BOM")
                 End If
                 Dim bom As BOM = bomRepo.Single(Function(c) c.validFrom <= Now And c.validTo >= Now And c.partNr = m.partnr)
+                'Dim bomItems As List(Of BomItem) = (From b In dc.Context.GetTable(Of BomItem)
+                '                                    Join p In dc.Context.GetTable(Of Part) On b.componentId=p.partNr
+                '                                       Where b.bomId.Equals(bom.id) And p.partType.Equals(settings.PartType)
+                '                                    Select b)
+
                 tempBoms.Add(m.partnr, bom.BomItems.Where(Function(c) c.validFrom <= Now And c.validTo >= Now).ToList)
             End If
             For Each item As BomItem In tempBoms(m.partnr)
@@ -87,17 +92,17 @@ Public Class Calculator
         Try
             ' requireRepo.SaveAll()
             requireRepo.GetTable.InsertAllOnSubmit(requires)
-                requireRepo.SaveAll()
+            requireRepo.SaveAll()
             ' trans.Complete()
         Catch ex As Exception
-                Throw ex
-            Finally
-                'release resource
-                repo = Nothing
-                tempBoms = Nothing
-                requires = Nothing
-                requireRepo = Nothing
-            End Try
+            Throw ex
+        Finally
+            'release resource
+            repo = Nothing
+            tempBoms = Nothing
+            requires = Nothing
+            requireRepo = Nothing
+        End Try
         'End Using
     End Sub
     Public Sub ResetOrders(targetStatus() As ProcessOrderStatus, reserveTypes As List(Of String), status As ProcessOrderStatus)

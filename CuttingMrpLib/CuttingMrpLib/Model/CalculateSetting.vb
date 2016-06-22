@@ -4,6 +4,7 @@ Public Class CalculateSetting
     Private _roundId As String
     Private _reserveTypes As List(Of String)
     Private _mergeMethod As MergeMethod
+
     Public MergeMethodType() As String = {"DAY", "WEEK", "MONTH", "YEAR"}
     Public OrderTypes() As String = {"FIX", "ACTUAL"}
 
@@ -70,6 +71,9 @@ Public Class CalculateSetting
             End If
         End Set
     End Property
+
+
+    Public Property PartType As PartType
 
 End Class
 

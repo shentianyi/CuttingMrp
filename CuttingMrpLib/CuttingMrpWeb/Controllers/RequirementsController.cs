@@ -157,6 +157,7 @@ namespace CuttingMrpWeb.Controllers
             {
                 TaskType="MRP",
                 OrderType = Request.Form.Get("OrderType"),
+                PartType= (PartType)int.Parse( Request.Form.Get("PartType")),
                 MergeMethod = new MergeMethod()
                 {
                     FirstDay = DateTime.Parse(Request.Form.Get("FirstDay")),
