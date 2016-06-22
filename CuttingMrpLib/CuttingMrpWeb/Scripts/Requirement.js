@@ -1,6 +1,11 @@
 ﻿var Requirement = {};
 
 Requirement.init = function () {
+
+    $('#ProcessOrder').css({
+        left:($(window).width()-650)/2+'px'    
+    })
+
     var partNr = $('#PartNr').val();
     var ordereddatefrom = $('#OrderedDateFrom').val();
     var ordereddateto = $('#OrderedDateTo').val();
@@ -103,6 +108,8 @@ Requirement.run_mrp = function () {
         $('.confirm-process-order').click(function () {
             var OrderType = $("input[name='OrderTypes']:checked").val();
             var MergeMethodType = $("input[name='MergeMethodType']:checked").val();
+            var KanBanType = $("input[name='KanBanType']:checked").val();
+
             if ($("#FirstDay").val().length == 0) {
                 alert("please select datetime!");
                 return;
@@ -113,6 +120,7 @@ Requirement.run_mrp = function () {
                 data:{
                     "OrderType": OrderType,
                     "MergeType": MergeMethodType,
+                    "KanBanType": KanBanType,
                     "FirstDay": $("#FirstDay").val(),
                     "Count": $("#Count").val()
                 },
@@ -140,7 +148,7 @@ Requirement.run_mrp = function () {
         var PanelDiv = $('#ProcessOrder').children('div');
         $('#ProcessOrder').find(PanelDiv).remove();
 
-        $("<hr/><div class='col-sm-12' style='text-align:center;'>" +
+        $("<hr/><div class='col-sm-12' style='text-align:center;line-height: 50px;margin-top: 50px;'>" +
             "<i class='" + iconClass + "' style='font-size:9em;color:" + fontColor + "'></i>" +
             "<br/><br/><div class='col-sm-12'>" +
             "<label style='text-align:center; color:"+fontColor+";font-size:1.5em;'>"+contentMsg+"</label>" +
