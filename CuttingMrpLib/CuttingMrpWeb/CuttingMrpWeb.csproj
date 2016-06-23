@@ -211,6 +211,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BomItemController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -227,9 +228,11 @@
     <Compile Include="Helpers\BatchOrderImportHelper.cs" />
     <Compile Include="Helpers\PagingHelper.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\BomItemImportModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Message.cs" />
+    <Compile Include="Models\PartImportModel.cs" />
     <Compile Include="Models\PartViewModel.cs" />
     <Compile Include="Models\CuttingOrderImportModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -246,6 +249,7 @@
     <Content Include="Content\part-stock.css" />
     <Content Include="Content\stock-report.css" />
     <Content Include="fonts\fontawesome-webfont.svg" />
+    <Content Include="Scripts\bom-item.js" />
     <Content Include="Scripts\bootstrap-typeahead.js" />
     <Content Include="Scripts\dashboard\complete-rate.js" />
     <Content Include="Scripts\dashboard\dashboard.js" />
@@ -254,6 +258,7 @@
     <Content Include="Scripts\dashboard\top-rate.js" />
     <Content Include="Scripts\highcharts\highcharts.js" />
     <Content Include="Scripts\mps.js" />
+    <Content Include="Scripts\part.js" />
     <Content Include="Scripts\stock-movement.js" />
     <Content Include="Scripts\sum-of-stock.js" />
     <Content Include="TmpFile\read.txt">
@@ -372,10 +377,12 @@
     <Content Include="Views\Mps\Delete.cshtml" />
     <Content Include="Views\Mps\Edit.cshtml" />
     <Content Include="Views\Mps\Create.cshtml" />
+    <Content Include="Views\Parts\Index.cshtml" />
+    <Content Include="Views\Parts\ImportPartRecord.cshtml" />
+    <Content Include="Views\BomItem\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Parts\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

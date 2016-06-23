@@ -33,4 +33,18 @@ Public Class PartRepository
 
         Return parts
     End Function
+
+    Public Function Search(conditions As PartSearchModel) As IQueryable(Of Part) Implements IPartRepository.Search
+
+        If conditions IsNot Nothing Then
+            Dim parts As IQueryable(Of Part) = _context.Parts
+
+            If Not String.IsNullOrWhiteSpace(conditions.PartNr) Then
+                parts = parts.Where(Function(c) c.partNr.Contains(conditions.PartNr.Trim()))
+            End If
+
+            Return parts.OrderBy(Function(c) c.partNr)
+        End If
+        Return Nothing
+    End Function
 End Class

@@ -82,7 +82,9 @@
     <Compile Include="Data\MPSStatus.vb" />
     <Compile Include="Data\OrderType.vb" />
     <Compile Include="Data\ProcessOrderStatus.vb" />
+    <Compile Include="Data\Repository\BomItemRepository.vb" />
     <Compile Include="Data\Repository\CalculateRepository.vb" />
+    <Compile Include="Data\Repository\IBomItemRepository.vb" />
     <Compile Include="Data\Repository\ICalculateRepository.vb" />
     <Compile Include="Data\Repository\IMpsRepository.vb" />
     <Compile Include="Data\Repository\IMrpRoundRepository.vb" />
@@ -130,9 +132,11 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Service\BomItemService.vb" />
     <Compile Include="Service\CalculateService.vb" />
     <Compile Include="Service\CapacityPlanService.vb" />
     <Compile Include="Service\DashboardService.vb" />
+    <Compile Include="Service\IBomItemService.vb" />
     <Compile Include="Service\ICalculateService.vb" />
     <Compile Include="Service\ICapacityPlanService.vb" />
     <Compile Include="Service\IDashboardService.vb" />
@@ -164,9 +168,11 @@
     <Compile Include="ViewModel\PageViewModel\DashboardForStockReportItem.vb" />
     <Compile Include="ViewModel\PageViewModel\DashboardItem.vb" />
     <Compile Include="ViewModel\PageViewModel\ProcessOrderInfoModel.vb" />
+    <Compile Include="ViewModel\SearchViewModel\BomItemSearchModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\DashboardSearchModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\MpsSeachModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\MRPSearchModel.vb" />
+    <Compile Include="ViewModel\SearchViewModel\PartSearchModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\ProcessOrderSearchModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\RequirementSearchModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\RequirementStatisticsSearchModel.vb" />
