@@ -353,6 +353,8 @@ Public Class Calculator
 
         Dim bomRepo As Repository(Of BOM) = New Repository(Of BOM)(dc)
         Dim stockRepo As Repository(Of Stock) = New Repository(Of Stock)(dc)
+
+        Dim negaStockRepo As Repository(Of Stock) = New Repository(Of Stock)(dc)
         Dim moveRepo As Repository(Of StockMovement) = New Repository(Of StockMovement)(dc)
         Dim mpsgroup As Hashtable = New Hashtable
         If mpses IsNot Nothing Then
@@ -378,7 +380,7 @@ Public Class Calculator
                                               .message = "没有找到BOM",
                                               .partnr = partnr,
                                               .quantity = quantity,
-                                              .sourceDoc = "BACKFLUSH",
+                                              .sourceDoc = sd,
                                               .status = BackflushStatus.Failed})
                         End If
                         If counter > 1 Then
@@ -438,12 +440,14 @@ Public Class Calculator
                                 End If
                             Next
                             If CType(dic.Value, Double) > 0 Then
+
                                 stockRepo.MarkForAdd(New Stock With {.container = "ORIGINAL",
-                                                     .fifo = Now, .partNr = CType(dic.Key, String),
-                                                     .position = "ORIGINAL",
-                                                     .quantity = -CType(dic.Value, Double),
-                                                     .source = sd, .sourceType = "BACKFLUSH",
-                                                     .wh = "ORIGINAL"})
+                                                         .fifo = Now, .partNr = CType(dic.Key, String),
+                                                         .position = "ORIGINAL",
+                                                         .quantity = -CType(dic.Value, Double),
+                                                         .source = sd, .sourceType = "BACKFLUSH",
+                                                         .wh = "ORIGINAL"})
+
                                 moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now,
                                                     .fifo = Now, .moveType = StockMoveType.Backflush,
                                                     .partNr = CType(dic.Key, String),
@@ -451,8 +455,30 @@ Public Class Calculator
                                                     .sourceDoc = sd})
                             End If
                         Else
-                            stockRepo.MarkForAdd(New Stock With {.container = "ORIGINAL", .fifo = Now, .partNr = CType(dic.Key, String), .position = "ORIGINAL", .quantity = -CType(dic.Value, Double), .source = sd, .sourceType = "BACKFLUSH", .wh = "ORIGINAL"})
-                            moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = Now, .moveType = StockMoveType.Backflush, .partNr = CType(dic.Key, String), .quantity = CType(dic.Value, Double), .sourceDoc = sd})
+                            ' 是否存在负库存，如果存在则操作这个负库存，不再生成很多backflush负库存
+                            Dim negaStock As Stock = negaStockRepo.FirstOrDefault(Function(s) s.partNr.Equals(CType(dic.Key, String)) And s.quantity <= 0)
+                            If negaStock IsNot Nothing Then
+                                negaStock.quantity -= CType(dic.Value, Double)
+                                negaStock.fifo = Now
+                                negaStock.source = sd
+                                negaStock.sourceType = "BACKFLUSH"
+                            Else
+                                stockRepo.MarkForAdd(New Stock With {.container = "ORIGINAL",
+                                                         .fifo = Now, .partNr = CType(dic.Key, String),
+                                                         .position = "ORIGINAL",
+                                                         .quantity = -CType(dic.Value, Double),
+                                                         .source = sd, .sourceType = "BACKFLUSH",
+                                                         .wh = "ORIGINAL"})
+                            End If
+                            moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now,
+                                                    .fifo = Now, .moveType = StockMoveType.Backflush,
+                                                    .partNr = CType(dic.Key, String),
+                                                    .quantity = CType(dic.Value, Double),
+                                                    .sourceDoc = sd})
+
+
+                            'stockRepo.MarkForAdd(New Stock With {.container = "ORIGINAL", .fifo = Now, .partNr = CType(dic.Key, String), .position = "ORIGINAL", .quantity = -CType(dic.Value, Double), .source = sd, .sourceType = "BACKFLUSH", .wh = "ORIGINAL"})
+                            'moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = Now, .moveType = StockMoveType.Backflush, .partNr = CType(dic.Key, String), .quantity = CType(dic.Value, Double), .sourceDoc = sd})
                         End If
                     Next
                     For Each mp As MP In mpses
@@ -466,6 +492,7 @@ Public Class Calculator
                                               .partnr = partnr, .quantity = quantity,
                                               .sourceDoc = sd,
                                               .status = BackflushStatus.Normal})
+                    ' negaStockRepo.SaveAll()
                     dc.SaveAll()
                 Catch ex As Exception
                     Dim failedFlushRepo As New Repository(Of BackflushRecord)(New DataContext(DBConn))
