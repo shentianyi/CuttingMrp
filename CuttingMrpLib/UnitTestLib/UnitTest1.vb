@@ -31,7 +31,7 @@ Imports System.Messaging
     <TestMethod> Public Sub TestConvertMpsToRequirement()
         Dim cal As Calculator = New Calculator("Data Source=vm08;Initial Catalog=CuttingMrp;User ID=sa;Password=brilliantech123@")
         Try
-            cal.ConvertMpsToRequirement()
+            '  cal.ConvertMpsToRequirement()
         Catch ex As Exception
             Assert.Fail()
         End Try

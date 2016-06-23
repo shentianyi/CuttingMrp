@@ -68,17 +68,27 @@ Public Class Calculator
                 If counter > 1 Then
                     Throw New Exception("找到" & counter & "个生效的BOM")
                 End If
-                Dim bom As BOM = bomRepo.Single(Function(c) c.validFrom <= Now And c.validTo >= Now And c.partNr = m.partnr)
-                'Dim bomItems As List(Of BomItem) = (From b In dc.Context.GetTable(Of BomItem)
-                '                                    Join p In dc.Context.GetTable(Of Part) On b.componentId=p.partNr
-                '                                       Where b.bomId.Equals(bom.id) And p.partType.Equals(settings.PartType)
-                '                                    Select b)
-
-                tempBoms.Add(m.partnr, bom.BomItems.Where(Function(c) c.validFrom <= Now And c.validTo >= Now).ToList)
+                Dim bom As BOM = bomRepo.SingleOrDefault(Function(c) c.validFrom <= Now And c.validTo >= Now And c.partNr = m.partnr)
+                If bom IsNot Nothing Then
+                    Dim bomItems As List(Of BomItem) = New List(Of BomItem)
+                    If settings.PartType.Equals(PartType.Product) Then
+                        bomItems = bom.BomItems.Where(Function(c) c.validFrom <= Now And c.validTo >= Now).ToList
+                    Else
+                        bomItems = (From b In dc.Context.GetTable(Of BomItem)
+                                    Join p In dc.Context.GetTable(Of Part) On b.componentId Equals p.partNr
+                                    Where b.bomId.Equals(bom.id) And p.partType.Equals(settings.PartType)
+                                    Order By b.id Ascending
+                                    Select b).ToList
+                    End If
+                    tempBoms.Add(m.partnr, bomItems)
+                    'tempBoms.Add(m.partnr, bom.BomItems.Where(Function(c) c.validFrom <= Now And c.validTo >= Now).ToList)
+                End If
             End If
-            For Each item As BomItem In tempBoms(m.partnr)
-                requires.Add(New Requirement With {.derivedFrom = m.sourceDoc, .derivedType = m.source, .orderedDate = m.orderedDate, .requiredDate = m.requiredDate, .partNr = item.componentId, .status = RequirementStatus.Open, .quantity = item.quantity * m.quantity})
-            Next
+            If tempBoms.ContainsKey(m.partnr) Then
+                For Each item As BomItem In tempBoms(m.partnr)
+                    requires.Add(New Requirement With {.derivedFrom = m.sourceDoc, .derivedType = m.source, .orderedDate = m.orderedDate, .requiredDate = m.requiredDate, .partNr = item.componentId, .status = RequirementStatus.Open, .quantity = item.quantity * m.quantity})
+                Next
+            End If
             ' repo.MarkForDeletion(m)
         Next
 

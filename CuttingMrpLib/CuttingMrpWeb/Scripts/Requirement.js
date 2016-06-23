@@ -110,12 +110,12 @@ Requirement.run_mrp = function () {
             var MergeMethodType = $("input[name='MergeMethodType']:checked").val();
             var PartType = $("input[name='PartType']:checked").val();
 
-            if ($("#FirstDay").val().length == 0) {
-                alert("Please select datetime!");
+            if (PartType == null || PartType.length == 0) {
+                alert("Please select Kanban Type!");
                 return;
             }
-            if (PartType.length == 0 || PartType == null) {
-                alert("Please select Kanban Type!");
+            if ($("#FirstDay").val().length == 0) {
+                alert("Please select datetime!");
                 return;
             }
             $.ajax({
@@ -124,7 +124,7 @@ Requirement.run_mrp = function () {
                 data:{
                     "OrderType": OrderType,
                     "MergeType": MergeMethodType,
-                    "PartType": KanBanType,
+                    "PartType": PartType,
                     "FirstDay": $("#FirstDay").val(),
                     "Count": $("#Count").val()
                 },

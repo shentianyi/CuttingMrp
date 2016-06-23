@@ -299,9 +299,15 @@ namespace CuttingMrpWeb.Controllers
                 configuration.TrimHeaders = true;
                 configuration.TrimFields = true;
 
+                //using (StreamReader sr = new StreamReader(filename)) {
+                //    using (CsvReader cr = new CsvReader(sr,configuration)) {
+                //        records = cr.GetRecords<CuttingOrderImportModel>().ToList();
 
+                //    }
+                //}
                 using (TextReader treader = System.IO.File.OpenText(filename))
                 {
+
                     for (int i = 0; true; i++)
                     {
                         string s = treader.ReadLine();
