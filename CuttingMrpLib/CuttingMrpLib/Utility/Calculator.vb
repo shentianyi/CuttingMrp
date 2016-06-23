@@ -420,21 +420,22 @@ Public Class Calculator
                         End If
                     Next
                     For Each dic As DictionaryEntry In stockToBook
+                        Dim tmpQuantity As Double = CType(dic.Value, Double)
                         If allocatedStock.ContainsKey(CType(dic.Key, String)) Then
                             For Each stockto As Stock In allocatedStock(CType(dic.Key, String))
                                 If CType(dic.Value, Double) = stockto.quantity Then
-                                    moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = stockto.fifo, .moveType = StockMoveType.Backflush, .partNr = CType(stockto.partNr, String), .quantity = stockto.quantity, .sourceDoc = sd})
+                                    'moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = stockto.fifo, .moveType = StockMoveType.Backflush, .partNr = CType(stockto.partNr, String), .quantity = stockto.quantity, .sourceDoc = sd})
                                     stockRepo.MarkForDeletion(stockto)
                                     dic.Value = 0
 
                                     Exit For
                                 ElseIf CType(dic.Value, Double) < stockto.quantity Then
-                                    moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = stockto.fifo, .moveType = StockMoveType.Backflush, .partNr = CType(stockto.partNr, String), .quantity = CType(dic.Value, Double), .sourceDoc = sd})
+                                    ' moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = stockto.fifo, .moveType = StockMoveType.Backflush, .partNr = CType(stockto.partNr, String), .quantity = CType(dic.Value, Double), .sourceDoc = sd})
                                     stockto.quantity = stockto.quantity - CType(dic.Value, Double)
                                     dic.Value = 0
                                     Exit For
                                 Else
-                                    moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = stockto.fifo, .moveType = StockMoveType.Backflush, .partNr = CType(dic.Key, String), .quantity = stockto.quantity, .sourceDoc = sd})
+                                    '   moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = stockto.fifo, .moveType = StockMoveType.Backflush, .partNr = CType(dic.Key, String), .quantity = stockto.quantity, .sourceDoc = sd})
                                     stockRepo.MarkForDeletion(stockto)
                                     dic.Value = CType(dic.Value, Double) - stockto.quantity
                                 End If
@@ -448,11 +449,11 @@ Public Class Calculator
                                                          .source = sd, .sourceType = "BACKFLUSH",
                                                          .wh = "ORIGINAL"})
 
-                                moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now,
-                                                    .fifo = Now, .moveType = StockMoveType.Backflush,
-                                                    .partNr = CType(dic.Key, String),
-                                                    .quantity = CType(dic.Value, Double),
-                                                    .sourceDoc = sd})
+                                'moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now,
+                                '                    .fifo = Now, .moveType = StockMoveType.Backflush,
+                                '                    .partNr = CType(dic.Key, String),
+                                '                    .quantity = CType(dic.Value, Double),
+                                '                    .sourceDoc = sd})
                             End If
                         Else
                             ' 是否存在负库存，如果存在则操作这个负库存，不再生成很多backflush负库存
@@ -470,16 +471,18 @@ Public Class Calculator
                                                          .source = sd, .sourceType = "BACKFLUSH",
                                                          .wh = "ORIGINAL"})
                             End If
-                            moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now,
-                                                    .fifo = Now, .moveType = StockMoveType.Backflush,
-                                                    .partNr = CType(dic.Key, String),
-                                                    .quantity = CType(dic.Value, Double),
-                                                    .sourceDoc = sd})
 
 
                             'stockRepo.MarkForAdd(New Stock With {.container = "ORIGINAL", .fifo = Now, .partNr = CType(dic.Key, String), .position = "ORIGINAL", .quantity = -CType(dic.Value, Double), .source = sd, .sourceType = "BACKFLUSH", .wh = "ORIGINAL"})
                             'moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = Now, .moveType = StockMoveType.Backflush, .partNr = CType(dic.Key, String), .quantity = CType(dic.Value, Double), .sourceDoc = sd})
                         End If
+
+                        moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now,
+                                                    .fifo = Now, .moveType = StockMoveType.Backflush,
+                                                    .partNr = CType(dic.Key, String),
+                                                    .quantity = tmpQuantity,
+                                                    .sourceDoc = sd})
+
                     Next
                     For Each mp As MP In mpses
                         If mp.partnr = partnr Then
