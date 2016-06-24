@@ -5,81 +5,83 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using CuttingMrpLib;
-using CuttingMrpWeb.Models;
 using CuttingMrpWeb.Properties;
 using MvcPaging;
 using System.IO;
 using System.Text;
 using CsvHelper.Configuration;
+using CuttingMrpWeb.Models;
 using CsvHelper;
 
 namespace CuttingMrpWeb.Controllers
 {
-    public class BomItemController : Controller
+    public class BatchOrderTemplateController : Controller
     {
-        // GET: BomItem
+        // GET: BatchOrderTemplate
         [CustomAuthorize]
         public ActionResult Index(int? page)
         {
             int pageIndex = PagingHelper.GetPageIndex(page);
 
-            BomItemSearchModel q = new BomItemSearchModel();
+            BatchOrderTemplateSearchModel q = new BatchOrderTemplateSearchModel();
 
-            IBomItemService bis = new BomItemService(Settings.Default.db);
+            IBatchOrderTemplateService bot = new BatchOrderTemplateService(Settings.Default.db);
 
-            IPagedList<BomItem> bomItems = bis.Search(q).ToPagedList(pageIndex, Settings.Default.pageSize);
+            IPagedList<BatchOrderTemplate> bots = bot.Search(q).ToPagedList(pageIndex, Settings.Default.pageSize);
 
             ViewBag.Query = q;
 
-            return View(bomItems);
+            return View(bots);
         }
 
-        public ActionResult Search([Bind(Include = "ComponentId, VFFrom, VFTo, VTFrom, VTTo, BomId")] BomItemSearchModel q)
+        public ActionResult Search([Bind(Include ="OrderNr, PartNr, Type, Remark1")] BatchOrderTemplateSearchModel q)
         {
             int pageIndex = 0;
             int.TryParse(Request.QueryString.Get("page"), out pageIndex);
             pageIndex = PagingHelper.GetPageIndex(pageIndex);
 
-            IBomItemService bis = new BomItemService(Settings.Default.db);
+            IBatchOrderTemplateService bot = new BatchOrderTemplateService(Settings.Default.db);
 
-            IPagedList<BomItem> bomItems = bis.Search(q).ToPagedList(pageIndex, Settings.Default.pageSize);
+            IPagedList<BatchOrderTemplate> bots = bot.Search(q).ToPagedList(pageIndex, Settings.Default.pageSize);
 
             ViewBag.Query = q;
 
-            return View("Index", bomItems);
+            return View("Index", bots);
         }
 
-        public void Export([Bind(Include = "ID, ComponentId, VFFrom, VFTo, VTFrom, VTTo, BomId")] BomItemSearchModel q)
+        public void Export([Bind(Include = "OrderNr, PartNr, Type, Remark1")] BatchOrderTemplateSearchModel q)
         {
-            IBomItemService ps = new BomItemService(Settings.Default.db);
+            IBatchOrderTemplateService bots = new BatchOrderTemplateService(Settings.Default.db);
 
-            List<BomItem> bomItems = ps.Search(q).ToList();
+            List<BatchOrderTemplate> bot = bots.Search(q).ToList();
 
             ViewBag.Query = q;
 
             MemoryStream ms = new MemoryStream();
             using (StreamWriter sw = new StreamWriter(ms, Encoding.UTF8))
             {
-                List<string> head = new List<string> { " No.", "ID","ComponentId", "ValidFrom", "ValidTo", "HasChild", "UOM", "Quantity", "BomId", "Action"};
+                List<string> head = new List<string> { " No.", "OrderNr", "PartNr", "BatchQuantity", "Type", "Bundle", "CreatedAt", "UpdatedAt", "Operator", "Remarkl", "Remark2", "Action" };
                 sw.WriteLine(string.Join(Settings.Default.csvDelimiter, head));
-                for (var i = 0; i < bomItems.Count; i++)
+                for (var i = 0; i < bot.Count; i++)
                 {
                     List<string> ii = new List<string>();
                     ii.Add((i + 1).ToString());
-                    ii.Add(bomItems[i].id.ToString());
-                    ii.Add(bomItems[i].componentId);
-                    ii.Add(bomItems[i].validFrom.ToString());
-                    ii.Add(bomItems[i].validTo.ToString());
-                    ii.Add(bomItems[i].hasChind.ToString());
-                    ii.Add(bomItems[i].uom.ToString());
-                    ii.Add(bomItems[i].quantity.ToString());
-                    ii.Add(bomItems[i].bomId);
+                    ii.Add(bot[i].orderNr);
+                    ii.Add(bot[i].partNr);
+                    ii.Add(bot[i].batchQuantity.ToString());
+                    ii.Add(bot[i].type.ToString());
+                    ii.Add(bot[i].bundle.ToString());
+                    ii.Add(bot[i].createdAt.ToString());
+                    ii.Add(bot[i].updatedAt.ToString());
+                    ii.Add(bot[i].@operator);
+                    ii.Add(bot[i].remark1);
+                    ii.Add(bot[i].remark2);
                     ii.Add("");
                     sw.WriteLine(string.Join(Settings.Default.csvDelimiter, ii.ToArray()));
                 }
                 //sw.WriteLine(max);
             }
-            var filename = "BomItem" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".csv";
+            var filename = "BatchOrderTemplate" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".csv";
             var contenttype = "text/csv";
             Response.Clear();
             Response.ContentEncoding = Encoding.UTF8;
@@ -90,21 +92,22 @@ namespace CuttingMrpWeb.Controllers
             Response.End();
         }
 
-        public ActionResult ImportBomItemRecord(HttpPostedFileBase bomItemFile)
+
+        public ActionResult ImportBatchOrderTemplateRecord(HttpPostedFileBase batchOrderTemplateFile)
         {
-            if (bomItemFile == null)
+            if(batchOrderTemplateFile == null)
             {
                 throw new Exception("No file is uploaded to system");
             }
 
             var appData = Server.MapPath("~/TmpFile/");
             var filename = Path.Combine(appData,
-                DateTime.Now.ToString("yyyyMMddHHmmss") + "_" + Path.GetFileName(bomItemFile.FileName));
+                DateTime.Now.ToString("yyyyMMddHHmmss") + "_" + Path.GetFileName(batchOrderTemplateFile.FileName));
 
-            bomItemFile.SaveAs(filename);
+            batchOrderTemplateFile.SaveAs(filename);
             string ex = Path.GetExtension(filename);
 
-            List<BomItemImportModel> records = new List<BomItemImportModel>();
+            List<BatchOrderTemplateImportModel> records = new List<BatchOrderTemplateImportModel>();
 
             if (ex.Equals(".csv"))
             {
@@ -112,7 +115,7 @@ namespace CuttingMrpWeb.Controllers
                 configuration.Delimiter = Settings.Default.csvDelimiter;
                 configuration.HasHeaderRecord = true;
                 configuration.SkipEmptyRecords = true;
-                configuration.RegisterClassMap<BomItemCsvModelMap>();
+                configuration.RegisterClassMap<BatchOrderTemplateCsvModelMap>();
                 configuration.TrimHeaders = true;
                 configuration.TrimFields = true;
 
@@ -121,7 +124,7 @@ namespace CuttingMrpWeb.Controllers
                     using (TextReader treader = System.IO.File.OpenText(filename))
                     {
                         CsvReader csvReader = new CsvReader(treader, configuration);
-                        records = csvReader.GetRecords<BomItemImportModel>().ToList();
+                        records = csvReader.GetRecords<BatchOrderTemplateImportModel>().ToList();
                     }
                 }
                 catch (Exception e)
@@ -132,6 +135,7 @@ namespace CuttingMrpWeb.Controllers
                 List<string> CreateErrorList = new List<string>();
                 List<string> UpdateErrorList = new List<string>();
                 List<string> DeleteErrorList = new List<string>();
+
 
                 if (records.Count > 0)
                 {
@@ -144,9 +148,9 @@ namespace CuttingMrpWeb.Controllers
                     int DeleteFailureQty = 0;
                     int OtherQty = 0;
 
-                    IBomItemService ps = new BomItemService(Settings.Default.db);
+                    IBatchOrderTemplateService ps = new BatchOrderTemplateService(Settings.Default.db);
 
-                    foreach (BomItemImportModel record in records)
+                    foreach (BatchOrderTemplateImportModel record in records)
                     {
                         if (string.IsNullOrWhiteSpace(record.Action))
                         {
@@ -155,48 +159,43 @@ namespace CuttingMrpWeb.Controllers
                         else
                         {
                             //新建
-                            BomItem bomItem = new BomItem()
+                            BatchOrderTemplate bot = new BatchOrderTemplate()
                             {
-                                id =Convert.ToInt32(record.ID),
-                                componentId = record.ComponentId,
-                                validFrom = record.ValidFrom,
-                                validTo = record.ValidTo,
-                                hasChind = Convert.ToByte(record.HasChild),
-                                uom = record.UOM,
-                                quantity = record.Quantity,
-                                bomId = record.BomId
+                                orderNr = record.OrderNr,
+                                partNr = record.PartNr,
+                                batchQuantity = record.BatchQuantity,
+                                type = record.Type,
+                                bundle = record.Bundle,
+                                createdAt = record.CreatedAt,
+                                updatedAt = record.UpdatedAt,
+                                @operator = record.Operator,
+                                remark1 = record.Remark1,
+                                remark2 = record.Remark2
                             };
 
-                            if (record.Action.Trim().Equals("create"))
+                            if (record.Action.Trim().ToLower().Equals("create"))
                             {
                                 try
                                 {
-                                    bool result = ps.Create(bomItem);
-                                    if (result)
-                                    {
-                                        CreateSuccessQty++;
-                                    }
-                                    else
-                                    {
-                                        CreateFailureQty++;
-
-                                        ViewBag.MsgCreate = "Some Part Create Failure:";
-
-                                        CreateErrorList.Add("ID is Exist-->"+bomItem.id);
-                                        ViewData["createError"] = CreateErrorList;
-                                    }
+                                    ps.Create(bot);
+                                    CreateSuccessQty++;
                                 }
                                 catch (Exception e)
                                 {
-                                    ViewBag.MsgCreate = "Create Failure!" + e;
+                                    CreateFailureQty++;
+
+                                    ViewBag.MsgCreate = "Some Part Create Failure:";
+
+                                    CreateErrorList.Add(bot.orderNr + e.Message);
+                                    ViewData["createError"] = CreateErrorList;
                                 }
                             }
-                            else if (record.Action.Trim().Equals("update"))
+                            else if (record.Action.Trim().ToLower().Equals("update"))
                             {
                                 //更新
                                 try
                                 {
-                                    bool result = ps.Update(bomItem);
+                                    bool result = ps.Update(bot);
                                     if (result)
                                     {
                                         UpdateSuccessQty++;
@@ -207,21 +206,26 @@ namespace CuttingMrpWeb.Controllers
 
                                         ViewBag.MsgUpdate = "Some Part Update Failure:";
 
-                                        UpdateErrorList.Add("ID is Not Exit -->"+bomItem.id);
+                                        UpdateErrorList.Add(bot.orderNr + "Not Exist ID.");
                                         ViewData["updateError"] = UpdateErrorList;
                                     }
                                 }
                                 catch (Exception e)
                                 {
-                                    ViewBag.MsgUpdate = "Update Failure!" + e;
+                                    UpdateFailureQty++;
+
+                                    ViewBag.MsgUpdate = "Some Part Update Failure:";
+
+                                    UpdateErrorList.Add(bot.orderNr + e.Message);
+                                    ViewData["updateError"] = UpdateErrorList;
                                 }
                             }
-                            else if (record.Action.Trim().Equals("delete"))
+                            else if (record.Action.Trim().ToLower().Equals("delete"))
                             {
-                                //删除
                                 try
                                 {
-                                    bool result = ps.Delete(bomItem);
+                                    //删除
+                                    bool result = ps.Delete(bot);
 
                                     if (result)
                                     {
@@ -233,7 +237,7 @@ namespace CuttingMrpWeb.Controllers
 
                                         ViewBag.MsgDelete = "Some Bom Delete Failure:";
 
-                                        DeleteErrorList.Add("Delete Error-->" + bomItem.id);
+                                        DeleteErrorList.Add(bot.orderNr);
                                         ViewData["deleteError"] = DeleteErrorList;
                                     }
                                 }
@@ -243,10 +247,9 @@ namespace CuttingMrpWeb.Controllers
 
                                     ViewBag.MsgDelete = "Some Part Delete Failure:";
 
-                                    DeleteErrorList.Add("Bom-> ID:" + bomItem.id + e.Message);
+                                    DeleteErrorList.Add("BatchOrderTemplate-> OrderNr:" + bot.orderNr + e.Message);
                                     ViewData["deleteError"] = DeleteErrorList;
                                 }
-
                             }
                             else
                             {
@@ -255,7 +258,7 @@ namespace CuttingMrpWeb.Controllers
                         }
                     }
 
-                    OtherQty = AllQty - CreateSuccessQty - CreateFailureQty - UpdateSuccessQty - UpdateFailureQty- DeleteSuccessQty- DeleteFailureQty;
+                    OtherQty = AllQty - CreateSuccessQty - CreateFailureQty - UpdateSuccessQty - UpdateFailureQty - DeleteSuccessQty - DeleteFailureQty;
                     Dictionary<string, int> Qty = new Dictionary<string, int>();
                     Qty.Add("AllQty", AllQty);
                     Qty.Add("CreateSuccessQty", CreateSuccessQty);
@@ -275,5 +278,6 @@ namespace CuttingMrpWeb.Controllers
 
             return View();
         }
+
     }
 }

@@ -8,6 +8,7 @@ namespace CuttingMrpWeb.Models
 {
     public class BomItemImportModel
     {
+        public string ID { get; set; }
         public string  ComponentId { get; set; }
         public DateTime ValidFrom { get; set; }
         public DateTime ValidTo { get; set; }
@@ -22,6 +23,7 @@ namespace CuttingMrpWeb.Models
     {
         public BomItemCsvModelMap()
         {
+            Map(m => m.ID).Name("ID");
             Map(m => m.ComponentId).Name("ComponentId");
             Map(m => m.ValidFrom).Name("ValidFrom");
             Map(m => m.ValidTo).Name("ValidTo");

@@ -52,8 +52,6 @@ namespace CuttingMrpWeb.Controllers
         {
             try
             {
-                // TODO: Add insert logic here
-
                 return RedirectToAction("Index");
             }
             catch
@@ -74,7 +72,6 @@ namespace CuttingMrpWeb.Controllers
         {
             //try
             //{
-                // TODO: Add update logic here 
                 IStockService ss = new StockService(Settings.Default.db);
                 ss.Update(stock);
                 return RedirectToAction("Index");

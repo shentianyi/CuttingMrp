@@ -60,8 +60,6 @@ namespace CuttingMrpWeb.Controllers
         {
             try
             {
-                // TODO: Add insert logic here
-
                 return RedirectToAction("Index");
             }
             catch
@@ -111,7 +109,6 @@ namespace CuttingMrpWeb.Controllers
         {
             //try
             //{
-            // TODO: Add delete logic here
             IProcessOrderService ps = new ProcessOrderService(Settings.Default.db);
             ps.DeleteById(id);
             return RedirectToAction("Index");

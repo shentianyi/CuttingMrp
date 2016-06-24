@@ -80,6 +80,12 @@ namespace CuttingMrpWeb
             bundles.Add(new ScriptBundle("~/bundles/bom-item").Include(
                      "~/Scripts/bom-item.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/bom").Include(
+                     "~/Scripts/bom.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/batch-order-template").Include(
+                     "~/Scripts/batch-order-template.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/jquery.datetimepicker.css",
