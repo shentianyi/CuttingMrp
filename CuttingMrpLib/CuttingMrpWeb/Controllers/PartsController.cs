@@ -18,6 +18,7 @@ namespace CuttingMrpWeb.Controllers
     public class PartsController : Controller
     {
         // GET: Parts
+        [CustomAuthorize]
         public ActionResult Index(int? page)
         {
             int pageIndex = PagingHelper.GetPageIndex(page);
@@ -103,8 +104,6 @@ namespace CuttingMrpWeb.Controllers
         {
             try
             {
-                // TODO: Add insert logic here
-
                 return RedirectToAction("Index");
             }
             catch
@@ -125,8 +124,6 @@ namespace CuttingMrpWeb.Controllers
         {
             try
             {
-                // TODO: Add update logic here
-
                 return RedirectToAction("Index");
             }
             catch
@@ -147,8 +144,6 @@ namespace CuttingMrpWeb.Controllers
         {
             try
             {
-                // TODO: Add delete logic here
-
                 return RedirectToAction("Index");
             }
             catch
@@ -176,6 +171,7 @@ namespace CuttingMrpWeb.Controllers
         {
             if(partFile == null)
             {
+                //TODO: Parts 上传， 如果没有路径，在此处进行友好处理
                 throw new Exception("No file is uploaded to system");
             }
 
@@ -208,28 +204,29 @@ namespace CuttingMrpWeb.Controllers
                 }
                 catch (Exception e)
                 {
-                    ViewBag.Msg = "Import Failure!" + e;
+                    ViewBag.TextExpMsg = "<-------------Read Csv File Exception!,Please Check.------------->" + e;
                 }
 
-                List<string> CreateErrorList = new List<string>();
-                List<string> UpdateErrorList = new List<string>();
-                
+             List<Dictionary<string, string>> CreateErrorDic = new List<Dictionary<string, string>>();
+             List<Dictionary<string, string>> UpdateErrorDic = new List<Dictionary<string, string>>();
 
                 if (records.Count > 0)
                 {
+                    IPartService ps = new PartService(Settings.Default.db);
+
                     int AllQty = records.Count;
                     int CreateSuccessQty = 0;
                     int CreateFailureQty = 0;
                     int UpdateSuccessQty = 0;
                     int UpdateFailureQty = 0;
+                    int ActionNullQty = 0;
                     int OtherQty = 0;
-
-                    IPartService ps = new PartService(Settings.Default.db);
 
                     foreach (PartImportModel record in records)
                     {
                         if (string.IsNullOrWhiteSpace(record.Action))
                         {
+                            ActionNullQty++;
                             break;
                         }
                         else
@@ -250,6 +247,7 @@ namespace CuttingMrpWeb.Controllers
                                 try
                                 {
                                    bool result= ps.Create(part);
+
                                     if (result)
                                     {
                                         CreateSuccessQty++;
@@ -258,15 +256,21 @@ namespace CuttingMrpWeb.Controllers
                                     {
                                         CreateFailureQty++;
 
-                                        ViewBag.MsgCreate = "Some Part Create Failure:";
+                                        Dictionary<string, string> CreateErrorList = new Dictionary<string, string>();
+                                        CreateErrorList.Add("partNr",part.partNr);
+                                        CreateErrorList.Add("partType",part.partTypeDisplay);
+                                        CreateErrorList.Add("partDesc",part.partDesc);
+                                        CreateErrorList.Add("partStatus",part.partStatus.ToString());
+                                        CreateErrorList.Add("MOQ",part.moq.ToString());
+                                        CreateErrorList.Add("SPQ",part.spq.ToString());
 
-                                        CreateErrorList.Add(part.partNr);
-                                        ViewData["createError"] = CreateErrorList;
+                                        CreateErrorDic.Add(CreateErrorList);
+                                        ViewData["createErrorDic"] = CreateErrorDic;
                                     }
                                 }
-                                catch (Exception e)
+                                catch (Exception)
                                 {
-                                    ViewBag.MsgCreate = "Create Failure!" + e;
+                                    ViewBag.CreateExpMsg = "<-------------Create Part Exception!,Maybe partNr is Exist,Please Check.------------->";
                                 }
                             }
                             else if (record.Action.Trim().ToLower().Equals("update"))
@@ -282,16 +286,20 @@ namespace CuttingMrpWeb.Controllers
                                     else
                                     {
                                         UpdateFailureQty++;
-                                       
-                                        ViewBag.MsgUpdate = "Some Part Update Failure:";
 
-                                        UpdateErrorList.Add(part.partNr);
-                                        ViewData["updateError"] = UpdateErrorList;
+                                        Dictionary<string, string> UpdateErrorList = new Dictionary<string, string>();
+                                        UpdateErrorDic.Add("partNr",part.partNr);
+                                        UpdateErrorDic.Add("partType",part.partTypeDisplay);
+                                        UpdateErrorDic.Add("partDesc",part.partDesc);
+                                        UpdateErrorDic.Add("partStatus",part.partStatus.ToString());
+                                        UpdateErrorDic.Add("MOQ",part.moq.ToString());
+                                        UpdateErrorDic.Add("SPQ",part.spq.ToString());
+                                        ViewData["updateErrorDic"] = UpdateErrorDic;
                                     }
                                 }
                                 catch (Exception e)
                                 {
-                                    ViewBag.MsgUpdate = "Update Failure!" + e;
+                                    ViewBag.UpdateExpMsg = "<-------------Update Part Exception!,Please Check.------------->" + e;
                                 }   
                             }
                             else if (record.Action.Trim().ToLower().Equals("delete"))
@@ -306,19 +314,35 @@ namespace CuttingMrpWeb.Controllers
                     }
 
                     OtherQty = AllQty - CreateSuccessQty - CreateFailureQty - UpdateSuccessQty - UpdateFailureQty;
+
                     Dictionary<string, int> Qty = new Dictionary<string, int>();
+
                     Qty.Add("AllQty", AllQty);
                     Qty.Add("CreateSuccessQty", CreateSuccessQty);
                     Qty.Add("CreateFailureQty", CreateFailureQty);
                     Qty.Add("UpdateSuccessQty", UpdateSuccessQty);
                     Qty.Add("UpdateFailureQty", UpdateFailureQty);
                     Qty.Add("OtherQty", OtherQty);
+
                     ViewData["Qty"] = Qty;
                 }
                 else
                 {
-                    ViewBag.NoData = "There are no Data.Please Check Delimiter.";
+                    ViewBag.NotCheckedData = "No Data Checked.Please Check Delimiter.";
                 }
+            }else
+            {
+                ViewBag.NotCsv = "Your File is not .Csv File , Please Check FileName.";
+            }
+
+            if (ViewBag.NotCsv ==null)
+            {
+                ViewBag.NotCsv = "CSV File is OK.";
+            }
+
+            if (ViewBag.NotCheckedData==null)
+            {
+                ViewBag.NotCheckedData = "Check Data is OK.";
             }
 
             return View();
@@ -386,6 +410,5 @@ namespace CuttingMrpWeb.Controllers
             }
             ViewData["partTypeList"] = select;
         }
-
     }
 }

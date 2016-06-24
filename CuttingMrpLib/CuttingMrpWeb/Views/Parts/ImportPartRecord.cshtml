@@ -2,9 +2,11 @@
     ViewBag.Title = "ImportPartRecord";
 }
 
-<h4>@ViewBag.NoData</h4>
+<div class="alert alert-danger" role="alert">
+    <h4>FileError: @ViewBag.NotCsv</h4>
+    <h4>CheckData: @ViewBag.NotCheckedData</h4>
+</div>
 
-<hr />
 
 @try
 {
@@ -18,45 +20,43 @@
 }
 catch (Exception e)
 {
-    Console.Write(e);
-}
-   
-<hr />
-
-@try
-{
-    <h4>@ViewBag.MsgCreate</h4>
-    <ul>
-        @foreach (var createErrorPartNr in ViewData["createError"] as List<string>)
-        {
-            <li>@createErrorPartNr</li>
-        }
-    </ul>
-}
-catch (Exception e)
-{
-    <h4>All Create Is Ok.</h4>
-    Console.Write(e);
+    <h4>Qty Error.</h4>
 }
 
 <hr />
-   
+
+<h4>Create Error Msg</h4>
 @try
 {
-    <h4>@ViewBag.MsgUpdate</h4>
     <ul>
-        @foreach (var updateErrorPartNr in ViewData["updateError"] as List<string>)
+        @foreach (var createError in ViewData["createErrorDic"] as Dictionary<string, string>)
         {
-            <li>@updateErrorPartNr</li>
+            <li>@createError.Key:  @createError.Value</li>
+        }
+    </ul>
+}
+catch (Exception)
+{
+    <h4>@ViewBag.CreateExpMsg</h4>
+}
+
+<hr />
+
+<h4>Update Error Msg</h4>
+
+@try
+{
+    <ul>
+        @foreach (var updateError in ViewData["updateErrorDic"] as Dictionary<string, string>)
+        {
+            <li>@updateError.Key: @updateError.Value</li>
         }
     </ul>
 
 }
-catch (Exception e)
+catch (Exception)
 {
-    <h4>All Update Is Ok.</h4>
-    Console.Write(e);
+    <h4>@ViewBag.UpdateExpMsg</h4>
 }
 
 @Scripts.Render("~/bundles/part")
-   

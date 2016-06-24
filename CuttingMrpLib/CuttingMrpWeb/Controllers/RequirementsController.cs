@@ -48,8 +48,6 @@ namespace CuttingMrpWeb.Controllers
         {
             try
             {
-                // TODO: Add insert logic here
-
                 return RedirectToAction("Index");
             }
             catch
@@ -77,7 +75,6 @@ namespace CuttingMrpWeb.Controllers
         {
             //try
             //{
-                // TODO: Add update logic here
                 IRequirementService rs = new RequirementService(Settings.Default.db);
                 rs.Update(requirement);
                 return RedirectToAction("Index");
@@ -107,7 +104,6 @@ namespace CuttingMrpWeb.Controllers
         {
             //try
             //{
-                // TODO: Add delete logic here
                 IRequirementService rs = new RequirementService(Settings.Default.db);
                 rs.DeleteById(id);
                 return RedirectToAction("Index"); 
