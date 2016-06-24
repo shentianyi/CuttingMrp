@@ -44,6 +44,9 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CsvHelper">
+      <HintPath>..\ThridPart\CsvHelper.2.14.2\lib\net40\CsvHelper.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Linq" />
@@ -165,6 +168,8 @@
     <Compile Include="Utility\EnumUtility.vb" />
     <Compile Include="Utility\Calculator.vb" />
     <Compile Include="Utility\CalculatorSingleton.vb" />
+    <Compile Include="Utility\FileDataHandler.vb" />
+    <Compile Include="Utility\FileUtility.vb" />
     <Compile Include="ViewModel\PageViewModel\DashboardForStockReportItem.vb" />
     <Compile Include="ViewModel\PageViewModel\DashboardItem.vb" />
     <Compile Include="ViewModel\PageViewModel\ProcessOrderInfoModel.vb" />

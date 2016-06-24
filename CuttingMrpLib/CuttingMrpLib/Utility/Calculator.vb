@@ -515,4 +515,44 @@ Public Class Calculator
 
     End Sub
 
+    Public Sub ProcessStockImport(settings As CalculateSetting)
+        Dim mrprepo As Repository(Of MrpRound) = New Repository(Of MrpRound)(New DataContext(DBConn))
+        Dim mrpRoundStr As String = Now.ToString("yyyyMMddhhmmss")
+        mrprepo.GetTable.InsertOnSubmit(New MrpRound With {.launcher = settings.TaskType, .mrpRound = mrpRoundStr, .runningStatus = CalculatorStatus.Running, .time = Now, .text = " "})
+        mrprepo.SaveAll()
+        Try
+            Dim handler = New FileDataHandler()
+            handler.ImportForceStock(settings.Parameters, DBConn)
+            Dim round As MrpRound = mrprepo.First(Function(c) c.mrpRound = mrpRoundStr)
+            round.runningStatus = CalculatorStatus.Finish
+            mrprepo.SaveAll()
+        Catch ex As Exception
+            Dim round As MrpRound = mrprepo.First(Function(c) c.mrpRound = mrpRoundStr)
+            round.runningStatus = CalculatorStatus.Cancel
+            round.text = "Fail to AutoStock with following errors:" & ex.ToString
+            mrprepo.SaveAll()
+            Throw New Exception(round.text)
+        End Try
+    End Sub
+
+    Public Sub ProcessSumStock(settings As CalculateSetting)
+        Dim mrprepo As Repository(Of MrpRound) = New Repository(Of MrpRound)(New DataContext(DBConn))
+        Dim mrpRoundStr As String = Now.ToString("yyyyMMddhhmmss")
+        mrprepo.GetTable.InsertOnSubmit(New MrpRound With {.launcher = settings.TaskType, .mrpRound = mrpRoundStr, .runningStatus = CalculatorStatus.Running, .time = Now, .text = " "})
+        mrprepo.SaveAll()
+        Try
+            Dim ss As IStockSumRecordService = New StockSumRecordService(DBConn)
+            ss.Generate(Date.Parse(settings.Parameters))
+            Dim round As MrpRound = mrprepo.First(Function(c) c.mrpRound = mrpRoundStr)
+            round.runningStatus = CalculatorStatus.Finish
+            mrprepo.SaveAll()
+        Catch ex As Exception
+            Dim round As MrpRound = mrprepo.First(Function(c) c.mrpRound = mrpRoundStr)
+            round.runningStatus = CalculatorStatus.Cancel
+            round.text = "Fail to AutoStock with following errors:" & ex.ToString
+            mrprepo.SaveAll()
+            Throw New Exception(round.text)
+        End Try
+    End Sub
+
 End Class
