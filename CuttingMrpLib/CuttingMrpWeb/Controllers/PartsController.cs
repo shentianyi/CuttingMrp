@@ -207,8 +207,8 @@ namespace CuttingMrpWeb.Controllers
                     ViewBag.TextExpMsg = "<-------------Read Csv File Exception!,Please Check.------------->" + e;
                 }
 
-             List<Dictionary<string, string>> CreateErrorDic = new List<Dictionary<string, string>>();
-             List<Dictionary<string, string>> UpdateErrorDic = new List<Dictionary<string, string>>();
+                List<Dictionary<string, string>> CreateErrorDic = new List<Dictionary<string, string>>();
+                List<Dictionary<string, string>> UpdateErrorDic = new List<Dictionary<string, string>>();
 
                 if (records.Count > 0)
                 {
@@ -258,7 +258,7 @@ namespace CuttingMrpWeb.Controllers
 
                                         Dictionary<string, string> CreateErrorList = new Dictionary<string, string>();
                                         CreateErrorList.Add("partNr",part.partNr);
-                                        CreateErrorList.Add("partType",part.partTypeDisplay);
+                                        CreateErrorList.Add("partType",part.partStatus.ToString());
                                         CreateErrorList.Add("partDesc",part.partDesc);
                                         CreateErrorList.Add("partStatus",part.partStatus.ToString());
                                         CreateErrorList.Add("MOQ",part.moq.ToString());
@@ -270,6 +270,7 @@ namespace CuttingMrpWeb.Controllers
                                 }
                                 catch (Exception)
                                 {
+                                    CreateFailureQty++;
                                     ViewBag.CreateExpMsg = "<-------------Create Part Exception!,Maybe partNr is Exist,Please Check.------------->";
                                 }
                             }
@@ -288,17 +289,21 @@ namespace CuttingMrpWeb.Controllers
                                         UpdateFailureQty++;
 
                                         Dictionary<string, string> UpdateErrorList = new Dictionary<string, string>();
-                                        UpdateErrorDic.Add("partNr",part.partNr);
-                                        UpdateErrorDic.Add("partType",part.partTypeDisplay);
-                                        UpdateErrorDic.Add("partDesc",part.partDesc);
-                                        UpdateErrorDic.Add("partStatus",part.partStatus.ToString());
-                                        UpdateErrorDic.Add("MOQ",part.moq.ToString());
-                                        UpdateErrorDic.Add("SPQ",part.spq.ToString());
+                                        UpdateErrorList.Add("partNr",part.partNr);
+                                        UpdateErrorList.Add("partType",part.partStatus.ToString());
+                                        UpdateErrorList.Add("partDesc",part.partDesc);
+                                        UpdateErrorList.Add("partStatus",part.partStatus.ToString());
+                                        UpdateErrorList.Add("MOQ",part.moq.ToString());
+                                        UpdateErrorList.Add("SPQ",part.spq.ToString());
+
+                                        UpdateErrorDic.Add(UpdateErrorList);
                                         ViewData["updateErrorDic"] = UpdateErrorDic;
                                     }
                                 }
                                 catch (Exception e)
                                 {
+                                    UpdateFailureQty++;
+
                                     ViewBag.UpdateExpMsg = "<-------------Update Part Exception!,Please Check.------------->" + e;
                                 }   
                             }
@@ -313,7 +318,7 @@ namespace CuttingMrpWeb.Controllers
                         }
                     }
 
-                    OtherQty = AllQty - CreateSuccessQty - CreateFailureQty - UpdateSuccessQty - UpdateFailureQty;
+                    OtherQty = AllQty - CreateSuccessQty - CreateFailureQty - UpdateSuccessQty - UpdateFailureQty - ActionNullQty;
 
                     Dictionary<string, int> Qty = new Dictionary<string, int>();
 
@@ -322,6 +327,7 @@ namespace CuttingMrpWeb.Controllers
                     Qty.Add("CreateFailureQty", CreateFailureQty);
                     Qty.Add("UpdateSuccessQty", UpdateSuccessQty);
                     Qty.Add("UpdateFailureQty", UpdateFailureQty);
+                    Qty.Add("ActionNullQty", ActionNullQty);
                     Qty.Add("OtherQty", OtherQty);
 
                     ViewData["Qty"] = Qty;
