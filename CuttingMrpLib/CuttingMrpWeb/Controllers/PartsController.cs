@@ -245,7 +245,7 @@ namespace CuttingMrpWeb.Controllers
                                 spq = record.SPQ
                             };
 
-                            if (record.Action.Trim().Equals("create"))
+                            if (record.Action.Trim().ToLower().Equals("create"))
                             {
                                 try
                                 {
@@ -269,7 +269,7 @@ namespace CuttingMrpWeb.Controllers
                                     ViewBag.MsgCreate = "Create Failure!" + e;
                                 }
                             }
-                            else if (record.Action.Trim().Equals("update"))
+                            else if (record.Action.Trim().ToLower().Equals("update"))
                             {
                                 //更新
                                 try
@@ -294,7 +294,7 @@ namespace CuttingMrpWeb.Controllers
                                     ViewBag.MsgUpdate = "Update Failure!" + e;
                                 }   
                             }
-                            else if (record.Action.Trim().Equals("delete"))
+                            else if (record.Action.Trim().ToLower().Equals("delete"))
                             {
                                 //删除  忽略
                             }
@@ -323,7 +323,6 @@ namespace CuttingMrpWeb.Controllers
 
             return View();
         }
-
 
         public void Export([Bind(Include = "PartNr")] PartSearchModel q)
         {

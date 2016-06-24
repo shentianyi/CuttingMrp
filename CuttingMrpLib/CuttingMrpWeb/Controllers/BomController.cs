@@ -1,85 +1,83 @@
-﻿using CuttingMrpWeb.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using CsvHelper;
+using CsvHelper.Configuration;
 using CuttingMrpLib;
+using CuttingMrpWeb.Helpers;
 using CuttingMrpWeb.Models;
 using CuttingMrpWeb.Properties;
 using MvcPaging;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
-using CsvHelper.Configuration;
-using CsvHelper;
+using System.Web;
+using System.Web.Mvc;
 
 namespace CuttingMrpWeb.Controllers
 {
-    public class BomItemController : Controller
+    public class BomController : Controller
     {
-        // GET: BomItem
+        // GET: Bom
         [CustomAuthorize]
         public ActionResult Index(int? page)
         {
             int pageIndex = PagingHelper.GetPageIndex(page);
 
-            BomItemSearchModel q = new BomItemSearchModel();
+            BomSearchModel q = new BomSearchModel();
 
-            IBomItemService bis = new BomItemService(Settings.Default.db);
+            IBomService bs = new BomService(Settings.Default.db);
 
-            IPagedList<BomItem> bomItems = bis.Search(q).ToPagedList(pageIndex, Settings.Default.pageSize);
+            IPagedList<BOM> boms = bs.Search(q).ToPagedList(pageIndex, Settings.Default.pageSize);
 
             ViewBag.Query = q;
 
-            return View(bomItems);
+            return View(boms);
         }
 
-        public ActionResult Search([Bind(Include = "ComponentId, VFFrom, VFTo, VTFrom, VTTo, BomId")] BomItemSearchModel q)
+        public ActionResult Search([Bind(Include ="ID, PartNr, VFFrom, VFTo, VTFrom, VTTo")] BomSearchModel q)
         {
             int pageIndex = 0;
             int.TryParse(Request.QueryString.Get("page"), out pageIndex);
             pageIndex = PagingHelper.GetPageIndex(pageIndex);
 
-            IBomItemService bis = new BomItemService(Settings.Default.db);
+            IBomService bs = new BomService(Settings.Default.db);
 
-            IPagedList<BomItem> bomItems = bis.Search(q).ToPagedList(pageIndex, Settings.Default.pageSize);
+            IPagedList<BOM> boms= bs.Search(q).ToPagedList(pageIndex, Settings.Default.pageSize);
 
             ViewBag.Query = q;
 
-            return View("Index", bomItems);
+            return View("Index", boms);
         }
 
-        public void Export([Bind(Include = "ID, ComponentId, VFFrom, VFTo, VTFrom, VTTo, BomId")] BomItemSearchModel q)
+        public void Export([Bind(Include = "ID, PartNr, VFFrom, VFTo, VTFrom, VTTo")] BomSearchModel q)
         {
-            IBomItemService ps = new BomItemService(Settings.Default.db);
+            IBomService bs = new BomService(Settings.Default.db);
 
-            List<BomItem> bomItems = ps.Search(q).ToList();
+            List<BOM> boms = bs.Search(q).ToList();
 
             ViewBag.Query = q;
 
             MemoryStream ms = new MemoryStream();
             using (StreamWriter sw = new StreamWriter(ms, Encoding.UTF8))
             {
-                List<string> head = new List<string> { " No.", "ID","ComponentId", "ValidFrom", "ValidTo", "HasChild", "UOM", "Quantity", "BomId", "Action"};
+                List<string> head = new List<string> { " No.", "ID", "PartNr", "ValidFrom", "ValidTo", "VersionId", "BomDesc, Action"};
                 sw.WriteLine(string.Join(Settings.Default.csvDelimiter, head));
-                for (var i = 0; i < bomItems.Count; i++)
+                for (var i = 0; i < boms.Count; i++)
                 {
                     List<string> ii = new List<string>();
                     ii.Add((i + 1).ToString());
-                    ii.Add(bomItems[i].id.ToString());
-                    ii.Add(bomItems[i].componentId);
-                    ii.Add(bomItems[i].validFrom.ToString());
-                    ii.Add(bomItems[i].validTo.ToString());
-                    ii.Add(bomItems[i].hasChind.ToString());
-                    ii.Add(bomItems[i].uom.ToString());
-                    ii.Add(bomItems[i].quantity.ToString());
-                    ii.Add(bomItems[i].bomId);
+                    ii.Add(boms[i].id.ToString());
+                    ii.Add(boms[i].partNr);
+                    ii.Add(boms[i].validFrom.ToString());
+                    ii.Add(boms[i].validTo.ToString());
+                    ii.Add(boms[i].versionId);
+                    ii.Add(boms[i].bomDesc);
                     ii.Add("");
                     sw.WriteLine(string.Join(Settings.Default.csvDelimiter, ii.ToArray()));
                 }
                 //sw.WriteLine(max);
             }
-            var filename = "BomItem" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".csv";
+            var filename = "Bom" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".csv";
             var contenttype = "text/csv";
             Response.Clear();
             Response.ContentEncoding = Encoding.UTF8;
@@ -90,21 +88,21 @@ namespace CuttingMrpWeb.Controllers
             Response.End();
         }
 
-        public ActionResult ImportBomItemRecord(HttpPostedFileBase bomItemFile)
+        public ActionResult ImportBomRecord(HttpPostedFileBase bomFile)
         {
-            if (bomItemFile == null)
+            if (bomFile == null)
             {
                 throw new Exception("No file is uploaded to system");
             }
 
             var appData = Server.MapPath("~/TmpFile/");
             var filename = Path.Combine(appData,
-                DateTime.Now.ToString("yyyyMMddHHmmss") + "_" + Path.GetFileName(bomItemFile.FileName));
+                DateTime.Now.ToString("yyyyMMddHHmmss") + "_" + Path.GetFileName(bomFile.FileName));
 
-            bomItemFile.SaveAs(filename);
+            bomFile.SaveAs(filename);
             string ex = Path.GetExtension(filename);
 
-            List<BomItemImportModel> records = new List<BomItemImportModel>();
+            List<BomImportModel> records = new List<BomImportModel>();
 
             if (ex.Equals(".csv"))
             {
@@ -112,7 +110,7 @@ namespace CuttingMrpWeb.Controllers
                 configuration.Delimiter = Settings.Default.csvDelimiter;
                 configuration.HasHeaderRecord = true;
                 configuration.SkipEmptyRecords = true;
-                configuration.RegisterClassMap<BomItemCsvModelMap>();
+                configuration.RegisterClassMap<BomCsvModelMap>();
                 configuration.TrimHeaders = true;
                 configuration.TrimFields = true;
 
@@ -121,7 +119,7 @@ namespace CuttingMrpWeb.Controllers
                     using (TextReader treader = System.IO.File.OpenText(filename))
                     {
                         CsvReader csvReader = new CsvReader(treader, configuration);
-                        records = csvReader.GetRecords<BomItemImportModel>().ToList();
+                        records = csvReader.GetRecords<BomImportModel>().ToList();
                     }
                 }
                 catch (Exception e)
@@ -132,6 +130,7 @@ namespace CuttingMrpWeb.Controllers
                 List<string> CreateErrorList = new List<string>();
                 List<string> UpdateErrorList = new List<string>();
                 List<string> DeleteErrorList = new List<string>();
+
 
                 if (records.Count > 0)
                 {
@@ -144,9 +143,9 @@ namespace CuttingMrpWeb.Controllers
                     int DeleteFailureQty = 0;
                     int OtherQty = 0;
 
-                    IBomItemService ps = new BomItemService(Settings.Default.db);
+                    IBomService ps = new BomService(Settings.Default.db);
 
-                    foreach (BomItemImportModel record in records)
+                    foreach (BomImportModel record in records)
                     {
                         if (string.IsNullOrWhiteSpace(record.Action))
                         {
@@ -155,48 +154,39 @@ namespace CuttingMrpWeb.Controllers
                         else
                         {
                             //新建
-                            BomItem bomItem = new BomItem()
+                            BOM bom = new BOM()
                             {
-                                id =Convert.ToInt32(record.ID),
-                                componentId = record.ComponentId,
+                                id = record.ID,
+                                partNr = record.PartNr,
                                 validFrom = record.ValidFrom,
                                 validTo = record.ValidTo,
-                                hasChind = Convert.ToByte(record.HasChild),
-                                uom = record.UOM,
-                                quantity = record.Quantity,
-                                bomId = record.BomId
+                                versionId = record.VersionId,
+                                bomDesc = record.BomDesc
                             };
 
-                            if (record.Action.Trim().Equals("create"))
+                            if (record.Action.Trim().ToLower().Equals("create"))
                             {
                                 try
                                 {
-                                    bool result = ps.Create(bomItem);
-                                    if (result)
-                                    {
-                                        CreateSuccessQty++;
-                                    }
-                                    else
-                                    {
-                                        CreateFailureQty++;
-
-                                        ViewBag.MsgCreate = "Some Part Create Failure:";
-
-                                        CreateErrorList.Add("ID is Exist-->"+bomItem.id);
-                                        ViewData["createError"] = CreateErrorList;
-                                    }
+                                    ps.Create(bom);
+                                    CreateSuccessQty++;
                                 }
                                 catch (Exception e)
                                 {
-                                    ViewBag.MsgCreate = "Create Failure!" + e;
+                                    CreateFailureQty++;
+
+                                    ViewBag.MsgCreate = "Some Part Create Failure:";
+
+                                    CreateErrorList.Add(bom.id + e.Message);
+                                    ViewData["createError"] = CreateErrorList;
                                 }
                             }
-                            else if (record.Action.Trim().Equals("update"))
+                            else if (record.Action.Trim().ToLower().Equals("update"))
                             {
                                 //更新
                                 try
                                 {
-                                    bool result = ps.Update(bomItem);
+                                    bool result = ps.Update(bom);
                                     if (result)
                                     {
                                         UpdateSuccessQty++;
@@ -207,21 +197,26 @@ namespace CuttingMrpWeb.Controllers
 
                                         ViewBag.MsgUpdate = "Some Part Update Failure:";
 
-                                        UpdateErrorList.Add("ID is Not Exit -->"+bomItem.id);
+                                        UpdateErrorList.Add(bom.id + "Not Exist ID.");
                                         ViewData["updateError"] = UpdateErrorList;
                                     }
                                 }
                                 catch (Exception e)
                                 {
-                                    ViewBag.MsgUpdate = "Update Failure!" + e;
+                                    UpdateFailureQty++;
+
+                                    ViewBag.MsgUpdate = "Some Part Update Failure:";
+
+                                    UpdateErrorList.Add(bom.id + e.Message);
+                                    ViewData["updateError"] = UpdateErrorList;
                                 }
                             }
-                            else if (record.Action.Trim().Equals("delete"))
+                            else if (record.Action.Trim().ToLower().Equals("delete"))
                             {
-                                //删除
                                 try
                                 {
-                                    bool result = ps.Delete(bomItem);
+                                    //删除
+                                    bool result = ps.Delete(bom);
 
                                     if (result)
                                     {
@@ -233,7 +228,7 @@ namespace CuttingMrpWeb.Controllers
 
                                         ViewBag.MsgDelete = "Some Bom Delete Failure:";
 
-                                        DeleteErrorList.Add("Delete Error-->" + bomItem.id);
+                                        DeleteErrorList.Add(bom.id);
                                         ViewData["deleteError"] = DeleteErrorList;
                                     }
                                 }
@@ -243,10 +238,9 @@ namespace CuttingMrpWeb.Controllers
 
                                     ViewBag.MsgDelete = "Some Part Delete Failure:";
 
-                                    DeleteErrorList.Add("Bom-> ID:" + bomItem.id + e.Message);
+                                    DeleteErrorList.Add("Bom-> ID:" + bom.id + "BomItem 中 存在外键，请先删除BomItem" + e.Message);
                                     ViewData["deleteError"] = DeleteErrorList;
                                 }
-
                             }
                             else
                             {
@@ -275,5 +269,6 @@ namespace CuttingMrpWeb.Controllers
 
             return View();
         }
+
     }
 }

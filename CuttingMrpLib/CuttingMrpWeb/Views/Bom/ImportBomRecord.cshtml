@@ -1,0 +1,83 @@
+﻿@{
+    ViewBag.Title = "ImportBomRecord";
+}
+
+
+<h4>@ViewBag.NoData</h4>
+
+<hr />
+
+@try
+{
+    <ul>
+        @foreach (var qty in ViewData["Qty"] as Dictionary<string, int>)
+        {
+            <li>@qty.Key: @qty.Value</li>
+        }
+    </ul>
+
+}
+catch (Exception e)
+{
+    Console.Write(e);
+}
+
+<hr />
+
+@try
+{
+    <h4>@ViewBag.MsgCreate</h4>
+    <ul>
+        @foreach (var createErrorPartNr in ViewData["createError"] as List<string>)
+        {
+            <li>@createErrorPartNr</li>
+        }
+    </ul>
+}
+catch (Exception e)
+{
+    <h4>All Create Is Ok.</h4>
+    Console.Write(e);
+}
+
+<hr />
+
+@try
+{
+    <h4>@ViewBag.MsgUpdate</h4>
+    <ul>
+        @foreach (var updateErrorPartNr in ViewData["updateError"] as List<string>)
+        {
+            <li>@updateErrorPartNr</li>
+        }
+    </ul>
+
+}
+catch (Exception e)
+{
+    <h4>All Update Is Ok.</h4>
+    Console.Write(e);
+}
+
+<hr />
+
+@try
+{
+    <h4>@ViewBag.MsgDelete</h4>
+
+    <ul>
+      @foreach (var deleteErrorPartNr in ViewData["deleteError"] as List<string>)
+      {
+        <li>@deleteErrorPartNr</li>
+      }
+    </ul>
+
+}
+catch (Exception e)
+{
+    Console.Write(e);
+}
+
+@Scripts.Render("~/bundles/bom")
+
+
