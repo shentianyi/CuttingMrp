@@ -1,5 +1,6 @@
 ﻿Imports System.Globalization
 Imports System.IO
+Imports Brilliantech.Framwork.Utils.LogUtil
 
 Public Class FileDataHandler
     ''' <summary>
@@ -8,12 +9,7 @@ Public Class FileDataHandler
     ''' <param name="fileName"></param>
     Public Sub ImportForceStock(fileName As String, db As String)
         If File.Exists(fileName) Then
-            'Dim dir As String = Directory.GetCurrentDirectory()
-            'Dim processingDir As String = Path.Combine(dir, "TmpFile\\Processing")
-            'If Directory.Exists(processingDir) = False Then
-            '    Directory.CreateDirectory(processingDir)
-            'End If
-            ' 将文件移动到处理中的文件夹
+
             Dim ex As String = Path.GetExtension(fileName)
             Dim records As List(Of BatchFinishOrderRecord) = New List(Of BatchFinishOrderRecord)
 
@@ -21,10 +17,12 @@ Public Class FileDataHandler
                 Using treader As TextReader = File.OpenText(fileName)
                     For i As Integer = 0 To Integer.MaxValue
                         Dim s As String = treader.ReadLine
-                        If String.IsNullOrWhiteSpace(s) Then
-                            Exit For
-                        End If
+
                         If i >= 16 Then
+                            If String.IsNullOrWhiteSpace(s) Then
+                                Exit For
+                            End If
+
                             Dim fields As String() = s.Split(";")
 
                             Dim rdate As String = fields(0)
@@ -55,6 +53,13 @@ Public Class FileDataHandler
                 ps.BatchFinishOrder(results("SUCCESS"), True, False)
             End If
 
+            ' move file to processed file
+            Dim dir As String = Path.GetDirectoryName(fileName)
+            Dim newDir As String = Path.Combine(dir, "Processed")
+            If Directory.Exists(newDir) = False Then
+                Directory.CreateDirectory(newDir)
+            End If
+            File.Move(fileName, Path.Combine(newDir, Path.GetFileName(fileName)))
         Else
             Throw New Exception(String.Format("处理Force文件失败,{0} 不存在", fileName))
         End If

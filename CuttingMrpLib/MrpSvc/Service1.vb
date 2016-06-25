@@ -36,13 +36,21 @@ Public Class Service1
             If msg IsNot Nothing Then
                 Dim settings As CalculateSetting = msg.Body
                 If settings.TaskType = "AutoStock" Then
+                    businessLogger.Info("AutoStock task start")
                     mrpExe.ProcessStockImport(settings)
+                    businessLogger.Info("AutoStock task finish")
                 ElseIf settings.TaskType = "MRP" Then
+                    businessLogger.Info("MRP task start")
                     mrpExe.ProcessMrp(settings)
+                    businessLogger.Info("MRP task finish")
                 ElseIf settings.TaskType = "BF" Then
+                    businessLogger.Info("BackFlush task start")
                     mrpExe.MakeBackflush()
+                    businessLogger.Info("BackFlush task finish")
                 ElseIf settings.TaskType = "SumStock" Then
+                    businessLogger.Info("SumStock task start")
                     mrpExe.ProcessSumStock(settings)
+                    businessLogger.Info("SumStock task finish")
                 Else
                     Throw New Exception("Unsupported Task Type " & settings.TaskType)
                 End If

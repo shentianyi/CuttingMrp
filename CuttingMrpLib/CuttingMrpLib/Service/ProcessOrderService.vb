@@ -212,7 +212,7 @@ Public Class ProcessOrderService
 
                 If negaStockDic.ContainsKey(rec.PartNr) Then
                     For Each s As Stock In negaStockDic(rec.PartNr)
-                        If rec.Amount > 0 And s.quantity < 0 Then
+                        If rec.Amount > 0 And s.quantity <= 0 Then
                             If Math.Abs(s.quantity) >= rec.Amount Then
 
                                 s.quantity += rec.Amount ' quantity 逐渐变大 
@@ -250,7 +250,7 @@ Public Class ProcessOrderService
             End If
         Next
 
-        Using scope As New TransactionScope
+        Using scope As New TransactionScope(TransactionScopeOption.Required, New TransactionOptions() With {.Timeout = New TimeSpan(0, 30, 0)})
 
 
             Dim context As DataContext = New DataContext(DBConn)
@@ -258,29 +258,45 @@ Public Class ProcessOrderService
             Dim moveRep As Repository(Of StockMovement) = New Repository(Of StockMovement)(context)
             Dim batchRecordRep As Repository(Of StockBatchMoveRecord) = New Repository(Of StockBatchMoveRecord)(context)
 
-            stockrepo.GetTable.InsertAllOnSubmit(toStock)
-            Dim deleteStock As List(Of Stock) = New List(Of Stock)
+
+            ' Dim deleteStock As List(Of Stock) = New List(Of Stock)
             For Each stocks As List(Of Stock) In negaStockDic.Values
-                For Each stock As Stock In stocks.Where(Function(s) s.quantity.Equals(0))
-                    Dim s As Stock = stockrepo.FirstOrDefault(Function(ss) ss.id.Equals(stock.id))
-                    If s IsNot Nothing Then
-                        stockrepo.MarkForDeletion(s)
-                    End If
-                Next
-                For Each stock As Stock In stocks.Where(Function(s) s.quantity < 0)
-                    Dim s As Stock = stockrepo.FirstOrDefault(Function(ss) ss.id.Equals(stock.id))
-                    If s IsNot Nothing Then
-                        s.quantity = stock.quantity
-                    End If
-                Next
+                Dim deleteIds As List(Of Integer) = stocks.Where(Function(s) s.quantity.Equals(0)).Distinct.Select(Function(s) s.id).ToList
+                If deleteIds.Count > 0 Then
+                    Dim _deletes As List(Of Stock) = context.Context.GetTable(Of Stock).Where(Function(s) deleteIds.Contains(s.id)).ToList
+                    context.Context.GetTable(Of Stock).DeleteAllOnSubmit(_deletes)
+                End If
+
+                Dim updateIds As List(Of Integer) = stocks.Where(Function(s) s.quantity < 0).Distinct.Select(Function(s) s.id).ToList
+                If updateIds.Count > 0 Then
+                    Dim _updates As List(Of Stock) = context.Context.GetTable(Of Stock).Where(Function(s) updateIds.Contains(s.id)).ToList
+                    For Each u As Stock In _updates
+                        Dim ori As Stock = stocks.SingleOrDefault(Function(s) s.id.Equals(u.id))
+                        If ori IsNot Nothing Then
+                            u.quantity = ori.quantity
+                        End If
+                    Next
+                End If
+                'For Each stock As Stock In stocks.Where(Function(s) s.quantity.Equals(0)).ToList
+                '    Dim s As Stock = stockrepo.FirstOrDefault(Function(ss) ss.id.Equals(stock.id))
+                '    If s IsNot Nothing Then
+                '        stockrepo.(s)
+                '    End If
+                'Next
+                'Dim _updateStock As List(Of Stock) = stocks.Where(Function(s) s.quantity < 0).Distinct.ToList
+
+                'For Each stock As Stock In _updateStock
+                '    Dim s As Stock = stockrepo.FirstOrDefault(Function(ss) ss.id.Equals(stock.id))
+                '    If s IsNot Nothing Then
+                '        s.quantity = stock.quantity
+                '    End If
+                'Next
             Next
+            context.Context.GetTable(Of Stock).InsertAllOnSubmit(toStock)
+            context.Context.GetTable(Of StockMovement).InsertAllOnSubmit(toMove)
+            context.Context.GetTable(Of StockBatchMoveRecord).InsertAllOnSubmit(toCreateStockBatchMoveRecord)
 
-            moveRep.GetTable.InsertAllOnSubmit(toMove)
-            batchRecordRep.GetTable.InsertAllOnSubmit(toCreateStockBatchMoveRecord)
-
-            stockrepo.SaveAll()
-            moveRep.SaveAll()
-            batchRecordRep.SaveAll()
+            context.SaveAll()
             scope.Complete()
             ' Catch ex As Exception
             '  Throw New Exception("写入数据库时出现错误", ex)

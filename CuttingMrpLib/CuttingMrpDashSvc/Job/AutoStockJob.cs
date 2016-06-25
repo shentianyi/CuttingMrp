@@ -21,7 +21,7 @@ namespace CuttingMrpDashSvc.Job
                 LogUtil.Logger.Info("start gen AutoStockJob");
 
                 List<string> files = FileUtility.GetAllFilesFromDirectory(Settings.Default.autoStockFilePath);
-                LogUtil.Logger.Error(Settings.Default.autoStockFilePath);
+              
                 LogUtil.Logger.Error(files);
 
                 if (files != null && files.Count > 0)

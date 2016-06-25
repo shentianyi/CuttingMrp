@@ -44,8 +44,14 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Brilliantech.Framwork">
+      <HintPath>..\ThridPart\Brilliantech.Framwork.dll</HintPath>
+    </Reference>
     <Reference Include="CsvHelper">
       <HintPath>..\ThridPart\CsvHelper.2.14.2\lib\net40\CsvHelper.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\ThridPart\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

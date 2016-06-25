@@ -522,6 +522,7 @@ Public Class Calculator
         mrprepo.SaveAll()
         Try
             Dim handler = New FileDataHandler()
+            ' Throw New Exception(settings.Parameters)
             handler.ImportForceStock(settings.Parameters, DBConn)
             Dim round As MrpRound = mrprepo.First(Function(c) c.mrpRound = mrpRoundStr)
             round.runningStatus = CalculatorStatus.Finish

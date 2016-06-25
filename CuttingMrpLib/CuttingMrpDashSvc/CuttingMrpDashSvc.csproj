@@ -89,12 +89,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Processed\read.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Processing\read.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="app.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
