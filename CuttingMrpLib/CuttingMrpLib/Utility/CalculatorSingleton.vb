@@ -29,13 +29,13 @@ Public Class CalculatorSingleton
             Dim qu As MessageQueue = New MessageQueue(queueAddr)
             Select Case type
                 Case "START"
-                    If qu.GetAllMessages.Count > 0 Then
-                        Throw New Exception("队列中已经有待运行的任务，请稍后再试")
-                    End If
+                    'If qu.GetAllMessages.Count > 0 Then
+                    '    Throw New Exception("队列中已经有待运行的任务，请稍后再试")
+                    'End If
                     Dim mrpRepo As Repository(Of MrpRound) = New Repository(Of MrpRound)(New DataContext(db))
-                    Dim mrp As MrpRound = mrpRepo.FirstOrDefault(Function(c) c.runningStatus = CalculatorStatus.Running)
+                    Dim mrp As MrpRound = mrpRepo.FirstOrDefault(Function(c) c.runningStatus = CalculatorStatus.Running And c.launcher.Equals("MRP"))
                     If mrp IsNot Nothing Then
-                        Throw New Exception("MRP is running")
+                        Throw New Exception("MRP is running, please wait later!")
                     End If
                     Dim msg As Message = New Message
                     msg.Body = settings

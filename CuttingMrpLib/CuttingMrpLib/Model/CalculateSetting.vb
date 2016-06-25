@@ -72,9 +72,18 @@ Public Class CalculateSetting
         End Set
     End Property
 
-
+    ''' <summary>
+    ''' Part Type
+    ''' </summary>
+    ''' <returns></returns>
     Public Property PartType As PartType
 
+    ''' <summary>
+    ''' parameters, key and value must be string! !! dic canot XmlMessageFormatter
+    ''' </summary>
+    ''' <returns></returns>
+    '''Public Property Parameters As Dictionary(Of String, String)
+    Public Property Parameters As String
 End Class
 
 Public Class MergeMethod

@@ -24,8 +24,6 @@ namespace CuttingMrpDashSvc.Job
                 .WithIdentity("KskBackFlashGroupJob-1", groupId)
                 .Build();
 
-          //  job.JobDataMap.Add("Date", DateTime.Now.Date);
-
             DashService.Scheduler.ScheduleJob(job, trigger);
 
             LogUtil.Logger.Info("KskBackFlashTrigger: " + trigger.Key + " added");

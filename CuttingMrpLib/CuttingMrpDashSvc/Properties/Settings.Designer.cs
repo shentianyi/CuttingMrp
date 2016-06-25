@@ -25,8 +25,20 @@ namespace CuttingMrpDashSvc.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=Charlot-PC\\SQLEXPRESS;Initial Catalog=CuttingMrp;Persist Security Inf" +
-            "o=True;User ID=sa;Password=123456@")]
+        [global::System.Configuration.DefaultSettingValueAttribute(".\\Private$\\cuttingMrp1")]
+        public string mrpQueue {
+            get {
+                return ((string)(this["mrpQueue"]));
+            }
+            set {
+                this["mrpQueue"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=WANGSONG-PC\\MSSQLSERVER2008R;Initial Catalog=CuttingMrp;Persist Secur" +
+            "ity Info=True;User ID=sa;Password=123456@")]
         public string db {
             get {
                 return ((string)(this["db"]));
@@ -38,7 +50,7 @@ namespace CuttingMrpDashSvc.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0 50 23 * * ? *")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0 50 6 * * ? *")]
         public string stockSumDashCron {
             get {
                 return ((string)(this["stockSumDashCron"]));
@@ -50,7 +62,7 @@ namespace CuttingMrpDashSvc.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0 */5 * * * ? *")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0 */30 * * * ? *")]
         public string backFlashCron {
             get {
                 return ((string)(this["backFlashCron"]));
@@ -62,13 +74,25 @@ namespace CuttingMrpDashSvc.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute(".\\Private$\\cuttingMrp1")]
-        public string mrpQueue {
+        [global::System.Configuration.DefaultSettingValueAttribute("0 3 */1 * * ? *")]
+        public string autoStockCron {
             get {
-                return ((string)(this["mrpQueue"]));
+                return ((string)(this["autoStockCron"]));
             }
             set {
-                this["mrpQueue"] = value;
+                this["autoStockCron"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\\\BRILLIANTECH-PC\\brilliantech\\Cutting")]
+        public string autoStockFilePath {
+            get {
+                return ((string)(this["autoStockFilePath"]));
+            }
+            set {
+                this["autoStockFilePath"] = value;
             }
         }
     }
