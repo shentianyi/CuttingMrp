@@ -60,7 +60,7 @@ namespace CuttingMrpWeb.Controllers
             MemoryStream ms = new MemoryStream();
             using (StreamWriter sw = new StreamWriter(ms, Encoding.UTF8))
             {
-                List<string> head = new List<string> { " No.", "OrderNr", "PartNr", "BatchQuantity", "Type", "Bundle", "CreatedAt", "UpdatedAt", "Operator", "Remarkl", "Remark2", "Action" };
+                List<string> head = new List<string> { " No.", "OrderNr", "PartNr", "BatchQuantity", "Type", "Bundle", "CreatedAt", "UpdatedAt", "Operator", "Remark1", "Remark2", "Action" };
                 sw.WriteLine(string.Join(Settings.Default.csvDelimiter, head));
                 for (var i = 0; i < bot.Count; i++)
                 {
@@ -92,11 +92,11 @@ namespace CuttingMrpWeb.Controllers
             Response.End();
         }
 
-
         public ActionResult ImportBatchOrderTemplateRecord(HttpPostedFileBase batchOrderTemplateFile)
         {
             if(batchOrderTemplateFile == null)
             {
+                //TODO:BatchOrderTemplate 上传
                 throw new Exception("No file is uploaded to system");
             }
 
@@ -125,17 +125,20 @@ namespace CuttingMrpWeb.Controllers
                     {
                         CsvReader csvReader = new CsvReader(treader, configuration);
                         records = csvReader.GetRecords<BatchOrderTemplateImportModel>().ToList();
+
+                        Console.Write(records);
                     }
                 }
                 catch (Exception e)
                 {
-                    ViewBag.Msg = "Import Failure!" + e;
+                    ViewBag.TextExpMsg = "<-------------Read Csv File Exception!,Please Check.------------->" + e;
                 }
 
-                List<string> CreateErrorList = new List<string>();
-                List<string> UpdateErrorList = new List<string>();
-                List<string> DeleteErrorList = new List<string>();
-
+                List<Dictionary<string, string>> CreateErrorDic = new List<Dictionary<string, string>>();
+                List<Dictionary<string, string>> UpdateErrorDic = new List<Dictionary<string, string>>();
+                List<Dictionary<string, string>> DeleteErrorDic = new List<Dictionary<string, string>>();
+                List<Dictionary<string, string>> ActionNullErrorDic = new List<Dictionary<string, string>>();
+                List<Dictionary<string, string>> OtherErrorDic = new List<Dictionary<string, string>>();
 
                 if (records.Count > 0)
                 {
@@ -146,6 +149,7 @@ namespace CuttingMrpWeb.Controllers
                     int UpdateFailureQty = 0;
                     int DeleteSuccessQty = 0;
                     int DeleteFailureQty = 0;
+                    int ActionNullQty = 0;
                     int OtherQty = 0;
 
                     IBatchOrderTemplateService ps = new BatchOrderTemplateService(Settings.Default.db);
@@ -154,7 +158,24 @@ namespace CuttingMrpWeb.Controllers
                     {
                         if (string.IsNullOrWhiteSpace(record.Action))
                         {
-                            break;
+                            ActionNullQty++;
+
+                            Dictionary<string, string> ActionNullErrorList = new Dictionary<string, string>();
+
+                            ActionNullErrorList.Add("OrderNr", record.OrderNr);
+                            ActionNullErrorList.Add("PartNr", record.PartNr);
+                            ActionNullErrorList.Add("BatchQuantity", record.BatchQuantity.ToString());
+                            ActionNullErrorList.Add("Type", record.Type.ToString());
+                            ActionNullErrorList.Add("Bundle", record.Bundle.ToString());
+                            ActionNullErrorList.Add("CreatedAt", record.CreatedAt.ToString());
+                            ActionNullErrorList.Add("UpdatedAt", record.UpdatedAt.ToString());
+                            ActionNullErrorList.Add("Operator", record.Operator);
+                            ActionNullErrorList.Add("Remark1", record.Remark1);
+                            ActionNullErrorList.Add("Remark2", record.Remark2);
+                            ActionNullErrorList.Add("Action", record.Action);
+
+                            ActionNullErrorDic.Add(ActionNullErrorList);
+                            ViewData["actionNullErrorDic"] = ActionNullErrorDic;
                         }
                         else
                         {
@@ -180,14 +201,26 @@ namespace CuttingMrpWeb.Controllers
                                     ps.Create(bot);
                                     CreateSuccessQty++;
                                 }
-                                catch (Exception e)
+                                catch (Exception)
                                 {
                                     CreateFailureQty++;
 
-                                    ViewBag.MsgCreate = "Some Part Create Failure:";
+                                    Dictionary<string, string> CreateErrorList = new Dictionary<string, string>();
 
-                                    CreateErrorList.Add(bot.orderNr + e.Message);
-                                    ViewData["createError"] = CreateErrorList;
+                                    CreateErrorList.Add("OrderNr", record.OrderNr);
+                                    CreateErrorList.Add("PartNr", record.PartNr);
+                                    CreateErrorList.Add("BatchQuantity", record.BatchQuantity.ToString());
+                                    CreateErrorList.Add("Type", record.Type.ToString());
+                                    CreateErrorList.Add("Bundle", record.Bundle.ToString());
+                                    CreateErrorList.Add("CreatedAt", record.CreatedAt.ToString());
+                                    CreateErrorList.Add("UpdatedAt", record.UpdatedAt.ToString());
+                                    CreateErrorList.Add("Operator", record.Operator);
+                                    CreateErrorList.Add("Remark1", record.Remark1);
+                                    CreateErrorList.Add("Remark2", record.Remark2);
+                                    CreateErrorList.Add("Action", record.Action);
+
+                                    CreateErrorDic.Add(CreateErrorList);
+                                    ViewData["createErrorDic"] = CreateErrorDic;
                                 }
                             }
                             else if (record.Action.Trim().ToLower().Equals("update"))
@@ -203,21 +236,44 @@ namespace CuttingMrpWeb.Controllers
                                     else
                                     {
                                         UpdateFailureQty++;
+                                        Dictionary<string, string> UpdateErrorList = new Dictionary<string, string>();
 
-                                        ViewBag.MsgUpdate = "Some Part Update Failure:";
+                                        UpdateErrorList.Add("OrderNr", record.OrderNr);
+                                        UpdateErrorList.Add("PartNr", record.PartNr);
+                                        UpdateErrorList.Add("BatchQuantity", record.BatchQuantity.ToString());
+                                        UpdateErrorList.Add("Type", record.Type.ToString());
+                                        UpdateErrorList.Add("Bundle", record.Bundle.ToString());
+                                        UpdateErrorList.Add("CreatedAt", record.CreatedAt.ToString());
+                                        UpdateErrorList.Add("UpdatedAt", record.UpdatedAt.ToString());
+                                        UpdateErrorList.Add("Operator", record.Operator);
+                                        UpdateErrorList.Add("Remark1", record.Remark1);
+                                        UpdateErrorList.Add("Remark2", record.Remark2);
+                                        UpdateErrorList.Add("Action", record.Action);
 
-                                        UpdateErrorList.Add(bot.orderNr + "Not Exist ID.");
-                                        ViewData["updateError"] = UpdateErrorList;
+                                        UpdateErrorDic.Add(UpdateErrorList);
+                                        ViewData["updateErrorDic"] = UpdateErrorList;
                                     }
                                 }
                                 catch (Exception e)
                                 {
                                     UpdateFailureQty++;
 
-                                    ViewBag.MsgUpdate = "Some Part Update Failure:";
+                                    Dictionary<string, string> UpdateErrorList = new Dictionary<string, string>();
 
-                                    UpdateErrorList.Add(bot.orderNr + e.Message);
-                                    ViewData["updateError"] = UpdateErrorList;
+                                    UpdateErrorList.Add("OrderNr", record.OrderNr);
+                                    UpdateErrorList.Add("PartNr", record.PartNr);
+                                    UpdateErrorList.Add("BatchQuantity", record.BatchQuantity.ToString());
+                                    UpdateErrorList.Add("Type", record.Type.ToString());
+                                    UpdateErrorList.Add("Bundle", record.Bundle.ToString());
+                                    UpdateErrorList.Add("CreatedAt", record.CreatedAt.ToString());
+                                    UpdateErrorList.Add("UpdatedAt", record.UpdatedAt.ToString());
+                                    UpdateErrorList.Add("Operator", record.Operator);
+                                    UpdateErrorList.Add("Remark1", record.Remark1);
+                                    UpdateErrorList.Add("Remark2", record.Remark2);
+                                    UpdateErrorList.Add("Action", record.Action);
+
+                                    UpdateErrorDic.Add(UpdateErrorList);
+                                    ViewData["updateErrorDic"] = UpdateErrorList;
                                 }
                             }
                             else if (record.Action.Trim().ToLower().Equals("delete"))
@@ -235,30 +291,71 @@ namespace CuttingMrpWeb.Controllers
                                     {
                                         DeleteFailureQty++;
 
-                                        ViewBag.MsgDelete = "Some Bom Delete Failure:";
+                                        Dictionary<string, string> DeleteErrorList = new Dictionary<string, string>();
 
-                                        DeleteErrorList.Add(bot.orderNr);
-                                        ViewData["deleteError"] = DeleteErrorList;
+                                        DeleteErrorList.Add("OrderNr", record.OrderNr);
+                                        DeleteErrorList.Add("PartNr", record.PartNr);
+                                        DeleteErrorList.Add("BatchQuantity", record.BatchQuantity.ToString());
+                                        DeleteErrorList.Add("Type", record.Type.ToString());
+                                        DeleteErrorList.Add("Bundle", record.Bundle.ToString());
+                                        DeleteErrorList.Add("CreatedAt", record.CreatedAt.ToString());
+                                        DeleteErrorList.Add("UpdatedAt", record.UpdatedAt.ToString());
+                                        DeleteErrorList.Add("Operator", record.Operator);
+                                        DeleteErrorList.Add("Remark1", record.Remark1);
+                                        DeleteErrorList.Add("Remark2", record.Remark2);
+                                        DeleteErrorList.Add("Action", record.Action);
+
+                                        DeleteErrorDic.Add(DeleteErrorList);
+                                        ViewData["deleteErrorDic"] = DeleteErrorList;
                                     }
                                 }
-                                catch (Exception e)
+                                catch (Exception)
                                 {
                                     DeleteFailureQty++;
 
-                                    ViewBag.MsgDelete = "Some Part Delete Failure:";
+                                    Dictionary<string, string> DeleteErrorList = new Dictionary<string, string>();
 
-                                    DeleteErrorList.Add("BatchOrderTemplate-> OrderNr:" + bot.orderNr + e.Message);
-                                    ViewData["deleteError"] = DeleteErrorList;
+                                    DeleteErrorList.Add("OrderNr", record.OrderNr);
+                                    DeleteErrorList.Add("PartNr", record.PartNr);
+                                    DeleteErrorList.Add("BatchQuantity", record.BatchQuantity.ToString());
+                                    DeleteErrorList.Add("Type", record.Type.ToString());
+                                    DeleteErrorList.Add("Bundle", record.Bundle.ToString());
+                                    DeleteErrorList.Add("CreatedAt", record.CreatedAt.ToString());
+                                    DeleteErrorList.Add("UpdatedAt", record.UpdatedAt.ToString());
+                                    DeleteErrorList.Add("Operator", record.Operator);
+                                    DeleteErrorList.Add("Remark1", record.Remark1);
+                                    DeleteErrorList.Add("Remark2", record.Remark2);
+                                    DeleteErrorList.Add("Action", record.Action);
+
+                                    DeleteErrorDic.Add(DeleteErrorList);
+                                    ViewData["deleteErrorDic"] = DeleteErrorList;
                                 }
                             }
                             else
                             {
                                 //错误 忽略
+
+                                Dictionary<string, string> OtherErrorList = new Dictionary<string, string>();
+
+                                OtherErrorList.Add("OrderNr", record.OrderNr);
+                                OtherErrorList.Add("PartNr", record.PartNr);
+                                OtherErrorList.Add("BatchQuantity", record.BatchQuantity.ToString());
+                                OtherErrorList.Add("Type", record.Type.ToString());
+                                OtherErrorList.Add("Bundle", record.Bundle.ToString());
+                                OtherErrorList.Add("CreatedAt", record.CreatedAt.ToString());
+                                OtherErrorList.Add("UpdatedAt", record.UpdatedAt.ToString());
+                                OtherErrorList.Add("Operator", record.Operator);
+                                OtherErrorList.Add("Remark1", record.Remark1);
+                                OtherErrorList.Add("Remark2", record.Remark2);
+                                OtherErrorList.Add("Action", record.Action);
+
+                                OtherErrorDic.Add(OtherErrorList);
+                                ViewData["otherErrorDic"] = OtherErrorDic;
                             }
                         }
                     }
 
-                    OtherQty = AllQty - CreateSuccessQty - CreateFailureQty - UpdateSuccessQty - UpdateFailureQty - DeleteSuccessQty - DeleteFailureQty;
+                    OtherQty = AllQty - CreateSuccessQty - CreateFailureQty - UpdateSuccessQty - UpdateFailureQty - DeleteSuccessQty - DeleteFailureQty - ActionNullQty;
                     Dictionary<string, int> Qty = new Dictionary<string, int>();
                     Qty.Add("AllQty", AllQty);
                     Qty.Add("CreateSuccessQty", CreateSuccessQty);
@@ -267,17 +364,30 @@ namespace CuttingMrpWeb.Controllers
                     Qty.Add("UpdateFailureQty", UpdateFailureQty);
                     Qty.Add("DeleteSuccessQty", DeleteSuccessQty);
                     Qty.Add("DeleteFailureQty", DeleteFailureQty);
+                    Qty.Add("ActionNullQty", ActionNullQty);
                     Qty.Add("OtherQty", OtherQty);
                     ViewData["Qty"] = Qty;
                 }
                 else
                 {
-                    ViewBag.NoData = "There are no Data.Please Check Delimiter.";
+                    ViewBag.NotCheckedData = "There are no Data.Please Check Delimiter or Column Name.";
                 }
+            }else
+            {
+                ViewBag.NotCsv = "Your File is not .Csv File , Please Check FileName.";
+            }
+
+            if (ViewBag.NotCsv == null)
+            {
+                ViewBag.NotCsv = "CSV File is OK.";
+            }
+
+            if (ViewBag.NotCheckedData == null)
+            {
+                ViewBag.NotCheckedData = "Check Data is OK.";
             }
 
             return View();
         }
-
     }
 }

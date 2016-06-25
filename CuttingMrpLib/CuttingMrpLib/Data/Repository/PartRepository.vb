@@ -43,6 +43,10 @@ Public Class PartRepository
                 parts = parts.Where(Function(c) c.partNr.Contains(conditions.PartNr.Trim()))
             End If
 
+            If conditions.PartType.HasValue Then
+                parts = parts.Where(Function(c) c.partType.Equals(conditions.PartType))
+            End If
+
             Return parts.OrderBy(Function(c) c.partNr)
         End If
         Return Nothing

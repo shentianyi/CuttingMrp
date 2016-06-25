@@ -18,6 +18,10 @@ Public Class BomItemRepository
 
             Dim bomItem As IQueryable(Of BomItem) = _context.BomItems
 
+            If condition.ID.HasValue Then
+                bomItem = bomItem.Where(Function(c) c.id.Equals(condition.ID))
+            End If
+
             If Not String.IsNullOrWhiteSpace(condition.ComponentId) Then
                 bomItem = bomItem.Where(Function(c) c.componentId.Contains(condition.ComponentId.Trim()))
             End If

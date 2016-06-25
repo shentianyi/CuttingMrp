@@ -2,7 +2,9 @@
 
 Part.Init = function () {
     var partnr = $('#PartNr').val();
+    var parttype = $('#PartType').children("option:selected").html();
     Part.add_string_label_to_div(partnr, 'PartNr like ', '.filter-p');
+    Part.add_string_label_to_div(parttype, 'PartType = ', '.filter-p');
 }
 
 Part.click_filter = function () {
@@ -57,6 +59,30 @@ Part.import_part_data = function () {
         });
     });
 }
+
+Part.import_result = function () {
+    var CreateFailureQty = $('#CreateFailureQty').html();
+    var UpdateFailureQty = $('#UpdateFailureQty').html();
+    var ActionNullQty = $('#ActionNullQty').html();
+    var OtherQty = $('#OtherQty').html();
+
+    if (CreateFailureQty == 0) {
+        $('.CreateFailureTable').css({display:'none'})
+    }
+
+    if (UpdateFailureQty == 0) {
+        $('.UpdateFailureTable').css({ display: 'none' })
+    }
+
+    if (ActionNullQty == 0) {
+        $('.ActionNullTable').css({ display: 'none' })
+    }
+
+    if (OtherQty == 0) {
+        $('.OtherTable').css({ display: 'none' })
+    }
+}
+
 
 window.onload = function () {
     $('.navbar-nav li').removeClass("nav-choosed");

@@ -2,32 +2,61 @@
     ViewBag.Title = "ImportPartRecord";
 }
 
-<div class="container" style="text-align:center">
-    <h1 style="color:green;">Import Log</h1>
+<div style="text-align:center;" class="container">
+    <h1>Import  Log  Page</h1>
+</div>
+
+<div class="alert alert-warning alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <ul class="list-unstyled" style="font-size:1.3em;">
+        <li>
+            1、Check Your Data Quantity
+        </li>
+        <li>
+            2、Look Error Reason
+        </li>
+        <li>
+            3、Copy Error Data and Solve
+        </li>
+        <li>
+            4、Import and Check Again 
+        </li>
+    </ul>
+</div>
+
+<blockquote>
+    <p class="label label-primary" style="font-size:1.5em;">@ViewBag.NotCsv</p>
     <br />
-</div>
+    <br />
+    <br />
+    <p class="label label-primary" style="font-size:1.5em;">@ViewBag.NotCheckedData</p>
+</blockquote>
 
-<div class="alert alert-success" role="alert">
-    <h4>FileError: <span class="label label-primary">@ViewBag.NotCsv</span></h4>
-    <hr />
-    <h4>CheckData: <span class="label label-primary">@ViewBag.NotCheckedData</span></h4>
-</div>
-
-<hr />
+<br />
 
 @try
 {
     <div>
         <table class="table table-bordered">
             <thead>
+                <tr style="background:white;">
+                    <th colspan="7" style="text-align:left;">
+                        <span class="label label-success" style="font-size:1.2em;">
+                            <i class="glyphicon glyphicon-bullhorn"></i>
+                            Check Your Import Data Quantity.
+                        </span>
+                    </th>
+                </tr>
                 <tr>
-                    <td>All Quantity</td>
-                    <td style="background:green;">CreateSuccessQty</td>
-                    <td style="background:darkred;">CreateFailureQty</td>
-                    <td style="background:green;">UpdateSuccessQty</td>
-                    <td style="background:darkred;">UpdateFailureQty</td>
-                    <td style="background:orange;">ActionNullQty</td>
-                    <td style="background:gray;">OtherQty</td>
+                    <th>All Quantity</th>
+                    <th style="background:#5cb85c;">CreateSuccessQty</th>
+                    <th style="background:#d9534f;">CreateFailureQty</th>
+                    <th style="background:#5cb85c;">UpdateSuccessQty</th>
+                    <th style="background:#d9534f;">UpdateFailureQty</th>
+                    <th style="background:#f0ad4e;">ActionNullQty</th>
+                    <th style="background:gray;">OtherQty</th>
                 </tr>
             </thead>
 
@@ -35,7 +64,7 @@
                 <tr>
                     @foreach (var qty in ViewData["Qty"] as Dictionary<string, int>)
                     {
-                        <td>
+                        <td id="@qty.Key">
                             @qty.Value
                         </td>
                     }
@@ -49,88 +78,182 @@ catch (Exception)
     <h4 style="color:brown;">Qty Error.</h4>
 }
 
-<hr />
-
 @try
 {
-<table class="table table-bordered">
-    <thead>
-        <tr style="background:white; color:red;">
-            <td colspan="6" style="text-align:left;">
-                <span class="label label-danger" style="font-size:1.2em;">Create Msg: Maybe ID Already Exist.</span>
-            </td>
-        </tr>
-        <tr>
-            <td>PartNr</td>
-            <td>PartType</td>
-            <td>PartDesc</td>
-            <td>PartStatus</td>
-            <td>MOQ</td>
-            <td>SPQ</td>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var createErrors in ViewData["createErrorDic"] as List<Dictionary<string, string>>)
-        {
+    <table class="table table-bordered CreateFailureTable">
+        <thead>
+            <tr style="background:white;">
+                <th colspan="7" style="text-align:left;">
+                    <span class="label label-danger" style="font-size:1.2em;">
+                        <i class="glyphicon glyphicon-warning-sign"></i>
+                        Create Msg: Maybe Column 'PartNr' Already Exist.
+                    </span>
+                </th>
+            </tr>
             <tr>
-                @foreach (var createError in @createErrors as Dictionary
+                <th>PartNr      </th>
+                <th>PartType    </th>
+                <th>PartDesc    </th>
+                <th>PartStatus  </th>
+                <th>MOQ         </th>
+                <th>SPQ         </th>
+                <th>Action      </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var createErrors in ViewData["createErrorDic"] as List<Dictionary<string, string>>)
+            {
+                <tr>
+                    @foreach (var createError in @createErrors as Dictionary
                 <string, string>
                     )
                     {
-                    <td>
-                        @createError.Value
-                    </td>
+                        <td>
+                            @createError.Value
+                        </td>
                     }
-            </tr>
-        }
-    </tbody>
-</table>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
 catch (Exception)
 {
     <h4 style="color:brown;">@ViewBag.CreateExpMsg</h4>
 }
 
-<hr />
-
 @try
 {
-<table class="table table-bordered">
-    <thead>
-        <tr style="background:white; color:red;">
-            <td colspan="6" style="text-align:left;">
-                <span class="label label-danger" style="font-size:1.2em;">Update Msg: Maybe ID Doesn't Exist.</span>
-            </td>
-        </tr>
-        <tr>
-            <td>PartNr</td>
-            <td>PartType</td>
-            <td>PartDesc</td>
-            <td>PartStatus</td>
-            <td>MOQ</td>
-            <td>SPQ</td>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var updateErrors in ViewData["updateErrorDic"] as List<Dictionary<string, string>>)
-        {
+    <table class="table table-bordered UpdateFailureTable">
+        <thead>
+            <tr style="background:white;">
+                <th colspan="7" style="text-align:left;">
+                    <span class="label label-danger" style="font-size:1.2em;">
+                        <i class="glyphicon glyphicon-warning-sign"></i>
+                        Update Msg: Maybe Column 'PartNr' Doesn't Exist.
+                    </span>
+                </th>
+            </tr>
             <tr>
-                @foreach (var updateError in @updateErrors as Dictionary
+                <th>PartNr      </th>
+                <th>PartType    </th>
+                <th>PartDesc    </th>
+                <th>PartStatus  </th>
+                <th>MOQ         </th>
+                <th>SPQ         </th>
+                <th>Action      </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var updateErrors in ViewData["updateErrorDic"] as List<Dictionary<string, string>>)
+            {
+                <tr>
+                    @foreach (var updateError in @updateErrors as Dictionary
         <string, string>
             )
-                {
-                    <td>
-                        @updateError.Value
-                    </td>
-                }
-            </tr>
-        }
-    </tbody>
-</table>
+                    {
+                        <td>
+                            @updateError.Value
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
 }
 catch (Exception)
 {
     <h4 style="color:brown;">@ViewBag.UpdateExpMsg</h4>
 }
 
+@try
+{
+    <table class="table table-bordered ActionNullTable">
+        <thead>
+            <tr style="background:white;">
+                <th colspan="7" style="text-align:left;">
+                    <span class="label label-danger" style="font-size:1.2em;">
+                        <i class="glyphicon glyphicon-warning-sign"></i>
+                        Action Null Msg: Column 'Action' is Null.
+                    </span>
+                </th>
+            </tr>
+            <tr>
+                <th>PartNr      </th>
+                <th>PartType    </th>
+                <th>PartDesc    </th>
+                <th>PartStatus  </th>
+                <th>MOQ         </th>
+                <th>SPQ         </th>
+                <th>Action      </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var actionNullErrors in ViewData["actionNullErrorDic"] as List<Dictionary<string, string>>)
+            {
+                <tr>
+                    @foreach (var actionNullError in @actionNullErrors as Dictionary
+        <string, string>
+            )
+                    {
+                        <td>
+                            @actionNullError.Value
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+catch (Exception)
+{
+}
+
+@try
+{
+    <table class="table table-bordered OtherTable">
+        <thead>
+            <tr style="background:white;">
+                <th colspan="7" style="text-align:left;">
+                    <span class="label label-danger" style="font-size:1.2em;">
+                        <i class="glyphicon glyphicon-warning-sign"></i>
+                        Other Msg: Maybe Column 'Action' Error.
+                    </span>
+                </th>
+            </tr>
+            <tr>
+                <th>PartNr      </th>
+                <th>PartType    </th>
+                <th>PartDesc    </th>
+                <th>PartStatus  </th>
+                <th>MOQ         </th>
+                <th>SPQ         </th>
+                <th>Action      </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var otherErrors in ViewData["otherErrorDic"] as List<Dictionary<string, string>>)
+            {
+                <tr>
+                    @foreach (var otherError in @otherErrors as Dictionary
+        <string, string>
+            )
+                    {
+                        <td>
+                            @otherError.Value
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+catch (Exception)
+{
+}
+
 @Scripts.Render("~/bundles/part")
+
+<script type="text/javascript">
+    Part.import_result();
+</script>
