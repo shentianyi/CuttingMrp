@@ -1,9 +1,15 @@
-﻿using CuttingMrpLib;
+﻿using CsvHelper;
+using CsvHelper.Configuration;
+using CuttingMrpLib;
+using CuttingMrpWeb.Helpers;
 using CuttingMrpWeb.Models;
 using CuttingMrpWeb.Properties;
+using MvcPaging;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -12,9 +18,20 @@ namespace CuttingMrpWeb.Controllers
     public class PartsController : Controller
     {
         // GET: Parts
-        public ActionResult Index()
+        [CustomAuthorize]
+        public ActionResult Index(int? page)
         {
-            return View();
+            int pageIndex = PagingHelper.GetPageIndex(page);
+            PartSearchModel q = new PartSearchModel();
+            IPartService ps = new PartService(Settings.Default.db);
+
+            IPagedList<Part> parts = ps.Search(q).ToPagedList(pageIndex, Settings.Default.pageSize);
+
+            ViewBag.Query = q;
+
+            SetPartTypeList(null);
+
+            return View(parts);
         }
 
         // GET: Parts/Details/5
@@ -87,8 +104,6 @@ namespace CuttingMrpWeb.Controllers
         {
             try
             {
-                // TODO: Add insert logic here
-
                 return RedirectToAction("Index");
             }
             catch
@@ -109,8 +124,6 @@ namespace CuttingMrpWeb.Controllers
         {
             try
             {
-                // TODO: Add update logic here
-
                 return RedirectToAction("Index");
             }
             catch
@@ -131,14 +144,277 @@ namespace CuttingMrpWeb.Controllers
         {
             try
             {
-                // TODO: Add delete logic here
-
                 return RedirectToAction("Index");
             }
             catch
             {
                 return View();
             }
+        }
+
+        public ActionResult Search([Bind(Include = "PartNr")] PartSearchModel q)
+        {
+            int pageIndex = 0;
+            int.TryParse(Request.QueryString.Get("page"), out pageIndex);
+            pageIndex = PagingHelper.GetPageIndex(pageIndex);
+
+            IPartService ps = new PartService(Settings.Default.db);
+
+            IPagedList<Part> parts = ps.Search(q).ToPagedList(pageIndex, Settings.Default.pageSize);
+
+            ViewBag.Query = q;
+
+            return View("Index", parts);
+        }
+
+        public ActionResult ImportPartRecord(HttpPostedFileBase partFile)
+        {
+            if(partFile == null)
+            {
+                //TODO: Parts 上传， 如果没有路径，在此处进行友好处理
+                throw new Exception("No file is uploaded to system");
+            }
+
+            var appData = Server.MapPath("~/TmpFile/");
+            var filename = Path.Combine(appData,
+                DateTime.Now.ToString("yyyyMMddHHmmss") + "_" + Path.GetFileName(partFile.FileName));
+
+            partFile.SaveAs(filename);
+            string ex = Path.GetExtension(filename);
+
+            List<PartImportModel> records = new List<PartImportModel>();
+
+            if (ex.Equals(".csv"))
+            {
+                CsvConfiguration configuration = new CsvConfiguration();
+                configuration.Delimiter = Settings.Default.csvDelimiter;
+                configuration.HasHeaderRecord = true;
+                configuration.SkipEmptyRecords = true;
+                configuration.RegisterClassMap<PartCsvModelMap>();
+                configuration.TrimHeaders = true;
+                configuration.TrimFields = true;
+
+                try
+                {
+                    using (TextReader treader = System.IO.File.OpenText(filename))
+                    {
+                        CsvReader csvReader = new CsvReader(treader, configuration);
+                        records = csvReader.GetRecords<PartImportModel>().ToList();
+                    }
+                }
+                catch (Exception e)
+                {
+                    ViewBag.TextExpMsg = "<-------------Read Csv File Exception!,Please Check.------------->" + e;
+                }
+
+                List<Dictionary<string, string>> CreateErrorDic = new List<Dictionary<string, string>>();
+                List<Dictionary<string, string>> UpdateErrorDic = new List<Dictionary<string, string>>();
+
+                if (records.Count > 0)
+                {
+                    IPartService ps = new PartService(Settings.Default.db);
+
+                    int AllQty = records.Count;
+                    int CreateSuccessQty = 0;
+                    int CreateFailureQty = 0;
+                    int UpdateSuccessQty = 0;
+                    int UpdateFailureQty = 0;
+                    int ActionNullQty = 0;
+                    int OtherQty = 0;
+
+                    foreach (PartImportModel record in records)
+                    {
+                        if (string.IsNullOrWhiteSpace(record.Action))
+                        {
+                            ActionNullQty++;
+                            break;
+                        }
+                        else
+                        {
+                            //新建
+                            Part part = new Part()
+                            {
+                                partNr = record.PartNr,
+                                partType = record.PartType,
+                                partDesc = record.PartDesc,
+                                partStatus = record.PartStatus,
+                                moq = record.MOQ,
+                                spq = record.SPQ
+                            };
+
+                            if (record.Action.Trim().ToLower().Equals("create"))
+                            {
+                                try
+                                {
+                                   bool result= ps.Create(part);
+
+                                    if (result)
+                                    {
+                                        CreateSuccessQty++;
+                                    }
+                                    else
+                                    {
+                                        CreateFailureQty++;
+
+                                        Dictionary<string, string> CreateErrorList = new Dictionary<string, string>();
+                                        CreateErrorList.Add("partNr",part.partNr);
+                                        CreateErrorList.Add("partType",part.partStatus.ToString());
+                                        CreateErrorList.Add("partDesc",part.partDesc);
+                                        CreateErrorList.Add("partStatus",part.partStatus.ToString());
+                                        CreateErrorList.Add("MOQ",part.moq.ToString());
+                                        CreateErrorList.Add("SPQ",part.spq.ToString());
+
+                                        CreateErrorDic.Add(CreateErrorList);
+                                        ViewData["createErrorDic"] = CreateErrorDic;
+                                    }
+                                }
+                                catch (Exception)
+                                {
+                                    CreateFailureQty++;
+                                    ViewBag.CreateExpMsg = "<-------------Create Part Exception!,Maybe partNr is Exist,Please Check.------------->";
+                                }
+                            }
+                            else if (record.Action.Trim().ToLower().Equals("update"))
+                            {
+                                //更新
+                                try
+                                {
+                                    bool result= ps.Update(part);
+                                    if (result)
+                                    {
+                                        UpdateSuccessQty++;
+                                    }
+                                    else
+                                    {
+                                        UpdateFailureQty++;
+
+                                        Dictionary<string, string> UpdateErrorList = new Dictionary<string, string>();
+                                        UpdateErrorList.Add("partNr",part.partNr);
+                                        UpdateErrorList.Add("partType",part.partStatus.ToString());
+                                        UpdateErrorList.Add("partDesc",part.partDesc);
+                                        UpdateErrorList.Add("partStatus",part.partStatus.ToString());
+                                        UpdateErrorList.Add("MOQ",part.moq.ToString());
+                                        UpdateErrorList.Add("SPQ",part.spq.ToString());
+
+                                        UpdateErrorDic.Add(UpdateErrorList);
+                                        ViewData["updateErrorDic"] = UpdateErrorDic;
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    UpdateFailureQty++;
+
+                                    ViewBag.UpdateExpMsg = "<-------------Update Part Exception!,Please Check.------------->" + e;
+                                }   
+                            }
+                            else if (record.Action.Trim().ToLower().Equals("delete"))
+                            {
+                                //删除  忽略
+                            }
+                            else
+                            {
+                                //错误 忽略
+                            }
+                        }
+                    }
+
+                    OtherQty = AllQty - CreateSuccessQty - CreateFailureQty - UpdateSuccessQty - UpdateFailureQty - ActionNullQty;
+
+                    Dictionary<string, int> Qty = new Dictionary<string, int>();
+
+                    Qty.Add("AllQty", AllQty);
+                    Qty.Add("CreateSuccessQty", CreateSuccessQty);
+                    Qty.Add("CreateFailureQty", CreateFailureQty);
+                    Qty.Add("UpdateSuccessQty", UpdateSuccessQty);
+                    Qty.Add("UpdateFailureQty", UpdateFailureQty);
+                    Qty.Add("ActionNullQty", ActionNullQty);
+                    Qty.Add("OtherQty", OtherQty);
+
+                    ViewData["Qty"] = Qty;
+                }
+                else
+                {
+                    ViewBag.NotCheckedData = "No Data Checked.Please Check Delimiter.";
+                }
+            }else
+            {
+                ViewBag.NotCsv = "Your File is not .Csv File , Please Check FileName.";
+            }
+
+            if (ViewBag.NotCsv ==null)
+            {
+                ViewBag.NotCsv = "CSV File is OK.";
+            }
+
+            if (ViewBag.NotCheckedData==null)
+            {
+                ViewBag.NotCheckedData = "Check Data is OK.";
+            }
+
+            return View();
+        }
+
+        public void Export([Bind(Include = "PartNr")] PartSearchModel q)
+        {
+            IPartService ps = new PartService(Settings.Default.db);
+
+            List<Part> parts = ps.Search(q).ToList();
+
+            ViewBag.Query = q;
+
+            MemoryStream ms = new MemoryStream();
+            using (StreamWriter sw = new StreamWriter(ms, Encoding.UTF8))
+            {
+                List<string> head = new List<string> { " No.", "PartNr", "PartType", "PartDesc","PartStatus","MOQ",
+                    "SPQ", "Action"};
+                sw.WriteLine(string.Join(Settings.Default.csvDelimiter, head));
+                for (var i = 0; i < parts.Count; i++)
+                {
+                    List<string> ii = new List<string>();
+                    ii.Add((i + 1).ToString());
+                    ii.Add(parts[i].partNr);
+                    ii.Add(parts[i].partType.ToString());
+                    ii.Add(parts[i].partDesc);
+                    ii.Add(parts[i].partStatus.ToString());
+                    ii.Add(parts[i].moq.ToString());
+                    ii.Add(parts[i].spq.ToString());
+                    ii.Add("");
+                    sw.WriteLine(string.Join(Settings.Default.csvDelimiter, ii.ToArray()));
+                }
+                //sw.WriteLine(max);
+            }
+            var filename = "Parts" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".csv";
+            var contenttype = "text/csv";
+            Response.Clear();
+            Response.ContentEncoding = Encoding.UTF8;
+            Response.ContentType = contenttype;
+            Response.AddHeader("content-disposition", "attachment;filename=" + filename);
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.BinaryWrite(ms.ToArray());
+            Response.End();
+        }
+
+        private void SetPartTypeList(int? status, bool allowBlank = true)
+        {
+            List<EnumItem> item = EnumUtility.GetList(typeof(PartType));
+
+            List<SelectListItem> select = new List<SelectListItem>();
+            if (allowBlank)
+            {
+                select.Add(new SelectListItem { Text = "", Value = "" });
+            }
+            foreach (var it in item)
+            {
+                if (status.HasValue && status.ToString().Equals(it.Value))
+                {
+                    select.Add(new SelectListItem { Text = it.Text, Value = it.Value.ToString(), Selected = true });
+                }
+                else
+                {
+                    select.Add(new SelectListItem { Text = it.Text, Value = it.Value.ToString(), Selected = false });
+                }
+            }
+            ViewData["partTypeList"] = select;
         }
     }
 }

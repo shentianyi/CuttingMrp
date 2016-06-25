@@ -68,7 +68,9 @@
     <Compile Include="DashService.Designer.cs">
       <DependentUpon>DashService.cs</DependentUpon>
     </Compile>
+    <Compile Include="Job\AutoStockJob.cs" />
     <Compile Include="Job\KskBackFlashJob.cs" />
+    <Compile Include="Job\AutoStockTigger.cs" />
     <Compile Include="Job\StockSumRecordJob.cs" />
     <Compile Include="Job\KskBackFlashTigger.cs" />
     <Compile Include="Job\StockSumRecordTigger.cs" />
@@ -87,6 +89,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Processed\read.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Processing\read.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="app.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

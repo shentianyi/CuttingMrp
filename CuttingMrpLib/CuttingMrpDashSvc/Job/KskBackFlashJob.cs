@@ -15,7 +15,7 @@ namespace CuttingMrpDashSvc.Job
         {
             try
             {
-                LogUtil.Logger.Info("start run KskBackFlashJob");
+                LogUtil.Logger.Info("start gen KskBackFlashJob");
                 CalculateSetting setting = new CalculateSetting()
                 {
                     TaskType="BF"
@@ -23,7 +23,7 @@ namespace CuttingMrpDashSvc.Job
                 ICalculateService cs = new CalculateService(Settings.Default.db);
                 cs.Start(Settings.Default.mrpQueue, setting);
 
-                LogUtil.Logger.Info("end run KskBackFlashJob");
+                LogUtil.Logger.Info("end gen KskBackFlashJob");
             }
             catch (Exception ex)
             {

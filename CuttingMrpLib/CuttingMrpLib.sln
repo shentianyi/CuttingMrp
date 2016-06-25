@@ -22,6 +22,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CuttingMrpDashSvc", "CuttingMrpDashSvc\CuttingMrpDashSvc.csproj", "{659D07F6-7D8A-430A-A737-5D57D2728FED}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Svc", "Svc", "{58166E08-9CAF-4751-AE11-2817720344BC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{61D657D8-E787-4FC6-8A34-B56BD3041BA2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp", "ConsoleApp\ConsoleApp.csproj", "{E29DC04D-CCDF-4450-ABAB-E148DC527030}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,8 +62,17 @@ Global
 		{659D07F6-7D8A-430A-A737-5D57D2728FED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{659D07F6-7D8A-430A-A737-5D57D2728FED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{659D07F6-7D8A-430A-A737-5D57D2728FED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E29DC04D-CCDF-4450-ABAB-E148DC527030}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E29DC04D-CCDF-4450-ABAB-E148DC527030}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E29DC04D-CCDF-4450-ABAB-E148DC527030}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E29DC04D-CCDF-4450-ABAB-E148DC527030}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BC5BCD58-EB62-4807-B342-BBF3ADEC9CF6} = {58166E08-9CAF-4751-AE11-2817720344BC}
+		{659D07F6-7D8A-430A-A737-5D57D2728FED} = {58166E08-9CAF-4751-AE11-2817720344BC}
+		{E29DC04D-CCDF-4450-ABAB-E148DC527030} = {61D657D8-E787-4FC6-8A34-B56BD3041BA2}
 	EndGlobalSection
 EndGlobal

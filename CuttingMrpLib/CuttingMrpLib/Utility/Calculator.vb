@@ -41,7 +41,7 @@ Public Class Calculator
         '3 get net requirement
         '4 generate the order
         '5.find the related KANBAN card
-        ConvertMpsToRequirement()
+        ConvertMpsToRequirement(settings)
         ResetOrders({ProcessOrderStatus.Open}, settings.ReservedType, ProcessOrderStatus.SystemCancel)
         Dim toInsertOrders As List(Of ProcessOrder) = New List(Of ProcessOrder)
         Dim procOrderRepo As Repository(Of ProcessOrder) = New Repository(Of ProcessOrder)(New DataContext(DBConn))
@@ -52,12 +52,12 @@ Public Class Calculator
         procOrderRepo.SaveAll()
     End Sub
 
-    Public Sub ConvertMpsToRequirement()
+    Public Sub ConvertMpsToRequirement(settings As CalculateSetting)
         Dim dc As DataContext = New DataContext(DBConn)
         Dim repo As Repository(Of MP) = New Repository(Of MP)(dc)
         Dim tempBoms As Hashtable = New Hashtable
         Dim requires As List(Of Requirement) = New List(Of Requirement)
-        Dim mpses As List(Of MP) = repo.FindAll(Function(c) c.status = MPSStatus.plan And c.requiredDate >= Now.Date).ToList
+        Dim mpses As List(Of MP) = repo.FindAll(Function(c) c.status = MPSStatus.Plan And c.requiredDate >= Now.Date).ToList
         For Each m As MP In mpses
             If tempBoms.ContainsKey(m.partnr) = False Then
                 Dim bomRepo As Repository(Of BOM) = New Repository(Of BOM)(dc)
@@ -68,12 +68,27 @@ Public Class Calculator
                 If counter > 1 Then
                     Throw New Exception("找到" & counter & "个生效的BOM")
                 End If
-                Dim bom As BOM = bomRepo.Single(Function(c) c.validFrom <= Now And c.validTo >= Now And c.partNr = m.partnr)
-                tempBoms.Add(m.partnr, bom.BomItems.Where(Function(c) c.validFrom <= Now And c.validTo >= Now).ToList)
+                Dim bom As BOM = bomRepo.SingleOrDefault(Function(c) c.validFrom <= Now And c.validTo >= Now And c.partNr = m.partnr)
+                If bom IsNot Nothing Then
+                    Dim bomItems As List(Of BomItem) = New List(Of BomItem)
+                    If settings.PartType.Equals(PartType.Product) Then
+                        bomItems = bom.BomItems.Where(Function(c) c.validFrom <= Now And c.validTo >= Now).ToList
+                    Else
+                        bomItems = (From b In dc.Context.GetTable(Of BomItem)
+                                    Join p In dc.Context.GetTable(Of Part) On b.componentId Equals p.partNr
+                                    Where b.bomId.Equals(bom.id) And p.partType.Equals(settings.PartType)
+                                    Order By b.id Ascending
+                                    Select b).ToList
+                    End If
+                    tempBoms.Add(m.partnr, bomItems)
+                    'tempBoms.Add(m.partnr, bom.BomItems.Where(Function(c) c.validFrom <= Now And c.validTo >= Now).ToList)
+                End If
             End If
-            For Each item As BomItem In tempBoms(m.partnr)
-                requires.Add(New Requirement With {.derivedFrom = m.sourceDoc, .derivedType = m.source, .orderedDate = m.orderedDate, .requiredDate = m.requiredDate, .partNr = item.componentId, .status = RequirementStatus.Open, .quantity = item.quantity * m.quantity})
-            Next
+            If tempBoms.ContainsKey(m.partnr) Then
+                For Each item As BomItem In tempBoms(m.partnr)
+                    requires.Add(New Requirement With {.derivedFrom = m.sourceDoc, .derivedType = m.source, .orderedDate = m.orderedDate, .requiredDate = m.requiredDate, .partNr = item.componentId, .status = RequirementStatus.Open, .quantity = item.quantity * m.quantity})
+                Next
+            End If
             ' repo.MarkForDeletion(m)
         Next
 
@@ -87,17 +102,17 @@ Public Class Calculator
         Try
             ' requireRepo.SaveAll()
             requireRepo.GetTable.InsertAllOnSubmit(requires)
-                requireRepo.SaveAll()
+            requireRepo.SaveAll()
             ' trans.Complete()
         Catch ex As Exception
-                Throw ex
-            Finally
-                'release resource
-                repo = Nothing
-                tempBoms = Nothing
-                requires = Nothing
-                requireRepo = Nothing
-            End Try
+            Throw ex
+        Finally
+            'release resource
+            repo = Nothing
+            tempBoms = Nothing
+            requires = Nothing
+            requireRepo = Nothing
+        End Try
         'End Using
     End Sub
     Public Sub ResetOrders(targetStatus() As ProcessOrderStatus, reserveTypes As List(Of String), status As ProcessOrderStatus)
@@ -122,10 +137,12 @@ Public Class Calculator
             For Each piece As DictionaryEntry In orderPieces
                 ordernr = NumericService.GenerateID(DBConn, "PROCESSORDER")
                 Dim sum As Double = 0
+                Dim requirementSum As Double = 0
                 Dim toInsertRefer As List(Of OrderDerivation) = New List(Of OrderDerivation)
                 For Each req As Requirement In piece.Value
-                    sum = sum + req.quantity
-                    toInsertRefer.Add(New OrderDerivation With {.mrpRound = mrpround, .deriveQty = req.quantity, .requirementId = req.id})
+                    sum = sum + req.reduceQuantity
+                    requirementSum += req.quantity
+                    toInsertRefer.Add(New OrderDerivation With {.mrpRound = mrpround, .deriveQty = req.reduceQuantity, .requirementId = req.id})
                 Next
                 Dim dateresult As DateTime
                 DateTime.TryParse(piece.Key, dateresult)
@@ -149,7 +166,7 @@ Public Class Calculator
                     moq = currPart.moq
                 End If
 
-                Dim actualQty As Double
+                Dim actualQty As Double = 0
                 If sum > 0 Then
                     If sum < spq Then
                         actualQty = spq
@@ -184,7 +201,7 @@ Public Class Calculator
                 End If
                 Dim toinsert As ProcessOrder = New ProcessOrder With {.orderNr = ordernr,
                     .partNr = dic.Key, .derivedFrom = "MRP", .proceeDate = dateresult, .sourceDoc = sourceDoc,
-                    .status = ProcessOrderStatus.Open, .sourceQuantity = sum, .actualQuantity = actualQty,
+                    .status = ProcessOrderStatus.Open, .sourceQuantity = sum, .actualQuantity = actualQty, .requirementQuantity = requirementSum,
                     .completeRate = completeRate, .batchQuantity = moq, .OrderDerivations = en, .OrderType = settings.OrderType, .createAt = Now}
                 result.Add(toinsert)
             Next
@@ -212,25 +229,27 @@ Public Class Calculator
             End If
         Next
         For Each requires In toUse
+            requires.reduceQuantity = requires.quantity
+
             If stockRecords.ContainsKey(requires.partNr) Then
-                If stockRecords(requires.partNr) >= requires.quantity Then
-                    stockRecords(requires.partNr) = stockRecords(requires.partNr) - requires.quantity
-                    requires = Nothing
+                If stockRecords(requires.partNr) >= requires.reduceQuantity Then
+                    stockRecords(requires.partNr) = stockRecords(requires.partNr) - requires.reduceQuantity
+                    requires.reduceQuantity = 0
                 Else
-                    requires.quantity = requires.quantity - stockRecords(requires.partNr)
+                    requires.reduceQuantity = requires.reduceQuantity - stockRecords(requires.partNr)
                     stockRecords.Remove(requires.partNr)
                 End If
             End If
 
-            If requires IsNot Nothing Then
-                If orders.ContainsKey(requires.partNr) Then
-                    orders(requires.partNr).add(requires)
-                Else
-                    Dim newValue As List(Of Requirement) = New List(Of Requirement)
-                    newValue.Add(requires)
-                    orders.Add(requires.partNr, newValue)
-                End If
+            'If requires IsNot Nothing Then
+            If orders.ContainsKey(requires.partNr) Then
+                orders(requires.partNr).add(requires)
+            Else
+                Dim newValue As List(Of Requirement) = New List(Of Requirement)
+                newValue.Add(requires)
+                orders.Add(requires.partNr, newValue)
             End If
+            'End If
         Next
         Return orders
     End Function
@@ -334,6 +353,8 @@ Public Class Calculator
 
         Dim bomRepo As Repository(Of BOM) = New Repository(Of BOM)(dc)
         Dim stockRepo As Repository(Of Stock) = New Repository(Of Stock)(dc)
+
+        Dim negaStockRepo As Repository(Of Stock) = New Repository(Of Stock)(dc)
         Dim moveRepo As Repository(Of StockMovement) = New Repository(Of StockMovement)(dc)
         Dim mpsgroup As Hashtable = New Hashtable
         If mpses IsNot Nothing Then
@@ -359,7 +380,7 @@ Public Class Calculator
                                               .message = "没有找到BOM",
                                               .partnr = partnr,
                                               .quantity = quantity,
-                                              .sourceDoc = "BACKFLUSH",
+                                              .sourceDoc = sd,
                                               .status = BackflushStatus.Failed})
                         End If
                         If counter > 1 Then
@@ -399,42 +420,69 @@ Public Class Calculator
                         End If
                     Next
                     For Each dic As DictionaryEntry In stockToBook
+                        Dim tmpQuantity As Double = CType(dic.Value, Double)
                         If allocatedStock.ContainsKey(CType(dic.Key, String)) Then
                             For Each stockto As Stock In allocatedStock(CType(dic.Key, String))
                                 If CType(dic.Value, Double) = stockto.quantity Then
-                                    moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = stockto.fifo, .moveType = StockMoveType.Backflush, .partNr = CType(stockto.partNr, String), .quantity = stockto.quantity, .sourceDoc = sd})
+                                    'moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = stockto.fifo, .moveType = StockMoveType.Backflush, .partNr = CType(stockto.partNr, String), .quantity = stockto.quantity, .sourceDoc = sd})
                                     stockRepo.MarkForDeletion(stockto)
                                     dic.Value = 0
 
                                     Exit For
                                 ElseIf CType(dic.Value, Double) < stockto.quantity Then
-                                    moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = stockto.fifo, .moveType = StockMoveType.Backflush, .partNr = CType(stockto.partNr, String), .quantity = CType(dic.Value, Double), .sourceDoc = sd})
+                                    ' moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = stockto.fifo, .moveType = StockMoveType.Backflush, .partNr = CType(stockto.partNr, String), .quantity = CType(dic.Value, Double), .sourceDoc = sd})
                                     stockto.quantity = stockto.quantity - CType(dic.Value, Double)
                                     dic.Value = 0
                                     Exit For
                                 Else
-                                    moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = stockto.fifo, .moveType = StockMoveType.Backflush, .partNr = CType(dic.Key, String), .quantity = stockto.quantity, .sourceDoc = sd})
+                                    '   moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = stockto.fifo, .moveType = StockMoveType.Backflush, .partNr = CType(dic.Key, String), .quantity = stockto.quantity, .sourceDoc = sd})
                                     stockRepo.MarkForDeletion(stockto)
                                     dic.Value = CType(dic.Value, Double) - stockto.quantity
                                 End If
                             Next
                             If CType(dic.Value, Double) > 0 Then
+
                                 stockRepo.MarkForAdd(New Stock With {.container = "ORIGINAL",
-                                                     .fifo = Now, .partNr = CType(dic.Key, String),
-                                                     .position = "ORIGINAL",
-                                                     .quantity = -CType(dic.Value, Double),
-                                                     .source = sd, .sourceType = "BACKFLUSH",
-                                                     .wh = "ORIGINAL"})
-                                moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now,
-                                                    .fifo = Now, .moveType = StockMoveType.Backflush,
-                                                    .partNr = CType(dic.Key, String),
-                                                    .quantity = CType(dic.Value, Double),
-                                                    .sourceDoc = sd})
+                                                         .fifo = Now, .partNr = CType(dic.Key, String),
+                                                         .position = "ORIGINAL",
+                                                         .quantity = -CType(dic.Value, Double),
+                                                         .source = sd, .sourceType = "BACKFLUSH",
+                                                         .wh = "ORIGINAL"})
+
+                                'moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now,
+                                '                    .fifo = Now, .moveType = StockMoveType.Backflush,
+                                '                    .partNr = CType(dic.Key, String),
+                                '                    .quantity = CType(dic.Value, Double),
+                                '                    .sourceDoc = sd})
                             End If
                         Else
-                            stockRepo.MarkForAdd(New Stock With {.container = "ORIGINAL", .fifo = Now, .partNr = CType(dic.Key, String), .position = "ORIGINAL", .quantity = -CType(dic.Value, Double), .source = sd, .sourceType = "BACKFLUSH", .wh = "ORIGINAL"})
-                            moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = Now, .moveType = StockMoveType.Backflush, .partNr = CType(dic.Key, String), .quantity = CType(dic.Value, Double), .sourceDoc = sd})
+                            ' 是否存在负库存，如果存在则操作这个负库存，不再生成很多backflush负库存
+                            Dim negaStock As Stock = negaStockRepo.FirstOrDefault(Function(s) s.partNr.Equals(CType(dic.Key, String)) And s.quantity <= 0)
+                            If negaStock IsNot Nothing Then
+                                negaStock.quantity -= CType(dic.Value, Double)
+                                negaStock.fifo = Now
+                                negaStock.source = sd
+                                negaStock.sourceType = "BACKFLUSH"
+                            Else
+                                stockRepo.MarkForAdd(New Stock With {.container = "ORIGINAL",
+                                                         .fifo = Now, .partNr = CType(dic.Key, String),
+                                                         .position = "ORIGINAL",
+                                                         .quantity = -CType(dic.Value, Double),
+                                                         .source = sd, .sourceType = "BACKFLUSH",
+                                                         .wh = "ORIGINAL"})
+                            End If
+
+
+                            'stockRepo.MarkForAdd(New Stock With {.container = "ORIGINAL", .fifo = Now, .partNr = CType(dic.Key, String), .position = "ORIGINAL", .quantity = -CType(dic.Value, Double), .source = sd, .sourceType = "BACKFLUSH", .wh = "ORIGINAL"})
+                            'moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now, .fifo = Now, .moveType = StockMoveType.Backflush, .partNr = CType(dic.Key, String), .quantity = CType(dic.Value, Double), .sourceDoc = sd})
                         End If
+
+                        moveRepo.MarkForAdd(New StockMovement With {.createdAt = Now,
+                                                    .fifo = Now, .moveType = StockMoveType.Backflush,
+                                                    .partNr = CType(dic.Key, String),
+                                                    .quantity = tmpQuantity,
+                                                    .sourceDoc = sd})
+
                     Next
                     For Each mp As MP In mpses
                         If mp.partnr = partnr Then
@@ -447,6 +495,7 @@ Public Class Calculator
                                               .partnr = partnr, .quantity = quantity,
                                               .sourceDoc = sd,
                                               .status = BackflushStatus.Normal})
+                    ' negaStockRepo.SaveAll()
                     dc.SaveAll()
                 Catch ex As Exception
                     Dim failedFlushRepo As New Repository(Of BackflushRecord)(New DataContext(DBConn))
@@ -464,6 +513,46 @@ Public Class Calculator
         End If
 
 
+    End Sub
+
+    Public Sub ProcessStockImport(settings As CalculateSetting)
+        Dim mrprepo As Repository(Of MrpRound) = New Repository(Of MrpRound)(New DataContext(DBConn))
+        Dim mrpRoundStr As String = Now.ToString("yyyyMMddhhmmss")
+        mrprepo.GetTable.InsertOnSubmit(New MrpRound With {.launcher = settings.TaskType, .mrpRound = mrpRoundStr, .runningStatus = CalculatorStatus.Running, .time = Now, .text = " "})
+        mrprepo.SaveAll()
+        Try
+            Dim handler = New FileDataHandler()
+            handler.ImportForceStock(settings.Parameters, DBConn)
+            Dim round As MrpRound = mrprepo.First(Function(c) c.mrpRound = mrpRoundStr)
+            round.runningStatus = CalculatorStatus.Finish
+            mrprepo.SaveAll()
+        Catch ex As Exception
+            Dim round As MrpRound = mrprepo.First(Function(c) c.mrpRound = mrpRoundStr)
+            round.runningStatus = CalculatorStatus.Cancel
+            round.text = "Fail to AutoStock with following errors:" & ex.ToString
+            mrprepo.SaveAll()
+            Throw New Exception(round.text)
+        End Try
+    End Sub
+
+    Public Sub ProcessSumStock(settings As CalculateSetting)
+        Dim mrprepo As Repository(Of MrpRound) = New Repository(Of MrpRound)(New DataContext(DBConn))
+        Dim mrpRoundStr As String = Now.ToString("yyyyMMddhhmmss")
+        mrprepo.GetTable.InsertOnSubmit(New MrpRound With {.launcher = settings.TaskType, .mrpRound = mrpRoundStr, .runningStatus = CalculatorStatus.Running, .time = Now, .text = " "})
+        mrprepo.SaveAll()
+        Try
+            Dim ss As IStockSumRecordService = New StockSumRecordService(DBConn)
+            ss.Generate(Date.Parse(settings.Parameters))
+            Dim round As MrpRound = mrprepo.First(Function(c) c.mrpRound = mrpRoundStr)
+            round.runningStatus = CalculatorStatus.Finish
+            mrprepo.SaveAll()
+        Catch ex As Exception
+            Dim round As MrpRound = mrprepo.First(Function(c) c.mrpRound = mrpRoundStr)
+            round.runningStatus = CalculatorStatus.Cancel
+            round.text = "Fail to AutoStock with following errors:" & ex.ToString
+            mrprepo.SaveAll()
+            Throw New Exception(round.text)
+        End Try
     End Sub
 
 End Class

@@ -1,0 +1,163 @@
+﻿@using MvcPaging;
+
+@model IPagedList<CuttingMrpLib.BOM>
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="panel panel-default navbar-fixed-top" style="box-shadow: -2px 2px 4px #34313a;top:60px;">
+    <div class="panel-body">
+        <div class="col-md-12" style="text-align:center;">
+            <form action="/Bom/Search" method="get">
+                <div class="col-md-7 filter-content">
+                    <span class="pull-right" id="basic-addon-filter"> <i class="glyphicon glyphicon-filter"></i> </span>
+                    <div class="filter-p"></div>
+                </div>
+
+                <div class="col-md-3">
+                    <button class="btn btn-info import-bom-data" type="button" style="width:150px; margin-top:10px;">Import</button>
+
+                    @Html.ActionLink("Export", "Export", new
+                   {
+                       ID = ViewBag.Query.ID,
+                       PartNr = ViewBag.Query.PartNr,
+                       VFFrom = ViewBag.Query.VFFrom,
+                       VFTo = ViewBag.Query.VFTo,
+                       VTFrom = ViewBag.Query.VTFrom,
+                       VTTo = ViewBag.Query.VTTo,
+                   }, new { @style = "width:150px; margin-top:10px;margin-left:20px;", @class = "btn btn-success", @title = "export searched results", data_toggle = "tooltip", data_placement = "bottom" })
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12" style="padding:0;margin-top:110px;">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th> No. </th>
+                <th>ID</th>
+                <th>PartNr</th>
+                <th>ValidFrom</th>
+                <th>ValidTo</th>
+                <th>VersionId</th>
+                <th>BomDesc</th>
+                @*<th>Options</th>*@
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                int i = 0;
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@(i += 1)</td>
+                        <td>@Html.DisplayFor(modelItem => item.id)</td>
+                        <td>@Html.DisplayFor(modelItem => item.partNr)</td>
+                        <td>@Html.DisplayFor(modelItem => item.validFrom)</td>
+                        <td>@Html.DisplayFor(modelItem => item.validTo)</td>
+                        <td>@Html.DisplayFor(modelItem => item.versionId)</td>
+                        <td>@Html.DisplayFor(modelItem => item.bomDesc)</td>
+                        @*<td class="IconA">
+                                <a href="@Url.Action("Edit", "ProcessOrders" , new { id=item.orderNr }) "> <i class="glyphicon glyphicon-pencil"></i></a>
+                                @if (item.canDelete)
+                                {
+                                    <a href="@Url.Action("Delete", "ProcessOrders" , new { id=item.orderNr }) "> <i class="glyphicon glyphicon-trash" style="color:red;"></i></a>
+                                }
+                            </td>*@
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="col-sm-12" style="text-align:center;">
+    <div class="clearfix pagination">
+        <div class="pagination-inner">
+            @if (Model != null)
+            {
+                if (ViewBag.Query != null)
+                {
+                    var html = Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
+                        .Options(o => o.AddRouteValue("ID", ViewBag.Query.ID))
+                        .Options(o => o.AddRouteValue("VFFrom", ViewBag.Query.VFFrom))
+                        .Options(o => o.AddRouteValue("VFTo", ViewBag.Query.VFTo))
+                        .Options(o => o.AddRouteValue("VTFrom", ViewBag.Query.VTFrom))
+                        .Options(o => o.AddRouteValue("VTTo", ViewBag.Query.VTTo));
+                    @html
+                }
+                else
+                {
+                    @Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<div style="display:none;">
+    <div id="extra-filter-content">
+        <div class="col-md-12">
+            <div class="input-group filter-detail">
+                <span class="input-group-addon" id="basic-addon-id" style="background:#0088cc;color:white;">ID</span>
+                <input type="text" class="form-control" name="ID" id="ID" value="@ViewBag.Query.ID" placeholder="PartNr" aria-describedby="basic-addon-id">
+                <span class="input-group-addon" id="basic-addon-partnr">PartNr</span>
+                <input type="text" class="form-control" name="PartNr" id="PartNr" value="@ViewBag.Query.PartNr" placeholder="PartNr" aria-describedby="basic-addon-partnr">
+            </div>
+        </div>
+
+        <hr style="margin:10px;" />
+
+        <div class="col-md-12">
+            <div class="input-group filter-detail">
+                <span class="input-group-addon" id="basic-addon-vf-from">ValidFrom</span>
+                <input type="text" class="form-control datetime-picker-from" autocomplete="off" name="VFFrom" id="VFFrom" value="@ViewBag.Query.VFFrom" placeholder="ValidFrom From" aria-describedby="basic-addon-vf-from">
+                <span class="space-mark">~</span>
+                <input type="text" class="form-control datetime-picker-to" autocomplete="off" name="VFTo" id="VFTo" value="@ViewBag.Query.VFTo" placeholder="ValidFrom To" />
+            </div>
+        </div>
+
+        <hr style="margin:10px;" />
+
+        <div class="col-sm-12">
+            <div class="input-group filter-detail">
+                <span class="input-group-addon" id="basic-addon-vf-to "> ValidTo </span>
+                <input type="text" class="form-control datetime-picker-from" autocomplete="off" name="VTFrom" id="VTFrom" value="@ViewBag.Query.VTFrom" placeholder="ValidTo From" aria-describedby="basic-addon-vf-to">
+                <span class="space-mark">~</span>
+                <input type="text" class="form-control datetime-picker-to" autocomplete="off" name="VTTo" id="VTTo" value="@ViewBag.Query.VTTo" placeholder="ValidTo To" />
+            </div>
+        </div>
+
+        <div class="popModal_footer">
+            <input type="submit" value="Search" class="btn btn-success" data-dialogModalBut="ok" />
+        </div>
+    </div>
+</div>
+
+<div id="dialog_content" class="import_content" style="display:none;">
+    @using (Html.BeginForm("ImportBomRecord", "Bom", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="dialogModal_header" style="background:steelblue;color:white;">
+            Import Bom Basic Data
+        </div>
+        <div class="dialogModal_content">
+            <strong>Select Bom File:</strong>
+            <hr />
+            <input type="file" value="file" name="bomFile" />
+        </div>
+        <div class="dialogModal_footer">
+            <button type="submit" class="btn btn-primary" style="width:200px;" data-dialogModalBut="ok">OK</button>
+        </div>
+    }
+</div>
+
+@Scripts.Render("~/bundles/bom")
+
+<script type="text/javascript">
+    Bom.Init();
+    Bom.click_filter();
+    Bom.import_bom_data();
+</script>

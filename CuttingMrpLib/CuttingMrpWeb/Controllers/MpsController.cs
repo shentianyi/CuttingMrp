@@ -58,7 +58,6 @@ namespace CuttingMrpWeb.Controllers
         {
             try
             {
-                // TODO: Add insert logic here
                 IMpsService mps = new MpsService(Settings.Default.db);
                 
                 mps.Create(mp);
@@ -127,7 +126,6 @@ namespace CuttingMrpWeb.Controllers
         {
             //try
             //{
-            // TODO: Add delete logic here
             IMpsService mps = new MpsService(Settings.Default.db);
             mps.DeleteById(id);
             return RedirectToAction("Index");

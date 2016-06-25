@@ -56,6 +56,14 @@ StockMovements.click_filter = function () {
     });
 }
 
+$('.datetime-picker').datetimepicker({
+    lang: 'ch',
+    format: 'Y/m/d H:i',
+    formatDate: 'Y/m/d',
+    formatTime: 'H:i',
+    defaultTime: '00:00'
+})
+
 $('.datetime-picker-from').datetimepicker({
     lang: 'ch',
     timepicker: false,

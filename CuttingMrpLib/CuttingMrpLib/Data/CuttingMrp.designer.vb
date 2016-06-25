@@ -4381,6 +4381,8 @@ Partial Public Class ProcessOrder
 	
 	Private _createAt As System.Nullable(Of Date)
 	
+	Private _requirementQuantity As System.Nullable(Of Double)
+	
 	Private _OrderDerivations As EntitySet(Of OrderDerivation)
 	
 	Private _Part As EntityRef(Of Part)
@@ -4443,6 +4445,10 @@ Partial Public Class ProcessOrder
     Partial Private Sub OncreateAtChanging(value As System.Nullable(Of Date))
     End Sub
     Partial Private Sub OncreateAtChanged()
+    End Sub
+    Partial Private Sub OnrequirementQuantityChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OnrequirementQuantityChanged()
     End Sub
     #End Region
 	
@@ -4664,6 +4670,22 @@ Partial Public Class ProcessOrder
 				Me._createAt = value
 				Me.SendPropertyChanged("createAt")
 				Me.OncreateAtChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_requirementQuantity", DbType:="Float")>  _
+	Public Property requirementQuantity() As System.Nullable(Of Double)
+		Get
+			Return Me._requirementQuantity
+		End Get
+		Set
+			If (Me._requirementQuantity.Equals(value) = false) Then
+				Me.OnrequirementQuantityChanging(value)
+				Me.SendPropertyChanging
+				Me._requirementQuantity = value
+				Me.SendPropertyChanged("requirementQuantity")
+				Me.OnrequirementQuantityChanged
 			End If
 		End Set
 	End Property

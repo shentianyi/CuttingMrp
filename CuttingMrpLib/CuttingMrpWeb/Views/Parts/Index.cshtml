@@ -1,0 +1,140 @@
+﻿@using MvcPaging;
+
+@model IPagedList<CuttingMrpLib.Part>
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="panel panel-default navbar-fixed-top" style="box-shadow: -2px 2px 4px #34313a;top:60px;">
+    <div class="panel-body">
+        <div class="col-md-12">
+            <form action="/Parts/Search" method="get">
+                <div class="col-md-7">
+                    <div class="col-md-9">
+                        <div class="filter-content">
+                            <span class="pull-right" id="basic-addon-filter"> <i class="glyphicon glyphicon-filter"></i> </span>
+                            <div class="filter-p"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <button class="btn btn-primary" type="submit" style="width:150px; margin-top:10px;">Search All</button>
+                    </div>
+                </div>
+
+                <div class="col-md-5" style="text-align:center;">
+                    <button class="btn btn-info import-part-data" type="button" style="width:150px; margin-top:10px;">Import</button>
+
+                    @Html.ActionLink("Export", "Export", new
+               {
+                   PartNr = ViewBag.Query.PartNr,
+               }, new { @style = "width:150px; margin-top:10px;margin-left:30px;", @class = "btn btn-success", @title = "export searched results", data_toggle = "tooltip", data_placement = "bottom" })
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12" style="padding:0;margin-top:110px;">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th> No. </th>
+                <th>PartNr</th>
+                <th>PartType</th>
+                <th>PartDesc</th>
+                <th>PartStatus</th>
+                <th>MOQ</th>
+                <th>SPQ</th>
+                @*<th>Options</th>*@
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                int i = 0;
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@(i += 1)</td>
+                        <td>@Html.DisplayFor(modelItem => item.partNr)</td>
+                        <td>@Html.DisplayFor(modelItem => item.partTypeDisplay)</td>
+                        <td>@Html.DisplayFor(modelItem => item.partDesc)</td>
+                        <td>@Html.DisplayFor(modelItem => item.partStatus)</td>
+                        <td>@Html.DisplayFor(modelItem => item.moq)</td>
+                        <td>@Html.DisplayFor(modelItem => item.spq)</td>
+                        @*<td class="IconA">
+                                <a href="@Url.Action("Edit", "ProcessOrders" , new { id=item.orderNr }) "> <i class="glyphicon glyphicon-pencil"></i></a>
+                                @if (item.canDelete)
+                                {
+                                    <a href="@Url.Action("Delete", "ProcessOrders" , new { id=item.orderNr }) "> <i class="glyphicon glyphicon-trash" style="color:red;"></i></a>
+                                }
+                            </td>*@
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="col-sm-12" style="text-align:center;">
+    <div class="clearfix pagination">
+        <div class="pagination-inner">
+            @if (Model != null)
+            {
+                if (ViewBag.Query != null)
+                {
+                    var html = Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
+                        .Options(o => o.AddRouteValue("PartNr", ViewBag.Query.PartNr));
+                    @html
+                }
+                else
+                {
+                    @Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<div style="display:none;">
+    <div id="extra-filter-content">
+        <div class="col-sm-12">
+            <div class="input-group filter-detail">
+                <span class="input-group-addon" id="basic-addon-partnr" style="background:#0088cc;color:white;">PartNr</span>
+                <input type="text" class="form-control" name="PartNr" id="PartNr" value="@ViewBag.Query.PartNr" placeholder="PartNr" aria-describedby="basic-addon-partnr">
+            </div>
+        </div>
+
+        <div class="popModal_footer">
+            <input type="submit" value="Search" class="btn btn-success" data-dialogModalBut="ok" />
+        </div>
+    </div>
+</div>
+
+<div id="dialog_content" class="import_content" style="display:none;">
+    @using (Html.BeginForm("ImportPartRecord", "Parts", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="dialogModal_header" style="background:steelblue;color:white;">
+            Import Part Basic Data
+        </div>
+        <div class="dialogModal_content">
+            <strong>Select Part File:</strong>
+            <hr />
+            <input type="file" value="file" name="partFile" />
+        </div>
+        <div class="dialogModal_footer">
+            <button type="submit" class="btn btn-primary" style="width:200px;" data-dialogModalBut="ok">OK</button>
+        </div>
+    }
+</div>
+
+@Scripts.Render("~/bundles/part")
+
+<script type="text/javascript">
+    Part.Init();
+    Part.click_filter();
+    Part.import_part_data();
+</script>

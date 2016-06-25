@@ -60,8 +60,6 @@ namespace CuttingMrpWeb.Controllers
         {
             try
             {
-                // TODO: Add insert logic here
-
                 return RedirectToAction("Index");
             }
             catch
@@ -111,7 +109,6 @@ namespace CuttingMrpWeb.Controllers
         {
             //try
             //{
-            // TODO: Add delete logic here
             IProcessOrderService ps = new ProcessOrderService(Settings.Default.db);
             ps.DeleteById(id);
             return RedirectToAction("Index");
@@ -157,7 +154,7 @@ namespace CuttingMrpWeb.Controllers
             using (StreamWriter sw = new StreamWriter(ms, Encoding.UTF8))
             {
                 List<string> head = new List<string> { " No.", "OrderNr", "PartNr", "Kanban","PartType(KB Type)","Status",
-                    "ProceeDate","SourceQuantity","ActualQuantity","BatchQuantity","BundleQuantity","KanBanPosition","RouteNr","CompleteRate", "DerivedFrom", "CreateAt" };
+                    "ProceeDate","ReqQuantity","SourceQuantity","ActualQuantity","BatchQuantity","BundleQuantity","KanBanPosition","RouteNr","CompleteRate", "DerivedFrom", "CreateAt" };
                 sw.WriteLine(string.Join(Settings.Default.csvDelimiter, head));
                 for(var i=0; i<processOrders.Count; i++)
                 {
@@ -169,6 +166,7 @@ namespace CuttingMrpWeb.Controllers
                     ii.Add(processOrders[i].Part.partTypeDisplay);
                     ii.Add(processOrders[i].statusDisplay);
                     ii.Add(processOrders[i].proceeDate.ToString());
+                    ii.Add(processOrders[i].requirementQuantity.ToString());
                     ii.Add(processOrders[i].sourceQuantity.ToString());
                     ii.Add(processOrders[i].actualQuantity.ToString());
                     ii.Add(processOrders[i].Part.kanbanBatchQty.ToString());
@@ -197,7 +195,9 @@ namespace CuttingMrpWeb.Controllers
         public void ExportKB([Bind(Include = "OrderNr,SourceDoc,DerivedFrom,ProceeDateFrom,ProceeDateTo,PartNr,ActualQuantityFrom,ActualQuantityTo,CompleteRateFrom,CompleteRateTo,Status,MrpRound,PartType,CreateAt")] ProcessOrderSearchModel q)
         {
             IProcessOrderService ps = new ProcessOrderService(Settings.Default.db);
-
+            if (!q.ActualQuantityFrom.HasValue) {
+                q.ActualQuantityFrom = 0.0000009;
+            }
             List<ProcessOrder> processOrders = ps.Search(q).ToList();
 
             ViewBag.Query = q;
@@ -296,9 +296,15 @@ namespace CuttingMrpWeb.Controllers
                 configuration.TrimHeaders = true;
                 configuration.TrimFields = true;
 
+                //using (StreamReader sr = new StreamReader(filename)) {
+                //    using (CsvReader cr = new CsvReader(sr,configuration)) {
+                //        records = cr.GetRecords<CuttingOrderImportModel>().ToList();
 
+                //    }
+                //}
                 using (TextReader treader = System.IO.File.OpenText(filename))
                 {
+
                     for (int i = 0; true; i++)
                     {
                         string s = treader.ReadLine();

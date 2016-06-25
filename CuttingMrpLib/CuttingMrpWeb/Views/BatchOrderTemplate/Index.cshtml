@@ -1,0 +1,160 @@
+﻿
+@model IPagedList<CuttingMrpLib.BatchOrderTemplate>
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="panel panel-default navbar-fixed-top" style="box-shadow: -2px 2px 4px #34313a;top:60px;">
+    <div class="panel-body">
+        <div class="col-md-12" style="text-align:center;">
+            <form action="/BatchOrderTemplate/Search" method="get">
+                <div class="col-md-7 filter-content">
+                    <span class="pull-right" id="basic-addon-filter"> <i class="glyphicon glyphicon-filter"></i> </span>
+                    <div class="filter-p"></div>
+                </div>
+
+                <div class="col-md-3">
+                    <button class="btn btn-info import-batch-order-tempalte" type="button" style="width:150px; margin-top:10px;">Import</button>
+
+                    @Html.ActionLink("Export", "Export", new
+                       {
+                           OrderNr = ViewBag.Query.OrderNr,
+                           PartNr = ViewBag.Query.PartNr,
+                           Type = ViewBag.Query.Type,
+                           Remark1 = ViewBag.Query.Remark1,
+                       }, new { @style = "width:150px; margin-top:10px;margin-left:20px;", @class = "btn btn-success", @title = "export searched results", data_toggle = "tooltip", data_placement = "bottom" })
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12" style="padding:0;margin-top:110px;">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th> No. </th>
+                <th>OrderNr</th>
+                <th>PartNr</th>
+                <th>BatchQty</th>
+                <th>Type</th>
+                <th>Bundle</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>Operator</th>
+                <th>Remark1</th>
+                <th>Remark2</th>
+                @*<th>Options</th>*@
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                int i = 0;
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@(i += 1)</td>
+                        <td>@Html.DisplayFor(modelItem => item.orderNr)</td>
+                        <td>@Html.DisplayFor(modelItem => item.partNr)</td>
+                        <td>@Html.DisplayFor(modelItem => item.batchQuantity)</td>
+                        <td>@Html.DisplayFor(modelItem => item.type)</td>
+                        <td>@Html.DisplayFor(modelItem => item.bundle)</td>
+                        <td>@Html.DisplayFor(modelItem => item.createdAt)</td>
+                        <td>@Html.DisplayFor(modelItem => item.updatedAt)</td>
+                        <td>@Html.DisplayFor(modelItem => item.@operator)</td>
+                        <td>@Html.DisplayFor(modelItem => item.remark1)</td>
+                        <td>@Html.DisplayFor(modelItem => item.remark2)</td>
+                        @*<td class="IconA">
+                                <a href="@Url.Action("Edit", "ProcessOrders" , new { id=item.orderNr }) "> <i class="glyphicon glyphicon-pencil"></i></a>
+                                @if (item.canDelete)
+                                {
+                                    <a href="@Url.Action("Delete", "ProcessOrders" , new { id=item.orderNr }) "> <i class="glyphicon glyphicon-trash" style="color:red;"></i></a>
+                                }
+                            </td>*@
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="col-sm-12" style="text-align:center;">
+    <div class="clearfix pagination">
+        <div class="pagination-inner">
+            @if (Model != null)
+            {
+                if (ViewBag.Query != null)
+                {
+                    var html = Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
+                        .Options(o => o.AddRouteValue("OrderNr", ViewBag.Query.OrderNr))
+                        .Options(o => o.AddRouteValue("PartNr", ViewBag.Query.PartNr))
+                        .Options(o => o.AddRouteValue("Type", ViewBag.Query.Type))
+                        .Options(o => o.AddRouteValue("Remark1", ViewBag.Query.Remark1));
+                    @html
+                }
+                else
+                {
+                    @Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<div style="display:none;">
+    <div id="extra-filter-content">
+        <div class="col-sm-12">
+            <div class="input-group filter-detail">
+                <span class="input-group-addon" id="basic-addon-ordernr" style="background:#0088cc;color:white;">OrderNr</span>
+                <input type="text" class="form-control" name="OrderNr" id="OrderNr" value="@ViewBag.Query.OrderNr" placeholder="OrderNr" aria-describedby="basic-addon-ordernr">
+
+                <span class="input-group-addon" id="basic-addon-partnr">PartNr</span>
+                <input type="text" class="form-control" name="PartNr" id="PartNr" value="@ViewBag.Query.PartNr" placeholder="PartNr" aria-describedby="basic-addon-partnr">
+            </div>
+        </div>
+
+        <hr style="margin:10px;" />
+
+        <div class="col-sm-12">
+            <div class="input-group filter-detail">
+                <span class="input-group-addon" id="basic-addon-type">Type</span>
+                <input type="text" class="form-control" name="Type" id="Type" value="@ViewBag.Query.Type" placeholder="Type" aria-describedby="basic-addon-type">
+
+                <span class="input-group-addon" id="basic-addon-remark1">Remark1</span>
+                <input type="text" class="form-control" name="Remark1" id="Remark1" value="@ViewBag.Query.Remark1" placeholder="Remark1" aria-describedby="basic-addon-remark1">
+            </div>
+        </div>
+
+        <hr style="margin:10px;" />
+
+        <div class="popModal_footer">
+            <input type="submit" value="Search" class="btn btn-success" data-dialogModalBut="ok" />
+        </div>
+    </div>
+</div>
+
+<div id="dialog_content" class="import_content" style="display:none;">
+    @using (Html.BeginForm("ImportBatchOrderTemplateRecord", "BatchOrderTemplate", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="dialogModal_header" style="background:steelblue;color:white;">
+            Import Batch Order Template Record
+        </div>
+        <div class="dialogModal_content">
+            <strong>Select Batch Order Template File:</strong>
+            <hr />
+            <input type="file" value="file" name="batchOrderTemplateFile" />
+        </div>
+        <div class="dialogModal_footer">
+            <button type="submit" class="btn btn-primary" style="width:200px;" data-dialogModalBut="ok">OK</button>
+        </div>
+    }
+</div>
+
+@Scripts.Render("~/bundles/batch-order-template")
+
+<script type="text/javascript">
+    BatchOrderTempalte.init();
+    BatchOrderTempalte.click_filter();
+    BatchOrderTempalte.import_BatchOrderTemplate_data();
+</script>

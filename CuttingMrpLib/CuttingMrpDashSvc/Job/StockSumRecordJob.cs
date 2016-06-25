@@ -1,4 +1,5 @@
 ﻿using Brilliantech.Framwork.Utils.LogUtil;
+using CuttingMrpDashSvc.Properties;
 using CuttingMrpLib;
 using Quartz;
 using System;
@@ -16,10 +17,21 @@ namespace CuttingMrpDashSvc.Job
             {
                 DateTime date = DateTime.Now.Date;
                 //(DateTime)context.MergedJobDataMap.Get("Date");
-                LogUtil.Logger.Info("start run StockSumRecordJob");
-                IStockSumRecordService ss = new StockSumRecordService(Properties.Settings.Default.db);
-                ss.Generate(date);
-                LogUtil.Logger.Info("end run StockSumRecordJob");
+                LogUtil.Logger.Info("start gen StockSumRecordJob");
+                //IStockSumRecordService ss = new StockSumRecordService(Properties.Settings.Default.db);
+                //ss.Generate(date);
+             
+                CalculateSetting setting = new CalculateSetting()
+                {
+                    TaskType = "SumStock",
+                    Parameters = DateTime.Now.Date.ToString() //new Dictionary<string, string>()
+                };
+               // setting.Parameters.Add("date", DateTime.Now.Date.ToString());
+
+                ICalculateService cs = new CalculateService(Settings.Default.db);
+                cs.Start(Settings.Default.mrpQueue, setting);
+
+                LogUtil.Logger.Info("end gen StockSumRecordJob");
             }
             catch (Exception ex) {
                 LogUtil.Logger.Error("StockSumRecordJob exec error!");
