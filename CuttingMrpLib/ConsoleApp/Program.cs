@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using NPOI.HSSF.UserModel;
+using NPOI.POIFS.FileSystem;
 
 namespace ConsoleApp
 {
@@ -41,10 +43,21 @@ namespace ConsoleApp
             //    s.quantity += 1000;
             //}
             //dc.SaveAll();
-            string file = @"C:\cz\MrpDashSvc\Processing\2016-06-25\10-38_66_3853d45d-d6e8-4669-a71d-c3f5ba9f62dd.csv";
-          string p=  Path.GetFullPath(file );
-            Console.WriteLine(Path.GetDirectoryName(file));
-            Console.WriteLine(DateTime.Now);
+            //  string file = @"C:\cz\MrpDashSvc\Processing\2016-06-25\10-38_66_3853d45d-d6e8-4669-a71d-c3f5ba9f62dd.csv";
+            //string p=  Path.GetFullPath(file );
+            //  Console.WriteLine(Path.GetDirectoryName(file));
+            //  Console.WriteLine(DateTime.Now);
+
+            string file = @"C:\cz\MrpDashSvc\Processing\2016-06-26\01-07_FFSLS033-XULI1001-20160606-164133_c561399f-6de1-4b9e-887d-f84c1871774f.xls";
+            //using (FileStream fs = File.OpenRead(file)) {
+            //    HSSFWorkbook.Create(fs);
+            //    HSSFWorkbook wk = new HSSFWorkbook(fs);
+            //    int sheetNum = wk.NumberOfSheets;
+            //}
+
+            POIFSFileSystem fs = new POIFSFileSystem(new FileStream(file, FileMode.Open, FileAccess.Read));
+
+                
             Console.Read();
 
         }
