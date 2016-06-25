@@ -152,7 +152,7 @@ namespace CuttingMrpWeb.Controllers
             }
         }
 
-        public ActionResult Search([Bind(Include = "PartNr")] PartSearchModel q)
+        public ActionResult Search([Bind(Include = "PartNr, PartType")] PartSearchModel q)
         {
             int pageIndex = 0;
             int.TryParse(Request.QueryString.Get("page"), out pageIndex);
@@ -164,6 +164,7 @@ namespace CuttingMrpWeb.Controllers
 
             ViewBag.Query = q;
 
+            SetPartTypeList(q.PartType);
             return View("Index", parts);
         }
 
@@ -209,6 +210,8 @@ namespace CuttingMrpWeb.Controllers
 
                 List<Dictionary<string, string>> CreateErrorDic = new List<Dictionary<string, string>>();
                 List<Dictionary<string, string>> UpdateErrorDic = new List<Dictionary<string, string>>();
+                List<Dictionary<string, string>> ActionNullErrorDic = new List<Dictionary<string, string>>();
+                List<Dictionary<string, string>> OtherErrorDic = new List<Dictionary<string, string>>();
 
                 if (records.Count > 0)
                 {
@@ -227,7 +230,18 @@ namespace CuttingMrpWeb.Controllers
                         if (string.IsNullOrWhiteSpace(record.Action))
                         {
                             ActionNullQty++;
-                            break;
+
+                            Dictionary<string, string> ActionNullErrorList = new Dictionary<string, string>();
+                            ActionNullErrorList.Add("partNr", record.PartNr);
+                            ActionNullErrorList.Add("partType", record.PartType.ToString());
+                            ActionNullErrorList.Add("partDesc", record.PartDesc);
+                            ActionNullErrorList.Add("partStatus", record.PartStatus.ToString());
+                            ActionNullErrorList.Add("MOQ", record.MOQ.ToString());
+                            ActionNullErrorList.Add("SPQ", record.SPQ.ToString());
+                            ActionNullErrorList.Add("Action", record.Action);
+
+                            ActionNullErrorDic.Add(ActionNullErrorList);
+                            ViewData["actionNullErrorDic"] = ActionNullErrorDic;
                         }
                         else
                         {
@@ -257,12 +271,13 @@ namespace CuttingMrpWeb.Controllers
                                         CreateFailureQty++;
 
                                         Dictionary<string, string> CreateErrorList = new Dictionary<string, string>();
-                                        CreateErrorList.Add("partNr",part.partNr);
-                                        CreateErrorList.Add("partType",part.partStatus.ToString());
-                                        CreateErrorList.Add("partDesc",part.partDesc);
-                                        CreateErrorList.Add("partStatus",part.partStatus.ToString());
-                                        CreateErrorList.Add("MOQ",part.moq.ToString());
-                                        CreateErrorList.Add("SPQ",part.spq.ToString());
+                                        CreateErrorList.Add("partNr", record.PartNr);
+                                        CreateErrorList.Add("partType", record.PartType.ToString());
+                                        CreateErrorList.Add("partDesc", record.PartDesc);
+                                        CreateErrorList.Add("partStatus", record.PartStatus.ToString());
+                                        CreateErrorList.Add("MOQ", record.MOQ.ToString());
+                                        CreateErrorList.Add("SPQ", record.SPQ.ToString());
+                                        CreateErrorList.Add("Action", record.Action);
 
                                         CreateErrorDic.Add(CreateErrorList);
                                         ViewData["createErrorDic"] = CreateErrorDic;
@@ -289,12 +304,13 @@ namespace CuttingMrpWeb.Controllers
                                         UpdateFailureQty++;
 
                                         Dictionary<string, string> UpdateErrorList = new Dictionary<string, string>();
-                                        UpdateErrorList.Add("partNr",part.partNr);
-                                        UpdateErrorList.Add("partType",part.partStatus.ToString());
-                                        UpdateErrorList.Add("partDesc",part.partDesc);
-                                        UpdateErrorList.Add("partStatus",part.partStatus.ToString());
-                                        UpdateErrorList.Add("MOQ",part.moq.ToString());
-                                        UpdateErrorList.Add("SPQ",part.spq.ToString());
+                                        UpdateErrorList.Add("partNr", record.PartNr);
+                                        UpdateErrorList.Add("partType", record.PartType.ToString());
+                                        UpdateErrorList.Add("partDesc", record.PartDesc);
+                                        UpdateErrorList.Add("partStatus", record.PartStatus.ToString());
+                                        UpdateErrorList.Add("MOQ", record.MOQ.ToString());
+                                        UpdateErrorList.Add("SPQ", record.SPQ.ToString());
+                                        UpdateErrorList.Add("Action", record.Action);
 
                                         UpdateErrorDic.Add(UpdateErrorList);
                                         ViewData["updateErrorDic"] = UpdateErrorDic;
@@ -307,13 +323,20 @@ namespace CuttingMrpWeb.Controllers
                                     ViewBag.UpdateExpMsg = "<-------------Update Part Exception!,Please Check.------------->" + e;
                                 }   
                             }
-                            else if (record.Action.Trim().ToLower().Equals("delete"))
-                            {
-                                //删除  忽略
-                            }
                             else
                             {
-                                //错误 忽略
+                                //错误 不做任何操作，只需要记录
+                                Dictionary<string, string> OtherErrorList = new Dictionary<string, string>();
+                                OtherErrorList.Add("partNr", record.PartNr);
+                                OtherErrorList.Add("partType", record.PartType.ToString());
+                                OtherErrorList.Add("partDesc", record.PartDesc);
+                                OtherErrorList.Add("partStatus", record.PartStatus.ToString());
+                                OtherErrorList.Add("MOQ", record.MOQ.ToString());
+                                OtherErrorList.Add("SPQ", record.SPQ.ToString());
+                                OtherErrorList.Add("Action", record.Action);
+
+                                OtherErrorDic.Add(OtherErrorList);
+                                ViewData["otherErrorDic"] = OtherErrorDic;
                             }
                         }
                     }
@@ -334,7 +357,7 @@ namespace CuttingMrpWeb.Controllers
                 }
                 else
                 {
-                    ViewBag.NotCheckedData = "No Data Checked.Please Check Delimiter.";
+                    ViewBag.NotCheckedData = "No Data Checked.Please Check Delimiter or Column Name.";
                 }
             }else
             {
@@ -354,7 +377,7 @@ namespace CuttingMrpWeb.Controllers
             return View();
         }
 
-        public void Export([Bind(Include = "PartNr")] PartSearchModel q)
+        public void Export([Bind(Include = "PartNr, PartType")] PartSearchModel q)
         {
             IPartService ps = new PartService(Settings.Default.db);
 

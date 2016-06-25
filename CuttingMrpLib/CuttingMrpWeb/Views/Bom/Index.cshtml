@@ -14,7 +14,7 @@
                     <div class="filter-p"></div>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-5">
                     <button class="btn btn-info import-bom-data" type="button" style="width:150px; margin-top:10px;">Import</button>
 
                     @Html.ActionLink("Export", "Export", new
@@ -103,7 +103,7 @@
         <div class="col-md-12">
             <div class="input-group filter-detail">
                 <span class="input-group-addon" id="basic-addon-id" style="background:#0088cc;color:white;">ID</span>
-                <input type="text" class="form-control" name="ID" id="ID" value="@ViewBag.Query.ID" placeholder="PartNr" aria-describedby="basic-addon-id">
+                <input type="text" class="form-control" name="ID" id="ID" value="@ViewBag.Query.ID" placeholder="ID" aria-describedby="basic-addon-id">
                 <span class="input-group-addon" id="basic-addon-partnr">PartNr</span>
                 <input type="text" class="form-control" name="PartNr" id="PartNr" value="@ViewBag.Query.PartNr" placeholder="PartNr" aria-describedby="basic-addon-partnr">
             </div>

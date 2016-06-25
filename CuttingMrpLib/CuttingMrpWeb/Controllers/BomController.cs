@@ -60,7 +60,7 @@ namespace CuttingMrpWeb.Controllers
             MemoryStream ms = new MemoryStream();
             using (StreamWriter sw = new StreamWriter(ms, Encoding.UTF8))
             {
-                List<string> head = new List<string> { " No.", "ID", "PartNr", "ValidFrom", "ValidTo", "VersionId", "BomDesc, Action"};
+                List<string> head = new List<string> { " No.", "ID", "PartNr", "ValidFrom", "ValidTo", "VersionId", "BomDesc", "Action"};
                 sw.WriteLine(string.Join(Settings.Default.csvDelimiter, head));
                 for (var i = 0; i < boms.Count; i++)
                 {
@@ -92,6 +92,7 @@ namespace CuttingMrpWeb.Controllers
         {
             if (bomFile == null)
             {
+                //TODO: Bom Import 优化上传失败界面
                 throw new Exception("No file is uploaded to system");
             }
 
@@ -130,6 +131,8 @@ namespace CuttingMrpWeb.Controllers
                 List<Dictionary<string, string>> CreateErrorDic = new List<Dictionary<string, string>>();
                 List<Dictionary<string, string>> UpdateErrorDic = new List<Dictionary<string, string>>();
                 List<Dictionary<string, string>> DeleteErrorDic = new List<Dictionary<string, string>>();
+                List<Dictionary<string, string>> ActionNullErrorDic = new List<Dictionary<string, string>>();
+                List<Dictionary<string, string>> OtherErrorDic = new List<Dictionary<string, string>>();
 
                 if (records.Count > 0)
                 {
@@ -150,7 +153,19 @@ namespace CuttingMrpWeb.Controllers
                         if (string.IsNullOrWhiteSpace(record.Action))
                         {
                             ActionNullQty++;
-                            break;
+
+                            Dictionary<string, string> ActionNullErrorList = new Dictionary<string, string>();
+
+                            ActionNullErrorList.Add("ID", record.ID);
+                            ActionNullErrorList.Add("PartNr", record.PartNr);
+                            ActionNullErrorList.Add("ValidFrom", record.ValidFrom.ToString());
+                            ActionNullErrorList.Add("ValidTo", record.ValidTo.ToString());
+                            ActionNullErrorList.Add("VersionId", record.VersionId);
+                            ActionNullErrorList.Add("BomDesc", record.BomDesc);
+                            ActionNullErrorList.Add("Action", record.Action);
+
+                            ActionNullErrorDic.Add(ActionNullErrorList);
+                            ViewData["actionNullErrorDic"] = ActionNullErrorDic;
                         }
                         else
                         {
@@ -178,12 +193,13 @@ namespace CuttingMrpWeb.Controllers
 
                                     Dictionary<string, string> CreateErrorList = new Dictionary<string, string>();
 
-                                    CreateErrorList.Add("ID", bom.id);
-                                    CreateErrorList.Add("PartNr", bom.partNr);
-                                    CreateErrorList.Add("ValidFrom", bom.validFrom.ToString());
-                                    CreateErrorList.Add("ValidTo", bom.validTo.ToString());
-                                    CreateErrorList.Add("VersionId", bom.versionId);
-                                    CreateErrorList.Add("BomDesc", bom.bomDesc);
+                                    CreateErrorList.Add("ID", record.ID);
+                                    CreateErrorList.Add("PartNr", record.PartNr);
+                                    CreateErrorList.Add("ValidFrom", record.ValidFrom.ToString());
+                                    CreateErrorList.Add("ValidTo", record.ValidTo.ToString());
+                                    CreateErrorList.Add("VersionId", record.VersionId);
+                                    CreateErrorList.Add("BomDesc", record.BomDesc);
+                                    CreateErrorList.Add("Action", record.Action);
 
                                     CreateErrorDic.Add(CreateErrorList);
                                     ViewData["createErrorDic"] = CreateErrorDic;
@@ -205,15 +221,15 @@ namespace CuttingMrpWeb.Controllers
 
                                         Dictionary<string, string> UpdateErrorList = new Dictionary<string, string>();
 
-                                        UpdateErrorList.Add("ID", bom.id);
-                                        UpdateErrorList.Add("PartNr", bom.partNr);
-                                        UpdateErrorList.Add("ValidFrom", bom.validFrom.ToString());
-                                        UpdateErrorList.Add("ValidTo", bom.validTo.ToString());
-                                        UpdateErrorList.Add("VersionId", bom.versionId);
-                                        UpdateErrorList.Add("BomDesc", bom.bomDesc);
+                                        UpdateErrorList.Add("ID", record.ID);
+                                        UpdateErrorList.Add("PartNr", record.PartNr);
+                                        UpdateErrorList.Add("ValidFrom", record.ValidFrom.ToString());
+                                        UpdateErrorList.Add("ValidTo", record.ValidTo.ToString());
+                                        UpdateErrorList.Add("VersionId", record.VersionId);
+                                        UpdateErrorList.Add("BomDesc", record.BomDesc);
+                                        UpdateErrorList.Add("Action", record.Action);
 
                                         UpdateErrorDic.Add(UpdateErrorList);
-
                                         ViewData["updateErrorDic"] = UpdateErrorDic;
                                     }
                                 }
@@ -221,7 +237,18 @@ namespace CuttingMrpWeb.Controllers
                                 {
                                     UpdateFailureQty++;
 
-                                    ViewBag.CreateExpMsg = "<-------------Create Part Exception!,Maybe partNr is Exist,Please Check.------------->";
+                                    Dictionary<string, string> UpdateErrorList = new Dictionary<string, string>();
+
+                                    UpdateErrorList.Add("ID", record.ID);
+                                    UpdateErrorList.Add("PartNr", record.PartNr);
+                                    UpdateErrorList.Add("ValidFrom", record.ValidFrom.ToString());
+                                    UpdateErrorList.Add("ValidTo", record.ValidTo.ToString());
+                                    UpdateErrorList.Add("VersionId", record.VersionId);
+                                    UpdateErrorList.Add("BomDesc", record.BomDesc);
+                                    UpdateErrorList.Add("Action", record.Action);
+
+                                    UpdateErrorDic.Add(UpdateErrorList);
+                                    ViewData["updateErrorDic"] = UpdateErrorDic;
                                 }
                             }
                             else if (record.Action.Trim().ToLower().Equals("delete"))
@@ -241,27 +268,50 @@ namespace CuttingMrpWeb.Controllers
 
                                         Dictionary<string, string> DeleteErrorList = new Dictionary<string, string>();
 
-                                        DeleteErrorList.Add("ID", bom.id);
-                                        DeleteErrorList.Add("PartNr", bom.partNr);
-                                        DeleteErrorList.Add("ValidFrom", bom.validFrom.ToString());
-                                        DeleteErrorList.Add("ValidTo", bom.validTo.ToString());
-                                        DeleteErrorList.Add("VersionId", bom.versionId);
-                                        DeleteErrorList.Add("BomDesc", bom.bomDesc);
+                                        DeleteErrorList.Add("ID", record.ID);
+                                        DeleteErrorList.Add("PartNr", record.PartNr);
+                                        DeleteErrorList.Add("ValidFrom", record.ValidFrom.ToString());
+                                        DeleteErrorList.Add("ValidTo", record.ValidTo.ToString());
+                                        DeleteErrorList.Add("VersionId", record.VersionId);
+                                        DeleteErrorList.Add("BomDesc", record.BomDesc);
+                                        DeleteErrorList.Add("Action", record.Action);
 
                                         DeleteErrorDic.Add(DeleteErrorList);
-
                                         ViewData["deleteErrorDic"] = DeleteErrorDic;
                                     }
                                 }
-                                catch (Exception e)
+                                catch (Exception)
                                 {
                                     DeleteFailureQty++;
-                                    ViewBag.DeleteExpMsg = "<-------------Delete Part Exception!,Please Check.------------->" + e;
+                                    Dictionary<string, string> DeleteErrorList = new Dictionary<string, string>();
+
+                                    DeleteErrorList.Add("ID", record.ID);
+                                    DeleteErrorList.Add("PartNr", record.PartNr);
+                                    DeleteErrorList.Add("ValidFrom", record.ValidFrom.ToString());
+                                    DeleteErrorList.Add("ValidTo", record.ValidTo.ToString());
+                                    DeleteErrorList.Add("VersionId", record.VersionId);
+                                    DeleteErrorList.Add("BomDesc", record.BomDesc);
+                                    DeleteErrorList.Add("Action", record.Action);
+
+                                    DeleteErrorDic.Add(DeleteErrorList);
+                                    ViewData["deleteErrorDic"] = DeleteErrorDic;
                                 }
                             }
                             else
                             {
                                 //错误 忽略
+                                Dictionary<string, string> OtherErrorList = new Dictionary<string, string>();
+
+                                OtherErrorList.Add("ID", record.ID);
+                                OtherErrorList.Add("PartNr", record.PartNr);
+                                OtherErrorList.Add("ValidFrom", record.ValidFrom.ToString());
+                                OtherErrorList.Add("ValidTo", record.ValidTo.ToString());
+                                OtherErrorList.Add("VersionId", record.VersionId);
+                                OtherErrorList.Add("BomDesc", record.BomDesc);
+                                OtherErrorList.Add("Action", record.Action);
+
+                                OtherErrorDic.Add(OtherErrorList);
+                                ViewData["otherErrorDic"] = OtherErrorDic;
                             }
                         }
                     }
@@ -281,7 +331,7 @@ namespace CuttingMrpWeb.Controllers
                 }
                 else
                 {
-                    ViewBag.NotCheckedData = "No Data Checked.Please Check Delimiter.";
+                    ViewBag.NotCheckedData = "No Data Checked.Please Check Delimiter or Column Name.";
                 }
             }
             else
@@ -301,6 +351,5 @@ namespace CuttingMrpWeb.Controllers
 
             return View();
         }
-
     }
 }

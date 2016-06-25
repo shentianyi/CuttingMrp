@@ -9,17 +9,9 @@
     <div class="panel-body">
         <div class="col-md-12">
             <form action="/Parts/Search" method="get">
-                <div class="col-md-7">
-                    <div class="col-md-9">
-                        <div class="filter-content">
-                            <span class="pull-right" id="basic-addon-filter"> <i class="glyphicon glyphicon-filter"></i> </span>
-                            <div class="filter-p"></div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <button class="btn btn-primary" type="submit" style="width:150px; margin-top:10px;">Search All</button>
-                    </div>
+                <div class="col-md-7 filter-content">
+                    <span class="pull-right" id="basic-addon-filter"> <i class="glyphicon glyphicon-filter"></i> </span>
+                    <div class="filter-p"></div>
                 </div>
 
                 <div class="col-md-5" style="text-align:center;">
@@ -107,6 +99,16 @@
                 <input type="text" class="form-control" name="PartNr" id="PartNr" value="@ViewBag.Query.PartNr" placeholder="PartNr" aria-describedby="basic-addon-partnr">
             </div>
         </div>
+
+        <hr />
+
+        <div class="col-sm-12">
+            <div class="input-group filter-detail">
+                <span class="input-group-addon">PartType</span>
+                @Html.DropDownList("PartType", ViewData["partTypeList"] as IEnumerable<SelectListItem>, new { @class = "form-control", @style = "width: 170px", @name = "PartType", @id = "PartType" })
+            </div>
+        </div>
+
 
         <div class="popModal_footer">
             <input type="submit" value="Search" class="btn btn-success" data-dialogModalBut="ok" />

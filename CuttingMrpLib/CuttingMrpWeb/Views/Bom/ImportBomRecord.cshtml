@@ -2,24 +2,52 @@
     ViewBag.Title = "ImportBomRecord";
 }
 
-<div class="container" style="text-align:center">
-    <h1 style="color:green;">Import Log</h1>
+
+<div style="text-align:center;" class="container">
+    <h1>Import  Log  Page</h1>
+</div>
+
+<div class="alert alert-warning alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <ul class="list-unstyled" style="font-size:1.3em;">
+        <li>
+            1、Check Your Data Quantity
+        </li>
+        <li>
+            2、Look Error Reason
+        </li>
+        <li>
+            3、Copy Error Data and Solve
+        </li>
+        <li>
+            4、Import and Check Again
+        </li>
+    </ul>
+</div>
+
+<blockquote>
+    <p class="label label-primary" style="font-size:1.5em;">@ViewBag.NotCsv</p>
     <br />
-</div>
-
-<div class="alert alert-success" role="alert">
-    <h4>FileError: <span class="label label-primary">@ViewBag.NotCsv</span></h4>
-    <hr />
-    <h4>CheckData: <span class="label label-primary">@ViewBag.NotCheckedData</span></h4>
-</div>
-
-<hr />
+    <br />
+    <br />
+    <p class="label label-primary" style="font-size:1.5em;">@ViewBag.NotCheckedData</p>
+</blockquote>
 
 @try
 {
     <div>
         <table class="table table-bordered">
             <thead>
+                <tr style="background:white;">
+                    <td colspan="9" style="text-align:left;">
+                        <span class="label label-success" style="font-size:1.2em;">
+                            <i class="glyphicon glyphicon-bullhorn"></i>
+                            Tips: You Can Check Your Data Here.
+                        </span>
+                    </td>
+                </tr>
                 <tr>
                     <td>All Quantity</td>
                     <td style="background:green;">CreateSuccessQty</td>
@@ -37,7 +65,7 @@
                 <tr>
                     @foreach (var qty in ViewData["Qty"] as Dictionary<string, int>)
                     {
-                        <td>
+                        <td id="@qty.Key">
                             @qty.Value
                         </td>
                     }
@@ -53,11 +81,14 @@ catch (Exception)
 
 @try
 {
-    <table class="table table-bordered">
+    <table class="table table-bordered CreateFailureTable">
         <thead>
-            <tr style="background:white; color:red;">
-                <td colspan="6" style="text-align:left;">
-                    <span class="label label-danger" style="font-size:1.2em;">Create Msg: Maybe ID Already Exist.</span>
+            <tr style="background:white;">
+                <td colspan="7" style="text-align:left;">
+                    <span class="label label-danger" style="font-size:1.2em;">
+                        <i class="glyphicon glyphicon-warning-sign"></i>
+                        Create Msg: Maybe Column 'ID' Already Exist or Column 'PartNr' Doesn't Exist.
+                    </span>
                 </td>
             </tr>
             <tr>
@@ -67,6 +98,7 @@ catch (Exception)
                 <td>ValidTo</td>
                 <td>VersionId</td>
                 <td>BomDesc</td>
+                <td>Action</td>
             </tr>
         </thead>
         <tbody>
@@ -91,11 +123,14 @@ catch (Exception)
 
 @try
 {
-    <table class="table table-bordered">
+    <table class="table table-bordered UpdateFailureTable">
         <thead>
-            <tr style="background:white; color:red;">
-                <td colspan="6" style="text-align:left;">
-                    <span class="label label-danger" style="font-size:1.2em;">Update Msg: Maybe ID Doesn't Exist.</span>
+            <tr style="background:white;">
+                <td colspan="7" style="text-align:left;">
+                    <span class="label label-danger" style="font-size:1.2em;">
+                        <i class="glyphicon glyphicon-warning-sign"></i>
+                        Update Msg: Maybe Column 'ID' or 'PartNr' Doesn't Exist.
+                    </span>
                 </td>
             </tr>
             <tr>
@@ -105,6 +140,7 @@ catch (Exception)
                 <td>ValidTo</td>
                 <td>VersionId</td>
                 <td>BomDesc</td>
+                <td>Action</td>
             </tr>
         </thead>
         <tbody>
@@ -128,6 +164,135 @@ catch (Exception)
 }
 
 
+@try
+{
+    <table class="table table-bordered DeleteFailureTable">
+        <thead>
+            <tr style="background:white;">
+                <td colspan="7" style="text-align:left;">
+                    <span class="label label-danger" style="font-size:1.2em;">
+                        <i class="glyphicon glyphicon-warning-sign"></i>
+                        Delete Msg: Maybe Column 'ID' Doesn't Exist.
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td>ID</td>
+                <td>PartNr</td>
+                <td>ValidFrom</td>
+                <td>ValidTo</td>
+                <td>VersionId</td>
+                <td>BomDesc</td>
+                <td>Action</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var deleteErrors in ViewData["deleteErrorDic"] as List<Dictionary<string, string>>)
+            {
+                <tr>
+                    @foreach (var deleteError in @deleteErrors as Dictionary<string, string>)
+                    {
+                        <td>
+                            @deleteError.Value
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+catch (Exception)
+{
+}
+
+@try
+{
+    <table class="table table-bordered ActionNullTable">
+        <thead>
+            <tr style="background:white;">
+                <td colspan="7" style="text-align:left;">
+                    <span class="label label-danger" style="font-size:1.2em;">
+                        <i class="glyphicon glyphicon-warning-sign"></i>
+                        Action Null: Column 'Action' is Null.
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td>ID</td>
+                <td>PartNr</td>
+                <td>ValidFrom</td>
+                <td>ValidTo</td>
+                <td>VersionId</td>
+                <td>BomDesc</td>
+                <td>Action</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var actionNullErrors in ViewData["actionNullErrorDic"] as List<Dictionary<string, string>>)
+            {
+                <tr>
+                    @foreach (var actionNullError in @actionNullErrors as Dictionary
+        <string, string>
+            )
+                    {
+                        <td>
+                            @actionNullError.Value
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+catch (Exception)
+{
+}
+
+
+@try
+{
+    <table class="table table-bordered OtherTable">
+        <thead>
+            <tr style="background:white;">
+                <td colspan="7" style="text-align:left;">
+                    <span class="label label-danger" style="font-size:1.2em;">
+                        <i class="glyphicon glyphicon-warning-sign"></i>
+                        Other Msg: Maybe Column 'Action' Error.
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td>ID</td>
+                <td>PartNr</td>
+                <td>ValidFrom</td>
+                <td>ValidTo</td>
+                <td>VersionId</td>
+                <td>BomDesc</td>
+                <td>Action</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var otherErrors in ViewData["otherErrorDic"] as List<Dictionary<string, string>>)
+            {
+                <tr>
+                    @foreach (var otherError in @otherErrors as Dictionary
+        <string, string>
+            )
+                    {
+                        <td>
+                            @otherError.Value
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+catch (Exception)
+{
+}
 @Scripts.Render("~/bundles/bom")
 
-
+<script type="text/javascript">
+    Bom.import_result();
+</script>

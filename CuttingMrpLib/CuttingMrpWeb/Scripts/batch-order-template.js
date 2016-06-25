@@ -4,11 +4,11 @@ BatchOrderTempalte.init = function () {
     var ordernr = $('#OrderNr').val();
     var partnr = $('#PartNr').val();
     var remark1 = $('#Remark1').val();
-    var type = $("#Type").children("option:selected").html();
+    var type = $("#Type").val();
 
     BatchOrderTempalte.add_string_label_to_div(ordernr, 'OrderNr like ', '.filter-p');
     BatchOrderTempalte.add_string_label_to_div(partnr, 'PartNr like ', '.filter-p');
-    BatchOrderTempalte.add_string_label_to_div(type, 'Type =', '.filter-p');
+    BatchOrderTempalte.add_string_label_to_div(type, 'Type = ', '.filter-p');
     BatchOrderTempalte.add_string_label_to_div(remark1, 'Remark1 like ', '.filter-p');
 }
 
@@ -63,6 +63,35 @@ BatchOrderTempalte.import_BatchOrderTemplate_data = function () {
             onClose: function () { },
         });
     });
+}
+
+BatchOrderTempalte.import_result = function () {
+    var CreateFailureQty = $('#CreateFailureQty').html();
+    var UpdateFailureQty = $('#UpdateFailureQty').html();
+    var DeleteFailureQty = $('#DeleteFailureQty').html();
+    var ActionNullQty = $('#ActionNullQty').html();
+    var OtherQty = $('#OtherQty').html();
+
+    if (CreateFailureQty == 0) {
+        $('.CreateFailureTable').css({ display: 'none' })
+    }
+
+    if (UpdateFailureQty == 0) {
+        $('.UpdateFailureTable').css({ display: 'none' })
+    }
+
+
+    if (DeleteFailureQty == 0) {
+        $('.DeleteFailureTable').css({ display: 'none' })
+    }
+
+    if (ActionNullQty == 0) {
+        $('.ActionNullTable').css({ display: 'none' })
+    }
+
+    if (OtherQty == 0) {
+        $('.OtherTable').css({ display: 'none' })
+    }
 }
 
 $('.datetime-picker-from').datetimepicker({

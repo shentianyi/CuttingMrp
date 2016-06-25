@@ -1,8 +1,19 @@
 ﻿var Bom = {}
 
 Bom.Init = function () {
+    var id = $('#ID').val();
     var partnr = $('#PartNr').val();
+    var vffrom = $('#VFFrom').val();
+    var vfto = $('#VFTo').val();
+
+    var vtfrom = $('#VTFrom').val();
+    var vtto = $('#VTTo').val();
+
+    Bom.add_string_label_to_div(id, 'ID like ', '.filter-p');
     Bom.add_string_label_to_div(partnr, 'PartNr like ', '.filter-p');
+    Bom.add_range_label_to_div(vffrom + "~" + vfto, 'ValidFrom', '.filter-p');
+    Bom.add_range_label_to_div(vtfrom + "~" + vtto, 'ValidFrom', '.filter-p');
+
 }
 
 Bom.click_filter = function () {
@@ -56,6 +67,34 @@ Bom.import_bom_data = function () {
             onClose: function () { },
         });
     });
+}
+
+Bom.import_result = function () {
+    var CreateFailureQty = $('#CreateFailureQty').html();
+    var UpdateFailureQty = $('#UpdateFailureQty').html();
+    var DeleteFailureQty = $('#DeleteFailureQty').html();
+    var ActionNullQty = $('#ActionNullQty').html();
+    var OtherQty = $('#OtherQty').html();
+
+    if (CreateFailureQty == 0) {
+        $('.CreateFailureTable').css({ display: 'none' })
+    }
+
+    if (UpdateFailureQty == 0) {
+        $('.UpdateFailureTable').css({ display: 'none' })
+    }
+
+    if (DeleteFailureQty == 0) {
+        $('.DeleteFailureTable').css({ display: 'none' })
+    }
+
+    if (ActionNullQty == 0) {
+        $('.ActionNullTable').css({ display: 'none' })
+    }
+
+    if (OtherQty == 0) {
+        $('.OtherTable').css({ display: 'none' })
+    }
 }
 
 $('.datetime-picker-from').datetimepicker({

@@ -34,7 +34,7 @@ namespace CuttingMrpWeb.Controllers
             return View(bomItems);
         }
 
-        public ActionResult Search([Bind(Include = "ComponentId, VFFrom, VFTo, VTFrom, VTTo, BomId")] BomItemSearchModel q)
+        public ActionResult Search([Bind(Include = "ID, ComponentId, VFFrom, VFTo, VTFrom, VTTo, BomId")] BomItemSearchModel q)
         {
             int pageIndex = 0;
             int.TryParse(Request.QueryString.Get("page"), out pageIndex);
@@ -94,6 +94,7 @@ namespace CuttingMrpWeb.Controllers
         {
             if (bomItemFile == null)
             {
+                //TODO: BomItem Import 优化
                 throw new Exception("No file is uploaded to system");
             }
 
@@ -126,12 +127,14 @@ namespace CuttingMrpWeb.Controllers
                 }
                 catch (Exception e)
                 {
-                    ViewBag.Msg = "Import Failure!" + e;
+                    ViewBag.TextExpMsg = "<-------------Read Csv File Exception!,Please Check.------------->" + e;
                 }
 
-                List<string> CreateErrorList = new List<string>();
-                List<string> UpdateErrorList = new List<string>();
-                List<string> DeleteErrorList = new List<string>();
+                List<Dictionary<string, string>> CreateErrorDic = new List<Dictionary<string, string>>();
+                List<Dictionary<string, string>> UpdateErrorDic = new List<Dictionary<string, string>>();
+                List<Dictionary<string, string>> DeleteErrorDic = new List<Dictionary<string, string>>();
+                List<Dictionary<string, string>> ActionNullErrorDic = new List<Dictionary<string, string>>();
+                List<Dictionary<string, string>> OtherErrorDic = new List<Dictionary<string, string>>();
 
                 if (records.Count > 0)
                 {
@@ -142,6 +145,7 @@ namespace CuttingMrpWeb.Controllers
                     int UpdateFailureQty = 0;
                     int DeleteSuccessQty = 0;
                     int DeleteFailureQty = 0;
+                    int ActionNullQty = 0;
                     int OtherQty = 0;
 
                     IBomItemService ps = new BomItemService(Settings.Default.db);
@@ -150,7 +154,22 @@ namespace CuttingMrpWeb.Controllers
                     {
                         if (string.IsNullOrWhiteSpace(record.Action))
                         {
-                            break;
+                            ActionNullQty++;
+
+                            Dictionary<string, string> ActionNullErrorList = new Dictionary<string, string>();
+
+                            ActionNullErrorList.Add("ID", record.ID);
+                            ActionNullErrorList.Add("ComponentId", record.ComponentId);
+                            ActionNullErrorList.Add("ValidFrom", record.ValidFrom.ToString());
+                            ActionNullErrorList.Add("ValidTo", record.ValidTo.ToString());
+                            ActionNullErrorList.Add("HasChild", record.HasChild.ToString());
+                            ActionNullErrorList.Add("UOM", record.UOM.ToString());
+                            ActionNullErrorList.Add("Quantity", record.Quantity.ToString());
+                            ActionNullErrorList.Add("BomId", record.BomId);
+                            ActionNullErrorList.Add("Action", record.Action);
+
+                            ActionNullErrorDic.Add(ActionNullErrorList);
+                            ViewData["actionNullErrorDic"] = ActionNullErrorDic;
                         }
                         else
                         {
@@ -167,7 +186,7 @@ namespace CuttingMrpWeb.Controllers
                                 bomId = record.BomId
                             };
 
-                            if (record.Action.Trim().Equals("create"))
+                            if (record.Action.Trim().ToLower().Equals("create"))
                             {
                                 try
                                 {
@@ -180,18 +199,43 @@ namespace CuttingMrpWeb.Controllers
                                     {
                                         CreateFailureQty++;
 
-                                        ViewBag.MsgCreate = "Some Part Create Failure:";
+                                        Dictionary<string, string> CreateErrorList = new Dictionary<string, string>();
 
-                                        CreateErrorList.Add("ID is Exist-->"+bomItem.id);
-                                        ViewData["createError"] = CreateErrorList;
+                                        CreateErrorList.Add("ID", record.ID);
+                                        CreateErrorList.Add("ComponentId", record.ComponentId);
+                                        CreateErrorList.Add("ValidFrom", record.ValidFrom.ToString());
+                                        CreateErrorList.Add("ValidTo", record.ValidTo.ToString());
+                                        CreateErrorList.Add("HasChild", record.HasChild.ToString());
+                                        CreateErrorList.Add("UOM", record.UOM.ToString());
+                                        CreateErrorList.Add("Quantity", record.Quantity.ToString());
+                                        CreateErrorList.Add("BomId", record.BomId);
+                                        CreateErrorList.Add("Action", record.Action);
+
+                                        CreateErrorDic.Add(CreateErrorList);
+                                        ViewData["createErrorDic"] = CreateErrorDic;
                                     }
                                 }
-                                catch (Exception e)
+                                catch (Exception)
                                 {
-                                    ViewBag.MsgCreate = "Create Failure!" + e;
+                                    CreateFailureQty++;
+
+                                    Dictionary<string, string> CreateErrorList = new Dictionary<string, string>();
+
+                                    CreateErrorList.Add("ID", record.ID);
+                                    CreateErrorList.Add("ComponentId", record.ComponentId);
+                                    CreateErrorList.Add("ValidFrom", record.ValidFrom.ToString());
+                                    CreateErrorList.Add("ValidTo", record.ValidTo.ToString());
+                                    CreateErrorList.Add("HasChild", record.HasChild.ToString());
+                                    CreateErrorList.Add("UOM", record.UOM.ToString());
+                                    CreateErrorList.Add("Quantity", record.Quantity.ToString());
+                                    CreateErrorList.Add("BomId", record.BomId);
+                                    CreateErrorList.Add("Action", record.Action);
+
+                                    CreateErrorDic.Add(CreateErrorList);
+                                    ViewData["createErrorDic"] = CreateErrorDic;
                                 }
                             }
-                            else if (record.Action.Trim().Equals("update"))
+                            else if (record.Action.Trim().ToLower().Equals("update"))
                             {
                                 //更新
                                 try
@@ -205,18 +249,42 @@ namespace CuttingMrpWeb.Controllers
                                     {
                                         UpdateFailureQty++;
 
-                                        ViewBag.MsgUpdate = "Some Part Update Failure:";
+                                        Dictionary<string, string> UpdateErrorList = new Dictionary<string, string>();
 
-                                        UpdateErrorList.Add("ID is Not Exit -->"+bomItem.id);
-                                        ViewData["updateError"] = UpdateErrorList;
+                                        UpdateErrorList.Add("ID", record.ID);
+                                        UpdateErrorList.Add("ComponentId", record.ComponentId);
+                                        UpdateErrorList.Add("ValidFrom", record.ValidFrom.ToString());
+                                        UpdateErrorList.Add("ValidTo", record.ValidTo.ToString());
+                                        UpdateErrorList.Add("HasChild", record.HasChild.ToString());
+                                        UpdateErrorList.Add("UOM", record.UOM.ToString());
+                                        UpdateErrorList.Add("Quantity", record.Quantity.ToString());
+                                        UpdateErrorList.Add("BomId", record.BomId);
+                                        UpdateErrorList.Add("Action", record.Action);
+
+                                        UpdateErrorDic.Add(UpdateErrorList);
+                                        ViewData["updateErrorDic"] = UpdateErrorDic;
                                     }
                                 }
-                                catch (Exception e)
+                                catch (Exception)
                                 {
-                                    ViewBag.MsgUpdate = "Update Failure!" + e;
+                                    UpdateFailureQty++;
+                                    Dictionary<string, string> UpdateErrorList = new Dictionary<string, string>();
+
+                                    UpdateErrorList.Add("ID", record.ID);
+                                    UpdateErrorList.Add("ComponentId", record.ComponentId);
+                                    UpdateErrorList.Add("ValidFrom", record.ValidFrom.ToString());
+                                    UpdateErrorList.Add("ValidTo", record.ValidTo.ToString());
+                                    UpdateErrorList.Add("HasChild", record.HasChild.ToString());
+                                    UpdateErrorList.Add("UOM", record.UOM.ToString());
+                                    UpdateErrorList.Add("Quantity", record.Quantity.ToString());
+                                    UpdateErrorList.Add("BomId", record.BomId);
+                                    UpdateErrorList.Add("Action", record.Action);
+
+                                    UpdateErrorDic.Add(UpdateErrorList);
+                                    ViewData["updateErrorDic"] = UpdateErrorDic;
                                 }
                             }
-                            else if (record.Action.Trim().Equals("delete"))
+                            else if (record.Action.Trim().ToLower().Equals("delete"))
                             {
                                 //删除
                                 try
@@ -230,32 +298,65 @@ namespace CuttingMrpWeb.Controllers
                                     else
                                     {
                                         DeleteFailureQty++;
+                                        Dictionary<string, string> DeleteErrorList = new Dictionary<string, string>();
 
-                                        ViewBag.MsgDelete = "Some Bom Delete Failure:";
+                                        DeleteErrorList.Add("ID", record.ID);
+                                        DeleteErrorList.Add("ComponentId", record.ComponentId);
+                                        DeleteErrorList.Add("ValidFrom", record.ValidFrom.ToString());
+                                        DeleteErrorList.Add("ValidTo", record.ValidTo.ToString());
+                                        DeleteErrorList.Add("HasChild", record.HasChild.ToString());
+                                        DeleteErrorList.Add("UOM", record.UOM.ToString());
+                                        DeleteErrorList.Add("Quantity", record.Quantity.ToString());
+                                        DeleteErrorList.Add("BomId", record.BomId);
+                                        DeleteErrorList.Add("Action", record.Action);
 
-                                        DeleteErrorList.Add("Delete Error-->" + bomItem.id);
-                                        ViewData["deleteError"] = DeleteErrorList;
+                                        DeleteErrorDic.Add(DeleteErrorList);
+                                        ViewData["deleteErrorDic"] = DeleteErrorDic;
                                     }
                                 }
-                                catch (Exception e)
+                                catch (Exception)
                                 {
                                     DeleteFailureQty++;
 
-                                    ViewBag.MsgDelete = "Some Part Delete Failure:";
+                                    Dictionary<string, string> DeleteErrorList = new Dictionary<string, string>();
 
-                                    DeleteErrorList.Add("Bom-> ID:" + bomItem.id + e.Message);
-                                    ViewData["deleteError"] = DeleteErrorList;
+                                    DeleteErrorList.Add("ID", record.ID);
+                                    DeleteErrorList.Add("ComponentId", record.ComponentId);
+                                    DeleteErrorList.Add("ValidFrom", record.ValidFrom.ToString());
+                                    DeleteErrorList.Add("ValidTo", record.ValidTo.ToString());
+                                    DeleteErrorList.Add("HasChild", record.HasChild.ToString());
+                                    DeleteErrorList.Add("UOM", record.UOM.ToString());
+                                    DeleteErrorList.Add("Quantity", record.Quantity.ToString());
+                                    DeleteErrorList.Add("BomId", record.BomId);
+                                    DeleteErrorList.Add("Action", record.Action);
+
+                                    DeleteErrorDic.Add(DeleteErrorList);
+                                    ViewData["deleteErrorDic"] = DeleteErrorDic;
                                 }
-
                             }
                             else
                             {
                                 //错误 忽略
+
+                                Dictionary<string, string> OtherErrorList = new Dictionary<string, string>();
+
+                                OtherErrorList.Add("ID", record.ID);
+                                OtherErrorList.Add("ComponentId", record.ComponentId);
+                                OtherErrorList.Add("ValidFrom", record.ValidFrom.ToString());
+                                OtherErrorList.Add("ValidTo", record.ValidTo.ToString());
+                                OtherErrorList.Add("HasChild", record.HasChild.ToString());
+                                OtherErrorList.Add("UOM", record.UOM.ToString());
+                                OtherErrorList.Add("Quantity", record.Quantity.ToString());
+                                OtherErrorList.Add("BomId", record.BomId);
+                                OtherErrorList.Add("Action", record.Action);
+
+                                OtherErrorDic.Add(OtherErrorList);
+                                ViewData["otherErrorDic"] = OtherErrorDic;
                             }
                         }
                     }
 
-                    OtherQty = AllQty - CreateSuccessQty - CreateFailureQty - UpdateSuccessQty - UpdateFailureQty- DeleteSuccessQty- DeleteFailureQty;
+                    OtherQty = AllQty - CreateSuccessQty - CreateFailureQty - UpdateSuccessQty - UpdateFailureQty- DeleteSuccessQty- DeleteFailureQty - ActionNullQty;
                     Dictionary<string, int> Qty = new Dictionary<string, int>();
                     Qty.Add("AllQty", AllQty);
                     Qty.Add("CreateSuccessQty", CreateSuccessQty);
@@ -264,13 +365,28 @@ namespace CuttingMrpWeb.Controllers
                     Qty.Add("UpdateFailureQty", UpdateFailureQty);
                     Qty.Add("DeleteSuccessQty", DeleteSuccessQty);
                     Qty.Add("DeleteFailureQty", DeleteFailureQty);
+                    Qty.Add("ActionNullQty", ActionNullQty);
                     Qty.Add("OtherQty", OtherQty);
                     ViewData["Qty"] = Qty;
                 }
                 else
                 {
-                    ViewBag.NoData = "There are no Data.Please Check Delimiter.";
+                    ViewBag.NotCheckedData = "There are no Data.Please Check Delimiter or Column Name.";
                 }
+            }
+            else
+            {
+                ViewBag.NotCsv = "Your File is not .Csv File , Please Check FileName.";
+            }
+
+            if (ViewBag.NotCsv == null)
+            {
+                ViewBag.NotCsv = "CSV File is OK.";
+            }
+
+            if (ViewBag.NotCheckedData == null)
+            {
+                ViewBag.NotCheckedData = "Check Data is OK.";
             }
 
             return View();

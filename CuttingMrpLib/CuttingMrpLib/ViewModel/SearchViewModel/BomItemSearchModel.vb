@@ -1,4 +1,5 @@
 ﻿Public Class BomItemSearchModel
+    Public Property ID As Integer?
     Public Property ComponentId As String
     Public Property VFFrom As DateTime?
     Public Property VFTo As DateTime?
