@@ -236,6 +236,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Message.cs" />
+    <Compile Include="Models\MpsImportModel.cs" />
     <Compile Include="Models\PartImportModel.cs" />
     <Compile Include="Models\PartViewModel.cs" />
     <Compile Include="Models\CuttingOrderImportModel.cs" />
@@ -391,6 +392,7 @@
     <Content Include="Views\BomItem\ImportBomItemRecord.cshtml" />
     <Content Include="Views\BatchOrderTemplate\Index.cshtml" />
     <Content Include="Views\BatchOrderTemplate\ImportBatchOrderTemplateRecord.cshtml" />
+    <Content Include="Views\Mps\ImportMpsRecord.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

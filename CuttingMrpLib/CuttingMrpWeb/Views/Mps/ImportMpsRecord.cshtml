@@ -1,6 +1,7 @@
 ﻿@{
-    ViewBag.Title = "ImportPartRecord";
+    ViewBag.Title = "ImportMpsRecord";
 }
+
 
 <div style="text-align:center;" class="container">
     <h1>Import  Log  Page</h1>
@@ -21,7 +22,7 @@
             3、Copy Error Data and Solve
         </li>
         <li>
-            4、Import and Check Again 
+            4、Import and Check Again
         </li>
     </ul>
 </div>
@@ -34,28 +35,28 @@
     <p class="label label-primary" style="font-size:1.5em;">@ViewBag.NotCheckedData</p>
 </blockquote>
 
-<br />
-
 @try
 {
     <table class="table table-bordered QtyTable">
         <thead>
             <tr style="background:white;">
-                <th colspan="7" style="text-align:left;">
+                <td colspan="9" style="text-align:left;">
                     <span class="label label-success" style="font-size:1.2em;">
                         <i class="glyphicon glyphicon-bullhorn"></i>
-                        Check Your Import Data Quantity.
+                        Tips: You Can Check Your Data Here.
                     </span>
-                </th>
+                </td>
             </tr>
             <tr>
-                <th>All Quantity</th>
-                <th style="background:#5cb85c;">CreateSuccessQty</th>
-                <th style="background:#d9534f;">CreateFailureQty</th>
-                <th style="background:#5cb85c;">UpdateSuccessQty</th>
-                <th style="background:#d9534f;">UpdateFailureQty</th>
-                <th style="background:#f0ad4e;">ActionNullQty</th>
-                <th style="background:gray;">OtherQty</th>
+                <td>All Quantity</td>
+                <td style="background:green;">CreateSuccessQty</td>
+                <td style="background:darkred;">CreateFailureQty</td>
+                <td style="background:green;">UpdateSuccessQty</td>
+                <td style="background:darkred;">UpdateFailureQty</td>
+                <td style="background:green;">DeleteSuccessQty</td>
+                <td style="background:darkred;">DeleteFailureQty</td>
+                <td style="background:orange;">ActionNullQty</td>
+                <td style="background:gray;">OtherQty</td>
             </tr>
         </thead>
 
@@ -73,7 +74,7 @@
 }
 catch (Exception)
 {
-    <input  hidden value="9999" class="Qty" />
+    <input hidden value="9999" class="Qty" />
 
     <h2 style="color:#d9534f;"> Your <code> .Csv </code> File Can't be Imported.Please Checked following tips:</h2>
     <br>
@@ -88,34 +89,36 @@ catch (Exception)
     </blockquote>
 }
 
-@try { 
+@try
+{
     <table class="table table-bordered CreateFailureTable">
         <thead>
             <tr style="background:white;">
-                <th colspan="7" style="text-align:left;">
+                <th colspan="10" style="text-align:left;">
                     <span class="label label-danger" style="font-size:1.2em;">
                         <i class="glyphicon glyphicon-warning-sign"></i>
-                        Create Msg: Maybe Column 'PartNr' Already Exist.
+                        Create Msg: Maybe Column 'ID' Already Exist or Column 'PartNr' Doesn't Exist.
                     </span>
                 </th>
             </tr>
             <tr>
-                <th>PartNr      </th>
-                <th>PartType    </th>
-                <th>PartDesc    </th>
-                <th>PartStatus  </th>
-                <th>MOQ         </th>
-                <th>SPQ         </th>
-                <th>Action      </th>
+                <th>ID</th>
+                <th>PartNr</th>
+                <th>OrderedDate</th>
+                <th>RequiredDate</th>
+                <th>Quantity</th>
+                <th>Source</th>
+                <th>SourceDoc</th>
+                <th>Status</th>
+                <th>UnitId</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var createErrors in ViewData["createErrorDic"] as List<Dictionary<string, string>>)
             {
                 <tr>
-                    @foreach (var createError in @createErrors as Dictionary
-                <string, string>
-                    )
+                    @foreach (var createError in @createErrors as Dictionary<string, string>)
                     {
                         <td>
                             @createError.Value
@@ -136,30 +139,31 @@ catch (Exception)
     <table class="table table-bordered UpdateFailureTable">
         <thead>
             <tr style="background:white;">
-                <th colspan="7" style="text-align:left;">
+                <th colspan="10" style="text-align:left;">
                     <span class="label label-danger" style="font-size:1.2em;">
                         <i class="glyphicon glyphicon-warning-sign"></i>
-                        Update Msg: Maybe Column 'PartNr' Doesn't Exist.
+                        Update Msg: Maybe Column 'ID' or 'PartNr' Doesn't Exist.
                     </span>
                 </th>
             </tr>
             <tr>
-                <th>PartNr      </th>
-                <th>PartType    </th>
-                <th>PartDesc    </th>
-                <th>PartStatus  </th>
-                <th>MOQ         </th>
-                <th>SPQ         </th>
-                <th>Action      </th>
+                <th>ID</th>
+                <th>PartNr</th>
+                <th>OrderedDate</th>
+                <th>RequiredDate</th>
+                <th>Quantity</th>
+                <th>Source</th>
+                <th>SourceDoc</th>
+                <th>Status</th>
+                <th>UnitId</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var updateErrors in ViewData["updateErrorDic"] as List<Dictionary<string, string>>)
             {
                 <tr>
-                    @foreach (var updateError in @updateErrors as Dictionary
-        <string, string>
-            )
+                    @foreach (var updateError in @updateErrors as Dictionary<string, string>)
                     {
                         <td>
                             @updateError.Value
@@ -175,6 +179,51 @@ catch (Exception)
     <h4 style="color:brown;">@ViewBag.UpdateExpMsg</h4>
 }
 
+
+@try
+{
+    <table class="table table-bordered DeleteFailureTable">
+        <thead>
+            <tr style="background:white;">
+                <th colspan="10" style="text-align:left;">
+                    <span class="label label-danger" style="font-size:1.2em;">
+                        <i class="glyphicon glyphicon-warning-sign"></i>
+                        Delete Msg: Maybe Column 'ID' Doesn't Exist.
+                    </span>
+                </th>
+            </tr>
+            <tr>
+                <th>ID</th>
+                <th>PartNr</th>
+                <th>OrderedDate</th>
+                <th>RequiredDate</th>
+                <th>Quantity</th>
+                <th>Source</th>
+                <th>SourceDoc</th>
+                <th>Status</th>
+                <th>UnitId</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var deleteErrors in ViewData["deleteErrorDic"] as List<Dictionary<string, string>>)
+            {
+                <tr>
+                    @foreach (var deleteError in @deleteErrors as Dictionary<string, string>)
+                    {
+                        <td>
+                            @deleteError.Value
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+catch (Exception)
+{
+}
+
 @try
 {
     <table class="table table-bordered ActionNullTable">
@@ -183,18 +232,21 @@ catch (Exception)
                 <th colspan="7" style="text-align:left;">
                     <span class="label label-danger" style="font-size:1.2em;">
                         <i class="glyphicon glyphicon-warning-sign"></i>
-                        Action Null Msg: Column 'Action' is Null.
+                        Action Null: Column 'Action' is Null.
                     </span>
                 </th>
             </tr>
             <tr>
-                <th>PartNr      </th>
-                <th>PartType    </th>
-                <th>PartDesc    </th>
-                <th>PartStatus  </th>
-                <th>MOQ         </th>
-                <th>SPQ         </th>
-                <th>Action      </th>
+                <th>ID</th>
+                <th>PartNr</th>
+                <th>OrderedDate</th>
+                <th>RequiredDate</th>
+                <th>Quantity</th>
+                <th>Source</th>
+                <th>SourceDoc</th>
+                <th>Status</th>
+                <th>UnitId</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -231,13 +283,16 @@ catch (Exception)
                 </th>
             </tr>
             <tr>
-                <th>PartNr      </th>
-                <th>PartType    </th>
-                <th>PartDesc    </th>
-                <th>PartStatus  </th>
-                <th>MOQ         </th>
-                <th>SPQ         </th>
-                <th>Action      </th>
+                <th>ID</th>
+                <th>PartNr</th>
+                <th>OrderedDate</th>
+                <th>RequiredDate</th>
+                <th>Quantity</th>
+                <th>Source</th>
+                <th>SourceDoc</th>
+                <th>Status</th>
+                <th>UnitId</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -261,8 +316,8 @@ catch (Exception)
 {
 }
 
-@Scripts.Render("~/bundles/part")
+@Scripts.Render("~/bundles/mps")
 
 <script type="text/javascript">
-    Part.import_result();
+    MPS.import_result();
 </script>

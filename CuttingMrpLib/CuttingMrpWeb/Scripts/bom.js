@@ -75,6 +75,16 @@ Bom.import_result = function () {
     var DeleteFailureQty = $('#DeleteFailureQty').html();
     var ActionNullQty = $('#ActionNullQty').html();
     var OtherQty = $('#OtherQty').html();
+    var QtyExp = $('.Qty').val();
+
+    if (QtyExp == 9999) {
+        $('.QtyTable').css({ display: 'none' });
+        $('.CreateFailureTable').css({ display: 'none' });
+        $('.UpdateFailureTable').css({ display: 'none' });
+        $('.DeleteFailureTable').css({ display: 'none' });
+        $('.ActionNullTable').css({ display: 'none' });
+        $('.OtherTable').css({ display: 'none' });
+    }
 
     if (CreateFailureQty == 0) {
         $('.CreateFailureTable').css({ display: 'none' })

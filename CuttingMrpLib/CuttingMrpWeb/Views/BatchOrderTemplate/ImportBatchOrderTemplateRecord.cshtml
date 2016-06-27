@@ -38,46 +38,56 @@
 
 @try
 {
-    <div>
-        <table class="table table-bordered">
-            <thead>
-                <tr style="background:white;">
-                    <td colspan="9" style="text-align:left;">
-                        <span class="label label-success" style="font-size:1.2em;">
-                            <i class="glyphicon glyphicon-bullhorn"></i>
-                            Tips: You Can Check Your Data Here.
-                        </span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>All Quantity</td>
-                    <td style="background:green;">CreateSuccessQty</td>
-                    <td style="background:darkred;">CreateFailureQty</td>
-                    <td style="background:green;">UpdateSuccessQty</td>
-                    <td style="background:darkred;">UpdateFailureQty</td>
-                    <td style="background:green;">DeleteSuccessQty</td>
-                    <td style="background:darkred;">DeleteFailureQty</td>
-                    <td style="background:orange;">ActionNullQty</td>
-                    <td style="background:gray;">OtherQty</td>
-                </tr>
-            </thead>
+    <table class="table table-bordered QtyTable">
+        <thead>
+            <tr style="background:white;">
+                <td colspan="9" style="text-align:left;">
+                    <span class="label label-success" style="font-size:1.2em;">
+                        <i class="glyphicon glyphicon-bullhorn"></i>
+                        Tips: You Can Check Your Data Here.
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td>All Quantity</td>
+                <td style="background:green;">CreateSuccessQty</td>
+                <td style="background:darkred;">CreateFailureQty</td>
+                <td style="background:green;">UpdateSuccessQty</td>
+                <td style="background:darkred;">UpdateFailureQty</td>
+                <td style="background:green;">DeleteSuccessQty</td>
+                <td style="background:darkred;">DeleteFailureQty</td>
+                <td style="background:orange;">ActionNullQty</td>
+                <td style="background:gray;">OtherQty</td>
+            </tr>
+        </thead>
 
-            <tbody>
-                <tr>
-                    @foreach (var qty in ViewData["Qty"] as Dictionary<string, int>)
-                    {
-                        <td id="@qty.Key">
-                            @qty.Value
-                        </td>
-                    }
-                </tr>
-            </tbody>
-        </table>
-    </div>
+        <tbody>
+            <tr>
+                @foreach (var qty in ViewData["Qty"] as Dictionary<string, int>)
+                {
+                    <td id="@qty.Key">
+                        @qty.Value
+                    </td>
+                }
+            </tr>
+        </tbody>
+    </table>
 }
 catch (Exception)
 {
-    <h4 style="color:brown;">Qty Error.</h4>
+    <input hidden value="9999" class="Qty" />
+
+    <h2 style="color:#d9534f;"> Your <code> .Csv </code> File Can't be Imported.Please Checked following tips:</h2>
+    <br>
+    <blockquote>
+        <ul class="list-unstyled" style="font-size:1.2em">
+            <li> <span class="label label-info"> step 1 :  </span>&emsp; Is the file correct?  </li>
+
+            <li> <span class="label label-primary"> step 2 : </span>&emsp; Are there any useless data? remove all of them. </li>
+
+            <li> <span class="label label-warning"> step 3 : </span>&emsp;  Column Name exist Error. Please Notice <code>1</code> and <code> l </code> etc. </li>
+        </ul>
+    </blockquote>
 }
 
 @try

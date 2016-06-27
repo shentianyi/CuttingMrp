@@ -357,11 +357,11 @@ namespace CuttingMrpWeb.Controllers
                 }
                 else
                 {
-                    ViewBag.NotCheckedData = "No Data Checked.Please Check Delimiter or Column Name.";
+                    ViewBag.NotCheckedData = "No Data Checked. Please Check Delimiter or Column Name.";
                 }
             }else
             {
-                ViewBag.NotCsv = "Your File is not .Csv File , Please Check FileName.";
+                ViewBag.NotCsv = "Your File is not .Csv File, Please Check FileName.";
             }
 
             if (ViewBag.NotCsv ==null)

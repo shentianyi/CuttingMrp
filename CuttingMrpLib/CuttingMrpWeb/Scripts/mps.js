@@ -1,10 +1,5 @@
 ﻿var MPS = {};
 
-window.onload = function () {
-    $('.navbar-nav li').removeClass("nav-choosed");
-    $('.nav-mps').addClass("nav-choosed");
-}
-
 MPS.init = function () {
     var partnr = $('#PartNr').val();
 
@@ -66,6 +61,56 @@ MPS.click_filter = function () {
     });
 }
 
+MPS.import_mps_data = function () {
+    $('.import-mps-data').click(function () {
+        $('#dialog_content').dialogModal({
+            onOkBut: function () {
+            },
+            onCancelBut: function () { },
+            onLoad: function () { },
+            onClose: function () { },
+        });
+    });
+}
+
+MPS.import_result = function () {
+    var CreateFailureQty = $('#CreateFailureQty').html();
+    var UpdateFailureQty = $('#UpdateFailureQty').html();
+    var DeleteFailureQty = $('#DeleteFailureQty').html();
+    var ActionNullQty = $('#ActionNullQty').html();
+    var OtherQty = $('#OtherQty').html();
+    var QtyExp = $('.Qty').val();
+
+    if (QtyExp == 9999) {
+        $('.QtyTable').css({ display: 'none' });
+        $('.CreateFailureTable').css({ display: 'none' });
+        $('.UpdateFailureTable').css({ display: 'none' });
+        $('.DeleteFailureTable').css({ display: 'none' });
+        $('.ActionNullTable').css({ display: 'none' });
+        $('.OtherTable').css({ display: 'none' });
+    }
+
+    if (CreateFailureQty == 0) {
+        $('.CreateFailureTable').css({ display: 'none' })
+    }
+
+    if (UpdateFailureQty == 0) {
+        $('.UpdateFailureTable').css({ display: 'none' })
+    }
+
+    if (DeleteFailureQty == 0) {
+        $('.DeleteFailureTable').css({ display: 'none' })
+    }
+
+    if (ActionNullQty == 0) {
+        $('.ActionNullTable').css({ display: 'none' })
+    }
+
+    if (OtherQty == 0) {
+        $('.OtherTable').css({ display: 'none' })
+    }
+}
+
 $('.datetime-picker-from').datetimepicker({
     lang: 'ch',
     timepicker: false,
@@ -84,3 +129,7 @@ $('.datetime-picker-to').datetimepicker({
     defaultTime: '23:59'
 })
 
+window.onload = function () {
+    $('.navbar-nav li').removeClass("nav-choosed");
+    $('.nav-mps').addClass("nav-choosed");
+}
