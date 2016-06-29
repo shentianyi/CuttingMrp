@@ -1,6 +1,8 @@
 ﻿Imports System.Globalization
 Imports System.IO
 Imports Brilliantech.Framwork.Utils.LogUtil
+Imports NPOI.HSSF.UserModel
+Imports NPOI.SS.UserModel
 Imports OfficeOpenXml
 
 Public Class FileDataHandler
@@ -51,7 +53,6 @@ Public Class FileDataHandler
                 Using ep As ExcelPackage = New ExcelPackage(fileInfo)
                     Dim ws As ExcelWorksheet = ep.Workbook.Worksheets.First()
                     For i As Integer = 9 To ws.Dimension.End.Row
-                        Dim f As String = ws.Cells(i, 17).Value.ToString()
                         Dim feedback = Integer.Parse(ws.Cells(i, 17).Value.ToString())
                         If feedback > 0 Then
                             Dim rdate As String = ws.Cells(i, 1).Value.ToString()
@@ -69,6 +70,35 @@ Public Class FileDataHandler
                             }
 
                             records.Add(record)
+                        End If
+                    Next
+                End Using
+            ElseIf (ex.Equals(".xls")) Then
+                Using fs As FileStream = File.OpenRead(fileName)
+                    Dim wk As HSSFWorkbook = New HSSFWorkbook(fs)
+                    Dim sheet As ISheet = wk.GetSheetAt(0)
+                    For i As Integer = 8 To sheet.LastRowNum
+                        Dim feedback = Integer.Parse(sheet.GetRow(i).GetCell(16).NumericCellValue.ToString())
+                        If feedback > 0 Then
+
+                            If sheet.GetRow(i) IsNot Nothing Then
+                                Dim rdate As String = sheet.GetRow(i).GetCell(0).StringCellValue
+                                Dim time As String = sheet.GetRow(i).GetCell(1).StringCellValue
+                                Dim part As String = sheet.GetRow(i).GetCell(10).StringCellValue
+                                Dim kanban As String = sheet.GetRow(i).GetCell(12).NumericCellValue.ToString() ' sheet.GetRow(i).GetCell(12).StringCellValue
+                                Dim qty As String = sheet.GetRow(i).GetCell(16).NumericCellValue.ToString() 'sheet.GetRow(i).GetCell(16).StringCellValue
+
+                                Dim record As BatchFinishOrderRecord = New BatchFinishOrderRecord With {
+                                .Id = String.Format("{0}_{1}_{2}", rdate, time, kanban),
+                                .PartNr = part,
+                                .FixOrderNr = kanban,
+                                .Amount = Double.Parse(qty.Split(",")(0)),
+                                .ProdTime = DateTime.ParseExact(rdate + " " + If(time.Length = 4, "0" + time, time), "dd.MM.yyyy HH:mm", CultureInfo.CurrentCulture)
+                                }
+
+                                records.Add(record)
+
+                            End If
                         End If
                     Next
                 End Using
