@@ -60,7 +60,15 @@ Public Class FileDataHandler
                             Dim kanban As String = ws.Cells(i, 13).Value.ToString()
                             Dim qty As String = ws.Cells(i, 17).Value.ToString()
 
+                            Dim record As BatchFinishOrderRecord = New BatchFinishOrderRecord With {
+                            .Id = String.Format("{0}_{1}_{2}", rdate, time, kanban),
+                            .PartNr = part,
+                            .FixOrderNr = kanban,
+                            .Amount = Double.Parse(qty.Split(",")(0)),
+                            .ProdTime = DateTime.ParseExact(rdate + " " + If(time.Length = 4, "0" + time, time), "dd.MM.yyyy HH:mm", CultureInfo.CurrentCulture)
+                            }
 
+                            records.Add(record)
                         End If
                     Next
                 End Using
