@@ -56,7 +56,7 @@ namespace ConsoleApp
             //}
 
             POIFSFileSystem fs = new POIFSFileSystem(new FileStream(file, FileMode.Open, FileAccess.Read));
-
+            
                 
             Console.Read();
 
