@@ -11,7 +11,8 @@ namespace ConsoleApp
 {
     class Program
     {
-        static string dbs = @"Data Source=Charlot-PC\MSSQLSERVER20082;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=sa;Password=123456@";
+        // static string dbs = @"Data Source=Charlot-PC\MSSQLSERVER20082;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=sa;Password=123456@";
+        static string dbs = @"WANGSONG-PC\MSSQLSERVER2008R;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=sa;Password=123456@";
         static void Main(string[] args)
         {
             //Console.WriteLine(DateTime.Now.ToLongTimeString());
