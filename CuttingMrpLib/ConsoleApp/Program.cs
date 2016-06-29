@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using NPOI.HSSF.UserModel;
 using NPOI.POIFS.FileSystem;
+using NPOI.SS.UserModel;
 
 namespace ConsoleApp
 {
@@ -36,7 +37,7 @@ namespace ConsoleApp
             Console.WriteLine(DateTime.Now);
              FileDataHandler h = new FileDataHandler();
             //  h.ImportForceStock(@"C:\cz\MrpDashSvc\Processing\2016-06-25\10-38_66_3853d45d-d6e8-4669-a71d-c3f5ba9f62dd.csv", dbs);
-            //DataContext dc = new DataContext(dbs);
+            //DataContext dc = newpo DataContext(dbs);
             //List<int> ostocks= dc.Context.GetTable<Stock>().Take(10).Select(s=>s.id).ToList();
             //List<Stock> stocks = dc.Context.GetTable<Stock>().Where(s => ostocks.Contains(s.id)).ToList();
             //foreach (Stock s in stocks) {
@@ -49,16 +50,23 @@ namespace ConsoleApp
             //  Console.WriteLine(Path.GetDirectoryName(file));
             //  Console.WriteLine(DateTime.Now);
 
-            string file = @"C:\cz\MrpDashSvc\Processing\2016-06-26\01-07_FFSLS033-XULI1001-20160606-164133_c561399f-6de1-4b9e-887d-f84c1871774f.xls";
-            //using (FileStream fs = File.OpenRead(file)) {
-            //    HSSFWorkbook.Create(fs);
-            //    HSSFWorkbook wk = new HSSFWorkbook(fs);
-            //    int sheetNum = wk.NumberOfSheets;
-            //}
+            string file = @"C:\cz\MrpDashSvc\Processing\2016-06-29\12-17_0_4ed61d2a-59f5-4837-81dc-860b9fcba3a6.xls";
+            using (FileStream fs = File.OpenRead(file))
+            { 
+                HSSFWorkbook wk = new HSSFWorkbook(fs);
+                //int sheetNum = wk.NumberOfSheets;
+              //  Console.WriteLine(sheetNum);
+                ISheet sheet = wk.GetSheetAt(0);
+                for (int i = 8; i <= 25; i++) {
+                    if (sheet.GetRow(i) != null) {
+                        Console.WriteLine(sheet.GetRow(i).GetCell(0).StringCellValue);
+                    }
+                }
+            }
 
-            POIFSFileSystem fs = new POIFSFileSystem(new FileStream(file, FileMode.Open, FileAccess.Read));
-            
-                
+            //  POIFSFileSystem fs = new POIFSFileSystem(new FileStream(file, FileMode.Open, FileAccess.Read));
+
+
             Console.Read();
 
         }

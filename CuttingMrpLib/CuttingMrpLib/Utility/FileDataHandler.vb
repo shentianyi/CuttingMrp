@@ -1,6 +1,7 @@
 ﻿Imports System.Globalization
 Imports System.IO
 Imports Brilliantech.Framwork.Utils.LogUtil
+Imports OfficeOpenXml
 
 Public Class FileDataHandler
     ''' <summary>
@@ -43,6 +44,24 @@ Public Class FileDataHandler
                             records.Add(record)
                         End If
 
+                    Next
+                End Using
+            ElseIf (ex.Equals(".xlsx")) Then
+                Dim fileInfo As FileInfo = New FileInfo(fileName)
+                Using ep As ExcelPackage = New ExcelPackage(fileInfo)
+                    Dim ws As ExcelWorksheet = ep.Workbook.Worksheets.First()
+                    For i As Integer = 9 To ws.Dimension.End.Row
+                        Dim f As String = ws.Cells(i, 17).Value.ToString()
+                        Dim feedback = Integer.Parse(ws.Cells(i, 17).Value.ToString())
+                        If feedback > 0 Then
+                            Dim rdate As String = ws.Cells(i, 1).Value.ToString()
+                            Dim time As String = ws.Cells(i, 2).Value.ToString()
+                            Dim part As String = ws.Cells(i, 11).Value.ToString()
+                            Dim kanban As String = ws.Cells(i, 13).Value.ToString()
+                            Dim qty As String = ws.Cells(i, 17).Value.ToString()
+
+
+                        End If
                     Next
                 End Using
             End If
