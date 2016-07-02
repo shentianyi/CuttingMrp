@@ -62,7 +62,19 @@ namespace CuttingMrpDashSvc.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0 */30 * * * ? *")]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\\\BRILLIANTECH-PC\\brilliantech\\Cutting")]
+        public string autoStockFilePath {
+            get {
+                return ((string)(this["autoStockFilePath"]));
+            }
+            set {
+                this["autoStockFilePath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0 */3 * * * ? *")]
         public string backFlashCron {
             get {
                 return ((string)(this["backFlashCron"]));
@@ -74,7 +86,7 @@ namespace CuttingMrpDashSvc.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0 3 */1 * * ? *")]
+        [global::System.Configuration.DefaultSettingValueAttribute("*/2 * * * * ? *")]
         public string autoStockCron {
             get {
                 return ((string)(this["autoStockCron"]));
@@ -86,13 +98,13 @@ namespace CuttingMrpDashSvc.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\\\\BRILLIANTECH-PC\\brilliantech\\Cutting")]
-        public string autoStockFilePath {
+        [global::System.Configuration.DefaultSettingValueAttribute("WHITE|BLUE")]
+        public string autoStockFileRegex {
             get {
-                return ((string)(this["autoStockFilePath"]));
+                return ((string)(this["autoStockFileRegex"]));
             }
             set {
-                this["autoStockFilePath"] = value;
+                this["autoStockFileRegex"] = value;
             }
         }
     }

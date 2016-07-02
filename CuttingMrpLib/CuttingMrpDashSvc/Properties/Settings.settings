@@ -11,14 +11,17 @@
     <Setting Name="stockSumDashCron" Type="System.String" Scope="User">
       <Value Profile="(Default)">0 50 6 * * ? *</Value>
     </Setting>
-    <Setting Name="backFlashCron" Type="System.String" Scope="User">
-      <Value Profile="(Default)">0 */30 * * * ? *</Value>
-    </Setting>
-    <Setting Name="autoStockCron" Type="System.String" Scope="User">
-      <Value Profile="(Default)">0 3 */1 * * ? *</Value>
-    </Setting>
     <Setting Name="autoStockFilePath" Type="System.String" Scope="User">
       <Value Profile="(Default)">\\BRILLIANTECH-PC\brilliantech\Cutting</Value>
+    </Setting>
+    <Setting Name="backFlashCron" Type="System.String" Scope="User">
+      <Value Profile="(Default)">0 */3 * * * ? *</Value>
+    </Setting>
+    <Setting Name="autoStockCron" Type="System.String" Scope="User">
+      <Value Profile="(Default)">*/2 * * * * ? *</Value>
+    </Setting>
+    <Setting Name="autoStockFileRegex" Type="System.String" Scope="User">
+      <Value Profile="(Default)">WHITE|BLUE</Value>
     </Setting>
   </Settings>
 </SettingsFile>

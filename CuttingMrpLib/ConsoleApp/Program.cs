@@ -7,6 +7,7 @@ using System.Text;
 using NPOI.HSSF.UserModel;
 using NPOI.POIFS.FileSystem;
 using NPOI.SS.UserModel;
+using System.Text.RegularExpressions;
 
 namespace ConsoleApp
 {
@@ -33,10 +34,10 @@ namespace ConsoleApp
             ////File.Copy(@"\\192.168.1.63\brilliantech\Cutting\1.xls", "c:\\122.xls",true);
             ////  Console.WriteLine(Path.GetFileNameWithoutExtension(@"\\192.168.1.63\brilliantech\Cutting\1.xls"));
             //Console.WriteLine(Path.GetFileNameWithoutExtension(@"\\ -PC\cuttingMrp"));
-            string file = @"C:\cz\MrpDashSvc\Processing\2016-06-29\07-01_1_0af7f282-02bd-48a2-8223-8a2392da7370.xls";
-            Console.WriteLine(DateTime.Now);
-             FileDataHandler h = new FileDataHandler();
-            h.ImportForceStock(file, dbs);
+            //string file = @"C:\cz\MrpDashSvc\Processing\2016-06-29\07-01_1_0af7f282-02bd-48a2-8223-8a2392da7370.xls";
+            //Console.WriteLine(DateTime.Now);
+            // FileDataHandler h = new FileDataHandler();
+            //h.ImportForceStock(file, dbs);
             //DataContext dc = newpo DataContext(dbs);
             //List<int> ostocks= dc.Context.GetTable<Stock>().Take(10).Select(s=>s.id).ToList();
             //List<Stock> stocks = dc.Context.GetTable<Stock>().Where(s => ostocks.Contains(s.id)).ToList();
@@ -65,8 +66,19 @@ namespace ConsoleApp
             //}
 
             //  POIFSFileSystem fs = new POIFSFileSystem(new FileStream(file, FileMode.Open, FileAccess.Read));
+            string s = "^[WHILE|BLUE].";
+            Regex r = new Regex(s);
 
+            Console.WriteLine(r.IsMatch("sss"));
 
+            Console.WriteLine(r.IsMatch("WHILE"));
+
+            Console.WriteLine(r.IsMatch("white"));
+            Console.WriteLine(r.IsMatch("WHILE.csv"));
+
+            Console.WriteLine(r.IsMatch("BLUE.xls"));
+
+            Console.WriteLine(r.IsMatch("BLUE.xlsx"));
             Console.Read();
 
         }

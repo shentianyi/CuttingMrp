@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using CuttingMrpDashSvc.Properties;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace CuttingMrpDashSvc.Job
 {
@@ -21,26 +22,29 @@ namespace CuttingMrpDashSvc.Job
                 LogUtil.Logger.Info("start gen AutoStockJob");
 
                 List<string> files = FileUtility.GetAllFilesFromDirectory(Settings.Default.autoStockFilePath);
-              
+                Regex r = new Regex(Settings.Default.autoStockFileRegex);
+                 
                 LogUtil.Logger.Error(files);
 
                 if (files != null && files.Count > 0)
                 {
                     foreach (string file in files)
                     {
-                        if (FileUtility.IsFileOpen(file))
-                        {
-                            string newFile = Process(file);
-
-                            CalculateSetting setting = new CalculateSetting()
+                        if (r.IsMatch(Path.GetFileName(file))){
+                            if (FileUtility.IsFileOpen(file))
                             {
-                                TaskType = "AutoStock",
-                                Parameters = newFile //new Dictionary<string, string>()
-                            };
-                           // setting.Parameters.Add("file", newFile);
+                                string newFile = Process(file);
 
-                            ICalculateService cs = new CalculateService(Settings.Default.db);
-                            cs.Start(Settings.Default.mrpQueue, setting);
+                                CalculateSetting setting = new CalculateSetting()
+                                {
+                                    TaskType = "AutoStock",
+                                    Parameters = newFile //new Dictionary<string, string>()
+                                };
+                                // setting.Parameters.Add("file", newFile);
+
+                                ICalculateService cs = new CalculateService(Settings.Default.db);
+                                cs.Start(Settings.Default.mrpQueue, setting);
+                            }
                         }
                     }
                 }
