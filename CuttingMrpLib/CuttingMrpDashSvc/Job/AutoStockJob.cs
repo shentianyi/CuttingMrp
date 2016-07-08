@@ -22,7 +22,7 @@ namespace CuttingMrpDashSvc.Job
                 LogUtil.Logger.Info("start gen AutoStockJob");
 
                 List<string> files = FileUtility.GetAllFilesFromDirectory(Settings.Default.autoStockFilePath);
-                Regex r = new Regex(Settings.Default.autoStockFileRegex);
+//Regex r = new Regex(Settings.Default.autoStockFileRegex);
                  
                 LogUtil.Logger.Error(files);
 
@@ -30,22 +30,28 @@ namespace CuttingMrpDashSvc.Job
                 {
                     foreach (string file in files)
                     {
-                        if (r.IsMatch(Path.GetFileName(file))){
+                        // if (r.IsMatch(Path.GetFileName(file))){
+                        string fileName = Path.GetFileName(file);
+                        if (Settings.Default.autoStockFileRegex.Split(';').Contains(fileName))
+                        {
                             if (FileUtility.IsFileOpen(file))
                             {
                                 string newFile = Process(file);
-
-                                CalculateSetting setting = new CalculateSetting()
+                                if (!string.IsNullOrWhiteSpace(newFile))
                                 {
-                                    TaskType = "AutoStock",
-                                    Parameters = newFile //new Dictionary<string, string>()
-                                };
-                                // setting.Parameters.Add("file", newFile);
+                                    CalculateSetting setting = new CalculateSetting()
+                                    {
+                                        TaskType = "AutoStock",
+                                        Parameters = newFile //new Dictionary<string, string>()
+                                    };
+                                    // setting.Parameters.Add("file", newFile);
 
-                                ICalculateService cs = new CalculateService(Settings.Default.db);
-                                cs.Start(Settings.Default.mrpQueue, setting);
+                                    ICalculateService cs = new CalculateService(Settings.Default.db);
+                                    cs.Start(Settings.Default.mrpQueue, setting);
+                                }
                             }
                         }
+                       // }
                     }
                 }
                 

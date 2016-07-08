@@ -69,16 +69,12 @@ namespace ConsoleApp
             string s = "^[WHILE|BLUE].";
             Regex r = new Regex(s);
 
-            Console.WriteLine(r.IsMatch("sss"));
-
-            Console.WriteLine(r.IsMatch("WHILE"));
-
-            Console.WriteLine(r.IsMatch("white"));
+            Console.WriteLine(r.IsMatch("WHILE1.csv"));
             Console.WriteLine(r.IsMatch("WHILE.csv"));
 
-            Console.WriteLine(r.IsMatch("BLUE.xls"));
-
             Console.WriteLine(r.IsMatch("BLUE.xlsx"));
+
+            Console.WriteLine(r.IsMatch("BLUE1.xlsx"));
             Console.Read();
 
         }
