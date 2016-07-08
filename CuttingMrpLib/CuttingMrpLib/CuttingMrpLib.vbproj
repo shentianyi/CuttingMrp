@@ -190,6 +190,7 @@
     <Compile Include="Utility\CalculatorSingleton.vb" />
     <Compile Include="Utility\FileDataHandler.vb" />
     <Compile Include="Utility\FileUtility.vb" />
+    <Compile Include="Utility\TimeUtility.vb" />
     <Compile Include="ViewModel\PageViewModel\DashboardForStockReportItem.vb" />
     <Compile Include="ViewModel\PageViewModel\DashboardItem.vb" />
     <Compile Include="ViewModel\PageViewModel\ProcessOrderInfoModel.vb" />

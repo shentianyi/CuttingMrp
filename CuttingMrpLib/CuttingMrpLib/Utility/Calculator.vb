@@ -130,6 +130,7 @@ Public Class Calculator
 
 
     Public Function PrepareData(mrpround As String, orders As Hashtable, settings As CalculateSetting) As List(Of ProcessOrder)
+
         Dim result As List(Of ProcessOrder) = New List(Of ProcessOrder)
         For Each dic As DictionaryEntry In orders
             Dim orderPieces As Hashtable = GroupByDate(settings.MergeMethod, dic.Value)
@@ -199,8 +200,15 @@ Public Class Calculator
                     End If
 
                 End If
+
+                Dim stockQty As Double = 0
+                Dim stockSumRep As Repository(Of SumOfStock) = New Repository(Of SumOfStock)(New DataContext(DBConn))
+                Dim stock As SumOfStock = stockSumRep.SingleOrDefault(Function(s) s.partNr.Equals(dic.Key))
+                If stock IsNot Nothing Then
+                    stockQty = stock.SumOfStock
+                End If
                 Dim toinsert As ProcessOrder = New ProcessOrder With {.orderNr = ordernr,
-                    .partNr = dic.Key, .derivedFrom = "MRP", .proceeDate = dateresult, .sourceDoc = sourceDoc,
+                    .partNr = dic.Key, .currentStock = stockQty, .derivedFrom = "MRP", .proceeDate = dateresult, .sourceDoc = sourceDoc,
                     .status = ProcessOrderStatus.Open, .sourceQuantity = sum, .actualQuantity = actualQty, .requirementQuantity = requirementSum,
                     .completeRate = completeRate, .batchQuantity = moq, .OrderDerivations = en, .OrderType = settings.OrderType, .createAt = Now}
                 result.Add(toinsert)

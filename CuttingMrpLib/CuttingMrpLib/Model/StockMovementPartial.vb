@@ -1,13 +1,15 @@
 ﻿Partial Public Class StockMovement
     Public ReadOnly Property createdAtDisplay As String
         Get
-            Return Me.createdAt.Value.ToString()
+            ' Return Me.createdAt.Value.ToString()
+            Return TimeUtility.Format(Me.createdAt)
         End Get
     End Property
 
     Public ReadOnly Property fifoDisplay As String
         Get
-            Return Me.fifo.ToString()
+            ' Return Me.fifo.ToString()
+            Return TimeUtility.Format(Me.fifo)
         End Get
     End Property
 

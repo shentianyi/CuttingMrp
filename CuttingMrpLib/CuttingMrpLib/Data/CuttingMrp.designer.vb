@@ -4383,6 +4383,8 @@ Partial Public Class ProcessOrder
 	
 	Private _requirementQuantity As System.Nullable(Of Double)
 	
+	Private _currentStock As System.Nullable(Of Double)
+	
 	Private _OrderDerivations As EntitySet(Of OrderDerivation)
 	
 	Private _Part As EntityRef(Of Part)
@@ -4449,6 +4451,10 @@ Partial Public Class ProcessOrder
     Partial Private Sub OnrequirementQuantityChanging(value As System.Nullable(Of Double))
     End Sub
     Partial Private Sub OnrequirementQuantityChanged()
+    End Sub
+    Partial Private Sub OncurrentStockChanging(value As System.Nullable(Of Double))
+    End Sub
+    Partial Private Sub OncurrentStockChanged()
     End Sub
     #End Region
 	
@@ -4686,6 +4692,22 @@ Partial Public Class ProcessOrder
 				Me._requirementQuantity = value
 				Me.SendPropertyChanged("requirementQuantity")
 				Me.OnrequirementQuantityChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_currentStock", DbType:="Float")>  _
+	Public Property currentStock() As System.Nullable(Of Double)
+		Get
+			Return Me._currentStock
+		End Get
+		Set
+			If (Me._currentStock.Equals(value) = false) Then
+				Me.OncurrentStockChanging(value)
+				Me.SendPropertyChanging
+				Me._currentStock = value
+				Me.SendPropertyChanged("currentStock")
+				Me.OncurrentStockChanged
 			End If
 		End Set
 	End Property

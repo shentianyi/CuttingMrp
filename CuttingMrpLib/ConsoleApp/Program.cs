@@ -66,15 +66,19 @@ namespace ConsoleApp
             //}
 
             //  POIFSFileSystem fs = new POIFSFileSystem(new FileStream(file, FileMode.Open, FileAccess.Read));
-            string s = "^[WHILE|BLUE].";
-            Regex r = new Regex(s);
+            //string s = "^[WHILE|BLUE].";
+            //Regex r = new Regex(s);
 
-            Console.WriteLine(r.IsMatch("WHILE1.csv"));
-            Console.WriteLine(r.IsMatch("WHILE.csv"));
+            //Console.WriteLine(r.IsMatch("WHILE1.csv"));
+            //Console.WriteLine(r.IsMatch("WHILE.csv"));
 
-            Console.WriteLine(r.IsMatch("BLUE.xlsx"));
+            //Console.WriteLine(r.IsMatch("BLUE.xlsx"));
 
-            Console.WriteLine(r.IsMatch("BLUE1.xlsx"));
+            //Console.WriteLine(r.IsMatch("BLUE1.xlsx"));
+            Console.WriteLine((int)0.1);
+            Console.WriteLine((int)1.1);
+            Console.WriteLine((int)1.123);
+            Console.WriteLine((int)1.9);
             Console.Read();
 
         }

@@ -31,7 +31,7 @@ Public Class StockMovementRepository
                 moves = moves.Where(Function(m) m.createdAt <= conditions.DateTo)
             End If
 
-            Return moves.OrderByDescending(Function(m) m.partNr)
+            Return moves.OrderByDescending(Function(m) m.id)
         End If
         Return Nothing
     End Function

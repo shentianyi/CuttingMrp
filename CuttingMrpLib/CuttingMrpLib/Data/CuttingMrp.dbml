@@ -240,6 +240,7 @@
       <Column Name="OrderType" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
       <Column Name="createAt" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Column Name="requirementQuantity" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="currentStock" Type="System.Double" DbType="Float" CanBeNull="true" />
       <Association Name="ProcessOrder_OrderDerivation" Member="OrderDerivations" ThisKey="orderNr" OtherKey="orderId" Type="OrderDerivation" />
       <Association Name="Part_ProcessOrder" Member="Part" ThisKey="partNr" OtherKey="partNr" Type="Part" IsForeignKey="true" />
     </Type>

@@ -137,7 +137,7 @@ namespace CuttingMrpWeb.Controllers
             return View("Index", stockMovements);
         }
 
-        public void Export([Bind(Include = "PartNr, Quantity, FIFO, MoveTypeDisplay, SourceDoc, CreatedDisplay")] StockMovementSearchModel q)
+        public void Export([Bind(Include = "PartNr, DateFrom, DateTo, MoveType")] StockMovementSearchModel q)
         {
             IStockMovementService sms = new StockMovementService(Settings.Default.db);
             List<StockMovement> stockMovements = sms.Search(q).ToList();
@@ -147,7 +147,7 @@ namespace CuttingMrpWeb.Controllers
             {
                 List<string> head = new List<string>
                 {
-                    "N0.", "PartNr", "Quantity", "FIFO", "MoveTypeDisplay", "SouceDoc", "CreatedAtDisplay"
+                    "N0.", "PartNr", "Quantity", "FIFO", "MoveType", "SouceDoc", "CreatedAt"
                 };
 
                 sw.WriteLine(string.Join(Settings.Default.csvDelimiter, head));
@@ -158,10 +158,10 @@ namespace CuttingMrpWeb.Controllers
                     ii.Add((i + 1).ToString());
                     ii.Add(stockMovements[i].partNr);
                     ii.Add(stockMovements[i].quantity.ToString());
-                    ii.Add(stockMovements[i].fifoDisplay.ToString());
-                    ii.Add(stockMovements[i].typeDisplay.ToString());
+                    ii.Add(stockMovements[i].fifoDisplay);
+                    ii.Add(stockMovements[i].typeDisplay);
                     ii.Add(stockMovements[i].sourceDoc.ToString());
-                    ii.Add(stockMovements[i].createdAtDisplay.ToString());
+                    ii.Add(stockMovements[i].createdAtDisplay);
                     sw.WriteLine(string.Join(Settings.Default.csvDelimiter, ii.ToArray()));
                 }
             }

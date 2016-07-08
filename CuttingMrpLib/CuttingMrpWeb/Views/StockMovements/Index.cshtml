@@ -80,8 +80,8 @@
                     var html = Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
                         .Options(o => o.AddRouteValue("PartNr", ViewBag.Query.PartNr))
                         .Options(o => o.AddRouteValue("MoveType", ViewBag.Query.MoveType))
-                        .Options(o => o.AddRouteValue("OrderedDateFrom", ViewBag.Query.DateFrom))
-                        .Options(o => o.AddRouteValue("OrderedDateTo", ViewBag.Query.DateTo));
+                        .Options(o => o.AddRouteValue("DateFrom", ViewBag.Query.DateFrom))
+                        .Options(o => o.AddRouteValue("DateTo", ViewBag.Query.DateTo));
                     @html
                 }
                 else

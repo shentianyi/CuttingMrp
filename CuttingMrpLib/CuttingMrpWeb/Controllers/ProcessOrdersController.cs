@@ -37,8 +37,8 @@ namespace CuttingMrpWeb.Controllers
             SetPartTypeList(null);
             SetProcessOrderMrpRoundList(null);
 
-            ProcessOrderInfoModel info = ps.GetProcessOrderInfo(q);
-            ViewBag.Info = info;
+            //ProcessOrderInfoModel info = ps.GetProcessOrderInfo(q);
+            //ViewBag.Info = info;
 
             return View(processOrders);
         }
@@ -136,14 +136,15 @@ namespace CuttingMrpWeb.Controllers
             SetPartTypeList(q.PartType);
             SetProcessOrderMrpRoundList(q.MrpRound);
 
-            ProcessOrderInfoModel info = ps.GetProcessOrderInfo(q);
-            ViewBag.Info = info;
+            //ProcessOrderInfoModel info = ps.GetProcessOrderInfo(q);
+            //ViewBag.Info = info;
 
             return View("Index", processOrders);
         }
 
         public void Export([Bind(Include = "OrderNr,SourceDoc,DerivedFrom,ProceeDateFrom,ProceeDateTo,PartNr,ActualQuantityFrom,ActualQuantityTo,CompleteRateFrom,CompleteRateTo,Status,MrpRound,KanbanNr,PartType,CreateAt")] ProcessOrderSearchModel q)
         {
+            var isNew = Request.QueryString["isNew"];
             IProcessOrderService ps = new ProcessOrderService(Settings.Default.db);
 
             List<ProcessOrder> processOrders = ps.Search(q).ToList();
@@ -158,8 +159,40 @@ namespace CuttingMrpWeb.Controllers
                 sw.WriteLine(string.Join(Settings.Default.csvDelimiter, head));
                 for(var i=0; i<processOrders.Count; i++)
                 {
+
                     List<string> ii = new List<string>();
                     ii.Add((i + 1).ToString());
+                    double sourceQuantity = processOrders[i].sourceQuantity;
+                    double actualQuantity = processOrders[i].actualQuantity;
+                    double kanbanBundleQty = processOrders[i].Part.kanbanBundleQty;
+                    if ((!string.IsNullOrEmpty(isNew)) && processOrders[i].currentStock>0) {
+                        ProcessOrderSearchModel qq = new ProcessOrderSearchModel()
+                        {
+                            PartNr = processOrders[i].partNr,
+                            Status = processOrders[i].status,
+                            ProceeDateTo = processOrders[i].proceeDate
+                        };
+                        List<ProcessOrder> orders = ps.Search(qq).ToList();
+                        double qty = sourceQuantity;
+                        if (orders.Count > 0) {
+                            qty = 0;
+                            foreach (ProcessOrder o in orders)
+                            {
+                                qty += o.sourceQuantity;
+                            }
+                        }
+                        sourceQuantity = qty;
+                        if (kanbanBundleQty > 0) {
+                            if (sourceQuantity % kanbanBundleQty == 0)
+                            {
+                                // do nothing
+                            }
+                            else {
+                                actualQuantity = kanbanBundleQty * (((int)(sourceQuantity / kanbanBundleQty)) + 1);
+                            }
+                        }
+                    }
+
                     ii.Add(processOrders[i].orderNr);
                     ii.Add(processOrders[i].partNr); 
                     ii.Add(processOrders[i].Part.kanbanNrs);
@@ -167,10 +200,10 @@ namespace CuttingMrpWeb.Controllers
                     ii.Add(processOrders[i].statusDisplay);
                     ii.Add(processOrders[i].proceeDate.ToString());
                     ii.Add(processOrders[i].requirementQuantity.ToString());
-                    ii.Add(processOrders[i].sourceQuantity.ToString());
-                    ii.Add(processOrders[i].actualQuantity.ToString());
+                    ii.Add(sourceQuantity.ToString());
+                    ii.Add(actualQuantity.ToString());
                     ii.Add(processOrders[i].Part.kanbanBatchQty.ToString());
-                    ii.Add(processOrders[i].Part.kanbanBundleQty.ToString());
+                    ii.Add(kanbanBundleQty.ToString());
                     ii.Add(processOrders[i].Part.kanbanPosition.ToString());
                     ii.Add(processOrders[i].Part.routeNr.ToString());
                     ii.Add(Math.Round(processOrders[i].completeRate,2).ToString());
@@ -194,6 +227,8 @@ namespace CuttingMrpWeb.Controllers
 
         public void ExportKB([Bind(Include = "OrderNr,SourceDoc,DerivedFrom,ProceeDateFrom,ProceeDateTo,PartNr,ActualQuantityFrom,ActualQuantityTo,CompleteRateFrom,CompleteRateTo,Status,MrpRound,PartType,CreateAt")] ProcessOrderSearchModel q)
         {
+
+            var isNew = Request.QueryString["isNew"];
             IProcessOrderService ps = new ProcessOrderService(Settings.Default.db);
             if (!q.ActualQuantityFrom.HasValue) {
                 q.ActualQuantityFrom = 0.0000009;
@@ -211,17 +246,54 @@ namespace CuttingMrpWeb.Controllers
                 {
                     List<string> ii = new List<string>();
                     ii.Add((i + 1).ToString());
+
+                    double sourceQuantity = processOrders[i].sourceQuantity;
+                    double actualQuantity = processOrders[i].actualQuantity;
+                    double kanbanBundleQty = processOrders[i].Part.kanbanBundleQty;
+                    double kanbanBatchQty= processOrders[i].Part.kanbanBatchQty;
+                    if ((!string.IsNullOrEmpty(isNew)) && processOrders[i].currentStock > 0)
+                    {
+                        ProcessOrderSearchModel qq = new ProcessOrderSearchModel()
+                        {
+                            PartNr = processOrders[i].partNr,
+                            Status = processOrders[i].status,
+                            ProceeDateTo = processOrders[i].proceeDate
+                        };
+                        List<ProcessOrder> orders = ps.Search(qq).ToList();
+                        double qty = sourceQuantity;
+                        if (orders.Count > 0)
+                        {
+                            qty = 0;
+                            foreach (ProcessOrder o in orders)
+                            {
+                                qty += o.sourceQuantity;
+                            }
+                        }
+                        sourceQuantity = qty;
+                        if (kanbanBundleQty > 0)
+                        {
+                            if (sourceQuantity % kanbanBundleQty == 0)
+                            {
+                                // do nothing
+                            }
+                            else
+                            {
+                                actualQuantity = kanbanBundleQty * (((int)(sourceQuantity / kanbanBundleQty)) + 1);
+                            }
+                        }
+                    }
+
                     ii.Add(processOrders[i].Part.productNr);
                     ii.Add(processOrders[i].partNr);
                     ii.Add(processOrders[i].Part.kanbanNrs);
                     ii.Add(processOrders[i].Part.partTypeDisplay);
                     ii.Add(processOrders[i].Part.kanbanPosition);
-                    ii.Add(processOrders[i].actualQuantity.ToString());
-                    ii.Add(processOrders[i].Part.kanbanBundleQty.ToString());
+                    ii.Add(actualQuantity.ToString());
+                    ii.Add(kanbanBundleQty.ToString());
                     ii.Add(processOrders[i].Part.kanbanBatchQty.ToString());
                     ii.Add(processOrders[i].Part.kanbanPosition.ToString());
                     ii.Add(processOrders[i].Part.routeNr.ToString());
-                    ii.Add(processOrders[i].needChangeKbQtyDisplay);
+                    ii.Add(actualQuantity>kanbanBatchQty ? "Y" : "N");
                     ii.Add(processOrders[i].createAt.ToString());
                     sw.WriteLine(string.Join(Settings.Default.csvDelimiter, ii.ToArray()));
                 }
