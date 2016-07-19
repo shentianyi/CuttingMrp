@@ -5,6 +5,7 @@
     Private _prodtime As DateTime
     Private _line As Integer
 
+
     Public Property Id As String
 
     Public Property LineNr As Integer
@@ -77,4 +78,20 @@
             _warnings = value
         End Set
     End Property
+
+
+    Private _moveType As StockMoveType
+
+    Public Property MoveType As StockMoveType
+        Get
+            If _moveType = Nothing Then
+                _moveType = StockMoveType.UploadEntry
+            End If
+            Return _moveType
+        End Get
+        Set(value As StockMoveType)
+            _moveType = value
+        End Set
+    End Property
+
 End Class

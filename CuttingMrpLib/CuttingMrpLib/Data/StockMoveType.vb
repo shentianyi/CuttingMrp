@@ -40,4 +40,32 @@ Public Enum StockMoveType
     ''' </summary>
     <Description("InventorySystem")>
     InventorySystem = 7
+
+    ''' <summary>
+    ''' 报废
+    ''' </summary>
+    <Description("Scrap")>
+    Scrap = 8
+
+    ''' <summary>
+    ''' 报废返工
+    ''' </summary>
+    <Description("ScrapRework")>
+    ScrapRework = 9
+
+
+    ''' <summary>
+    ''' 返工
+    ''' </summary>
+    <Description("Rework")>
+    Rework = 10
+
+    ''' <summary>
+    ''' 误操作
+    ''' </summary>
+    <Description("MisHandle")>
+    MisHandle = 11
+
+
+
 End Enum

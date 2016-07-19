@@ -189,6 +189,7 @@ Public Class ProcessOrderService
         Dim toStock As List(Of Stock) = New List(Of Stock)
         Dim negaStockDic As Dictionary(Of String, List(Of Stock)) = New Dictionary(Of String, List(Of Stock))
 
+        Dim posiStockDic As Dictionary(Of String, List(Of Stock)) = New Dictionary(Of String, List(Of Stock))
         Dim toMove As List(Of StockMovement) = New List(Of StockMovement)
         Dim toCreateStockBatchMoveRecord As List(Of StockBatchMoveRecord) = New List(Of StockBatchMoveRecord)
 
@@ -202,6 +203,29 @@ Public Class ProcessOrderService
 
                 Dim tmpQuantity As Double = rec.Amount
 
+                If tmpQuantity < 0 Then
+                    If posiStockDic.ContainsKey(rec.PartNr) = False Then
+                        Dim posiStocks As List(Of Stock) = findStockRep.FindAll(Function(s) s.partNr.Equals(rec.PartNr) And s.quantity > 0).OrderBy(Function(s) s.fifo).ToList
+                        If posiStocks.Count > 0 Then
+                            posiStockDic.Add(rec.PartNr, posiStocks)
+                        End If
+                    End If
+
+                    If posiStockDic.ContainsKey(rec.PartNr) Then
+                        For Each s As Stock In posiStockDic(rec.PartNr)
+                            If rec.Amount < 0 And s.quantity > 0 Then
+                                If Math.Abs(rec.Amount) > s.quantity Then
+                                    rec.Amount += s.quantity
+                                    s.quantity = 0
+                                Else
+                                    s.quantity += rec.Amount
+                                    rec.Amount = 0
+                                End If
+                            End If
+                        Next
+                    End If
+                End If
+
                 ' 找到负库存
                 If negaStockDic.ContainsKey(rec.PartNr) = False Then
                     Dim negaStocks As List(Of Stock) = findStockRep.FindAll(Function(s) s.partNr.Equals(rec.PartNr) And s.quantity <= 0).ToList
@@ -212,7 +236,7 @@ Public Class ProcessOrderService
 
                 If negaStockDic.ContainsKey(rec.PartNr) Then
                     For Each s As Stock In negaStockDic(rec.PartNr)
-                        If rec.Amount > 0 And s.quantity <= 0 Then
+                        If rec.Amount <> 0 And s.quantity <= 0 Then
                             If Math.Abs(s.quantity) >= rec.Amount Then
 
                                 s.quantity += rec.Amount ' quantity 逐渐变大 
@@ -225,7 +249,7 @@ Public Class ProcessOrderService
                     Next
                 End If
 
-                If rec.Amount > 0 Then
+                If rec.Amount <> 0 Then
                     toStock.Add(New Stock With {.partNr = rec.PartNr, .fifo = rec.ProdTime,
                                        .sourceType = "BATCHUPLOAD", .container = "ORIGINAL",
                                    .position = "ORIGINAL", .quantity = rec.Amount,
@@ -235,13 +259,13 @@ Public Class ProcessOrderService
 
 
                 toMove.Add(New StockMovement With {.fifo = Now,
-                                  .moveType = StockMoveType.UploadEntry, .partNr = rec.PartNr,
+                                  .moveType = rec.MoveType, .partNr = rec.PartNr,
                                   .quantity = tmpQuantity,
                                   .sourceDoc = rec.FixOrderNr,
                                   .createdAt = DateTime.Now})
 
                 toCreateStockBatchMoveRecord.Add(New StockBatchMoveRecord With {.id = rec.Id,
-                                                 .moveType = StockMoveType.UploadEntry,
+                                                 .moveType = rec.MoveType,
                                                  .partNr = rec.PartNr,
                                                  .quantity = tmpQuantity,
                                                  .sourceDoc = rec.FixOrderNr,
@@ -291,6 +315,28 @@ Public Class ProcessOrderService
                 '        s.quantity = stock.quantity
                 '    End If
                 'Next
+            Next
+
+
+
+            ' Dim deleteStock As List(Of Stock) = New List(Of Stock)
+            For Each stocks As List(Of Stock) In posiStockDic.Values
+                Dim deleteIds As List(Of Integer) = stocks.Where(Function(s) s.quantity.Equals(0)).Distinct.Select(Function(s) s.id).ToList
+                If deleteIds.Count > 0 Then
+                    Dim _deletes As List(Of Stock) = context.Context.GetTable(Of Stock).Where(Function(s) deleteIds.Contains(s.id)).ToList
+                    context.Context.GetTable(Of Stock).DeleteAllOnSubmit(_deletes)
+                End If
+
+                Dim updateIds As List(Of Integer) = stocks.Where(Function(s) s.quantity > 0).Distinct.Select(Function(s) s.id).ToList
+                If updateIds.Count > 0 Then
+                    Dim _updates As List(Of Stock) = context.Context.GetTable(Of Stock).Where(Function(s) updateIds.Contains(s.id)).ToList
+                    For Each u As Stock In _updates
+                        Dim ori As Stock = stocks.SingleOrDefault(Function(s) s.id.Equals(u.id))
+                        If ori IsNot Nothing Then
+                            u.quantity = ori.quantity
+                        End If
+                    Next
+                End If
             Next
             context.Context.GetTable(Of Stock).InsertAllOnSubmit(toStock)
             context.Context.GetTable(Of StockMovement).InsertAllOnSubmit(toMove)

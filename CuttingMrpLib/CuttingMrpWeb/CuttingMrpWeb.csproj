@@ -393,6 +393,7 @@
     <Content Include="Views\BatchOrderTemplate\Index.cshtml" />
     <Content Include="Views\BatchOrderTemplate\ImportBatchOrderTemplateRecord.cshtml" />
     <Content Include="Views\Mps\ImportMpsRecord.cshtml" />
+    <Content Include="Views\Stocks\ImportRecord.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

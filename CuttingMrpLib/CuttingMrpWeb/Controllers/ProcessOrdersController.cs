@@ -168,7 +168,7 @@ namespace CuttingMrpWeb.Controllers
                     if ((!string.IsNullOrEmpty(isNew)) && processOrders[i].currentStock>0) {
                         ProcessOrderSearchModel qq = new ProcessOrderSearchModel()
                         {
-                            PartNr = processOrders[i].partNr,
+                            PartNrAct = processOrders[i].partNr,
                             Status = processOrders[i].status,
                             ProceeDateTo = processOrders[i].proceeDate
                         };
@@ -255,7 +255,7 @@ namespace CuttingMrpWeb.Controllers
                     {
                         ProcessOrderSearchModel qq = new ProcessOrderSearchModel()
                         {
-                            PartNr = processOrders[i].partNr,
+                            PartNrAct = processOrders[i].partNr,
                             Status = processOrders[i].status,
                             ProceeDateTo = processOrders[i].proceeDate
                         };
@@ -368,12 +368,7 @@ namespace CuttingMrpWeb.Controllers
                 configuration.TrimHeaders = true;
                 configuration.TrimFields = true;
 
-                //using (StreamReader sr = new StreamReader(filename)) {
-                //    using (CsvReader cr = new CsvReader(sr,configuration)) {
-                //        records = cr.GetRecords<CuttingOrderImportModel>().ToList();
-
-                //    }
-                //}
+                
                 using (TextReader treader = System.IO.File.OpenText(filename))
                 {
 
@@ -441,30 +436,6 @@ namespace CuttingMrpWeb.Controllers
                         }
                     }
                 }
-
-
-                //using (FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read))
-                //{ 
-                //    HSSFWorkbook wk = new HSSFWorkbook(fs);
-                //    ISheet sheet = wk.GetSheetAt(0);
-                //    for (int j = 0; j <= sheet.LastRowNum; j++)
-                //    {
-                //        IRow row = sheet.GetRow(j);
-                //        if (row != null)
-                //        {
-                //            for (int k = 0; k <= row.LastCellNum; k++)
-                //            {
-                //                ICell cell = row.GetCell(k);
-                //                if (cell != null)
-                //                {
-                //                    string s = cell.ToString();
-                //                    string ss = cell.ToString();
-                //                }
-                //            }
-                //        }
-                //    }
-
-                //}
             
             bool success = true;
             List<BatchFinishOrderRecord> vr = new List<BatchFinishOrderRecord>();

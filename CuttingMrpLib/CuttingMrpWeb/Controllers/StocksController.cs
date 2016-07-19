@@ -11,6 +11,8 @@ using CuttingMrpWeb.Helpers;
 using System.IO;
 using System.Text;
 using CuttingMrpWeb.Models;
+using System.Collections;
+using OfficeOpenXml;
 
 namespace CuttingMrpWeb.Controllers
 {
@@ -72,9 +74,9 @@ namespace CuttingMrpWeb.Controllers
         {
             //try
             //{
-                IStockService ss = new StockService(Settings.Default.db);
-                ss.Update(stock);
-                return RedirectToAction("Index");
+            IStockService ss = new StockService(Settings.Default.db);
+            ss.Update(stock);
+            return RedirectToAction("Index");
             //}
             //catch
             //{
@@ -85,7 +87,7 @@ namespace CuttingMrpWeb.Controllers
         // GET: Stocks/Delete/5
         public ActionResult Delete(int? id)
         {
-            
+
             return GetStockById(id);
         }
 
@@ -95,9 +97,9 @@ namespace CuttingMrpWeb.Controllers
         {
             //try
             //{
-                IStockService ss = new StockService(Settings.Default.db);
-                ss.DeleteById(id);
-                return RedirectToAction("Index");
+            IStockService ss = new StockService(Settings.Default.db);
+            ss.DeleteById(id);
+            return RedirectToAction("Index");
             //}
             //catch
             //{
@@ -120,7 +122,8 @@ namespace CuttingMrpWeb.Controllers
             return View("Index", stocks);
         }
 
-        private ActionResult GetStockById(int? id) {
+        private ActionResult GetStockById(int? id)
+        {
             if (id == null || !id.HasValue)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -135,7 +138,7 @@ namespace CuttingMrpWeb.Controllers
             return View(stock);
         }
 
-        public ActionResult SumOfStock([Bind(Include ="PartNr")] SumOfStockSearchModel q)
+        public ActionResult SumOfStock([Bind(Include = "PartNr")] SumOfStockSearchModel q)
         {
             int pageIndex = 0;
             int.TryParse(Request.QueryString.Get("page"), out pageIndex);
@@ -194,7 +197,7 @@ namespace CuttingMrpWeb.Controllers
             MemoryStream ms = new MemoryStream();
             using (StreamWriter sw = new StreamWriter(ms, Encoding.UTF8))
             {
-                List<string> head = new List<string> { "No.", "PartNr", "FIFO", "Quantity", "Wh", "KanBanNr","KanBanPosition"};
+                List<string> head = new List<string> { "No.", "PartNr", "FIFO", "Quantity", "Wh", "KanBanNr", "KanBanPosition" };
                 sw.WriteLine(string.Join(Settings.Default.csvDelimiter, head));
                 for (var i = 0; i < stocks.Count; i++)
                 {
@@ -221,5 +224,101 @@ namespace CuttingMrpWeb.Controllers
             Response.End();
 
         }
+
+
+        [HttpPost]
+        public ActionResult ImportRecord(HttpPostedFileBase stockFile)
+        { 
+            int excelStartFromLine = 2;
+            //try
+            //{
+            if (stockFile == null)
+            {
+                throw new Exception("No file is uploaded to system");
+            }
+            var appData = Server.MapPath("~/TmpFile/");
+            var filename = Path.Combine(appData,
+                DateTime.Now.ToString("yyyyMMddHHmmss") + "_" + Path.GetFileName(stockFile.FileName));
+            stockFile.SaveAs(filename);
+            string ex = Path.GetExtension(filename);
+   List<BatchFinishOrderRecord> vr = new List<BatchFinishOrderRecord>();
+
+            IBatchOrderTemplateService bs = new BatchOrderTemplateService(Settings.Default.db);
+
+            if (Path.GetExtension(filename).Equals(".xlsx"))
+            {
+                FileInfo file = new FileInfo(filename);
+                using (ExcelPackage ep = new ExcelPackage(file))
+                {
+                    ExcelWorksheet ws = ep.Workbook.Worksheets.First();
+
+                    for (int i = excelStartFromLine; i <= ws.Dimension.End.Row; i++)
+                    {
+
+                        string partNr = ws.Cells[i, 1].Value == null ? string.Empty : ws.Cells[i, 1].Value.ToString();
+
+                        string kanbanNr = ws.Cells[i, 2].Value == null ? string.Empty : ws.Cells[i, 2].Value.ToString();
+                        float qty = 0;
+                        float.TryParse(ws.Cells[i, 3].Value.ToString(), out qty);
+                        StockMoveType type = (StockMoveType)(int.Parse(ws.Cells[i, 4].Value.ToString()));
+                        DateTime dt = DateTime.Now.Date;
+                        if (ws.Cells[i, 5].Value != null)
+                        {
+                            DateTime.TryParse(ws.Cells[i, 5].Value.ToString(), out dt);
+                        }
+                        if (string.IsNullOrWhiteSpace(partNr) && (!string.IsNullOrWhiteSpace(kanbanNr)))
+                        {
+                            BatchOrderTemplate kb = bs.FindByNr(kanbanNr);
+                            if (kb != null)
+                            {
+                                partNr = kb.partNr;
+                                
+                            }
+                        }
+
+                        if (!string.IsNullOrWhiteSpace(partNr)) {
+                            vr.Add(new BatchFinishOrderRecord()
+                            {
+                                Id = string.Format("{0}_{1}_{2}_{3}_{4}", partNr, kanbanNr, qty, type, dt),
+                                MoveType = type,
+                                PartNr = partNr,
+                                Amount = qty,
+                                ProdTime = dt
+                            });
+                        }
+
+                    }
+                }
+            }
+
+            bool success = true;
+         
+
+            if (vr.Count > 0)
+            {
+
+                IProcessOrderService ps = new ProcessOrderService(Settings.Default.db);
+                 ViewBag.Success = true;
+                if (success)
+                {
+                    ps.BatchFinishOrder(vr, true, false);
+                    ViewBag.Msg = "Import Stock Success!";
+
+                    return View();
+                }
+                else
+                {
+                    ViewBag.Msg = "Validate Warning!";
+                    return View();
+                }
+            }
+            else
+            {
+                ViewBag.Msg = "No Record";
+
+                return View();
+            }
+        }
+
     }
 }

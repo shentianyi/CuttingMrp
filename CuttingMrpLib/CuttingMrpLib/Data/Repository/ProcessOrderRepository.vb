@@ -46,6 +46,10 @@ Public Class ProcessOrderRepository
                 processOrders = processOrders.Where(Function(c) c.proceeDate <= conditions.ProceeDateTo)
             End If
 
+            If Not String.IsNullOrWhiteSpace(conditions.PartNrAct) Then
+                processOrders = processOrders.Where(Function(c) c.partNr.Equals(conditions.PartNrAct))
+            End If
+
             If Not String.IsNullOrWhiteSpace(conditions.PartNr) Then
                 processOrders = processOrders.Where(Function(c) c.partNr.Contains(conditions.PartNr))
             End If

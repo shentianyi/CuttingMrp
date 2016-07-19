@@ -69,4 +69,11 @@ Public Class BatchOrderTemplateService
 
         Return result
     End Function
+
+    Public Function FindByNr(nr As String) As BatchOrderTemplate Implements IBatchOrderTemplateService.FindByNr
+        Dim context As DataContext = New DataContext(Me.DBConn)
+        Dim rep As BatchOrderTemplateRepository = New BatchOrderTemplateRepository(context)
+        Return rep.FirstOrDefault(Function(s) s.orderNr.Equals(nr))
+
+    End Function
 End Class

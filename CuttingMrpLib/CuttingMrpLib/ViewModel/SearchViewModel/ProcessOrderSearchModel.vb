@@ -15,6 +15,8 @@ Public Class ProcessOrderSearchModel
 
     Public Property ProceeDateTo As DateTime?
 
+    Public Property PartNrAct As String
+
     Public Property PartNr As String
 
     Public Property ActualQuantityFrom As Double?

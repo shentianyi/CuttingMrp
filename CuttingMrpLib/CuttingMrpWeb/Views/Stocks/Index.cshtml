@@ -34,7 +34,7 @@
                     <a href="/Stocks/SumOfStock" title="Sum Of Stock" data-toggle="tooltip" data-placement="bottom" style="width:100px;margin-left:20px;" class="btn btn-info">SumOfStock</a>
 
                     @* 暂时先去掉import *@
-                    @*<button class="btn btn-warning import-stock" title="Import Stock" data-toggle="tooltip" data-placement="bottom" type="button" style="width:100px;margin-left:20px;">Import Stock</button>*@
+                    <button class="btn btn-warning import-stock" title="Import Stock" data-toggle="tooltip" data-placement="bottom" type="button" style="width:100px;margin-left:20px;">Import Stock</button>
                 </div>
             </div>
         </div>
@@ -167,8 +167,8 @@
 </div>
 
 <div id="dialog_content" class="import_content" style="display:none;">
-  @*  @using (Html.BeginForm("ImportForceRecord", "ProcessOrders", FormMethod.Post, new { enctype = "multipart/form-data" }))*@
-    @* { *@
+    @using (Html.BeginForm("ImportRecord", "Stocks", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    { 
         <div class="dialogModal_header" style="background:steelblue;color:white;">
             Import Stock
         </div>
@@ -180,7 +180,7 @@
         <div class="dialogModal_footer">
             <button type="submit" class="btn btn-primary" style="width:200px;" data-dialogModalBut="ok">OK</button>
         </div>
-    @*}*@
+    }
 </div>
 
 @Scripts.Render("~/bundles/stocks")

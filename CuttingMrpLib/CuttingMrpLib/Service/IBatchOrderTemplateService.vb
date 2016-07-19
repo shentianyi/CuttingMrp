@@ -4,4 +4,5 @@
     Function Create(batchOrderTempalte As BatchOrderTemplate) As Boolean
     Function Update(batchOrderTempalte As BatchOrderTemplate) As Boolean
     Function Delete(batchOrderTempalte As BatchOrderTemplate) As Boolean
+    Function FindByNr(nr As String) As BatchOrderTemplate
 End Interface
