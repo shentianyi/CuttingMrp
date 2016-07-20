@@ -204,7 +204,7 @@ namespace CuttingMrpWeb.Controllers
                     List<string> ii = new List<string>();
                     ii.Add((i + 1).ToString());
                     ii.Add(stocks[i].partNr);
-                    ii.Add(stocks[i].fifo.ToString());
+                    ii.Add(stocks[i].fifo.ToString("yyyy-MM-dd HH:mm"));
                     ii.Add(stocks[i].quantity.ToString());
                     ii.Add(stocks[i].wh.ToString());
                     ii.Add(stocks[i].Part.kanbanNrs.ToString());

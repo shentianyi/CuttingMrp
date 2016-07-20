@@ -268,6 +268,9 @@
     <Content Include="Scripts\part.js" />
     <Content Include="Scripts\stock-movement.js" />
     <Content Include="Scripts\sum-of-stock.js" />
+    <Content Include="Template\read.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TmpFile\read.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -394,6 +397,9 @@
     <Content Include="Views\BatchOrderTemplate\ImportBatchOrderTemplateRecord.cshtml" />
     <Content Include="Views\Mps\ImportMpsRecord.cshtml" />
     <Content Include="Views\Stocks\ImportRecord.cshtml" />
+    <Content Include="Template\库存导入文件模板.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -160,7 +160,7 @@ namespace CuttingMrpWeb.Controllers
                     ii.Add(stockMovements[i].quantity.ToString());
                     ii.Add(stockMovements[i].fifoDisplay);
                     ii.Add(stockMovements[i].typeDisplay);
-                    ii.Add(stockMovements[i].sourceDoc.ToString());
+                    ii.Add(stockMovements[i].sourceDoc==null ? string.Empty : stockMovements[i].sourceDoc.ToString());
                     ii.Add(stockMovements[i].createdAtDisplay);
                     sw.WriteLine(string.Join(Settings.Default.csvDelimiter, ii.ToArray()));
                 }
