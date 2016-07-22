@@ -131,7 +131,8 @@ namespace CuttingMrpWeb.Controllers
                 }
                 catch (Exception e)
                 {
-                    ViewBag.TextExpMsg = "<-------------Read Csv File Exception!,Please Check.------------->" + e;
+                    //ViewBag.TextExpMsg = "<-------------Read Csv File Exception!,Please Check.------------->" + e;
+                    ViewBag.TextExpMsg = "<-------------读取CSV文件异常，请查看原因：------------->" + e;
                 }
 
                 List<Dictionary<string, string>> CreateErrorDic = new List<Dictionary<string, string>>();
@@ -370,21 +371,25 @@ namespace CuttingMrpWeb.Controllers
                 }
                 else
                 {
-                    ViewBag.NotCheckedData = "There are no Data. Please Check Delimiter or Column Name.";
+                    //ViewBag.NotCheckedData = "There are no Data. Please Check Delimiter or Column Name.";
+                    ViewBag.NotCheckedData = "没有检测到数据。请检查分隔符和列名。";
                 }
             }else
             {
-                ViewBag.NotCsv = "Your File is not .Csv File, Please Check FileName.";
+                //ViewBag.NotCsv = "Your File is not .Csv File, Please Check FileName.";
+                ViewBag.NotCsv = "你上传的文件不是.CSV格式。请检查文件名。";
             }
 
             if (ViewBag.NotCsv == null)
             {
-                ViewBag.NotCsv = "CSV File is OK.";
+                //ViewBag.NotCsv = "CSV File is OK.";
+                ViewBag.NotCsv = "上传CSV文件正确!";
             }
 
             if (ViewBag.NotCheckedData == null)
             {
-                ViewBag.NotCheckedData = "Check Data is OK.";
+                //ViewBag.NotCheckedData = "Check Data is OK.";
+                ViewBag.NotCheckedData = "检查数据完成!";
             }
 
             return View();

@@ -4,7 +4,7 @@
 
 
 <div style="text-align:center;" class="container">
-    <h1>Import  Log  Page</h1>
+    <h1>上传日志</h1>
 </div>
 
 <div class="alert alert-warning alert-dismissible" role="alert">
@@ -13,16 +13,20 @@
     </button>
     <ul class="list-unstyled" style="font-size:1.3em;">
         <li>
-            1、Check Your Data Quantity
+            @*1、Check Your Data Quantity*@
+            1、请检查你数据的总数量是否正确
         </li>
         <li>
-            2、Look Error Reason
+            @*2、Look Error Reason*@
+            2、查看错误信息
         </li>
         <li>
-            3、Copy Error Data and Solve
+            @*3、Copy Error Data and Solve*@
+            3、检查错误信息并处理
         </li>
         <li>
-            4、Import and Check Again
+            @*4、Import and Check Again*@
+            4、检查无误之后重新上传
         </li>
     </ul>
 </div>
@@ -43,20 +47,21 @@
                 <td colspan="9" style="text-align:left;">
                     <span class="label label-success" style="font-size:1.2em;">
                         <i class="glyphicon glyphicon-bullhorn"></i>
-                        Tips: You Can Check Your Data Here.
+                        @*Tips: You Can Check Your Data Here.*@
+                        提示：请在下表中检查你所上传的数据
                     </span>
                 </td>
             </tr>
             <tr>
-                <td>All Quantity</td>
-                <td style="background:green;">CreateSuccessQty</td>
-                <td style="background:darkred;">CreateFailureQty</td>
-                <td style="background:green;">UpdateSuccessQty</td>
-                <td style="background:darkred;">UpdateFailureQty</td>
-                <td style="background:green;">DeleteSuccessQty</td>
-                <td style="background:darkred;">DeleteFailureQty</td>
-                <td style="background:orange;">ActionNullQty</td>
-                <td style="background:gray;">OtherQty</td>
+                <td>总数量</td>
+                <td style="background:green;">【新建】成功</td>
+                <td style="background:darkred;">【新建】失败</td>
+                <td style="background:green;">【更新】成功</td>
+                <td style="background:darkred;">【更新】失败</td>
+                <td style="background:green;">【删除】成功</td>
+                <td style="background:darkred;">【删除】失败</td>
+                <td style="background:orange;">【Action】列为空</td>
+                <td style="background:gray;">其他错误</td>
             </tr>
         </thead>
 
@@ -76,15 +81,30 @@ catch (Exception)
 {
     <input hidden value="9999" class="Qty" />
 
-    <h2 style="color:#d9534f;"> Your <code> .Csv </code> File Can't be Imported.Please Checked following tips:</h2>
+    @*<h2 style="color:#d9534f;"> Your <code> .Csv </code> File Can't be Imported.Please Checked following tips:</h2>*@
+
+    <h2 style="color:#d9534f;"> 你的 <code> .Csv </code> 文件不能导入，请通过以下步骤进行检查：</h2>
     <br>
     <blockquote>
         <ul class="list-unstyled" style="font-size:1.2em">
-            <li> <span class="label label-info"> step 1 :  </span>&emsp; Is the file correct?  </li>
+            <li>
+                <span class="label label-info">
+                    @*step 1 :  </span>&emsp; Is the file correct?*@
+                    第一步 :
+                </span>&emsp; 请检查文件名是否正确?
+            </li>
+            <li>
+                <span class="label label-primary">
+                    @*step 2 : </span>&emsp; Are there any useless data? remove all of them.*@
+                    第二步 :
+                </span>&emsp; 如果存在无用的数据，请先删除，然后再次上传
+            </li>
 
-            <li> <span class="label label-primary"> step 2 : </span>&emsp; Are there any useless data? remove all of them. </li>
-
-            <li> <span class="label label-warning"> step 3 : </span>&emsp;  Column Name exist Error. Please Notice <code>1</code> and <code> l </code> etc. </li>
+            <li>
+                <span class="label label-warning">
+                    @*step 3 : </span>&emsp;  Column Name exist Error. Please Notice <code>1</code> and <code> l </code> etc.*@
+                    第三步 :
+                </span>&emsp;  列名有错误，请注意 <code>1</code> 和 <code> l </code> 之类的区别.</li>
         </ul>
     </blockquote>
 }
@@ -97,7 +117,8 @@ catch (Exception)
                 <td colspan="7" style="text-align:left;">
                     <span class="label label-danger" style="font-size:1.2em;">
                         <i class="glyphicon glyphicon-warning-sign"></i>
-                        Create Msg: Maybe Column 'ID' Already Exist or Column 'PartNr' Doesn't Exist.
+                        @*Create Msg: Maybe Column 'ID' Already Exist or Column 'PartNr' Doesn't Exist.*@
+                        新建信息:'ID'列已经存在，或者'PartNr'列不存在
                     </span>
                 </td>
             </tr>
@@ -139,7 +160,8 @@ catch (Exception)
                 <td colspan="7" style="text-align:left;">
                     <span class="label label-danger" style="font-size:1.2em;">
                         <i class="glyphicon glyphicon-warning-sign"></i>
-                        Update Msg: Maybe Column 'ID' or 'PartNr' Doesn't Exist.
+                        @*Update Msg: Maybe Column 'ID' or 'PartNr' Doesn't Exist.*@
+                        更新信息： "ID"和"PartNr"不存在
                     </span>
                 </td>
             </tr>
@@ -182,7 +204,8 @@ catch (Exception)
                 <td colspan="7" style="text-align:left;">
                     <span class="label label-danger" style="font-size:1.2em;">
                         <i class="glyphicon glyphicon-warning-sign"></i>
-                        Delete Msg: Maybe Column 'ID' Doesn't Exist.
+                        @*Delete Msg: Maybe Column 'ID' Doesn't Exist.*@
+                        删除信息："ID"列不存在
                     </span>
                 </td>
             </tr>
@@ -223,7 +246,8 @@ catch (Exception)
                 <td colspan="7" style="text-align:left;">
                     <span class="label label-danger" style="font-size:1.2em;">
                         <i class="glyphicon glyphicon-warning-sign"></i>
-                        Action Null: Column 'Action' is Null.
+                        @*Action Null: Column 'Action' is Null.*@
+                        [Action]为空：'Action' 列为空，请仔细检查列中是否存在
                     </span>
                 </td>
             </tr>
@@ -267,7 +291,8 @@ catch (Exception)
                 <td colspan="7" style="text-align:left;">
                     <span class="label label-danger" style="font-size:1.2em;">
                         <i class="glyphicon glyphicon-warning-sign"></i>
-                        Other Msg: Maybe Column 'Action' Error.
+                        @*Other Msg: Maybe Column 'Action' Error.*@
+                        其他信息： "Action"列有错误，只能填写'create','update','delete'三个字段
                     </span>
                 </td>
             </tr>

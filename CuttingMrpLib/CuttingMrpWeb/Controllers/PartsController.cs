@@ -205,7 +205,8 @@ namespace CuttingMrpWeb.Controllers
                 }
                 catch (Exception e)
                 {
-                    ViewBag.TextExpMsg = "<-------------Read Csv File Exception!,Please Check.------------->" + e;
+                    //ViewBag.TextExpMsg = "<-------------Read Csv File Exception!,Please Check.------------->" + e;
+                    ViewBag.TextExpMsg = "<-------------读取CSV文件异常，请查看原因：------------->" + e;
                 }
 
                 List<Dictionary<string, string>> CreateErrorDic = new List<Dictionary<string, string>>();
@@ -286,7 +287,8 @@ namespace CuttingMrpWeb.Controllers
                                 catch (Exception)
                                 {
                                     CreateFailureQty++;
-                                    ViewBag.CreateExpMsg = "<-------------Create Part Exception!,Maybe partNr is Exist,Please Check.------------->";
+                                    //ViewBag.CreateExpMsg = "<-------------Create Part Exception!,Maybe partNr is Exist,Please Check.------------->";
+                                    ViewBag.CreateExpMsg = "<-------------创建零件异常，可能PartNr列已经存在，请仔细检查。------------->";
                                 }
                             }
                             else if (record.Action.Trim().ToLower().Equals("update"))
@@ -320,8 +322,10 @@ namespace CuttingMrpWeb.Controllers
                                 {
                                     UpdateFailureQty++;
 
-                                    ViewBag.UpdateExpMsg = "<-------------Update Part Exception!,Please Check.------------->" + e;
-                                }   
+                                    //ViewBag.UpdateExpMsg = "<-------------Update Part Exception!,Please Check.------------->" + e;
+                                    ViewBag.UpdateExpMsg = "<-------------更新零件异常，可能ID或PartNr不存在，请仔细检查。------------->" + e;
+
+                                }
                             }
                             else
                             {
@@ -357,21 +361,25 @@ namespace CuttingMrpWeb.Controllers
                 }
                 else
                 {
-                    ViewBag.NotCheckedData = "No Data Checked. Please Check Delimiter or Column Name.";
+                    //ViewBag.NotCheckedData = "No Data Checked. Please Check Delimiter or Column Name.";
+                    ViewBag.NotCheckedData = "没有检测到数据。请检查分隔符和列名。";
                 }
             }else
             {
-                ViewBag.NotCsv = "Your File is not .Csv File, Please Check FileName.";
+                //ViewBag.NotCsv = "Your File is not .Csv File, Please Check FileName.";
+                ViewBag.NotCsv = "你上传的文件不是.CSV格式。请检查文件名。";
             }
 
             if (ViewBag.NotCsv ==null)
             {
-                ViewBag.NotCsv = "CSV File is OK.";
+                //ViewBag.NotCsv = "CSV File is OK.";
+                ViewBag.NotCsv = "上传CSV文件正确!";
             }
 
             if (ViewBag.NotCheckedData==null)
             {
-                ViewBag.NotCheckedData = "Check Data is OK.";
+                //ViewBag.NotCheckedData = "Check Data is OK.";
+                ViewBag.NotCheckedData = "检查数据完成!";
             }
 
             return View();
