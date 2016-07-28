@@ -8,6 +8,7 @@ using NPOI.HSSF.UserModel;
 using NPOI.POIFS.FileSystem;
 using NPOI.SS.UserModel;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace ConsoleApp
 {
@@ -75,6 +76,9 @@ namespace ConsoleApp
             //Console.WriteLine(r.IsMatch("BLUE.xlsx"));
 
             //Console.WriteLine(r.IsMatch("BLUE1.xlsx"));
+            Console.WriteLine(DateTime.Now);
+            Console.WriteLine(DateTime.ParseExact("2016-07-20", "yyyy-MM-dd", CultureInfo.CurrentCulture));
+            Console.WriteLine(DateTime.Now >   DateTime.ParseExact("2016-07-20","yyyy-MM-dd", CultureInfo.CurrentCulture));
             Console.WriteLine((int)0.1);
             Console.WriteLine((int)1.1);
             Console.WriteLine((int)1.123);

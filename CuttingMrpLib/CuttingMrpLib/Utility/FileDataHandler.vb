@@ -11,7 +11,7 @@ Public Class FileDataHandler
     ''' </summary>
     ''' <param name="fileName"></param>
     Public Sub ImportForceStock(fileName As String, db As String)
-
+        Dim filterDate As DateTime = DateTime.ParseExact("2016-07-20", "yyyy-MM-dd", CultureInfo.CurrentCulture)
         If File.Exists(fileName) Then
             Try
                 Dim ex As String = Path.GetExtension(fileName)
@@ -44,7 +44,9 @@ Public Class FileDataHandler
                             .Amount = Double.Parse(qty.Split(",")(0)),
                             .ProdTime = DateTime.ParseExact(rdate + " " + If(time.Length = 4, "0" + time, time), "dd.MM.yyyy HH:mm", CultureInfo.CurrentCulture)
                             }
-                                records.Add(record)
+                                If record.ProdTime > filterDate Then
+                                    records.Add(record)
+                                End If
                             End If
 
                         Next
@@ -70,7 +72,9 @@ Public Class FileDataHandler
                             .ProdTime = DateTime.ParseExact(rdate + " " + If(time.Length = 4, "0" + time, time), "dd.MM.yyyy HH:mm", CultureInfo.CurrentCulture)
                             }
 
-                                records.Add(record)
+                                If record.ProdTime > filterDate Then
+                                    records.Add(record)
+                                End If
                             End If
                         Next
                     End Using
@@ -97,8 +101,9 @@ Public Class FileDataHandler
                                 .ProdTime = DateTime.ParseExact(rdate + " " + If(time.Length = 4, "0" + time, time), "dd.MM.yyyy HH:mm", CultureInfo.CurrentCulture)
                                 }
 
-                                    records.Add(record)
-
+                                    If record.ProdTime > filterDate Then
+                                        records.Add(record)
+                                    End If
                                 End If
                             End If
                         Next
@@ -131,5 +136,4 @@ Public Class FileDataHandler
             Throw New Exception(String.Format("处理Force文件失败,{0} 不存在", fileName))
         End If
     End Sub
-
 End Class
