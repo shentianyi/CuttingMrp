@@ -73,8 +73,9 @@ namespace CuttingMrpDashSvc.Job
             {
                 lock (fileLocker)
                 {
-                    string currentDir = @"C:\cz\MrpDashSvc";//Directory.GetCurrentDirectory();
-                     
+                    // string currentDir = @"C:\cz\MrpDashSvc";//Directory.GetCurrentDirectory();
+                    string currentDir = Settings.Default.autoStockCopyFilePath;
+
                     string processDir = Path.Combine(currentDir, "Processing", DateTime.Now.ToString("yyyy-MM-dd"));
                     if (!Directory.Exists(processDir))
                     {

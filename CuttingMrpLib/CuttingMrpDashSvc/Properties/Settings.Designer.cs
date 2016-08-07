@@ -37,19 +37,6 @@ namespace CuttingMrpDashSvc.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=WANGSONG-PC\\MSSQLSERVER2008R;Initial Catalog=CuttingMrp;Persist Secur" +
-            "ity Info=True;User ID=sa;Password=123456@")]
-        public string db {
-            get {
-                return ((string)(this["db"]));
-            }
-            set {
-                this["db"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0 50 6 * * ? *")]
         public string stockSumDashCron {
             get {
@@ -57,30 +44,6 @@ namespace CuttingMrpDashSvc.Properties {
             }
             set {
                 this["stockSumDashCron"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\\\\BRILLIANTECH-PC\\brilliantech\\Cutting")]
-        public string autoStockFilePath {
-            get {
-                return ((string)(this["autoStockFilePath"]));
-            }
-            set {
-                this["autoStockFilePath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0 */3 * * * ? *")]
-        public string backFlashCron {
-            get {
-                return ((string)(this["backFlashCron"]));
-            }
-            set {
-                this["backFlashCron"] = value;
             }
         }
         
@@ -98,13 +61,62 @@ namespace CuttingMrpDashSvc.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("WHITE|BLUE")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=Charlot-PC\\MSSQLSERVER20082;Initial Catalog=CuttingMrp;Persist Securi" +
+            "ty Info=True;User ID=sa;Password=123456@")]
+        public string db {
+            get {
+                return ((string)(this["db"]));
+            }
+            set {
+                this["db"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\\\CHARLOT-PC\\IFShare\\Publish\\cutting")]
+        public string autoStockFilePath {
+            get {
+                return ((string)(this["autoStockFilePath"]));
+            }
+            set {
+                this["autoStockFilePath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0 */7 * * * ? *")]
+        public string backFlashCron {
+            get {
+                return ((string)(this["backFlashCron"]));
+            }
+            set {
+                this["backFlashCron"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("WHITEETIHW.csv;BLUEEULB.xlsx")]
         public string autoStockFileRegex {
             get {
                 return ((string)(this["autoStockFileRegex"]));
             }
             set {
                 this["autoStockFileRegex"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\cz\\MrpDashSvc")]
+        public string autoStockCopyFilePath {
+            get {
+                return ((string)(this["autoStockCopyFilePath"]));
+            }
+            set {
+                this["autoStockCopyFilePath"] = value;
             }
         }
     }

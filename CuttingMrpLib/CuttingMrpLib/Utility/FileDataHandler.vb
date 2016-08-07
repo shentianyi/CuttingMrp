@@ -11,7 +11,7 @@ Public Class FileDataHandler
     ''' </summary>
     ''' <param name="fileName"></param>
     Public Sub ImportForceStock(fileName As String, db As String)
-        Dim filterDate As DateTime = DateTime.ParseExact("2016-07-20", "yyyy-MM-dd", CultureInfo.CurrentCulture)
+        Dim filterDate As DateTime = DateTime.ParseExact("2016-08-01", "yyyy-MM-dd", CultureInfo.CurrentCulture)
         If File.Exists(fileName) Then
             Try
                 Dim ex As String = Path.GetExtension(fileName)

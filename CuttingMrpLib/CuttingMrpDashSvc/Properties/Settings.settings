@@ -5,23 +5,26 @@
     <Setting Name="mrpQueue" Type="System.String" Scope="User">
       <Value Profile="(Default)">.\Private$\cuttingMrp1</Value>
     </Setting>
-    <Setting Name="db" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Data Source=WANGSONG-PC\MSSQLSERVER2008R;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=sa;Password=123456@</Value>
-    </Setting>
     <Setting Name="stockSumDashCron" Type="System.String" Scope="User">
       <Value Profile="(Default)">0 50 6 * * ? *</Value>
-    </Setting>
-    <Setting Name="autoStockFilePath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">\\BRILLIANTECH-PC\brilliantech\Cutting</Value>
-    </Setting>
-    <Setting Name="backFlashCron" Type="System.String" Scope="User">
-      <Value Profile="(Default)">0 */3 * * * ? *</Value>
     </Setting>
     <Setting Name="autoStockCron" Type="System.String" Scope="User">
       <Value Profile="(Default)">*/2 * * * * ? *</Value>
     </Setting>
+    <Setting Name="db" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Data Source=Charlot-PC\MSSQLSERVER20082;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=sa;Password=123456@</Value>
+    </Setting>
+    <Setting Name="autoStockFilePath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">\\CHARLOT-PC\IFShare\Publish\cutting</Value>
+    </Setting>
+    <Setting Name="backFlashCron" Type="System.String" Scope="User">
+      <Value Profile="(Default)">0 */7 * * * ? *</Value>
+    </Setting>
     <Setting Name="autoStockFileRegex" Type="System.String" Scope="User">
-      <Value Profile="(Default)">WHITE|BLUE</Value>
+      <Value Profile="(Default)">WHITEETIHW.csv;BLUEEULB.xlsx</Value>
+    </Setting>
+    <Setting Name="autoStockCopyFilePath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">D:\cz\MrpDashSvc</Value>
     </Setting>
   </Settings>
 </SettingsFile>
