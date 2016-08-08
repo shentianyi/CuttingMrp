@@ -145,10 +145,16 @@ Partial Public Class CuttingMrpDataContext
     End Sub
   Partial Private Sub DeleteProcessOrder(instance As ProcessOrder)
     End Sub
+  Partial Private Sub InsertUnDoneStock(instance As UnDoneStock)
+    End Sub
+  Partial Private Sub UpdateUnDoneStock(instance As UnDoneStock)
+    End Sub
+  Partial Private Sub DeleteUnDoneStock(instance As UnDoneStock)
+    End Sub
   #End Region
 	
 	Public Sub New()
-		MyBase.New(Global.CuttingMrpLib.My.MySettings.Default.CuttingMrpConnectionString2, mappingSource)
+		MyBase.New(Global.CuttingMrpLib.My.MySettings.Default.CuttingMrpConnectionString4, mappingSource)
 		OnCreated
 	End Sub
 	
@@ -301,6 +307,12 @@ Partial Public Class CuttingMrpDataContext
 	Public ReadOnly Property ProcessOrderViews() As System.Data.Linq.Table(Of ProcessOrderView)
 		Get
 			Return Me.GetTable(Of ProcessOrderView)
+		End Get
+	End Property
+	
+	Public ReadOnly Property UnDoneStock() As System.Data.Linq.Table(Of UnDoneStock)
+		Get
+			Return Me.GetTable(Of UnDoneStock)
 		End Get
 	End Property
 End Class
@@ -5057,4 +5069,179 @@ Partial Public Class ProcessOrderView
 			End If
 		End Set
 	End Property
+End Class
+
+<Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.UnDoneStock")>  _
+Partial Public Class UnDoneStock
+	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+	
+	Private Shared emptyChangingEventArgs As PropertyChangingEventArgs = New PropertyChangingEventArgs(String.Empty)
+	
+	Private _id As Integer
+	
+	Private _partNr As String
+	
+	Private _quantity As Double
+	
+	Private _source As String
+	
+	Private _sourceType As Integer
+	
+	Private _state As Integer
+	
+    #Region "可扩展性方法定义"
+    Partial Private Sub OnLoaded()
+    End Sub
+    Partial Private Sub OnValidate(action As System.Data.Linq.ChangeAction)
+    End Sub
+    Partial Private Sub OnCreated()
+    End Sub
+    Partial Private Sub OnidChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnidChanged()
+    End Sub
+    Partial Private Sub OnpartNrChanging(value As String)
+    End Sub
+    Partial Private Sub OnpartNrChanged()
+    End Sub
+    Partial Private Sub OnquantityChanging(value As Double)
+    End Sub
+    Partial Private Sub OnquantityChanged()
+    End Sub
+    Partial Private Sub OnsourceChanging(value As String)
+    End Sub
+    Partial Private Sub OnsourceChanged()
+    End Sub
+    Partial Private Sub OnsourceTypeChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnsourceTypeChanged()
+    End Sub
+    Partial Private Sub OnstateChanging(value As Integer)
+    End Sub
+    Partial Private Sub OnstateChanged()
+    End Sub
+    #End Region
+	
+	Public Sub New()
+		MyBase.New
+		OnCreated
+	End Sub
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_id", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true)>  _
+	Public Property id() As Integer
+		Get
+			Return Me._id
+		End Get
+		Set
+			If ((Me._id = value)  _
+						= false) Then
+				Me.OnidChanging(value)
+				Me.SendPropertyChanging
+				Me._id = value
+				Me.SendPropertyChanged("id")
+				Me.OnidChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_partNr", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
+	Public Property partNr() As String
+		Get
+			Return Me._partNr
+		End Get
+		Set
+			If (String.Equals(Me._partNr, value) = false) Then
+				Me.OnpartNrChanging(value)
+				Me.SendPropertyChanging
+				Me._partNr = value
+				Me.SendPropertyChanged("partNr")
+				Me.OnpartNrChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_quantity", DbType:="Float NOT NULL")>  _
+	Public Property quantity() As Double
+		Get
+			Return Me._quantity
+		End Get
+		Set
+			If ((Me._quantity = value)  _
+						= false) Then
+				Me.OnquantityChanging(value)
+				Me.SendPropertyChanging
+				Me._quantity = value
+				Me.SendPropertyChanged("quantity")
+				Me.OnquantityChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_source", DbType:="VarChar(200) NOT NULL", CanBeNull:=false)>  _
+	Public Property source() As String
+		Get
+			Return Me._source
+		End Get
+		Set
+			If (String.Equals(Me._source, value) = false) Then
+				Me.OnsourceChanging(value)
+				Me.SendPropertyChanging
+				Me._source = value
+				Me.SendPropertyChanged("source")
+				Me.OnsourceChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_sourceType", DbType:="Int NOT NULL")>  _
+	Public Property sourceType() As Integer
+		Get
+			Return Me._sourceType
+		End Get
+		Set
+			If ((Me._sourceType = value)  _
+						= false) Then
+				Me.OnsourceTypeChanging(value)
+				Me.SendPropertyChanging
+				Me._sourceType = value
+				Me.SendPropertyChanged("sourceType")
+				Me.OnsourceTypeChanged
+			End If
+		End Set
+	End Property
+	
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_state", DbType:="Int NOT NULL")>  _
+	Public Property state() As Integer
+		Get
+			Return Me._state
+		End Get
+		Set
+			If ((Me._state = value)  _
+						= false) Then
+				Me.OnstateChanging(value)
+				Me.SendPropertyChanging
+				Me._state = value
+				Me.SendPropertyChanged("state")
+				Me.OnstateChanged
+			End If
+		End Set
+	End Property
+	
+	Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
+	
+	Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
+	
+	Protected Overridable Sub SendPropertyChanging()
+		If ((Me.PropertyChangingEvent Is Nothing)  _
+					= false) Then
+			RaiseEvent PropertyChanging(Me, emptyChangingEventArgs)
+		End If
+	End Sub
+	
+	Protected Overridable Sub SendPropertyChanged(ByVal propertyName As [String])
+		If ((Me.PropertyChangedEvent Is Nothing)  _
+					= false) Then
+			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
+		End If
+	End Sub
 End Class

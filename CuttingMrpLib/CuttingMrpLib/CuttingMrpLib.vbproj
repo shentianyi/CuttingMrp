@@ -113,6 +113,7 @@
     <Compile Include="Data\Repository\IProcessOrderRepository.vb" />
     <Compile Include="Data\Repository\IRequirementRepository.vb" />
     <Compile Include="Data\Repository\IStockSumRecordRepository.vb" />
+    <Compile Include="Data\Repository\IUnDoneStockRepository.vb" />
     <Compile Include="Data\Repository\MpsRepository.vb" />
     <Compile Include="Data\Repository\NumericDefinitionRepository.vb" />
     <Compile Include="Data\Repository\StockMovementRepository.vb" />
@@ -121,6 +122,7 @@
     <Compile Include="Data\Repository\MrpRoundRepository.vb" />
     <Compile Include="Data\Repository\PartRepository.vb" />
     <Compile Include="Data\Repository\StockSumRecordRepository.vb" />
+    <Compile Include="Data\Repository\UnDoneStockRepository.vb" />
     <Compile Include="Data\RequirementStatus.vb" />
     <Compile Include="Data\StockMoveType.vb" />
     <Compile Include="Model\BatchFinishOrderRecord.vb" />
@@ -136,6 +138,8 @@
     <Compile Include="Model\RequirementPartial.vb" />
     <Compile Include="Model\RequirementStatistics.vb" />
     <Compile Include="Model\StockMovementPartial.vb" />
+    <Compile Include="Model\StockState.vb" />
+    <Compile Include="Model\UnDoneStockPartial.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -172,6 +176,7 @@
     <Compile Include="Service\IStockMovementService.vb" />
     <Compile Include="Service\IStockSumRecordService.vb" />
     <Compile Include="Service\ISumOfStockService.vb" />
+    <Compile Include="Service\IUnDoneStockService.vb" />
     <Compile Include="Service\MpsService.vb" />
     <Compile Include="Service\PartService.vb" />
     <Compile Include="Service\NumericService.vb" />
@@ -184,6 +189,7 @@
     <Compile Include="Service\StockService.vb" />
     <Compile Include="Service\StockSumRecordService.vb" />
     <Compile Include="Service\SumOfStockService.vb" />
+    <Compile Include="Service\UnDoneStockService.vb" />
     <Compile Include="Utility\EnumItem.vb" />
     <Compile Include="Utility\EnumUtility.vb" />
     <Compile Include="Utility\Calculator.vb" />
@@ -208,6 +214,7 @@
     <Compile Include="ViewModel\SearchViewModel\StockMovementSearchModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\StockSearchModel.vb" />
     <Compile Include="ViewModel\SearchViewModel\SumOfStockSearchModel.vb" />
+    <Compile Include="ViewModel\SearchViewModel\UnDoneStockSearchModel.vb" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
