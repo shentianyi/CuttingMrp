@@ -143,6 +143,7 @@
       <Association Name="Part_Requirement" Member="Requirements" ThisKey="partNr" OtherKey="partNr" Type="Requirement" />
       <Association Name="Part_Stock" Member="Stocks" ThisKey="partNr" OtherKey="partNr" Type="Stock" />
       <Association Name="Part_ProcessOrder" Member="ProcessOrders" ThisKey="partNr" OtherKey="partNr" Type="ProcessOrder" />
+      <Association Name="Part_UnDoneStock" Member="UnDoneStock" ThisKey="partNr" OtherKey="partNr" Type="UnDoneStock" />
     </Type>
   </Table>
   <Table Name="dbo.ProductionUnit" Member="ProductionUnits">
@@ -273,9 +274,10 @@
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="partNr" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
       <Column Name="quantity" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
-      <Column Name="source" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="kanbanNr" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
       <Column Name="sourceType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="state" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Part_UnDoneStock" Member="Part" ThisKey="partNr" OtherKey="partNr" Type="Part" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

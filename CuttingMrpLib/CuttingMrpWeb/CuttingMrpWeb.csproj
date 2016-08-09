@@ -241,6 +241,7 @@
     <Compile Include="Models\PartImportModel.cs" />
     <Compile Include="Models\PartViewModel.cs" />
     <Compile Include="Models\CuttingOrderImportModel.cs" />
+    <Compile Include="Models\UnDoneStockImportModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -404,6 +405,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Views\UnDoneStock\Index.cshtml" />
+    <Content Include="Views\UnDoneStock\ImportUnDoneStock.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

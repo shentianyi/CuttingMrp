@@ -140,6 +140,7 @@
     <Compile Include="Model\StockMovementPartial.vb" />
     <Compile Include="Model\StockState.vb" />
     <Compile Include="Model\UnDoneStockPartial.vb" />
+    <Compile Include="Model\UnDoneStockRecord.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>

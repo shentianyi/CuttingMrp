@@ -28,7 +28,7 @@ Public Class UnDoneStockRepository
                 undonestocks = undonestocks.Where(Function(c) c.state.Equals(conditions.State))
             End If
 
-            Return undonestocks
+            Return undonestocks.OrderBy(Function(c) c.id)
 
         End If
 
