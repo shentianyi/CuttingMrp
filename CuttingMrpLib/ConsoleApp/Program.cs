@@ -9,6 +9,7 @@ using NPOI.POIFS.FileSystem;
 using NPOI.SS.UserModel;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using System.Threading;
 
 namespace ConsoleApp
 {
@@ -83,6 +84,9 @@ namespace ConsoleApp
             Console.WriteLine((int)1.1);
             Console.WriteLine((int)1.123);
             Console.WriteLine((int)1.9);
+            Console.WriteLine(DateTime.Now.ToString("yyyyMMddhhmmssSSS"));
+            Thread.Sleep(100);
+            Console.WriteLine(DateTime.Now.ToString("yyyyMMddHHmmssSSS"));
             Console.Read();
 
         }

@@ -11,7 +11,7 @@ Public Class Calculator
 
     Public Sub ProcessMrp(settings As CalculateSetting)
         Dim mrprepo As Repository(Of MrpRound) = New Repository(Of MrpRound)(New DataContext(DBConn))
-        Dim mrpRoundStr As String = Now.ToString("yyyyMMddhhmmss")
+        Dim mrpRoundStr As String = Now.ToString("yyyyMMddHHmmss")
         mrprepo.GetTable.InsertOnSubmit(New MrpRound With {.launcher = settings.TaskType, .mrpRound = mrpRoundStr, .runningStatus = CalculatorStatus.Running, .time = Now, .text = " "})
         mrprepo.SaveAll()
         Try
@@ -525,7 +525,7 @@ Public Class Calculator
 
     Public Sub ProcessStockImport(settings As CalculateSetting)
         Dim mrprepo As Repository(Of MrpRound) = New Repository(Of MrpRound)(New DataContext(DBConn))
-        Dim mrpRoundStr As String = Now.ToString("yyyyMMddhhmmss")
+        Dim mrpRoundStr As String = Now.ToString("yyyyMMddHHmmss")
         mrprepo.GetTable.InsertOnSubmit(New MrpRound With {.launcher = settings.TaskType, .mrpRound = mrpRoundStr, .runningStatus = CalculatorStatus.Running, .time = Now, .text = " "})
         mrprepo.SaveAll()
         Try
@@ -546,7 +546,7 @@ Public Class Calculator
 
     Public Sub ProcessSumStock(settings As CalculateSetting)
         Dim mrprepo As Repository(Of MrpRound) = New Repository(Of MrpRound)(New DataContext(DBConn))
-        Dim mrpRoundStr As String = Now.ToString("yyyyMMddhhmmss")
+        Dim mrpRoundStr As String = Now.ToString("yyyyMMddHHmmss")
         mrprepo.GetTable.InsertOnSubmit(New MrpRound With {.launcher = settings.TaskType, .mrpRound = mrpRoundStr, .runningStatus = CalculatorStatus.Running, .time = Now, .text = " "})
         mrprepo.SaveAll()
         Try
