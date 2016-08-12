@@ -20,6 +20,10 @@ Public Class MpsRepository
                 mps = mps.Where(Function(c) c.partnr.Contains(conditons.PartNr.Trim()))
             End If
 
+            If Not String.IsNullOrWhiteSpace(conditons.PartNrAct) Then
+                mps = mps.Where(Function(c) c.partnr.Equals(conditons.PartNrAct.Trim()))
+            End If
+
             If conditons.OrderedDateFrom.HasValue Then
                 mps = mps.Where(Function(c) c.orderedDate >= conditons.OrderedDateFrom)
             End If

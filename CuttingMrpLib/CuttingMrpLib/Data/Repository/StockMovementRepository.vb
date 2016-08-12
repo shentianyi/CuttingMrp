@@ -18,6 +18,10 @@ Public Class StockMovementRepository
                 moves = moves.Where(Function(m) m.partNr.Contains(conditions.PartNr.Trim()))
             End If
 
+            If Not String.IsNullOrWhiteSpace(conditions.PartNrAct) Then
+                moves = moves.Where(Function(m) m.partNr.Equals(conditions.PartNrAct.Trim()))
+            End If
+
             If conditions.MoveType.HasValue Then
                 moves = moves.Where(Function(c) c.moveType = conditions.MoveType)
             End If

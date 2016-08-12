@@ -123,7 +123,7 @@ namespace CuttingMrpWeb.Controllers
             return Json(moves.ToList(), JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Search([Bind(Include = "PartNr, DateFrom, DateTo, MoveType")] StockMovementSearchModel q) {
+        public ActionResult Search([Bind(Include = "PartNr,PartNrAct, DateFrom, DateTo, MoveType")] StockMovementSearchModel q) {
             int pageIndex = 0;
             int.TryParse(Request.QueryString.Get("page"), out pageIndex);
             pageIndex = PagingHelper.GetPageIndex(pageIndex);
@@ -137,7 +137,7 @@ namespace CuttingMrpWeb.Controllers
             return View("Index", stockMovements);
         }
 
-        public void Export([Bind(Include = "PartNr, DateFrom, DateTo, MoveType")] StockMovementSearchModel q)
+        public void Export([Bind(Include = "PartNr, PartNrAct, DateFrom, DateTo, MoveType")] StockMovementSearchModel q)
         {
             IStockMovementService sms = new StockMovementService(Settings.Default.db);
             List<StockMovement> stockMovements = sms.Search(q).ToList();

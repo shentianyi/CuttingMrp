@@ -1,6 +1,7 @@
 ﻿Public Class StockMovementSearchModel
 
     Public Property PartNr As String
+    Public Property PartNrAct As String
     Public Property DateFrom As DateTime?
     Public Property DateTo As DateTime?
     Public Property MoveType As Integer?

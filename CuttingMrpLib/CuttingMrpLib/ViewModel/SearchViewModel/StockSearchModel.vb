@@ -2,6 +2,7 @@
     Inherits SearchModelBase
 
     Public Property PartNr As String
+    Public Property PartNrAct As String
     Public Property FIFOFrom As DateTime?
     Public Property FIFOTo As DateTime?
     Public Property QuantityFrom As Single?

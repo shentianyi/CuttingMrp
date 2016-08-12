@@ -33,7 +33,7 @@ namespace CuttingMrpWeb.Controllers
             return View(mps);
         }
 
-        public ActionResult Search([Bind(Include = "PartNr, OrderedDateFrom, OrderedDateTo,RequiredDateFrom, RequiredDateTo, Status")] MpsSeachModel q)
+        public ActionResult Search([Bind(Include = "PartNr,PartNrAct, OrderedDateFrom, OrderedDateTo,RequiredDateFrom, RequiredDateTo, Status")] MpsSeachModel q)
         {
             int pageIndex = 0;
             int.TryParse(Request.QueryString.Get("page"), out pageIndex);
@@ -140,7 +140,7 @@ namespace CuttingMrpWeb.Controllers
             //}
         }
 
-        public void Export([Bind(Include = "PartNr, OrderedDateFrom, OrderedDateTo,RequiredDateFrom, RequiredDateTo, Status")] MpsSeachModel q)
+        public void Export([Bind(Include = "PartNr,PartNrAct, OrderedDateFrom, OrderedDateTo,RequiredDateFrom, RequiredDateTo, Status")] MpsSeachModel q)
         {
             IMpsService bs = new MpsService(Settings.Default.db);
 

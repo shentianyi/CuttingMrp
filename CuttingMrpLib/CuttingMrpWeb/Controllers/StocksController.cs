@@ -107,7 +107,7 @@ namespace CuttingMrpWeb.Controllers
             //}
         }
 
-        public ActionResult Search([Bind(Include = "PartNr,FIFOFrom,FIFOTo,QuantityFrom,QuantityTo,Wh,Position")] StockSearchModel q)
+        public ActionResult Search([Bind(Include = "PartNr,PartNrAct,FIFOFrom,FIFOTo,QuantityFrom,QuantityTo,Wh,Position")] StockSearchModel q)
         {
             int pageIndex = 0;
             int.TryParse(Request.QueryString.Get("page"), out pageIndex);
@@ -187,7 +187,7 @@ namespace CuttingMrpWeb.Controllers
 
         }
 
-        public void Export([Bind(Include = "PartNr,FIFOFrom,FIFOTo,QuantityFrom,QuantityTo,Wh,Position")] StockSearchModel q)
+        public void Export([Bind(Include = "PartNr,PartNrAct,FIFOFrom,FIFOTo,QuantityFrom,QuantityTo,Wh,Position")] StockSearchModel q)
         {
             IStockService ss = new StockService(Settings.Default.db);
             List<Stock> stocks = ss.Search(q).ToList();
