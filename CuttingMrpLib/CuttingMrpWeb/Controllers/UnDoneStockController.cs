@@ -75,13 +75,10 @@ namespace CuttingMrpWeb.Controllers
                 FileInfo file = new FileInfo(filename);
                 using (ExcelPackage ep = new ExcelPackage(file))
                 {
-                    Console.Write(ep.Workbook.Worksheets.Count);
-
                     ExcelWorksheet ws = ep.Workbook.Worksheets.First();
 
                     for (int i = excelStartFromLine; i <= ws.Dimension.End.Row; i++)
                     {
-                        string f = ws.Cells[i, 17].Value.ToString();
                         int feedback = int.Parse(ws.Cells[i, 17].Value.ToString());
                         if (feedback == 0)
                         {
@@ -140,6 +137,15 @@ namespace CuttingMrpWeb.Controllers
             {
                 return View();
             }
+        }
+
+        [HttpPost]
+        public ActionResult CancelAll()
+        {
+            IUnDoneStockService dss = new UnDoneStockService(Settings.Default.db);
+            dss.SetStateCancel();
+
+            return RedirectToAction("Index");
         }
 
         private void SetPartTypeList(int? type, bool allowBlank = true)

@@ -5,7 +5,6 @@ UnDoneStock.init = function () {
     var status = $("#State").children("option:selected").html();
     var sourcetype = $("#SourceType").children("option:selected").html();
 
-
     UnDoneStock.add_string_label_to_div(partnr, 'PartNr like ', '.filter-p');
     UnDoneStock.add_string_label_to_div(status, 'State =', '.filter-p');
     UnDoneStock.add_string_label_to_div(sourcetype, 'SourceType =', '.filter-p');
@@ -28,6 +27,21 @@ UnDoneStock.click_filter = function () {
             }
         })
     });
+}
+
+UnDoneStock.cancel_all = function () {
+    $('.cancel-all').click(function () {
+        $.ajax({
+            url: '/UnDoneStock/CancelAll',
+            type: 'post',
+            success: function (data) {
+                console.log(data);
+            },
+            error: function () {
+                console.log("Something Error!");
+            }
+        })
+    })
 }
 
 UnDoneStock.add_string_label_to_div = function (content, name, cls) {

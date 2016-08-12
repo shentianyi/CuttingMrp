@@ -23,9 +23,17 @@ Public Class Calculator
             Else
                 Throw New Exception("Unsupported Type")
             End If
+
             Dim round As MrpRound = mrprepo.First(Function(c) c.mrpRound = mrpRoundStr)
             round.runningStatus = CalculatorStatus.Finish
             mrprepo.SaveAll()
+
+            Try
+                Dim uss As IUnDoneStockService = New UnDoneStockService(DBConn)
+                uss.SetStateCancel()
+            Catch ex As Exception
+                Console.Write(ex)
+            End Try
         Catch ex As Exception
             Dim round As MrpRound = mrprepo.First(Function(c) c.mrpRound = mrpRoundStr)
             round.runningStatus = CalculatorStatus.Cancel

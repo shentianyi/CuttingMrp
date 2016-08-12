@@ -7,14 +7,20 @@
     <div class="panel-body">
         <div class="col-md-12" style="text-align:center;">
             <form action="/UnDoneStock/Search" method="get">
-                <div class="col-md-9 filter-content">
+                <div class="col-md-8 filter-content">
                     <span class="pull-right" id="basic-addon-filter"> <i class="glyphicon glyphicon-filter"></i> </span>
                     <div class="filter-p"></div>
                 </div>
-                <div class="col-md-3" style="border-right:1px solid #eeeeee;">
+                <div class="col-md-2">
                     <button class="btn btn-info import-force-record" title="Import Force Record" data-toggle="tooltip" data-placement="bottom" type="button" style="width:100px;margin-top:10px;">Import</button>
                 </div>
             </form>
+
+            <div class="col-md-2">
+                <form action="/UnDoneStock/CancelAll" method="post">
+                    <button class="btn btn-warning" type="submit" style="width:100px;margin-top:10px;"  title="Cancel all UnDone Stock" data-toggle="tooltip">Cancel All</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
@@ -86,10 +92,10 @@
         <div class="col-sm-12">
             <div class="input-group filter-detail">
                 <span class="input-group-addon">SourceType</span>
-                @Html.DropDownList("SourceType", ViewData["partTypeList"] as IEnumerable<SelectListItem>, new { @class = "form-control" })
+                @Html.DropDownList("SourceType", ViewData["partTypeList"] as IEnumerable<SelectListItem>, new { @class = "form-control", @style = "min-width:180px;" })
 
                 <span class="input-group-addon">State</span>
-                @Html.DropDownList("State", ViewData["stockStateList"] as IEnumerable<SelectListItem>, new { @class = "form-control" })
+                @Html.DropDownList("State", ViewData["stockStateList"] as IEnumerable<SelectListItem>, new { @class = "form-control", @style = "min-width:180px;" })
             </div>
         </div>
         
@@ -122,4 +128,5 @@
     UnDoneStock.init();
     UnDoneStock.click_filter();
     UnDoneStock.import_force_record();
+    UnDoneStock.cancel_all();
 </script>
