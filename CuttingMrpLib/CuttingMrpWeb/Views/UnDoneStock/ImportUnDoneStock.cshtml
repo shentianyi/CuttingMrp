@@ -3,6 +3,12 @@
     ViewBag.Title = "ImportUnDoneStock";
 }
 
+@if (ViewBag.Msg != null)
+{
+    <h3>@ViewBag.Msg</h3>
+}
+
+
 @if (Model != null)
 {
     int i = 0;

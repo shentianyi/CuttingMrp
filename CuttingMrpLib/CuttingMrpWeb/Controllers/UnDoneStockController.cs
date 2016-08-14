@@ -126,15 +126,21 @@ namespace CuttingMrpWeb.Controllers
 
                 if (results.ContainsKey("WARN"))
                 {
+                    ViewBag.Msg = "Has Warning!";
+
                     return View(results["WARN"] as List<UnDoneStockRecord>);
                 }
                 else
                 {
+                    ViewBag.Msg = "Finish Success!";
+
                     return View();
                 }
             }
             else
             {
+                ViewBag.Msg = "No Record!";
+
                 return View();
             }
         }
