@@ -1,4 +1,5 @@
-﻿using CuttingMrpLib;
+﻿using CsvHelper.Configuration;
+using CuttingMrpLib;
 using CuttingMrpWeb.Helpers;
 using CuttingMrpWeb.Models;
 using CuttingMrpWeb.Properties;
@@ -56,6 +57,7 @@ namespace CuttingMrpWeb.Controllers
         public ActionResult ImportUnDoneStock(HttpPostedFileBase undoneStock)
         {
             int excelStartFromLine = 9;
+            int csvStartFromLine = 13;
 
             if (undoneStock == null)
             {
@@ -69,6 +71,7 @@ namespace CuttingMrpWeb.Controllers
             string ex = Path.GetExtension(filename);
 
             List<UnDoneStockImportModel> records = new List<UnDoneStockImportModel>();
+            IUnDoneStockService uss = new UnDoneStockService(Settings.Default.db);
 
             if (Path.GetExtension(filename).Equals(".xlsx"))
             {
@@ -86,10 +89,56 @@ namespace CuttingMrpWeb.Controllers
                             {
                                 KanbanNr = ws.Cells[i, 13].Value.ToString(),
                                 Quantity = ws.Cells[i, 16].Value.ToString(),
+                                SourceType = 1
                             });
                         }
                     }
                 }
+                uss.SetStateCancel(PartType.BlueCard);
+            }
+            else if (Path.GetExtension(filename).Equals(".csv"))
+            {
+                CsvConfiguration configration = new CsvConfiguration();
+                configration.Delimiter = Settings.Default.csvDelimiter;
+                configration.HasHeaderRecord = true;
+                configration.SkipEmptyRecords = true;
+                configration.RegisterClassMap<UnDoneStockCsvModelMap>();
+                configration.TrimHeaders = true;
+                configration.TrimFields = true;
+
+                using ( TextReader treader = System.IO.File.OpenText(filename))
+                {
+                    for(int i =0; true; i++)
+                    {
+                        string s = treader.ReadLine();
+
+                        if (i >= csvStartFromLine)
+                        {
+                            if (string.IsNullOrWhiteSpace(s))
+                            {
+                                break;
+                            }
+
+                            string[] fields = s.Split(char.Parse(Settings.Default.csvDelimiter));
+
+                            try
+                            {
+                                records.Add(new UnDoneStockImportModel()
+                                {
+                                    KanbanNr = fields[6],
+                                    Quantity = fields[5],
+                                    SourceType = 2
+                                });
+                            }
+                            catch (Exception)
+                            {
+                                break;
+                            }
+                            
+                        }
+                    }
+                }
+                uss.SetStateCancel(PartType.WhiteCard);
             }
 
             List<UnDoneStockRecord> usr = new List<UnDoneStockRecord>();
@@ -99,29 +148,30 @@ namespace CuttingMrpWeb.Controllers
                 {
                     PartNr = r.KanbanNr,
                     KanbanNr = r.KanbanNr,
-                    Quantity = int.Parse(r.Quantity),
+                    Quantity = r.CutQuantity,
+                    SourceType = r.SourceType
                 });
             }
 
             if (records.Count > 0)
             {
-                IUnDoneStockService uss = new UnDoneStockService(Settings.Default.db);
                 Hashtable results = uss.ValidateUnDoneStock(usr);
 
-                uss.SetStateCancel();
-
-                foreach (UnDoneStockRecord u in results["SUCCESS"] as List<UnDoneStockRecord>)
+                if (results.ContainsKey("SUCCESS"))
                 {
-                    UnDoneStock uds = new UnDoneStock()
+                    foreach (UnDoneStockRecord u in results["SUCCESS"] as List<UnDoneStockRecord>)
                     {
-                        partNr = u.PartNr,
-                        quantity = u.Quantity,
-                        kanbanNr = u.KanbanNr,
-                        sourceType = u.SourceType,
-                        state = u.State
-                    };
+                        UnDoneStock uds = new UnDoneStock()
+                        {
+                            partNr = u.PartNr,
+                            quantity = u.Quantity,
+                            kanbanNr = u.KanbanNr,
+                            sourceType = u.SourceType,
+                            state = u.State
+                        };
 
-                    uss.Create(uds);
+                        uss.Create(uds);
+                    }
                 }
 
                 if (results.ContainsKey("WARN"))
@@ -149,7 +199,8 @@ namespace CuttingMrpWeb.Controllers
         public ActionResult CancelAll()
         {
             IUnDoneStockService dss = new UnDoneStockService(Settings.Default.db);
-            dss.SetStateCancel();
+
+            dss.SetStateCancel(PartType.Product);
 
             return RedirectToAction("Index");
         }

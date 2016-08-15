@@ -5,5 +5,5 @@
 
     Function ValidateUnDoneStock(records As List(Of UnDoneStockRecord)) As Hashtable
 
-    Function SetStateCancel()
+    Function SetStateCancel(type As PartType)
 End Interface

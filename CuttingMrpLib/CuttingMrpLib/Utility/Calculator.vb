@@ -30,7 +30,13 @@ Public Class Calculator
 
             Try
                 Dim uss As IUnDoneStockService = New UnDoneStockService(DBConn)
-                uss.SetStateCancel()
+
+                If settings.PartType.Equals("All") Then
+                    uss.SetStateCancel(PartType.Product)
+                Else
+                    uss.SetStateCancel(settings.PartType)
+                End If
+
             Catch ex As Exception
                 Console.Write(ex)
             End Try

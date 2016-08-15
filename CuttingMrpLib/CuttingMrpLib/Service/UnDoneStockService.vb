@@ -46,7 +46,7 @@ Public Class UnDoneStockService
                 warning.Add(rec)
             Else
                 rec.PartNr = kanban.partNr
-                rec.SourceType = 1
+                rec.SourceType = rec.SourceType
                 rec.State = 100
                 succ.Add(rec)
             End If
@@ -65,12 +65,19 @@ Public Class UnDoneStockService
 
     End Function
 
-    Public Function SetStateCancel() Implements IUnDoneStockService.SetStateCancel
+    Public Function SetBlueStateCancel(type As PartType) Implements IUnDoneStockService.SetStateCancel
         Dim context As DataContext = New DataContext(Me.DBConn)
 
         Dim rep As UnDoneStockRepository = New UnDoneStockRepository(context)
 
-        Dim undonestocks As List(Of UnDoneStock) = rep.FindAll(Function(c) c.state = StockState.Finish And c.sourceType = PartType.BlueCard).ToList
+        Dim undonestocks As List(Of UnDoneStock)
+        If type.Equals(PartType.BlueCard) Then
+            undonestocks = rep.FindAll(Function(c) c.state = StockState.Finish And c.sourceType = PartType.BlueCard).ToList
+        ElseIf type.Equals(PartType.WhiteCard) Then
+            undonestocks = rep.FindAll(Function(c) c.state = StockState.Finish And c.sourceType = PartType.WhiteCard).ToList
+        Else
+            undonestocks = rep.FindAll(Function(c) c.state = StockState.Finish).ToList
+        End If
 
         For Each undonestock As UnDoneStock In undonestocks
             undonestock.state = 200
