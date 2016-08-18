@@ -7,10 +7,13 @@ window.onload = function () {
 
 StockMovements.init = function () {
     var partnr = $('#PartNr').val();
+    var partnract = $('#PartNrAct').val();
     var datefrom = $('#DateFrom').val();
     var dateto = $('#DateTo').val();
     var movetype = $("#MoveType").children("option:selected").html();
+
     StockMovements.add_string_label_to_div(partnr, 'PartNr like ', '.filter-p');
+    StockMovements.add_string_label_to_div(partnract, 'PartNrAct = ', '.filter-p');
     StockMovements.add_string_label_to_div(movetype, 'MoveType = ', '.filter-p');
     StockMovements.add_range_label_to_div(datefrom + "~" + dateto, 'CreatedAt ', '.filter-p');
 }

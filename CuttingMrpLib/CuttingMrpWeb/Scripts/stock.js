@@ -1,7 +1,8 @@
 ﻿var Stock = {};
 
 Stock.init = function () {
-    var partNr = $('#PartNr').val();
+    var partnr = $('#PartNr').val();
+    var partnract = $('#PartNrAct').val();
     var fifofrom = $('#FIFOFrom').val();
     var fifoto = $('#FIFOTo').val();
     var quantityfrom = $('#QuantityFrom').val() > 0 ? $('#QuantityFrom').val() : "";
@@ -9,7 +10,8 @@ Stock.init = function () {
     var wh = $('#Wh').val();
     var position = $('#Position').val();
 
-    Stock.add_string_label_to_div(partNr, 'PartNr Like ', '.filter-p');
+    Stock.add_string_label_to_div(partnr, 'PartNr Like ', '.filter-p');
+    Stock.add_string_label_to_div(partnract, 'PartNrAct = ', '.filter-p');
     Stock.add_range_label_to_div(fifofrom +"~"+ fifoto, 'FIFO ', '.filter-p');
     Stock.add_range_label_to_div(quantityfrom +"~"+ quantityto, 'Quantity ', '.filter-p');
     Stock.add_string_label_to_div(wh, 'Wh = ', '.filter-p');

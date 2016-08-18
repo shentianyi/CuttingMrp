@@ -2,21 +2,17 @@
 
 MPS.init = function () {
     var partnr = $('#PartNr').val();
-
+    var partnract = $('#PartNrAct').val();
     var ordereddatefrom = $('#OrderedDateFrom').val();
     var ordereddateto = $('#OrderedDateTo').val();
-
     var requireddatefrom = $('#RequiredDateFrom').val();
     var requireddateto = $('#RequiredDateTo').val();
-
     var status = $("#Status").children("option:selected").html();
 
     MPS.add_string_label_to_div(partnr, 'PartNr like ', '.filter-p');
-
+    MPS.add_string_label_to_div(partnract, 'PartNrAct = ', '.filter-p');
     MPS.add_string_label_to_div(status, 'Status = ', '.filter-p');
-
     MPS.add_range_label_to_div(ordereddatefrom + "~" + ordereddateto, 'OrderedDate ', '.filter-p');
-
     MPS.add_range_label_to_div(requireddatefrom + "~" + requireddateto, 'RequiredDate ', '.filter-p');
 }
 

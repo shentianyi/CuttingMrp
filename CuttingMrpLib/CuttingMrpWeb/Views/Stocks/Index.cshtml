@@ -23,6 +23,7 @@
                     @Html.ActionLink("Export Full", "Export", new
                {
                    PartNr = ViewBag.Query.PartNr,
+                   PartNrAct = ViewBag.Query.PartNrAct,
                    FIFOFrom = ViewBag.Query.FIFOFrom,
                    FIFOTo = ViewBag.Query.FIFOTo,
                    QuantityFrom = ViewBag.Query.QuantityFrom,
@@ -102,6 +103,7 @@
 
                 var html = Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
                     .Options(o => o.AddRouteValue("PartNr", ViewBag.Query.PartNr))
+                    .Options(o => o.AddRouteValue("PartNrAct", ViewBag.Query.PartNrAct))
                     .Options(o => o.AddRouteValue("FIFOFrom", ViewBag.Query.FIFOFrom))
                     .Options(o => o.AddRouteValue("FIFOTo", ViewBag.Query.FIFOTo))
                     .Options(o => o.AddRouteValue("QuantityFrom", ViewBag.Query.QuantityFrom))
@@ -125,6 +127,9 @@
             <div class="input-group filter-detail">
                 <span class="input-group-addon" id="basic-addon-partnr" style="background:#0088cc;color:white;">PartNr</span>
                 <input type="text" class="form-control" name="PartNr" id="PartNr" value="@ViewBag.Query.PartNr" placeholder="PartNr" aria-describedby="basic-addon-partnr">
+
+                <span class="input-group-addon" id="basic-addon-partnract">PartNrAct</span>
+                <input type="text" class="form-control" name="PartNrAct" id="PartNrAct" value="@ViewBag.Query.PartNrAct" placeholder="PartNrAct" aria-describedby="basic-addon-partnract">
             </div>
         </div>
         <hr style="border:1px solid #eeeeee; margin:10px -10px;" />

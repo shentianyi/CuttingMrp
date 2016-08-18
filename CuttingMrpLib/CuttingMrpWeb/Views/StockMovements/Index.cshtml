@@ -25,7 +25,9 @@
                 @Html.ActionLink("Export", "Export", new
            {
                PartNr = ViewBag.Query.PartNr,
+               PartNrAct = ViewBag.Query.PartNrAct,
                DateFrom = ViewBag.Query.DateFrom,
+               MoveType = ViewBag.Query.MoveType,
                DateTo = ViewBag.Query.DateTo
            }, new { @style = "width:100px;margin-top:10px;", @class = "btn btn-success", @title = "export searched results", data_toggle = "tooltip", data_placement = "bottom" })
             </div>
@@ -79,6 +81,7 @@
                 {
                     var html = Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)
                         .Options(o => o.AddRouteValue("PartNr", ViewBag.Query.PartNr))
+                        .Options(o => o.AddRouteValue("PartNrAct", ViewBag.Query.PartNrAct))
                         .Options(o => o.AddRouteValue("MoveType", ViewBag.Query.MoveType))
                         .Options(o => o.AddRouteValue("DateFrom", ViewBag.Query.DateFrom))
                         .Options(o => o.AddRouteValue("DateTo", ViewBag.Query.DateTo));
@@ -106,8 +109,11 @@
 
         <div class="col-sm-12">
             <div class="input-group filter-detail">
+                <span class="input-group-addon" id="basic-addon-partnract">PartNrAct</span>
+                <input type="text" class="form-control" name="PartNrAct" id="PartNrAct" value="@ViewBag.Query.PartNrAct" placeholder="PartNrAct" aria-describedby="basic-addon-partnract">
+
                 <span class="input-group-addon" id="basic-addon-stat" style="width:80px;">MoveType</span>
-                @Html.DropDownList("MoveType", ViewData["moveTypeList"] as IEnumerable<SelectListItem>, new { @class = "from-control" , @style="width:160px;" })
+                @Html.DropDownList("MoveType", ViewData["moveTypeList"] as IEnumerable<SelectListItem>, new { @class = "form-control" , @style="width:160px;" })
             </div>
         </div>
 

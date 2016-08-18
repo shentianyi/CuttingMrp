@@ -44,7 +44,7 @@
                 <th>UOM</th>
                 <th>Quantity</th>
                 <th>BomId</th>
-                @*<th>Options</th>*@
+                <th>Options</th>
             </tr>
         </thead>
         <tbody>
@@ -61,15 +61,11 @@
                         <td>@Html.DisplayFor(modelItem => item.validTo)</td>
                         <td>@Html.DisplayFor(modelItem => item.hasChind)</td>
                         <td>@Html.DisplayFor(modelItem => item.uom)</td>
-                        <td>@Html.DisplayFor(modelItem => item.quantity)</td>
+                        <td><input type="number" name="item-quantity" value="@Html.DisplayFor(modelItem => item.quantity)" style="text-align:center; width: 70px; border:none; background:white;" disabled /></td>
                         <td>@Html.DisplayFor(modelItem => item.bomId)</td>
-                        @*<td class="IconA">
-                                <a href="@Url.Action("Edit", "ProcessOrders" , new { id=item.orderNr }) "> <i class="glyphicon glyphicon-pencil"></i></a>
-                                @if (item.canDelete)
-                                {
-                                    <a href="@Url.Action("Delete", "ProcessOrders" , new { id=item.orderNr }) "> <i class="glyphicon glyphicon-trash" style="color:red;"></i></a>
-                                }
-                            </td>*@
+                        <td class="IconA">
+                            <i class="glyphicon glyphicon-pencil edit-bom-item" style="font-size:1.2em; color: steelblue;"></i>
+                        </td>
                     </tr>
                 }
             }
@@ -174,6 +170,7 @@
 
 <script type="text/javascript">
     BomItem.init();
+    BomItem.edit_bom_item();
     BomItem.click_filter();
     BomItem.import_BomItem_data();
 </script>

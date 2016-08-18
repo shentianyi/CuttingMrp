@@ -16,7 +16,11 @@ Public Class StockRepository
 
             Dim stocks As IQueryable(Of Stock) = _context.Stocks
             If Not String.IsNullOrWhiteSpace(searchModel.PartNr) Then
-                stocks = stocks.Where(Function(s) s.partNr.Contains(searchModel.PartNr))
+                stocks = stocks.Where(Function(s) s.partNr.Contains(searchModel.PartNr.Trim()))
+            End If
+
+            If Not String.IsNullOrWhiteSpace(searchModel.PartNrAct) Then
+                stocks = stocks.Where(Function(s) s.partNr.Equals(searchModel.PartNrAct.Trim()))
             End If
 
             If searchModel.FIFOFrom.HasValue Then

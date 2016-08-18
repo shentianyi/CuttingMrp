@@ -224,6 +224,7 @@
     <Compile Include="Controllers\RequirementsController.cs" />
     <Compile Include="Controllers\StockMovementsController.cs" />
     <Compile Include="Controllers\StocksController.cs" />
+    <Compile Include="Controllers\UnDoneStockController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -240,6 +241,7 @@
     <Compile Include="Models\PartImportModel.cs" />
     <Compile Include="Models\PartViewModel.cs" />
     <Compile Include="Models\CuttingOrderImportModel.cs" />
+    <Compile Include="Models\UnDoneStockImportModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -268,6 +270,7 @@
     <Content Include="Scripts\part.js" />
     <Content Include="Scripts\stock-movement.js" />
     <Content Include="Scripts\sum-of-stock.js" />
+    <Content Include="Scripts\undone-stock.js" />
     <Content Include="Template\read.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -401,6 +404,8 @@
     <Content Include="Template\库存导入文件模板.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Views\UnDoneStock\Index.cshtml" />
+    <Content Include="Views\UnDoneStock\ImportUnDoneStock.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

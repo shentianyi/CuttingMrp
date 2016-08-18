@@ -1,0 +1,38 @@
+﻿@model List<CuttingMrpLib.UnDoneStockRecord>
+@{
+    ViewBag.Title = "ImportUnDoneStock";
+}
+
+@if (ViewBag.Msg != null)
+{
+    <h3>@ViewBag.Msg</h3>
+}
+
+
+@if (Model != null)
+{
+    int i = 0;
+    <table class="table table-bordered" style="margin-top:10px;">
+        <thead>
+            <tr>
+                <th> No. </th>
+                <th>KanBanNr</th>
+                <th>Quantity</th>
+                <th>Reason</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@(i += 1)</td>
+                    <td>@Html.DisplayFor(modelItem => item.KanbanNr)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Quantity)</td>
+                    <td style="color:red;">Kanban: @Html.DisplayFor(modelItem => item.PartNr) does not exist in the system.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@Scripts.Render("~/bundles/undone-stock")

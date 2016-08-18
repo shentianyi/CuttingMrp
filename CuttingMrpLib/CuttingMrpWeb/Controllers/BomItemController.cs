@@ -396,5 +396,17 @@ namespace CuttingMrpWeb.Controllers
 
             return View();
         }
+
+        [HttpPost]
+        public JsonResult Edit(int id, int quantity)
+        {
+            IBomItemService bis = new BomItemService(Settings.Default.db);
+
+            Dictionary<String, Object> result = new Dictionary<string, object>();
+
+            result = bis.Edit(id, quantity);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
     }
 }
