@@ -16,6 +16,62 @@ BomItem.init = function () {
     BomItem.add_range_label_to_div(vtfrom + "~" + vtto, 'ValidTo', '.filter-p');
 }
 
+BomItem.edit_bom_item = function () {
+    var Quantity;
+    var ChangedQty;
+
+    $('.IconA').unbind('click').on('click', '.edit-bom-item', function () {
+        var Item = $(this).parent().parent();
+        var Item_Quantity = Item.find('[name="item-quantity"]');
+        var BomID = Item.find('td')[1].innerHTML.trim();
+        var BomComponentID = Item.find('td')[2].innerHTML.trim();
+      
+        if (Item_Quantity.attr('disabled') == "disabled") {
+            $(this).addClass('glyphicon glyphicon-ok')
+            Item_Quantity.css({ border: '1px solid steelblue' });
+            Item_Quantity.removeAttr('disabled');
+            Quantity = Item_Quantity.val();
+        } else {
+            ChangedQty = Item_Quantity.val();
+
+            if (!isNaN(ChangedQty) && ChangedQty != "") {
+                if (Quantity === ChangedQty) {
+                    //do Nothing
+                } else {
+                    $.ajax({
+                        url: '/BomItem/Edit',
+                        type: 'post',
+                        data: {
+                            id: BomID,
+                            quantity: ChangedQty
+                        },
+                        success: function (data) {
+                            //更新成功
+                            $('<div>'+data.content+'</div>').notifyModal({
+                                overlay: false,
+                                placement: 'rightTop'
+                            });
+                        },
+                        error: function () {
+                            console.log("Something Error!");
+                        }
+                    })
+                }
+
+                $(this).removeClass('glyphicon-ok');
+                Item_Quantity.css({ border: 'none' });
+                Item_Quantity.attr('disabled', 'disabled');
+            } else {
+                $(Item_Quantity).val(Quantity);
+                $('<div>输入不是数字或者为空，请检查</div>').notifyModal({
+                    overlay: false,
+                    placement: 'rightTop'
+                });
+            }
+        }
+    });
+}
+
 BomItem.click_filter = function () {
     $('#basic-addon-filter').click(function () {
         $('#basic-addon-filter').popModal({
@@ -125,7 +181,6 @@ $('.datetime-picker-to').datetimepicker({
     formatTime: 'H:i',
     defaultTime: '23:59'
 })
-
 
 window.onload = function () {
     $('.navbar-nav li').removeClass("nav-choosed");

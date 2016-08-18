@@ -52,6 +52,7 @@ textarea {
 .IconA{
     text-align:center;
     white-space:nowrap;
+    cursor:pointer;
 }
 
 .IconA>a{

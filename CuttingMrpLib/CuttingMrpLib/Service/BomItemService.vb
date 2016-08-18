@@ -65,4 +65,25 @@ Public Class BomItemService
 
         Return result
     End Function
+
+    Public Function Edit(id As Integer, quantity As Integer) As Dictionary(Of String, Object) Implements IBomItemService.Edit
+        Dim result As Dictionary(Of String, Object) = New Dictionary(Of String, Object)
+
+        Dim context As DataContext = New DataContext(Me.DBConn)
+        Dim rep As BomItemRepository = New BomItemRepository(context)
+
+        Dim ubomItem As BomItem = rep.FirstOrDefault(Function(s) s.id.Equals(id))
+
+        If (ubomItem IsNot Nothing) Then
+            ubomItem.quantity = quantity
+            rep.SaveAll()
+            result.Add("result", "true")
+            result.Add("content", "更新成功")
+        Else
+            result.Add("result", "false")
+            result.Add("content", "ID不存在")
+        End If
+
+        Return result
+    End Function
 End Class
