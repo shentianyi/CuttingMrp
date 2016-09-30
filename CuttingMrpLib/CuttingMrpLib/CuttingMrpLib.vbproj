@@ -59,6 +59,9 @@
     <Reference Include="NPOI">
       <HintPath>..\ThridPart\NPOI\Net40\NPOI.dll</HintPath>
     </Reference>
+    <Reference Include="Quartz">
+      <HintPath>..\ThridPart\Quartz.2.3.3\lib\net40-client\Quartz.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Linq" />
