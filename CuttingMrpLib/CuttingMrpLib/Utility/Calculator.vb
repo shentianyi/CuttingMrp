@@ -77,10 +77,10 @@ Public Class Calculator
                 Dim bomRepo As Repository(Of BOM) = New Repository(Of BOM)(dc)
                 Dim counter As Integer = bomRepo.Count(Function(c) c.validFrom <= m.requiredDate And c.validTo >= m.requiredDate And c.partNr = m.partnr)
                 If counter < 1 Then
-                    Throw New Exception("没有找到相应的BOM")
+                    Throw New Exception("零件：" + m.partnr + ", 没有找到相应的BOM")
                 End If
                 If counter > 1 Then
-                    Throw New Exception("找到" & counter & "个生效的BOM")
+                    Throw New Exception("零件：" + m.partnr + ", 找到" & counter & "个生效的BOM")
                 End If
                 Dim bom As BOM = bomRepo.SingleOrDefault(Function(c) c.validFrom <= Now And c.validTo >= Now And c.partNr = m.partnr)
                 If bom IsNot Nothing Then
