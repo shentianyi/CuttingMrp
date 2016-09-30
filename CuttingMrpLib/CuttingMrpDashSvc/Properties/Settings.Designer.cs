@@ -61,8 +61,10 @@ namespace CuttingMrpDashSvc.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=Charlot-PC\\MSSQLSERVER20082;Initial Catalog=CuttingMrp;Persist Securi" +
-            "ty Info=True;User ID=sa;Password=123456@")]
+        //[global::System.Configuration.DefaultSettingValueAttribute("Data Source=Charlot-PC\\MSSQLSERVER20082;Initial Catalog=CuttingMrp;Persist Securi" +
+        //    "ty Info=True;User ID=sa;Password=123456@")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=DELL-PC\\SQLEXPRESS;Initial Catalog=CuttingMrp;Persist Securi" +
+            "ty Info=True;User ID=sa;Password=sa")]
         public string db {
             get {
                 return ((string)(this["db"]));
@@ -74,7 +76,8 @@ namespace CuttingMrpDashSvc.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\\\\CHARLOT-PC\\IFShare\\Publish\\cutting")]
+        //[global::System.Configuration.DefaultSettingValueAttribute("\\\\CHARLOT-PC\\IFShare\\Publish\\cutting")]//C:\FTPServer\sync
+        [global::System.Configuration.DefaultSettingValueAttribute("\\\\dell-PC\\FTPServer\\sync")]
         public string autoStockFilePath {
             get {
                 return ((string)(this["autoStockFilePath"]));
@@ -98,7 +101,8 @@ namespace CuttingMrpDashSvc.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("WHITEETIHW.csv;BLUEEULB.xlsx")]
+        //[global::System.Configuration.DefaultSettingValueAttribute("WHITEETIHW.csv;BLUEEULB.xlsx")]
+        [global::System.Configuration.DefaultSettingValueAttribute("WHITEETIHW.csv;STOCK.xlsx")]
         public string autoStockFileRegex {
             get {
                 return ((string)(this["autoStockFileRegex"]));
@@ -110,7 +114,8 @@ namespace CuttingMrpDashSvc.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("D:\\cz\\MrpDashSvc")]
+        //[global::System.Configuration.DefaultSettingValueAttribute("D:\\cz\\MrpDashSvc")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\FTPServer\\sync")]
         public string autoStockCopyFilePath {
             get {
                 return ((string)(this["autoStockCopyFilePath"]));
