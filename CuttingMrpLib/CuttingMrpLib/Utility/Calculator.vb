@@ -2,6 +2,7 @@
 Imports System.Globalization
 Imports System.Data.Linq
 Imports System.Transactions
+Imports Brilliantech.Framwork.Utils.LogUtil
 
 Public Class Calculator
     Inherits ServiceBase
@@ -545,6 +546,8 @@ Public Class Calculator
         Try
             Dim handler = New FileDataHandler()
             ' Throw New Exception(settings.Parameters)
+            LogUtil.Logger.Info("kkkkkkkkkkkk2kkk")
+            LogUtil.Logger.Info(settings.Parameters)
             handler.ImportForceStock(settings.Parameters, DBConn)
             Dim round As MrpRound = mrprepo.First(Function(c) c.mrpRound = mrpRoundStr)
             round.runningStatus = CalculatorStatus.Finish
