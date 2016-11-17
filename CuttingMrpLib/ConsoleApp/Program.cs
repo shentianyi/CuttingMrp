@@ -15,8 +15,8 @@ namespace ConsoleApp
 {
     class Program
     {
-        // static string dbs = @"Data Source=Charlot-PC\MSSQLSERVER20082;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=sa;Password=123456@";
-        static string dbs = @"Data Source=WANGSONG-PC\MSSQLSERVER2008R;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=sa;Password=123456@";
+        static string dbs = @"Data Source=Charlot-PC\MSSQLSERVER20082;Initial Catalog=CuttingMrp_Junnuo;Persist Security Info=True;User ID=sa;Password=123456@";
+        //static string dbs = @"Data Source=WANGSONG-PC\MSSQLSERVER2008R;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=sa;Password=123456@";
         static void Main(string[] args)
         {
             //Console.WriteLine(DateTime.Now.ToLongTimeString());
@@ -77,16 +77,9 @@ namespace ConsoleApp
             //Console.WriteLine(r.IsMatch("BLUE.xlsx"));
 
             //Console.WriteLine(r.IsMatch("BLUE1.xlsx"));
-            Console.WriteLine(DateTime.Now);
-            Console.WriteLine(DateTime.ParseExact("2016-07-20", "yyyy-MM-dd", CultureInfo.CurrentCulture));
-            Console.WriteLine(DateTime.Now >   DateTime.ParseExact("2016-07-20","yyyy-MM-dd", CultureInfo.CurrentCulture));
-            Console.WriteLine((int)0.1);
-            Console.WriteLine((int)1.1);
-            Console.WriteLine((int)1.123);
-            Console.WriteLine((int)1.9);
-            Console.WriteLine(DateTime.Now.ToString("yyyyMMddhhmmssSSS"));
-            Thread.Sleep(100);
-            Console.WriteLine(DateTime.Now.ToString("yyyyMMddHHmmssSSS"));
+
+            Calculator c = new Calculator(dbs);
+            c.MakeBackflush();
             Console.Read();
 
         }
