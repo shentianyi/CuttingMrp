@@ -524,7 +524,7 @@ Public Class Calculator
 
                     failedFlushRepo.MarkForAdd(New BackflushRecord With
                                                 {.fifo = Now, .launchTime = Now,
-                                                .message = ex.Message,
+                                                .message = ex.Message + ":" + ex.StackTrace,
                                                 .partnr = partnr, .quantity = quantity,
                                                 .sourceDoc = sd,
                                                 .status = BackflushStatus.Failed})
