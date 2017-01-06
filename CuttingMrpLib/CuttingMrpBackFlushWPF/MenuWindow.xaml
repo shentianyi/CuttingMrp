@@ -1,0 +1,20 @@
+﻿<Window x:Class="CuttingMrpBackFlushWPF.MenuWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CuttingMrpBackFlushWPF"
+        mc:Ignorable="d"
+        Background="SkyBlue"
+        Title="倒冲入库" Height="600" Width="800" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen">
+    <Grid Margin="0,0,2,0">
+        <TextBox x:Name="productNrTB" Keyboard.KeyDown="productNrTB_KeyDown" HorizontalAlignment="Left" Height="50" Margin="196,140,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="388" FontSize="25"/>
+        <TextBox x:Name="parNrTB" Keyboard.KeyDown="parNrTB_KeyDown"  HorizontalAlignment="Left" Height="50" Margin="196,267,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="388" FontSize="25"/>
+        <Label x:Name="productNrLB" Content="唯一码" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="87,140,0,0" Height="50" Width="104" FontSize="20" FontFamily="微软雅黑"/>
+        <Label x:Name="bomIdLB" Content="配置号" HorizontalAlignment="Left" Margin="87,267,0,0" VerticalAlignment="Top" Height="53" Width="104" FontSize="20" FontFamily="微软雅黑"/>
+        <Button x:Name="resetBtn" Content="清　空" Margin="270,400,0,0" VerticalAlignment="Top" Height="40" FontSize="15" Click="resetBtn_Click" HorizontalAlignment="Left" Width="130"/>
+        <Button x:Name="submitBtn" Content="提　交" HorizontalAlignment="Left" Margin="470,400,0,0" VerticalAlignment="Top" Width="130" Height="40" FontSize="15" Click="submitBtn_Click"/>
+        <Button x:Name="history_Btn" Content="历史数据" HorizontalAlignment="Left" Margin="70,400,0,0" VerticalAlignment="Top" Width="130" Height="40" FontSize="15" Click="history_Btn_Click"/>
+        <Label x:Name="label" Content="倒冲入库" HorizontalAlignment="Left" Margin="305,62,0,0" VerticalAlignment="Top" FontSize="30"/>
+    </Grid>
+</Window>

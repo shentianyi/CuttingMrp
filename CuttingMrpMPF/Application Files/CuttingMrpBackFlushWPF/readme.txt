@@ -1,0 +1,3 @@
+1、使用本程序之前，请先在原有数据库中执行productFinish.sql数据库脚本添加数据表。
+
+2、修改CuttingMrpBackFlushWPF.exe.config中的数据库连接字段为需要连接的数据库。

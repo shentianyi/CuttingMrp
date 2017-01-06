@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="CuttingMrp" Class="ProductFinishDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=TANGHUOSONG-PC;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=sa" SettingsObjectName="CuttingMrpBackFlushWPF.Properties.Settings" SettingsPropertyName="CuttingMrpConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.MPS" Member="MPS">
+    <Type Name="MPS">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="partnr" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="orderedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="requiredDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="quantity" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="source" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="sourceDoc" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="unitId" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Association Name="MPS_MPS" Member="MPS2" ThisKey="id" OtherKey="id" Type="MPS" Cardinality="One" />
+      <Association Name="MPS_MPS" Member="MPS1" ThisKey="id" OtherKey="id" Type="MPS" IsForeignKey="true" />
+      <Association Name="Part_MPS" Member="Part" ThisKey="partnr" OtherKey="partNr" Type="Part" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ProductFinish" Member="ProductFinish">
+    <Type Name="ProductFinish">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="productnr" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="partNr" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="finishTime" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Part" Member="Part">
+    <Type Name="Part">
+      <Column Name="partNr" Type="System.String" DbType="VarChar(200) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="partType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="partDesc" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="partStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="moq" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="spq" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Association Name="Part_MPS" Member="MPS" ThisKey="partNr" OtherKey="partnr" Type="MPS" />
+    </Type>
+  </Table>
+</Database>

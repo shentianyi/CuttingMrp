@@ -1,0 +1,44 @@
+﻿<Window x:Class="CuttingMrpBackFlushWPF.DataShowWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CuttingMrpBackFlushWPF"
+        mc:Ignorable="d"
+        Background="SkyBlue"
+        Title="历史数据" Height="600" Width="800">
+    <Grid>
+        <Label x:Name="label" Content="" HorizontalAlignment="Left" Margin="90,52,0,0" VerticalAlignment="Top" FontSize="20"/>
+        <DatePicker HorizontalAlignment="Left" Margin="171,89,0,0" VerticalAlignment="Top" Name="StartDate" Width="125"/>
+        <DatePicker HorizontalAlignment="Left" Margin="379,89,0,0" VerticalAlignment="Top" Name="EndDate" Width="125" RenderTransformOrigin="0.448,0.083"/>
+        <TextBox x:Name="productNrTB" HorizontalAlignment="Left" Height="23" Margin="171,131,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="125"/>
+        <TextBox x:Name="parNrTB" HorizontalAlignment="Left" Height="23" Margin="379,131,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="125"/>
+        <Button x:Name="Search_Btn" Content="搜　索" HorizontalAlignment="Left" Margin="530,95,0,0" VerticalAlignment="Top" Width="86" Height="28" FontSize="14" Click="Search_Btn_Click"/>
+        <DataGrid x:Name="DataShow" HorizontalAlignment="Left" Margin="88,200,0,0" 
+                  VerticalAlignment="Top" Height="332" Width="554"  
+                  ItemsSource="{Binding}" AutoGenerateColumns="False" CanUserDeleteRows="False" 
+                  CanUserAddRows="False" IsReadOnly="True" SelectionUnit="Cell">
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="复制" Command="{x:Static ApplicationCommands.Copy}"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="唯一码" Binding="{ Binding productnr}" Width="150"/>
+                <DataGridTextColumn Header="配置号" Binding="{ Binding partNr}" Width="100"/>
+                <DataGridTextColumn Header="状　态" Binding="{ Binding status}" Width="70"/>
+                <DataGridTextColumn Header="日　期" Binding="{ Binding finishTime,StringFormat=yyyy-MM-dd HH:mm:ss}" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <Label x:Name="label2" Content="开始时间" FontSize="12" HorizontalAlignment="Left" Margin="117,89,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.469,0.55"/>
+        <Label x:Name="label3" Content="结束时间" FontSize="12" HorizontalAlignment="Left" Margin="321,89,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.012,0.55"/>
+        <Label x:Name="label4" Content="唯一码" FontSize="12" HorizontalAlignment="Left" Margin="117,126,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label5" Content="配置号" FontSize="12" HorizontalAlignment="Left" Margin="327,128,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.362,0.553"/>
+        <Label x:Name="label6" Content="搜索结果:" FontSize="12" HorizontalAlignment="Left" Margin="90,169,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="ResultLB" Content="0条" HorizontalAlignment="Left" Margin="151,169,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="ExportBtn" Content="导出数据" HorizontalAlignment="Left" Margin="572,170,0,0" VerticalAlignment="Top" Width="70" Click="ExportBtn_Click" Height="25"/>
+        <GroupBox x:Name="groupBox" Header="条件搜索" HorizontalAlignment="Left" Margin="88,59,0,0" VerticalAlignment="Top" Height="106" Width="554" BorderBrush="LightGray" BorderThickness="1"/>
+
+
+    </Grid>
+</Window>
