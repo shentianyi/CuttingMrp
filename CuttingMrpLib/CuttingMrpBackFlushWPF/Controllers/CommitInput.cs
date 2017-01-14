@@ -25,6 +25,7 @@ namespace CuttingMrpBackFlushWPF.Controllers
     }
     class CommitInput
     {
+        ProductFinishDataContext context = new ProductFinishDataContext();
         /// <summary>
         /// 验证输入是否正确
         /// </summary>
@@ -33,35 +34,42 @@ namespace CuttingMrpBackFlushWPF.Controllers
         /// <returns></returns>
         public Message CheckInput(string productNr, string partNr)
         {
+            try
+            {
+                
+                if (string.IsNullOrEmpty(productNr))
+                {
+                    return new Message(false, "唯一码不能为空！");
+                }
+                else if (productNr.Length != Properties.Settings.Default.productNrLength)
+                {
+                    return new Message(false, "唯一码不正确！");
+                }
 
-            ProductFinishDataContext context = new ProductFinishDataContext();
-            if (string.IsNullOrEmpty(productNr))
-            {
-                return new Message(false, "唯一码不能为空！");
-            }
-            else if(productNr.Length != Properties.Settings.Default.productNrLength)
-            {
-                return new Message(false, "唯一码不正确！");
-            }
+                if (string.IsNullOrEmpty(partNr))
+                {
+                    return new Message(false, "配置号不能为空！");
+                }
 
-            if (string.IsNullOrEmpty(partNr))
-            {
-                return new Message(false, "配置号不能为空！");
-            }
+                if (context.ProductFinish.FirstOrDefault(s => s.productnr == productNr) != null)
+                {
+                    return new Message(false, "当前唯一码已存在，请确认是否正确！");
+                }
+                if (context.Part.FirstOrDefault(p => p.partNr == partNr) == null)
+                {
+                    return new Message(false, "当前配置号不存在，请确认是否正确！");
+                }
+                else
+                {
+                    return new Message(true, "");
 
-            if(context.ProductFinish.FirstOrDefault(s => s.productnr == productNr) != null)
-            {
-                return new Message(false, "当前唯一码已存在，请确认是否正确！");
+                }
             }
-            if (context.Part.FirstOrDefault(p => p.partNr == partNr) == null)
+            catch(Exception e)
             {
-                return new Message(false, "当前配置号不存在，请确认是否正确！");
+                return new Message(false,"异常信息："+e.Message);
             }
-            else
-            {
-                return new Message(true, "");
-               
-            }
+            
         }
         /// <summary>
         /// 提交到数据库，插入ProductFinish表
@@ -71,7 +79,7 @@ namespace CuttingMrpBackFlushWPF.Controllers
         /// <returns></returns>
         public Message Commit(string productNr, string partNr)
         {
-            ProductFinishDataContext context = new ProductFinishDataContext();
+            //ProductFinishDataContext context = new ProductFinishDataContext();
             try
             {
                 ProductFinish productFinish = new ProductFinish();
@@ -99,7 +107,7 @@ namespace CuttingMrpBackFlushWPF.Controllers
             catch (SqlException e)
             {
                 //MessageBox.Show(e.Message);
-                return new Message(false, "添加失败，详细原因：数据上传失败！");
+                return new Message(false, "异常信息："+e.Message);
             }
         }
     }

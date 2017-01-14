@@ -51,8 +51,15 @@ namespace CuttingMrpBackFlushWPF
             string partNr = parNrTB.Text;
             ShowData showData = new ShowData();
             List<ProductFinish> list =  showData.SearchData(startDate,endDate,productNr,partNr);
-            ResultLB.Content = list.Count().ToString() + "条";
-            ((this.FindName("DataShow")) as DataGrid).ItemsSource = list;
+            if (list != null)
+            {
+                ResultLB.Content = list.Count().ToString() + "条";
+                ((this.FindName("DataShow")) as DataGrid).ItemsSource = list;
+            }else
+            {
+                MessageBox.Show("查询数据库失败，请检查网络后重试！");
+            }
+            
         }
 
         private void ExportBtn_Click(object sender, RoutedEventArgs e)

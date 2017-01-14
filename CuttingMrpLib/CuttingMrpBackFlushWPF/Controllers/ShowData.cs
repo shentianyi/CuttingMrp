@@ -21,35 +21,41 @@ namespace CuttingMrpBackFlushWPF.Controllers
         {
             ProductFinishDataContext context = new ProductFinishDataContext();
             List<ProductFinish> list = new List<ProductFinish>();
-            if (string.IsNullOrEmpty(productNr) && string.IsNullOrEmpty(partNr))
+            try
             {
-                list = (from p in context.ProductFinish
-                        where p.finishTime >= startDate && p.finishTime <= endDate
-                        select p).ToList();
+                if (string.IsNullOrEmpty(productNr) && string.IsNullOrEmpty(partNr))
+                {
+                    list = (from p in context.ProductFinish
+                            where p.finishTime >= startDate && p.finishTime <= endDate
+                            select p).ToList();
+                }
+                else if (!string.IsNullOrEmpty(productNr) && !string.IsNullOrEmpty(partNr))
+                {
+                    list = (from p in context.ProductFinish
+                            where p.finishTime >= startDate && p.finishTime <= endDate
+                            && p.productnr == productNr && p.partNr == partNr
+                            select p).ToList();
+                }
+                else if (string.IsNullOrEmpty(productNr) && !string.IsNullOrEmpty(partNr))
+                {
+                    list = (from p in context.ProductFinish
+                            where p.finishTime >= startDate && p.finishTime <= endDate
+                            && p.partNr == partNr
+                            select p).ToList();
+                }
+                else if (!string.IsNullOrEmpty(productNr) && string.IsNullOrEmpty(partNr))
+                {
+                    list = (from p in context.ProductFinish
+                            where p.finishTime >= startDate && p.finishTime <= endDate
+                            && p.productnr == productNr
+                            select p).ToList();
+                }
+                return list;
+
+            } catch (Exception e) {
+
+                return null;
             }
-            else if (!string.IsNullOrEmpty(productNr) && !string.IsNullOrEmpty(partNr))
-            {
-                list = (from p in context.ProductFinish
-                        where p.finishTime >= startDate && p.finishTime <= endDate
-                        && p.productnr == productNr && p.partNr == partNr
-                        select p).ToList();
-            }
-            else if (string.IsNullOrEmpty(productNr) && !string.IsNullOrEmpty(partNr))
-            {
-                list = (from p in context.ProductFinish
-                        where p.finishTime >= startDate && p.finishTime <= endDate
-                        && p.partNr == partNr
-                        select p).ToList();
-            }
-            else if (!string.IsNullOrEmpty(productNr) && string.IsNullOrEmpty(partNr))
-            {
-                list = (from p in context.ProductFinish
-                        where p.finishTime >= startDate && p.finishTime <= endDate
-                        && p.productnr == productNr
-                        select p).ToList();
-            }
-            return list;
-           
         }
     }
 }
