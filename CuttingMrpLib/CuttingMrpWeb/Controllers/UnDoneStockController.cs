@@ -167,7 +167,9 @@ namespace CuttingMrpWeb.Controllers
                             quantity = u.Quantity,
                             kanbanNr = u.KanbanNr,
                             sourceType = u.SourceType,
-                            state = u.State
+                            state = u.State,
+                            createdAt=DateTime.Now,
+                            updatedAt=DateTime.Now
                         };
 
                         uss.Create(uds);

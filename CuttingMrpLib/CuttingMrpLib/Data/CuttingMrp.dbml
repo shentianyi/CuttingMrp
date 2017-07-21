@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="CuttingMrp" Class="CuttingMrpDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=SFZ-PC\MSSQLSERVER2008;Initial Catalog=CuttingMrp;Integrated Security=True" SettingsObjectName="CuttingMrpLib.My.MySettings" SettingsPropertyName="CuttingMrpConnectionString4" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Data Source=CHARLOT-PC\MSSQLSERVER2008R;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=sa" SettingsObjectName="CuttingMrpLib.My.MySettings" SettingsPropertyName="CuttingMrpConnectionString5" Provider="System.Data.SqlClient" />
   <Table Name="dbo.BackflushRecord" Member="BackflushRecords">
     <Type Name="BackflushRecord">
       <Column Name="backflushId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -271,12 +271,14 @@
   </Table>
   <Table Name="dbo.UnDoneStock" Member="UnDoneStock">
     <Type Name="UnDoneStock">
-      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="partNr" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
       <Column Name="quantity" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
       <Column Name="kanbanNr" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
       <Column Name="sourceType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="state" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="createdAt" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="updatedAt" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Association Name="Part_UnDoneStock" Member="Part" ThisKey="partNr" OtherKey="partNr" Type="Part" IsForeignKey="true" />
     </Type>
   </Table>

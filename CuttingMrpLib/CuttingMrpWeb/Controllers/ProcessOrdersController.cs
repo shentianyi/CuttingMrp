@@ -155,7 +155,7 @@ namespace CuttingMrpWeb.Controllers
             using (StreamWriter sw = new StreamWriter(ms, Encoding.UTF8))
             {
                 List<string> head = new List<string> { " No.", "OrderNr", "PartNr", "Kanban","PartType(KB Type)","Status",
-                    "ProceeDate","ReqQuantity","SourceQuantity","ActualQuantity","BatchQuantity","BundleQuantity","KanBanPosition","RouteNr","CompleteRate", "DerivedFrom", "CreateAt" };
+                    "ProceeDate","ReqQuantity","SourceQuantity","ActualQuantity","BatchQuantity","BundleQuantity","KanBanPosition","RouteNr","CompleteRate", "DerivedFrom", "CreateAt" ,"CurrentStock"};
                 sw.WriteLine(string.Join(Settings.Default.csvDelimiter, head));
                 for(var i=0; i<processOrders.Count; i++)
                 {
@@ -165,7 +165,12 @@ namespace CuttingMrpWeb.Controllers
                     double sourceQuantity = processOrders[i].sourceQuantity;
                     double actualQuantity = processOrders[i].actualQuantity;
                     double kanbanBundleQty = processOrders[i].Part.kanbanBundleQty;
-                    if ((!string.IsNullOrEmpty(isNew)) && processOrders[i].currentStock>0) {
+
+                    #region V2
+                    if ((!string.IsNullOrEmpty(isNew)))
+                    {
+                        //if (processOrders[i].currentStock >= 0)
+                        //{
                         ProcessOrderSearchModel qq = new ProcessOrderSearchModel()
                         {
                             PartNrAct = processOrders[i].partNr,
@@ -173,25 +178,64 @@ namespace CuttingMrpWeb.Controllers
                             ProceeDateTo = processOrders[i].proceeDate
                         };
                         List<ProcessOrder> orders = ps.Search(qq).ToList();
-                        double qty = sourceQuantity;
-                        if (orders.Count > 0) {
+                        double qty = processOrders[i].currentStock >= 0 ? sourceQuantity : processOrders[i].requirementQuantity.Value;
+                        if (orders.Count > 0)
+                        {
                             qty = 0;
                             foreach (ProcessOrder o in orders)
                             {
-                                qty += o.sourceQuantity;
+                                qty += (processOrders[i].currentStock >= 0 ? o.sourceQuantity : o.requirementQuantity.Value);
                             }
                         }
                         sourceQuantity = qty;
-                        if (kanbanBundleQty > 0) {
+                        if (kanbanBundleQty > 0)
+                        {
                             if (sourceQuantity % kanbanBundleQty == 0)
                             {
                                 // do nothing
                             }
-                            else {
+                            else
+                            {
                                 actualQuantity = kanbanBundleQty * (((int)(sourceQuantity / kanbanBundleQty)) + 1);
                             }
                         }
+                        //}
                     }
+                    #endregion
+
+                    #region V1
+                    //if ((!string.IsNullOrEmpty(isNew)) && processOrders[i].currentStock > 0)
+                    //{
+                    //    ProcessOrderSearchModel qq = new ProcessOrderSearchModel()
+                    //    {
+                    //        PartNrAct = processOrders[i].partNr,
+                    //        Status = processOrders[i].status,
+                    //        ProceeDateTo = processOrders[i].proceeDate
+                    //    };
+                    //    List<ProcessOrder> orders = ps.Search(qq).ToList();
+                    //    double qty = sourceQuantity;
+                    //    if (orders.Count > 0)
+                    //    {
+                    //        qty = 0;
+                    //        foreach (ProcessOrder o in orders)
+                    //        {
+                    //            qty += o.sourceQuantity;
+                    //        }
+                    //    }
+                    //    sourceQuantity = qty;
+                    //    if (kanbanBundleQty > 0)
+                    //    {
+                    //        if (sourceQuantity % kanbanBundleQty == 0)
+                    //        {
+                    //            // do nothing
+                    //        }
+                    //        else
+                    //        {
+                    //            actualQuantity = kanbanBundleQty * (((int)(sourceQuantity / kanbanBundleQty)) + 1);
+                    //        }
+                    //    }
+                    //}
+                    #endregion
 
                     ii.Add(processOrders[i].orderNr);
                     ii.Add(processOrders[i].partNr); 
@@ -209,6 +253,7 @@ namespace CuttingMrpWeb.Controllers
                     ii.Add(Math.Round(processOrders[i].completeRate,2).ToString());
                     ii.Add(processOrders[i].derivedFrom);
                     ii.Add(processOrders[i].createAt.ToString());
+                    ii.Add(processOrders[i].currentStock.ToString());
                     sw.WriteLine(string.Join(Settings.Default.csvDelimiter, ii.ToArray()));
                 }
                 //sw.WriteLine(max);
@@ -240,7 +285,7 @@ namespace CuttingMrpWeb.Controllers
             MemoryStream ms = new MemoryStream();
             using (StreamWriter sw = new StreamWriter(ms, Encoding.UTF8))
             {
-                List<string> head = new List<string> { " No.","Product", "PartNr", "Kanban", "PartType(KB Type)","Position", "ActualQuantity", "BundleQuantity", "BatchQuantity","KanBanPosition","RouteNr","ChangeQty", "CreateAt" };
+                List<string> head = new List<string> { " No.","Product", "PartNr", "Kanban", "PartType(KB Type)","Position", "ActualQuantity", "BundleQuantity", "BatchQuantity","KanBanPosition","RouteNr","ChangeQty", "CreateAt","CurrentStock" };
                 sw.WriteLine(string.Join(Settings.Default.csvDelimiter, head));
                 for (var i = 0; i < processOrders.Count; i++)
                 {
@@ -251,8 +296,11 @@ namespace CuttingMrpWeb.Controllers
                     double actualQuantity = processOrders[i].actualQuantity;
                     double kanbanBundleQty = processOrders[i].Part.kanbanBundleQty;
                     double kanbanBatchQty= processOrders[i].Part.kanbanBatchQty;
-                    if ((!string.IsNullOrEmpty(isNew)) && processOrders[i].currentStock > 0)
+                    #region V2
+                    if ((!string.IsNullOrEmpty(isNew)))
                     {
+                        //if (processOrders[i].currentStock >= 0)
+                        //{
                         ProcessOrderSearchModel qq = new ProcessOrderSearchModel()
                         {
                             PartNrAct = processOrders[i].partNr,
@@ -260,13 +308,13 @@ namespace CuttingMrpWeb.Controllers
                             ProceeDateTo = processOrders[i].proceeDate
                         };
                         List<ProcessOrder> orders = ps.Search(qq).ToList();
-                        double qty = sourceQuantity;
+                        double qty = processOrders[i].currentStock >= 0 ? sourceQuantity : processOrders[i].requirementQuantity.Value;
                         if (orders.Count > 0)
                         {
                             qty = 0;
                             foreach (ProcessOrder o in orders)
                             {
-                                qty += o.sourceQuantity;
+                                qty += (processOrders[i].currentStock >= 0 ? o.sourceQuantity : o.requirementQuantity.Value);
                             }
                         }
                         sourceQuantity = qty;
@@ -281,7 +329,43 @@ namespace CuttingMrpWeb.Controllers
                                 actualQuantity = kanbanBundleQty * (((int)(sourceQuantity / kanbanBundleQty)) + 1);
                             }
                         }
+                        //}
                     }
+                    #endregion
+
+                    #region V1
+                    //if ((!string.IsNullOrEmpty(isNew)) && processOrders[i].currentStock > 0)
+                    //{
+                    //    ProcessOrderSearchModel qq = new ProcessOrderSearchModel()
+                    //    {
+                    //        PartNrAct = processOrders[i].partNr,
+                    //        Status = processOrders[i].status,
+                    //        ProceeDateTo = processOrders[i].proceeDate
+                    //    };
+                    //    List<ProcessOrder> orders = ps.Search(qq).ToList();
+                    //    double qty = sourceQuantity;
+                    //    if (orders.Count > 0)
+                    //    {
+                    //        qty = 0;
+                    //        foreach (ProcessOrder o in orders)
+                    //        {
+                    //            qty += o.sourceQuantity;
+                    //        }
+                    //    }
+                    //    sourceQuantity = qty;
+                    //    if (kanbanBundleQty > 0)
+                    //    {
+                    //        if (sourceQuantity % kanbanBundleQty == 0)
+                    //        {
+                    //            // do nothing
+                    //        }
+                    //        else
+                    //        {
+                    //            actualQuantity = kanbanBundleQty * (((int)(sourceQuantity / kanbanBundleQty)) + 1);
+                    //        }
+                    //    }
+                    //}
+                    #endregion
 
                     ii.Add(processOrders[i].Part.productNr);
                     ii.Add(processOrders[i].partNr);
@@ -295,6 +379,7 @@ namespace CuttingMrpWeb.Controllers
                     ii.Add(processOrders[i].Part.routeNr.ToString());
                     ii.Add(actualQuantity>kanbanBatchQty ? "Y" : "N");
                     ii.Add(processOrders[i].createAt.ToString());
+                    ii.Add(processOrders[i].currentStock.ToString());
                     sw.WriteLine(string.Join(Settings.Default.csvDelimiter, ii.ToArray()));
                 }
                 //sw.WriteLine(max);

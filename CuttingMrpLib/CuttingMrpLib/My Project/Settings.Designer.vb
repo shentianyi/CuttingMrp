@@ -54,19 +54,6 @@ Namespace My
             End Get
         End Property
         
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("Data Source=vm08;Initial Catalog=CuttingMrp;Persist Security Info=True;User ID=sa"& _ 
-            ";Password=brilliantech123@")>  _
-        Public Property db() As String
-            Get
-                Return CType(Me("db"),String)
-            End Get
-            Set
-                Me("db") = value
-            End Set
-        End Property
-        
         <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.SpecialSettingAttribute(Global.System.Configuration.SpecialSetting.ConnectionString),  _
@@ -118,6 +105,30 @@ Namespace My
         Public ReadOnly Property CuttingMrpConnectionString4() As String
             Get
                 Return CType(Me("CuttingMrpConnectionString4"),String)
+            End Get
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("Data Source=S2\SQLSERVER2008R2;Initial Catalog=CuttingMrp;Persist Security Info=T"& _ 
+            "rue;User ID=sa;Password=1")>  _
+        Public Property db() As String
+            Get
+                Return CType(Me("db"),String)
+            End Get
+            Set
+                Me("db") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.SpecialSettingAttribute(Global.System.Configuration.SpecialSetting.ConnectionString),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("Data Source=CHARLOT-PC\MSSQLSERVER2008R;Initial Catalog=CuttingMrp;Persist Securi"& _ 
+            "ty Info=True;User ID=sa")>  _
+        Public ReadOnly Property CuttingMrpConnectionString5() As String
+            Get
+                Return CType(Me("CuttingMrpConnectionString5"),String)
             End Get
         End Property
     End Class

@@ -157,6 +157,7 @@
                 <th>CompleteRate</th>
                 <th>DerivedFrom</th>
                 <th>CreateAt</th>
+                <th>CurrentCalculateStock</th>
                 <th>Requirements</th>
                 <th>Options</th>
             </tr>
@@ -192,6 +193,7 @@
                         <td>@Html.DisplayFor(modelItem => item.completeRateDisplay)</td>
                         <td>@Html.DisplayFor(modelItem => item.derivedFrom)</td>
                         <td>@Html.DisplayFor(modelItem => item.createAt)</td>
+                        <td>@Html.DisplayFor(modelItem => item.currentStock)</td>
                         <td>
                             <a href="@Url.Action("Search", "Requirements" , new { orderNr=item.orderNr })" style="white-space:nowrap;">
                                 @(item.requirementCount.ToString() + " Requirements")

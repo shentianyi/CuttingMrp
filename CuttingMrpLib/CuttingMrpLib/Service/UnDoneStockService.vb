@@ -81,6 +81,7 @@ Public Class UnDoneStockService
 
         For Each undonestock As UnDoneStock In undonestocks
             undonestock.state = 200
+            undonestock.updatedAt = DateTime.Now
         Next
 
         rep.SaveAll()

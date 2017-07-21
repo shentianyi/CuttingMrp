@@ -34,6 +34,7 @@
                 <th>KanbanNr</th>
                 <th>SourceType</th>
                 <th>State</th>
+                <th>ImportDate</th>
             </tr>
         </thead>
         <tbody>
@@ -49,6 +50,7 @@
                         <td>@Html.DisplayFor(modelItem => item.kanbanNr)</td>
                         <td>@Html.DisplayFor(modelItem => item.sourceTypeDisplay)</td>
                         <td>@Html.DisplayFor(modelItem => item.stateDisplay)</td>
+                        <td>@Html.DisplayFor(modelItem => item.createdAt)</td>
                     </tr>
                 }
             }

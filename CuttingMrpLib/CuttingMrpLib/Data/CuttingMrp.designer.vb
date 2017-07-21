@@ -145,16 +145,10 @@ Partial Public Class CuttingMrpDataContext
     End Sub
   Partial Private Sub DeleteProcessOrder(instance As ProcessOrder)
     End Sub
-  Partial Private Sub InsertUnDoneStock(instance As UnDoneStock)
-    End Sub
-  Partial Private Sub UpdateUnDoneStock(instance As UnDoneStock)
-    End Sub
-  Partial Private Sub DeleteUnDoneStock(instance As UnDoneStock)
-    End Sub
   #End Region
 	
 	Public Sub New()
-		MyBase.New(Global.CuttingMrpLib.My.MySettings.Default.CuttingMrpConnectionString4, mappingSource)
+		MyBase.New(Global.CuttingMrpLib.My.MySettings.Default.CuttingMrpConnectionString5, mappingSource)
 		OnCreated
 	End Sub
 	
@@ -2800,8 +2794,6 @@ Partial Public Class Part
 	
 	Private _ProcessOrders As EntitySet(Of ProcessOrder)
 	
-	Private _UnDoneStock As EntitySet(Of UnDoneStock)
-	
     #Region "可扩展性方法定义"
     Partial Private Sub OnLoaded()
     End Sub
@@ -2843,7 +2835,6 @@ Partial Public Class Part
 		Me._Requirements = New EntitySet(Of Requirement)(AddressOf Me.attach_Requirements, AddressOf Me.detach_Requirements)
 		Me._Stocks = New EntitySet(Of Stock)(AddressOf Me.attach_Stocks, AddressOf Me.detach_Stocks)
 		Me._ProcessOrders = New EntitySet(Of ProcessOrder)(AddressOf Me.attach_ProcessOrders, AddressOf Me.detach_ProcessOrders)
-		Me._UnDoneStock = New EntitySet(Of UnDoneStock)(AddressOf Me.attach_UnDoneStock, AddressOf Me.detach_UnDoneStock)
 		OnCreated
 	End Sub
 	
@@ -3005,16 +2996,6 @@ Partial Public Class Part
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_UnDoneStock", Storage:="_UnDoneStock", ThisKey:="partNr", OtherKey:="partNr")>  _
-	Public Property UnDoneStock() As EntitySet(Of UnDoneStock)
-		Get
-			Return Me._UnDoneStock
-		End Get
-		Set
-			Me._UnDoneStock.Assign(value)
-		End Set
-	End Property
-	
 	Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
 	
 	Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
@@ -3089,16 +3070,6 @@ Partial Public Class Part
 	End Sub
 	
 	Private Sub detach_ProcessOrders(ByVal entity As ProcessOrder)
-		Me.SendPropertyChanging
-		entity.Part = Nothing
-	End Sub
-	
-	Private Sub attach_UnDoneStock(ByVal entity As UnDoneStock)
-		Me.SendPropertyChanging
-		entity.Part = Me
-	End Sub
-	
-	Private Sub detach_UnDoneStock(ByVal entity As UnDoneStock)
 		Me.SendPropertyChanging
 		entity.Part = Nothing
 	End Sub
@@ -5096,9 +5067,6 @@ End Class
 
 <Global.System.Data.Linq.Mapping.TableAttribute(Name:="dbo.UnDoneStock")>  _
 Partial Public Class UnDoneStock
-	Implements System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
-	
-	Private Shared emptyChangingEventArgs As PropertyChangingEventArgs = New PropertyChangingEventArgs(String.Empty)
 	
 	Private _id As Integer
 	
@@ -5112,48 +5080,15 @@ Partial Public Class UnDoneStock
 	
 	Private _state As Integer
 	
-	Private _Part As EntityRef(Of Part)
+	Private _createdAt As System.Nullable(Of Date)
 	
-    #Region "可扩展性方法定义"
-    Partial Private Sub OnLoaded()
-    End Sub
-    Partial Private Sub OnValidate(action As System.Data.Linq.ChangeAction)
-    End Sub
-    Partial Private Sub OnCreated()
-    End Sub
-    Partial Private Sub OnidChanging(value As Integer)
-    End Sub
-    Partial Private Sub OnidChanged()
-    End Sub
-    Partial Private Sub OnpartNrChanging(value As String)
-    End Sub
-    Partial Private Sub OnpartNrChanged()
-    End Sub
-    Partial Private Sub OnquantityChanging(value As Double)
-    End Sub
-    Partial Private Sub OnquantityChanged()
-    End Sub
-    Partial Private Sub OnkanbanNrChanging(value As String)
-    End Sub
-    Partial Private Sub OnkanbanNrChanged()
-    End Sub
-    Partial Private Sub OnsourceTypeChanging(value As Integer)
-    End Sub
-    Partial Private Sub OnsourceTypeChanged()
-    End Sub
-    Partial Private Sub OnstateChanging(value As Integer)
-    End Sub
-    Partial Private Sub OnstateChanged()
-    End Sub
-    #End Region
+	Private _updatedAt As System.Nullable(Of Date)
 	
 	Public Sub New()
 		MyBase.New
-		Me._Part = CType(Nothing, EntityRef(Of Part))
-		OnCreated
 	End Sub
 	
-	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_id", AutoSync:=AutoSync.OnInsert, DbType:="Int NOT NULL IDENTITY", IsPrimaryKey:=true, IsDbGenerated:=true)>  _
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_id", AutoSync:=AutoSync.Always, DbType:="Int NOT NULL IDENTITY", IsDbGenerated:=true)>  _
 	Public Property id() As Integer
 		Get
 			Return Me._id
@@ -5161,11 +5096,7 @@ Partial Public Class UnDoneStock
 		Set
 			If ((Me._id = value)  _
 						= false) Then
-				Me.OnidChanging(value)
-				Me.SendPropertyChanging
 				Me._id = value
-				Me.SendPropertyChanged("id")
-				Me.OnidChanged
 			End If
 		End Set
 	End Property
@@ -5177,14 +5108,7 @@ Partial Public Class UnDoneStock
 		End Get
 		Set
 			If (String.Equals(Me._partNr, value) = false) Then
-				If Me._Part.HasLoadedOrAssignedValue Then
-					Throw New System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException()
-				End If
-				Me.OnpartNrChanging(value)
-				Me.SendPropertyChanging
 				Me._partNr = value
-				Me.SendPropertyChanged("partNr")
-				Me.OnpartNrChanged
 			End If
 		End Set
 	End Property
@@ -5197,11 +5121,7 @@ Partial Public Class UnDoneStock
 		Set
 			If ((Me._quantity = value)  _
 						= false) Then
-				Me.OnquantityChanging(value)
-				Me.SendPropertyChanging
 				Me._quantity = value
-				Me.SendPropertyChanged("quantity")
-				Me.OnquantityChanged
 			End If
 		End Set
 	End Property
@@ -5213,11 +5133,7 @@ Partial Public Class UnDoneStock
 		End Get
 		Set
 			If (String.Equals(Me._kanbanNr, value) = false) Then
-				Me.OnkanbanNrChanging(value)
-				Me.SendPropertyChanging
 				Me._kanbanNr = value
-				Me.SendPropertyChanged("kanbanNr")
-				Me.OnkanbanNrChanged
 			End If
 		End Set
 	End Property
@@ -5230,11 +5146,7 @@ Partial Public Class UnDoneStock
 		Set
 			If ((Me._sourceType = value)  _
 						= false) Then
-				Me.OnsourceTypeChanging(value)
-				Me.SendPropertyChanging
 				Me._sourceType = value
-				Me.SendPropertyChanged("sourceType")
-				Me.OnsourceTypeChanged
 			End If
 		End Set
 	End Property
@@ -5247,58 +5159,32 @@ Partial Public Class UnDoneStock
 		Set
 			If ((Me._state = value)  _
 						= false) Then
-				Me.OnstateChanging(value)
-				Me.SendPropertyChanging
 				Me._state = value
-				Me.SendPropertyChanged("state")
-				Me.OnstateChanged
 			End If
 		End Set
 	End Property
 	
-	<Global.System.Data.Linq.Mapping.AssociationAttribute(Name:="Part_UnDoneStock", Storage:="_Part", ThisKey:="partNr", OtherKey:="partNr", IsForeignKey:=true)>  _
-	Public Property Part() As Part
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_createdAt", DbType:="DateTime")>  _
+	Public Property createdAt() As System.Nullable(Of Date)
 		Get
-			Return Me._Part.Entity
+			Return Me._createdAt
 		End Get
 		Set
-			Dim previousValue As Part = Me._Part.Entity
-			If ((Object.Equals(previousValue, value) = false)  _
-						OrElse (Me._Part.HasLoadedOrAssignedValue = false)) Then
-				Me.SendPropertyChanging
-				If ((previousValue Is Nothing)  _
-							= false) Then
-					Me._Part.Entity = Nothing
-					previousValue.UnDoneStock.Remove(Me)
-				End If
-				Me._Part.Entity = value
-				If ((value Is Nothing)  _
-							= false) Then
-					value.UnDoneStock.Add(Me)
-					Me._partNr = value.partNr
-				Else
-					Me._partNr = CType(Nothing, String)
-				End If
-				Me.SendPropertyChanged("Part")
+			If (Me._createdAt.Equals(value) = false) Then
+				Me._createdAt = value
 			End If
 		End Set
 	End Property
 	
-	Public Event PropertyChanging As PropertyChangingEventHandler Implements System.ComponentModel.INotifyPropertyChanging.PropertyChanging
-	
-	Public Event PropertyChanged As PropertyChangedEventHandler Implements System.ComponentModel.INotifyPropertyChanged.PropertyChanged
-	
-	Protected Overridable Sub SendPropertyChanging()
-		If ((Me.PropertyChangingEvent Is Nothing)  _
-					= false) Then
-			RaiseEvent PropertyChanging(Me, emptyChangingEventArgs)
-		End If
-	End Sub
-	
-	Protected Overridable Sub SendPropertyChanged(ByVal propertyName As [String])
-		If ((Me.PropertyChangedEvent Is Nothing)  _
-					= false) Then
-			RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
-		End If
-	End Sub
+	<Global.System.Data.Linq.Mapping.ColumnAttribute(Storage:="_updatedAt", DbType:="DateTime")>  _
+	Public Property updatedAt() As System.Nullable(Of Date)
+		Get
+			Return Me._updatedAt
+		End Get
+		Set
+			If (Me._updatedAt.Equals(value) = false) Then
+				Me._updatedAt = value
+			End If
+		End Set
+	End Property
 End Class
